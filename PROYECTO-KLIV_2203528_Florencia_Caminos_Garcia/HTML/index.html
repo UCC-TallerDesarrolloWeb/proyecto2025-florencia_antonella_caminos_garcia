@@ -1,49 +1,109 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inicio</title>
+    <title>Kliv</title>
     <link rel="stylesheet" href="../CSS/Index.css">
 </head>
+
 <body id="site-body">
     <header id="site-header">
-        <h1>Inicio</h1>
+
+        <div id="header-content">
+            <h1>Kliv</h1>
+            <h2>Dashboard Principal</h2>
+        </div>
+
+        <div class="user-info">
+            <div id="user-avatar">FL</div>
+            <span>Flor</span>
+        </div>
     </header>
 
+    <div id="sidebar">
+        <h4>Inicio</h4>
+        <aside>
+            <ul class="sidebar-menu">
+                <li><a href="#" class="active">Dashboard</a></li>
+                <li><a href="#">Proyectos</a></li>
+                <li><a href="#">Galería</a></li>
+                <li><a href="#">Tareas</a></li>
+                <li><a href="#">Configuración</a></li>
+                <li><a href="#">Ayuda</a></li>
+            </ul>
+        </aside>
+    </div>
+
     <main id="site-main">
-        <div id="gallery">
-            <figure>
-                <img src="../Imagenes/1_Ropa.jpeg" alt="Prenda de ropa" />
-                <figcaption>Prenda destacada</figcaption>
-            </figure>
 
-            <figure>
-                <img src="../Imagenes/2_Codigo.jpeg" alt="Ejemplo de código" />
-                <figcaption>Ideas de código</figcaption>
-            </figure>
+        <section id="section fade-in">
+            <h2 id="section-title">Ver Foto</h2>
+            <div class="ver-foto-options" role="radiogroup" aria-labelledby="option-label">
+                <label id="option-label">
+                    <input type="radio" name="foto-option" value="no-mostrar">
+                    No Mostrar este Contenido
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="foto-option" value="guardar">
+                    Guardar
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="foto-option" value="reaccionar">
+                    Reaccionar
+                </label>
+            </div>
+            <p class="error-message" id="foto-error" role="alert">
+                Error: Si escoge una de las opciones de la izquierda, debe seleccionar una imagen
+            </p>
+        </section>
 
-            <figure>
-                <img src="../Imagenes/3_Naturaleza.jpeg" alt="Naturaleza" />
-                <figcaption>Naturaleza</figcaption>
-            </figure>
+        <section class="section fade-in" aria-labelledby="gallery-title">
+            <h2 id="gallery-title">Galería de Contenidos</h2>
+            <div id="gallery" class="gallery-grid"> <!-- Agregué clase para posible CSS de grid/flex -->
+                <figure>
+                    <img src="../Imagenes/1_Ropa.jpeg" alt="Prenda de ropa" />
+                    <figcaption>Prenda destacada</figcaption>
+                </figure>
 
-            <figure>
-                <img src="../Imagenes/4_Libros.jpeg" alt="Libro Recomendado" />
-                <figcaption>Recomendaciones de Libros</figcaption>
-            </figure>
+                <figure>
+                    <img src="../Imagenes/2_Codigo.jpeg" alt="Ejemplo de código" />
+                    <figcaption>Ideas de código</figcaption>
+                </figure>
 
-            <figure>
-                <img src="../Imagenes/5_Comida.jpeg" alt="Recetas" />
-                <figcaption>Inspiracion de Recetas</figcaption>
-            </figure>
+                <figure>
+                    <img src="../Imagenes/3_Naturaleza.jpeg" alt="Naturaleza" />
+                    <figcaption>Naturaleza</figcaption>
+                </figure>
 
-            <figure>
-                <img src="../Imagenes/6_Decoracion.jpeg" alt="Ideas Deco" />
-                <figcaption>Ideas de Decoracion</figcaption>
-            </figure>
-        </div>
+                <figure>
+                    <img src="../Imagenes/4_Libros.jpeg" alt="Libro Recomendado" />
+                    <figcaption>Recomendaciones de Libros</figcaption>
+                </figure>
+
+                <figure>
+                    <img src="../Imagenes/5_Comida.jpeg" alt="Recetas" />
+                    <figcaption>Inspiracion de Recetas</figcaption>
+                </figure>
+
+                <figure>
+                    <img src="../Imagenes/6_Decoracion.jpeg" alt="Ideas de decoración interior" />
+                    <figcaption>Ideas de Decoración</figcaption>
+                </figure>
+            </div>
+        </section>
+
+
+        <section class="section fade-in">
+            <h2 class="section-title">Carga de Archivos</h2>
+            <div class="riska-section">
+                <h3 class="riska-title">Carga Archivos</h3>
+                <p>Arrastra tus archivos aquí o haz clic para seleccionar</p>
+            </div>
+        </section>
     </main>
 
 </body>
+
 </html>
