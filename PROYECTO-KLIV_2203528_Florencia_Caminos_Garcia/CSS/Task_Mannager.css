@@ -1,12 +1,12 @@
 :root {
-    --color-primario: #B27CFC;
-    --color-secundario: #FA2FDD;
-    --color-fondo-secundario: #C72FFA;
+    --color-primario: #7CA7FC;
+    --color-secundario: #6E2FFA 
+    --color-fondo-secundario: #2F33FA;
     --color-fondo: #F5F7FA;
-    --color-texto: #1A1A1A;
-    --color-border: #432FFA;
-    --color-boton: #FF4071;
-    --color-boton-hover: #C000FF;
+    --color-texto: #000000;
+    --color-border: #1015FF;
+    --color-boton: #2FB3FA;
+    --color-boton-hover: #BA40FF;
     --color-boton-texto: #fff;
     --color-boton-texto-hover: #e0e0e0;
 
@@ -19,10 +19,11 @@
 }
 
 body {
-  font-family: "SUSE Mono", monospace;
-  background-color: var(--color-fondo);
-  color: var(--color-texto);
-  line-height: 1.6;
+    margin: 0;
+    font-family: "SUSE Mono", sans-serif;
+    background-color: var(--color-fondo);
+    color: var(--color-texto);
+    line-height: 1.6;
 }
 
 button {
@@ -30,7 +31,6 @@ button {
   color: var(--color-boton-texto);
   border: 2px solid var(--color-border);
   padding: 10px 20px;
-  margin: 5px;
   border-radius: 8px;
   cursor: pointer;
   font-size: 1rem;
@@ -40,5 +40,5 @@ button {
 button:hover {
   background-color: var(--color-boton-hover);
   color: var(--color-boton-texto-hover);
-  transform: scale(1.05); /* pequeño efecto de animación */
+  transform: scale(1.05); /* efecto sutil */
 }
