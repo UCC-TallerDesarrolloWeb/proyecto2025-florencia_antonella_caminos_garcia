@@ -6,62 +6,286 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kliv</title>
     <link rel="stylesheet" href="../CSS/Index.css">
+    <script src="../JAVASCRIPT/Index.js" defer></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap"
+        rel="stylesheet">
 </head>
 
 <body id="site-body">
     <header id="site-header">
 
         <div id="header-content">
-            <h1>Kliv</h1>
-            <h2>Dashboard Principal</h2>
+            <h1 id="main-title">Kliv</h1>
+            <h2 id="dashboard-subtitle">Dashboard Principal</h2>
         </div>
 
-        <div class="user-info">
+        <div id="user-info">
             <div id="user-avatar">FL</div>
-            <span>Flor</span>
+            <span id="user-name">Flor</span>
         </div>
     </header>
 
     <div id="sidebar">
         <h4>Inicio</h4>
         <aside>
-            <ul class="sidebar-menu">
-                <li><a href="#" class="active">Dashboard</a></li>
-                <li><a href="#">Proyectos</a></li>
-                <li><a href="#">Galería</a></li>
-                <li><a href="#">Tareas</a></li>
-                <li><a href="#">Configuración</a></li>
-                <li><a href="#">Ayuda</a></li>
+            <ul id="sidebar-menu">
+                <li id="menu-dashboard"><a href="#Dashboard"><i id="dashboard"></i>
+                        <span>Dashboard</span></a>
+                </li>
+                <li id="menu-projects"><a href="#Projects"><i id="projects"></i>
+                        <span>Proyectos</span></a>
+                </li>
+                <li id="menu-gallery"><a href="#Gallery"><i id="gallery"></i>
+                        <span>Galería</span></a>
+                </li>
+                <li id="menu-tasks"><a href="#Tasks"><i id="tasks"></i>
+                        <span>Tareas</span></a>
+                </li>
+                <li id="menu-settings"><a href="#Settings"><i id="settings"></i>
+                        <span>Configuración</span></a>
+                </li>
+                <li id="menu-help"><a href="#Help"><i id="fas fa-question-circle"></i>
+                        <span>Ayuda</span></a>
+                </li>
             </ul>
         </aside>
     </div>
 
     <main id="site-main">
+        <section id="Dashboard">
+            <h2>Dashboard</h2>
+            <div>
+                <article>
+                    <img src="https://picsum.photos/200/300" alt="Pin 1">
+                    <footer>❤️ 120 &nbsp; 💬 45</footer>
+                </article>
 
-        <section id="section fade-in">
-            <h2 id="section-title">Ver Foto</h2>
-            <div class="ver-foto-options" role="radiogroup" aria-labelledby="option-label">
-                <label id="option-label">
-                    <input type="radio" name="foto-option" value="no-mostrar">
-                    No Mostrar este Contenido
-                </label>
-                <label class="option-label">
-                    <input type="radio" name="foto-option" value="guardar">
-                    Guardar
-                </label>
-                <label class="option-label">
-                    <input type="radio" name="foto-option" value="reaccionar">
-                    Reaccionar
-                </label>
+                <article>
+                    <img src="https://picsum.photos/200/180" alt="Pin 2">
+                    <footer>❤️ 89 &nbsp; 💬 12</footer>
+                </article>
+
+                <article>
+                    <img src="https://picsum.photos/200/250" alt="Pin 3">
+                    <footer>❤️ 340 &nbsp; 💬 78</footer>
+                </article>
+
+                <article>
+                    <img src="https://picsum.photos/200/220" alt="Pin 4">
+                    <footer>❤️ 56 &nbsp; 💬 9</footer>
+                </article>
+
+                <article>
+                    <img src="https://picsum.photos/200/270" alt="Pin 5">
+                    <footer>❤️ 210 &nbsp; 💬 34</footer>
+                </article>
+
+                <article>
+                    <img src="https://picsum.photos/200/320" alt="Pin 6">
+                    <footer>❤️ 150 &nbsp; 💬 22</footer>
+                </article>
+
+                <article>
+                    <img src="https://picsum.photos/200/200" alt="Pin 7">
+                    <footer>❤️ 72 &nbsp; 💬 14</footer>
+                </article>
+
+                <article>
+                    <img src="https://picsum.photos/200/350" alt="Pin 8">
+                    <footer>❤️ 415 &nbsp; 💬 102</footer>
+                </article>
+
+                <article>
+                    <img src="https://picsum.photos/200/260" alt="Pin 9">
+                    <footer>❤️ 98 &nbsp; 💬 17</footer>
+                </article>
+
+                <article>
+                    <img src="https://picsum.photos/200/280" alt="Pin 10">
+                    <footer>❤️ 187 &nbsp; 💬 41</footer>
+                </article>
+
+                <article>
+                    <img src="https://picsum.photos/200/310" alt="Pin 11">
+                    <footer>❤️ 63 &nbsp; 💬 8</footer>
+                </article>
+
+                <article>
+                    <img src="https://picsum.photos/200/240" alt="Pin 12">
+                    <footer>❤️ 224 &nbsp; 💬 59</footer>
+                </article>
+
+                <article>
+                    <img src="https://picsum.photos/200/190" alt="Pin 13">
+                    <footer>❤️ 77 &nbsp; 💬 15</footer>
+                </article>
+
+                <article>
+                    <img src="https://picsum.photos/200/330" alt="Pin 14">
+                    <footer>❤️ 300 &nbsp; 💬 90</footer>
+                </article>
+
+                <article>
+                    <img src="https://picsum.photos/200/210" alt="Pin 15">
+                    <footer>❤️ 142 &nbsp; 💬 23</footer>
+                </article>
+
+                <article>
+                    <img src="https://picsum.photos/200/290" alt="Pin 16">
+                    <footer>❤️ 58 &nbsp; 💬 11</footer>
+                </article>
+
+                <article>
+                    <img src="https://picsum.photos/200/360" alt="Pin 17">
+                    <footer>❤️ 420 &nbsp; 💬 110</footer>
+                </article>
+
+                <article>
+                    <img src="https://picsum.photos/200/230" alt="Pin 18">
+                    <footer>❤️ 134 &nbsp; 💬 27</footer>
+                </article>
+
+                <article>
+                    <img src="https://picsum.photos/200/340" alt="Pin 19">
+                    <footer>❤️ 289 &nbsp; 💬 64</footer>
+                </article>
+
+                <article>
+                    <img src="https://picsum.photos/200/260" alt="Pin 20">
+                    <footer>❤️ 99 &nbsp; 💬 18</footer>
+                </article>
             </div>
-            <p class="error-message" id="foto-error" role="alert">
-                Error: Si escoge una de las opciones de la izquierda, debe seleccionar una imagen
-            </p>
+
+            <div id="file-upload" class="file-upload">
+                <h2>📂 Carga de Archivos</h2>
+                <div class="cards-container">
+
+                    <div class="card">
+                        <h3>Arrastra o selecciona tus archivos</h3>
+                        <p>Arrastra tus archivos aquí o haz clic para seleccionar.</p>
+
+                        <!-- Zona de carga -->
+                        <div class="upload-zone">
+                            <p>📁 Zona de carga</p>
+                            <input type="file" id="file-input" multiple style="display:none;">
+                        </div>
+
+                        <!-- Botón para abrir selector de archivos -->
+                        <button onclick="document.getElementById('file-input').click();">
+                            Seleccionar archivos
+                        </button>
+                    </div>
+
+                </div>
+            </div>
         </section>
 
-        <section class="section fade-in" aria-labelledby="gallery-title">
+        <section id="Projects">
+            <h2>Proyectos</h2>
+            <div>
+                <article>
+                    <h3>📌 Recordatorios</h3>
+                    <ul>
+                        <li>Reunión mañana 9:00 AM</li>
+                        <li>Enviar informe semanal</li>
+                        <li>Llamar al proveedor</li>
+                    </ul>
+                </article>
+
+                <article>
+                    <h3>🔔 Notificaciones</h3>
+                    <p>3 nuevas tareas asignadas en “Alpha”.</p>
+                    <p>El plan de “Marketing 2025” fue actualizado.</p>
+                </article>
+
+                <article>
+                    <h3>📊 Estadísticas</h3>
+                    <ul>
+                        <li>Progreso proyecto Beta: 65%</li>
+                        <li>Tareas completadas: 34/52</li>
+                        <li>Colaboradores activos: 8</li>
+                    </ul>
+                </article>
+
+                <article>
+                    <h3>📝 Notas</h3>
+                    <p>Ideas para la campaña:</p>
+                    <ul>
+                        <li>Integrar redes sociales</li>
+                        <li>Diseñar logo alternativo</li>
+                        <li>Explorar influencers locales</li>
+                    </ul>
+                </article>
+
+                <article>
+                    <h3>📅 Planes</h3>
+                    <ol>
+                        <li>Semana 1: Investigación</li>
+                        <li>Semana 2: Diseño</li>
+                        <li>Semana 3: Desarrollo</li>
+                        <li>Semana 4: Presentación</li>
+                    </ol>
+                </article>
+
+                <article>
+                    <h3>✅ Tareas rápidas</h3>
+                    <ul>
+                        <li>[ ] Revisar contratos</li>
+                        <li>[x] Confirmar reunión</li>
+                        <li>[ ] Subir documentos al drive</li>
+                    </ul>
+                </article>
+
+                <article>
+                    <h3>📂 Documentos</h3>
+                    <p>Últimos archivos subidos:</p>
+                    <ul>
+                        <li>Reporte_final.pdf</li>
+                        <li>Plan_marketing.xlsx</li>
+                        <li>Notas_equipo.docx</li>
+                    </ul>
+                </article>
+
+                <article>
+                    <h3>🚀 Avances</h3>
+                    <p>El prototipo inicial fue aprobado y se comenzará la fase de pruebas la próxima semana.</p>
+                </article>
+            </div>
+        </section>
+
+        <section id="Gallery">
+
             <h2 id="gallery-title">Galería de Contenidos</h2>
-            <div id="gallery" class="gallery-grid"> <!-- Agregué clase para posible CSS de grid/flex -->
+
+            <div id="photo-section">
+                <h2>Ver Foto</h2>
+
+                <div id="photo-options">
+                    <label>
+                        <input type="radio" name="photo-option" value="no-show">
+                        No Mostrar este Contenido
+                    </label>
+
+                    <label>
+                        <input type="radio" name="photo-option" value="save">
+                        Guardar
+                    </label>
+
+                    <label>
+                        <input type="radio" name="photo-option" value="react">
+                        Reaccionar
+                    </label>
+                </div>
+
+                <p id="photo-error-message">
+                    Error: Si escoge una de las opciones de la izquierda, debe seleccionar una imagen
+                </p>
+            </div>
+
+
+            <div id="gallery-grid">
                 <figure>
                     <img src="../Imagenes/1_Ropa.jpeg" alt="Prenda de ropa" />
                     <figcaption>Prenda destacada</figcaption>
@@ -94,14 +318,226 @@
             </div>
         </section>
 
+        <section id="Tasks">
+            <h2>Tareas</h2>
 
-        <section class="section fade-in">
-            <h2 class="section-title">Carga de Archivos</h2>
-            <div class="riska-section">
-                <h3 class="riska-title">Carga Archivos</h3>
-                <p>Arrastra tus archivos aquí o haz clic para seleccionar</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Estado</th>
+                        <th>Tarea</th>
+                        <th>Responsable</th>
+                        <th>Prioridad</th>
+                        <th>Fecha límite</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>💜 [x]</td>
+                        <td>Revisar contratos</td>
+                        <td>Ana</td>
+                        <td>Alta</td>
+                        <td>27/09/2025</td>
+                    </tr>
+                    <tr>
+                        <td>[ ]</td>
+                        <td>Actualizar informe financiero</td>
+                        <td>Carlos</td>
+                        <td>Media</td>
+                        <td>30/09/2025</td>
+                    </tr>
+                    <tr>
+                        <td>💜 [x]</td>
+                        <td>Subir documentos al drive</td>
+                        <td>Lucía</td>
+                        <td>Baja</td>
+                        <td>25/09/2025</td>
+                    </tr>
+                    <tr>
+                        <td>[ ]</td>
+                        <td>Preparar presentación del proyecto</td>
+                        <td>Marcos</td>
+                        <td>Alta</td>
+                        <td>01/10/2025</td>
+                    </tr>
+                    <tr>
+                        <td>[ ]</td>
+                        <td>Revisar correo de clientes</td>
+                        <td>Sofía</td>
+                        <td>Media</td>
+                        <td>28/09/2025</td>
+                    </tr>
+                    <tr>
+                        <td>💜 [x]</td>
+                        <td>Actualizar base de datos</td>
+                        <td>Diego</td>
+                        <td>Alta</td>
+                        <td>29/09/2025</td>
+                    </tr>
+                    <tr>
+                        <td>[ ]</td>
+                        <td>Organizar reunión de equipo</td>
+                        <td>Ana</td>
+                        <td>Baja</td>
+                        <td>30/09/2025</td>
+                    </tr>
+                    <tr>
+                        <td>💜 [x]</td>
+                        <td>Redactar resumen semanal</td>
+                        <td>Marcos</td>
+                        <td>Media</td>
+                        <td>26/09/2025</td>
+                    </tr>
+                    <tr>
+                        <td>[ ]</td>
+                        <td>Revisar facturas pendientes</td>
+                        <td>Lucía</td>
+                        <td>Alta</td>
+                        <td>28/09/2025</td>
+                    </tr>
+                    <tr>
+                        <td>[ ]</td>
+                        <td>Preparar informe de ventas</td>
+                        <td>Carlos</td>
+                        <td>Media</td>
+                        <td>29/09/2025</td>
+                    </tr>
+                    <tr>
+                        <td>💜 [x]</td>
+                        <td>Enviar correos a clientes</td>
+                        <td>Sofía</td>
+                        <td>Baja</td>
+                        <td>27/09/2025</td>
+                    </tr>
+                    <tr>
+                        <td>[ ]</td>
+                        <td>Actualizar sitio web</td>
+                        <td>Diego</td>
+                        <td>Alta</td>
+                        <td>01/10/2025</td>
+                    </tr>
+                    <tr>
+                        <td>[ ]</td>
+                        <td>Diseñar presentación para junta</td>
+                        <td>Ana</td>
+                        <td>Media</td>
+                        <td>30/09/2025</td>
+                    </tr>
+                    <tr>
+                        <td>💜 [x]</td>
+                        <td>Revisión de reportes trimestrales</td>
+                        <td>Marcos</td>
+                        <td>Alta</td>
+                        <td>02/10/2025</td>
+                    </tr>
+                    <tr>
+                        <td>[ ]</td>
+                        <td>Enviar feedback a equipo</td>
+                        <td>Sofía</td>
+                        <td>Media</td>
+                        <td>26/09/2025</td>
+                    </tr>
+                    <tr>
+                        <td>[ ]</td>
+                        <td>Planificar nueva campaña</td>
+                        <td>Carlos</td>
+                        <td>Alta</td>
+                        <td>03/10/2025</td>
+                    </tr>
+                    <tr>
+                        <td>💜 [x]</td>
+                        <td>Actualizar base de clientes</td>
+                        <td>Lucía</td>
+                        <td>Media</td>
+                        <td>28/09/2025</td>
+                    </tr>
+                    <tr>
+                        <td>[ ]</td>
+                        <td>Reunión de cierre de proyecto</td>
+                        <td>Diego</td>
+                        <td>Alta</td>
+                        <td>04/10/2025</td>
+                    </tr>
+                    <tr>
+                        <td>[ ]</td>
+                        <td>Redactar acta de reunión</td>
+                        <td>Ana</td>
+                        <td>Media</td>
+                        <td>29/09/2025</td>
+                    </tr>
+                    <tr>
+                        <td>💜 [x]</td>
+                        <td>Preparar presupuesto anual</td>
+                        <td>Marcos</td>
+                        <td>Alta</td>
+                        <td>05/10/2025</td>
+                    </tr>
+                </tbody>
+            </table>
+
+
+            <div>
+                <button>➕ Añadir tarea</button>
+                <button>❌ Quitar tarea</button>
             </div>
         </section>
+
+        <section id="Settings">
+            <h2>⚙️ Configuración</h2>
+            <div id="cards-container">
+
+                <div id="card">
+                    <h3>Perfil</h3>
+                    <ul>
+                        <li>Nombre: Juan Pérez <button>Editar</button></li>
+                        <li>Email: juan@mail.com <button>Editar</button></li>
+                        <li>Contraseña: ******** <button>Cambiar</button></li>
+                    </ul>
+                </div>
+
+                <div id="card">
+                    <h3>Preferencias</h3>
+                    <ul>
+                        <li>Notificaciones: Activadas <button>Modificar</button></li>
+                        <li>Idioma: Español <button>Modificar</button></li>
+                        <li>Privacidad: Pública <button>Modificar</button></li>
+                    </ul>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="Help">
+            <h2>🆘 Ayuda y Comunidad</h2>
+            <div id="cards-container">
+
+                <div id="card">
+                    <h3>Preguntas Frecuentes</h3>
+                    <ul>
+                        <li>¿Cómo restablecer mi contraseña? <button>Ver</button></li>
+                        <li>¿Cómo crear un proyecto? <button>Ver</button></li>
+                        <li>¿Cómo invitar a otros usuarios? <button>Ver</button></li>
+                    </ul>
+                </div>
+
+                <div id="card">
+                    <h3>Contactar Soporte</h3>
+                    <p>Envía un mensaje a nuestro equipo de soporte:</p>
+                    <button>Enviar Mensaje</button>
+                </div>
+
+                <div id="card">
+                    <h3>Comunidad</h3>
+                    <ul>
+                        <li>Foro de preguntas <button>Entrar</button></li>
+                        <li>Tips y tutoriales <button>Ver</button></li>
+                        <li>Eventos y webinars <button>Ver</button></li>
+                    </ul>
+                </div>
+
+            </div>
+        </section>
+
     </main>
 
 </body>
