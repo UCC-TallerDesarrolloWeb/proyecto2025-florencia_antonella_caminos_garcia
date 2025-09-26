@@ -1,11 +1,18 @@
 :root {
     --color-primario: #5CA7DB;
-    --color-secundario: #5624E0
-    --color-fondo: #4A63DB;
+    --color-secundario: #5624E0 --color-fondo: #4A63DB;
     --color-texto: #271FDB;
     --color-boton: #427CDB;
     --color-boton-hover: #967BE0;
     --color-boton-texto: #fff;
     --color-boton-texto-hover: #e0e0e0;
 
+}
+
+
+.source-code-pro {
+  font-family: "Source Code Pro", monospace;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
 }
