@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard_Editor</title>
+    <link rel="stylesheet" href="../CSS/Dashboard_Editor.css">
+    <script src="../JS/Dashboard_Editor.js" defer></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&family=SUSE+Mono:ital,wght@0,100..800;1,100..800&family=Source+Code+Pro:ital,wght@1,700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <aside id="sidebar">
+        <h2>Opciones de edición</h2>
+
+        <nav>
+            <ul>
+                <li><button id="addChart">➕ Agregar gráfico</button></li>
+                <li><button id="addTable">➕ Agregar tabla</button></li>
+                <li><button id="addText">➕ Agregar texto</button></li>
+                <li><button id="changeColors">🎨 Cambiar colores</button></li>
+                <li><button id="addFilter">🔍 Agregar filtro</button></li>
+                <li><button id="saveDashboard">💾 Guardar dashboard</button></li>
+                <li><button id="loadDashboard">📂 Cargar dashboard</button></li>
+                <li><button id="previewMode">👀 Vista previa</button></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main id="dashboard-canvas">
+
+        <!-- Encabezado -->
+        <header>
+            <h1>Editor de Dashboard</h1>
+            <p>Configura y organiza tus paneles de datos de forma dinámica.</p>
+        </header>
+
+        <!-- Barra de herramientas -->
+        <section id="toolbar">
+            <h2>Herramientas rápidas</h2>
+            <div>
+                <button id="btnAddChart">➕ Gráfico</button>
+                <button id="btnAddTable">📋 Tabla</button>
+                <button id="btnAddText">📝 Texto</button>
+                <button id="btnAddFilter">🔍 Filtro</button>
+            </div>
+        </section>
+
+        <section id="workspace">
+            <h2>Zona de trabajo</h2>
+            <p>Aquí podrás arrastrar y organizar los elementos de tu dashboard.</p>
+
+            <div id="widgets-container">
+                <article class="widget">
+                    <h3>📊 Gráfico de ejemplo</h3>
+                    <p>Este es un espacio reservado para un gráfico.</p>
+                </article>
+
+                <article class="widget">
+                    <h3>📋 Tabla de ejemplo</h3>
+                    <p>Aquí iría una tabla con datos.</p>
+                </article>
+            </div>
+        </section>
+
+        <section id="customization">
+            <h2>Personalización</h2>
+            <form>
+                <label for="colorScheme">Esquema de colores:</label>
+                <select id="colorScheme" name="colorScheme">
+                    <option value="default">Predeterminado</option>
+                    <option value="dark">Oscuro</option>
+                    <option value="light">Claro</option>
+                </select>
+
+                <br><br>
+
+                <label for="fontSelect">Fuente:</label>
+                <select id="fontSelect" name="fontSelect">
+                    <option value="sans-serif">Sans Serif</option>
+                    <option value="serif">Serif</option>
+                    <option value="monospace">Monospace</option>
+                </select>
+            </form>
+        </section>
+
+        <section id="actions">
+            <h2>Acciones</h2>
+            <button id="btnSave">💾 Guardar Dashboard</button>
+            <button id="btnLoad">📂 Cargar Dashboard</button>
+            <button id="btnPreview">👀 Vista previa</button>
+        </section>
+
+    </main>
+</body>
+
+</html>
