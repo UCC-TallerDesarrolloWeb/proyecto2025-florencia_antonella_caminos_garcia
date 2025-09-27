@@ -112,6 +112,7 @@
             </div>
             <div class="file-upload">
                 <button onclick="window.location.href='../HTML/Dashboard_Editor.html'">Ir al Dashboard Editor</button>
+                <p role="alert" class="error-msg">⚠️ No se pudo abrir el editor, revise la conexión.</p>
             </div>
         </section>
 
@@ -128,14 +129,19 @@
                         <option value="recordatorios">📌 Recordatorios</option>
                         <option value="notificaciones">🔔 Notificaciones</option>
                         <option value="estadisticas">📊 Estadísticas</option>
+                        <option value="notas">📝 Notas</option>
+                        <option value="planes">📅 Planes</option>
+                        <option value="tareas">✅ Tareas rápidas</option>
+                        <option value="documentos">📂 Documentos</option>
+                        <option value="avances">🚀 Avances</option>
                     </select>
-                    <small>Debe elegir una tarjeta antes de continuar.</small>
+                    <span class="error-msg" role="alert">⚠️ Debe elegir una tarjeta antes de continuar.</span>
 
                     <label for="project-content-text">Contenido:</label>
                     <input id="project-content-text" name="project-content-text" type="text"
                         placeholder="Texto para agregar" required minlength="5" maxlength="100"
                         pattern="[A-Za-z0-9 áéíóúÁÉÍÓÚñÑ,.-]+" title="Solo letras, números y signos básicos." />
-                    <small>Entre 5 y 100 caracteres, sin símbolos raros.</small>
+                    <span class="error-msg" role="alert">⚠️ Entre 5 y 100 caracteres, sin símbolos raros.</span>
 
                     <button type="submit">Agregar</button>
                 </fieldset>
