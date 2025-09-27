@@ -117,68 +117,103 @@
 
         <section id="Projects">
             <h2>Proyectos</h2>
-            <div class="projects-grid">
-                <article>
-                    <h3>📌 Recordatorios</h3>
-                    <ul>
-                        <li>Reunión mañana 9:00 AM</li>
-                        <li>Enviar informe semanal</li>
-                        <li>Llamar al proveedor</li>
-                    </ul>
-                </article>
-                <article>
-                    <h3>🔔 Notificaciones</h3>
-                    <p>3 nuevas tareas asignadas en “Alpha”.</p>
-                    <p>El plan de “Marketing 2025” fue actualizado.</p>
-                </article>
-                <article>
-                    <h3>📊 Estadísticas</h3>
-                    <ul>
-                        <li>Progreso proyecto Beta: 65%</li>
-                        <li>Tareas completadas: 34/52</li>
-                        <li>Colaboradores activos: 8</li>
-                    </ul>
-                </article>
-                <article>
-                    <h3>📝 Notas</h3>
-                    <p>Ideas para la campaña:</p>
-                    <ul>
-                        <li>Integrar redes sociales</li>
-                        <li>Diseñar logo alternativo</li>
-                        <li>Explorar influencers locales</li>
-                    </ul>
-                </article>
-                <article>
-                    <h3>📅 Planes</h3>
-                    <ol>
-                        <li>Semana 1: Investigación</li>
-                        <li>Semana 2: Diseño</li>
-                        <li>Semana 3: Desarrollo</li>
-                        <li>Semana 4: Presentación</li>
-                    </ol>
-                </article>
-                <article>
-                    <h3>✅ Tareas rápidas</h3>
-                    <ul>
-                        <li>[ ] Revisar contratos</li>
-                        <li>[x] Confirmar reunión</li>
-                        <li>[ ] Subir documentos al drive</li>
-                    </ul>
-                </article>
-                <article>
-                    <h3>📂 Documentos</h3>
-                    <p>Últimos archivos subidos:</p>
-                    <ul>
-                        <li>Reporte_final.pdf</li>
-                        <li>Plan_marketing.xlsx</li>
-                        <li>Notas_equipo.docx</li>
-                    </ul>
-                </article>
-                <article>
-                    <h3>🚀 Avances</h3>
-                    <p>El prototipo inicial fue aprobado y se comenzará la fase de pruebas la próxima semana.</p>
-                </article>
-            </div>
+
+            <form id="add-project-content" aria-label="Agregar contenido a proyecto">
+                <label for="target-card">Seleccionar card:</label>
+                <select id="target-card" name="target-card" required>
+                    <option value="" disabled selected>Seleccionar card...</option>
+                    <option value="recordatorios">📌 Recordatorios</option>
+                    <option value="notificaciones">🔔 Notificaciones</option>
+                    <option value="estadisticas">📊 Estadísticas</option>
+                    <option value="notas">📝 Notas</option>
+                    <option value="planes">📅 Planes</option>
+                    <option value="tareas">✅ Tareas rápidas</option>
+                    <option value="documentos">📂 Documentos</option>
+                    <option value="avances">🚀 Avances</option>
+                </select>
+
+                <label for="project-content-text">Contenido:</label>
+                <input id="project-content-text" name="project-content-text" type="text"
+                    placeholder="Texto para agregar" required />
+
+                <button type="submit">Agregar</button>
+
+                <div class="projects-grid">
+                    <article data-type="recordatorios">
+                        <h3>📌 Recordatorios</h3>
+                        <ul class="card-list">
+                            <li>Reunión mañana 9:00 AM</li>
+                            <li>Enviar informe semanal</li>
+                            <li>Llamar al proveedor</li>
+                        </ul>
+                    </article>
+
+                    <article data-type="notificaciones">
+                        <h3>🔔 Notificaciones</h3>
+                        <ul class="card-list">
+                            <li>3 nuevas tareas asignadas en "Alpha"</li>
+                            <li>El plan de "Marketing 2025" fue actualizado</li>
+                        </ul>
+                    </article>
+
+                    <article data-type="estadisticas">
+                        <h3>📊 Estadísticas</h3>
+                        <ul class="card-list">
+                            <li>Progreso proyecto Beta: 65%</li>
+                            <li>Tareas completadas: 34/52</li>
+                            <li>Colaboradores activos: 8</li>
+                        </ul>
+                    </article>
+
+                    <article data-type="notas">
+                        <h3>📝 Notas</h3>
+                        <ul class="card-list">
+                            <li>Integrar redes sociales</li>
+                            <li>Diseñar logo alternativo</li>
+                            <li>Explorar influencers locales</li>
+                        </ul>
+                    </article>
+
+                    <article data-type="planes">
+                        <h3>📅 Planes</h3>
+                        <ol class="card-list">
+                            <li>Semana 1: Investigación</li>
+                            <li>Semana 2: Diseño</li>
+                            <li>Semana 3: Desarrollo</li>
+                            <li>Semana 4: Presentación</li>
+                        </ol>
+                    </article>
+
+                    <article data-type="tareas">
+                        <h3>✅ Tareas rápidas</h3>
+                        <ul class="card-list">
+                            <li><label><input type="checkbox" class="quick-task-checkbox"> Revisar contratos</label>
+                            </li>
+                            <li data-initial-complete="true"><label><input type="checkbox" class="quick-task-checkbox"
+                                        checked> Confirmar reunión</label></li>
+                            <li><label><input type="checkbox" class="quick-task-checkbox"> Subir documentos al
+                                    drive</label>
+                            </li>
+                        </ul>
+                    </article>
+
+                    <article data-type="documentos">
+                        <h3>📂 Documentos</h3>
+                        <ul class="card-list">
+                            <li>Reporte_final.pdf</li>
+                            <li>Plan_marketing.xlsx</li>
+                            <li>Notas_equipo.docx</li>
+                        </ul>
+                    </article>
+
+                    <article data-type="avances">
+                        <h3>🚀 Avances</h3>
+                        <ul class="card-list">
+                            <li>Prototipo inicial aprobado</li>
+                            <li>Fase de pruebas comenzará la próxima semana</li>
+                        </ul>
+                    </article>
+                </div>
         </section>
 
         <section id="Gallery">
