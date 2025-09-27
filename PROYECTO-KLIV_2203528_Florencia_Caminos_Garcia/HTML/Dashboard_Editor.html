@@ -177,21 +177,111 @@
         <section class="preview-panel">
             <h2>Vista previa de archivos</h2>
             <div class="preview-grid" aria-live="polite">
-                <article class="preview-card">
-                    <img src="https://via.placeholder.com/150/5CA7DB/FFFFFF?text=IMG" alt="Archivo gráfico">
-                    <p>archivo_grafico.png (250 KB)</p>
+                <article class="preview-card pdf">
+                    <div class="card-header">
+                        <div class="card-icon">📄</div>
+                        <h3 class="card-title">Reporte_Trimestral.pdf</h3>
+                    </div>
+                    <div class="card-preview pdf-preview">
+                        📊 PDF
+                    </div>
+                    <div class="card-info">
+                        <span class="file-size">2.4 MB</span>
+                        <span class="file-date">15/03/2023</span>
+                    </div>
+                    <div class="card-actions">
+                        <button class="card-btn">👁️ Vista previa</button>
+                        <button class="card-btn primary">⬇️ Descargar</button>
+                    </div>
                 </article>
-                <article class="preview-card">
-                    <img src="https://via.placeholder.com/150/5624E0/FFFFFF?text=PDF" alt="Documento PDF">
-                    <p>reporte_analitico.pdf (1.2 MB)</p>
+
+                <article class="preview-card image">
+                    <div class="card-header">
+                        <div class="card-icon">🖼️</div>
+                        <h3 class="card-title">Dashboard_Design.png</h3>
+                    </div>
+                    <div class="card-preview image-preview">
+                        <svg width="100%" height="100%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="10" y="10" width="80" height="60" fill="#f0f0f0" stroke="#ccc" stroke-width="1" />
+                            <rect x="15" y="15" width="70" height="10" fill="#8A2BE2" opacity="0.7" />
+                            <rect x="15" y="30" width="20" height="20" fill="#6BC5E8" opacity="0.7" />
+                            <rect x="40" y="30" width="20" height="20" fill="#FFB347" opacity="0.7" />
+                            <rect x="65" y="30" width="20" height="20" fill="#6BCB77" opacity="0.7" />
+                            <rect x="15" y="55" width="70" height="10" fill="#DA70D6" opacity="0.7" />
+                        </svg>
+                    </div>
+                    <div class="card-info">
+                        <span class="file-size">1.8 MB</span>
+                        <span class="file-date">22/03/2023</span>
+                    </div>
+                    <div class="card-actions">
+                        <button class="card-btn">👁️ Vista previa</button>
+                        <button class="card-btn primary">⬇️ Descargar</button>
+                    </div>
                 </article>
-                <article class="preview-card">
-                    <img src="https://via.placeholder.com/150/427CDB/FFFFFF?text=JPG" alt="Imagen">
-                    <p>captura_dashboard.jpg (580 KB)</p>
+
+                <article class="preview-card chart">
+                    <div class="card-header">
+                        <div class="card-icon">📈</div>
+                        <h3 class="card-title">Ventas_2023.csv</h3>
+                    </div>
+                    <div class="card-preview chart-preview">
+                        <div class="mini-chart">
+                            <div class="chart-bar"></div>
+                            <div class="chart-bar"></div>
+                            <div class="chart-bar"></div>
+                            <div class="chart-bar"></div>
+                            <div class="chart-bar"></div>
+                            <div class="chart-bar"></div>
+                            <div class="chart-bar"></div>
+                        </div>
+                    </div>
+                    <div class="card-info">
+                        <span class="file-size">350 KB</span>
+                        <span class="file-date">10/04/2023</span>
+                    </div>
+                    <div class="card-actions">
+                        <button class="card-btn">📊 Visualizar</button>
+                        <button class="card-btn primary">⬇️ Descargar</button>
+                    </div>
+                </article>
+
+                <article class="preview-card data">
+                    <div class="card-header">
+                        <div class="card-icon">📋</div>
+                        <h3 class="card-title">Métricas_Q1.json</h3>
+                    </div>
+                    <div class="card-preview data-preview">
+                        <table class="data-table">
+                            <tr>
+                                <td>Visitas:</td>
+                                <td>12,450</td>
+                            </tr>
+                            <tr>
+                                <td>Conversiones:</td>
+                                <td>1,240</td>
+                            </tr>
+                            <tr>
+                                <td>Tasa conversión:</td>
+                                <td>9.96%</td>
+                            </tr>
+                            <tr>
+                                <td>Ingresos:</td>
+                                <td>$24,800</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="card-info">
+                        <span class="file-size">120 KB</span>
+                        <span class="file-date">05/04/2023</span>
+                    </div>
+                    <div class="card-actions">
+                        <button class="card-btn">📊 Analizar</button>
+                        <button class="card-btn primary">⬇️ Descargar</button>
+                    </div>
                 </article>
             </div>
         </section>
-
         <section class="file-panel">
             <h2>Archivos, fotos y notas</h2>
             <div id="file-list"></div>
