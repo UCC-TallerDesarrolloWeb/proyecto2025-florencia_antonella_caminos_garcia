@@ -119,114 +119,119 @@
             <h2>Proyectos</h2>
 
             <form id="add-project-content" aria-label="Agregar contenido a proyecto">
-                <label for="target-card">Seleccionar card:</label>
-                <select id="target-card" name="target-card" required>
-                    <option value="" disabled selected>Seleccionar card...</option>
-                    <option value="recordatorios">📌 Recordatorios</option>
-                    <option value="notificaciones">🔔 Notificaciones</option>
-                    <option value="estadisticas">📊 Estadísticas</option>
-                    <option value="notas">📝 Notas</option>
-                    <option value="planes">📅 Planes</option>
-                    <option value="tareas">✅ Tareas rápidas</option>
-                    <option value="documentos">📂 Documentos</option>
-                    <option value="avances">🚀 Avances</option>
-                </select>
+                <fieldset>
+                    <legend>Agregar contenido a proyecto</legend>
 
-                <label for="project-content-text">Contenido:</label>
-                <input id="project-content-text" name="project-content-text" type="text"
-                    placeholder="Texto para agregar" required />
+                    <label for="target-card">Seleccionar card:</label>
+                    <select id="target-card" name="target-card" required>
+                        <option value="" disabled selected>Seleccionar card...</option>
+                        <option value="recordatorios">📌 Recordatorios</option>
+                        <option value="notificaciones">🔔 Notificaciones</option>
+                        <option value="estadisticas">📊 Estadísticas</option>
+                    </select>
+                    <small>Debe elegir una tarjeta antes de continuar.</small>
 
-                <button type="submit">Agregar</button>
+                    <label for="project-content-text">Contenido:</label>
+                    <input id="project-content-text" name="project-content-text" type="text"
+                        placeholder="Texto para agregar" required minlength="5" maxlength="100"
+                        pattern="[A-Za-z0-9 áéíóúÁÉÍÓÚñÑ,.-]+" title="Solo letras, números y signos básicos." />
+                    <small>Entre 5 y 100 caracteres, sin símbolos raros.</small>
 
-                <div class="projects-grid">
-                    <article data-type="recordatorios">
-                        <h3>📌 Recordatorios</h3>
-                        <ul class="card-list">
-                            <li>Reunión mañana 9:00 AM</li>
-                            <li>Enviar informe semanal</li>
-                            <li>Llamar al proveedor</li>
-                        </ul>
-                    </article>
+                    <button type="submit">Agregar</button>
+                </fieldset>
+            </form>
 
-                    <article data-type="notificaciones">
-                        <h3>🔔 Notificaciones</h3>
-                        <ul class="card-list">
-                            <li>3 nuevas tareas asignadas en "Alpha"</li>
-                            <li>El plan de "Marketing 2025" fue actualizado</li>
-                        </ul>
-                    </article>
+            <div class="projects-grid">
+                <article data-type="recordatorios">
+                    <h3>📌 Recordatorios</h3>
+                    <ul class="card-list">
+                        <li>Reunión mañana 9:00 AM</li>
+                        <li>Enviar informe semanal</li>
+                        <li>Llamar al proveedor</li>
+                    </ul>
+                </article>
 
-                    <article data-type="estadisticas">
-                        <h3>📊 Estadísticas</h3>
-                        <ul class="card-list">
-                            <li>Progreso proyecto Beta: 65%</li>
-                            <li>Tareas completadas: 34/52</li>
-                            <li>Colaboradores activos: 8</li>
-                        </ul>
-                    </article>
+                <article data-type="notificaciones">
+                    <h3>🔔 Notificaciones</h3>
+                    <ul class="card-list">
+                        <li>3 nuevas tareas asignadas en "Alpha"</li>
+                        <li>El plan de "Marketing 2025" fue actualizado</li>
+                    </ul>
+                </article>
 
-                    <article data-type="notas">
-                        <h3>📝 Notas</h3>
-                        <ul class="card-list">
-                            <li>Integrar redes sociales</li>
-                            <li>Diseñar logo alternativo</li>
-                            <li>Explorar influencers locales</li>
-                        </ul>
-                    </article>
+                <article data-type="estadisticas">
+                    <h3>📊 Estadísticas</h3>
+                    <ul class="card-list">
+                        <li>Progreso proyecto Beta: 65%</li>
+                        <li>Tareas completadas: 34/52</li>
+                        <li>Colaboradores activos: 8</li>
+                    </ul>
+                </article>
 
-                    <article data-type="planes">
-                        <h3>📅 Planes</h3>
-                        <ol class="card-list">
-                            <li>Semana 1: Investigación</li>
-                            <li>Semana 2: Diseño</li>
-                            <li>Semana 3: Desarrollo</li>
-                            <li>Semana 4: Presentación</li>
-                        </ol>
-                    </article>
+                <article data-type="notas">
+                    <h3>📝 Notas</h3>
+                    <ul class="card-list">
+                        <li>Integrar redes sociales</li>
+                        <li>Diseñar logo alternativo</li>
+                        <li>Explorar influencers locales</li>
+                    </ul>
+                </article>
 
-                    <article data-type="tareas">
-                        <h3>✅ Tareas rápidas</h3>
-                        <ul class="card-list">
-                            <li><label><input type="checkbox" class="quick-task-checkbox"> Revisar contratos</label>
-                            </li>
-                            <li data-initial-complete="true"><label><input type="checkbox" class="quick-task-checkbox"
-                                        checked> Confirmar reunión</label></li>
-                            <li><label><input type="checkbox" class="quick-task-checkbox"> Subir documentos al
-                                    drive</label>
-                            </li>
-                        </ul>
-                    </article>
+                <article data-type="planes">
+                    <h3>📅 Planes</h3>
+                    <ol class="card-list">
+                        <li>Semana 1: Investigación</li>
+                        <li>Semana 2: Diseño</li>
+                        <li>Semana 3: Desarrollo</li>
+                        <li>Semana 4: Presentación</li>
+                    </ol>
+                </article>
 
-                    <article data-type="documentos">
-                        <h3>📂 Documentos</h3>
-                        <ul class="card-list">
-                            <li>Reporte_final.pdf</li>
-                            <li>Plan_marketing.xlsx</li>
-                            <li>Notas_equipo.docx</li>
-                        </ul>
-                    </article>
+                <article data-type="tareas">
+                    <h3>✅ Tareas rápidas</h3>
+                    <ul class="card-list">
+                        <li><label><input type="checkbox" class="quick-task-checkbox"> Revisar contratos</label>
+                        </li>
+                        <li data-initial-complete="true"><label><input type="checkbox" class="quick-task-checkbox"
+                                    checked> Confirmar reunión</label></li>
+                        <li><label><input type="checkbox" class="quick-task-checkbox"> Subir documentos al
+                                drive</label>
+                        </li>
+                    </ul>
+                </article>
 
-                    <article data-type="avances">
-                        <h3>🚀 Avances</h3>
-                        <ul class="card-list">
-                            <li>Prototipo inicial aprobado</li>
-                            <li>Fase de pruebas comenzará la próxima semana</li>
-                        </ul>
-                    </article>
-                </div>
+                <article data-type="documentos">
+                    <h3>📂 Documentos</h3>
+                    <ul class="card-list">
+                        <li>Reporte_final.pdf</li>
+                        <li>Plan_marketing.xlsx</li>
+                        <li>Notas_equipo.docx</li>
+                    </ul>
+                </article>
+
+                <article data-type="avances">
+                    <h3>🚀 Avances</h3>
+                    <ul class="card-list">
+                        <li>Prototipo inicial aprobado</li>
+                        <li>Fase de pruebas comenzará la próxima semana</li>
+                    </ul>
+                </article>
+            </div>
         </section>
 
         <section id="Gallery">
             <h2>Galería de Contenidos</h2>
             <div id="photo-section">
-                <h3>Ver Foto</h3>
-                <div id="photo-options">
-                    <label><input type="radio" name="photo-option" value="no-show"> No Mostrar este Contenido</label>
-                    <label><input type="radio" name="photo-option" value="save"> Guardar</label>
-                    <label><input type="radio" name="photo-option" value="react"> Reaccionar</label>
+                <h2>Galería de Contenidos</h2>
+                <div id="photo-section">
+                    <h3>Ver Foto</h3>
+                    <div id="photo-options">
+                        <label><input type="radio" name="photo-option" value="no-show" required> No Mostrar</label>
+                        <label><input type="radio" name="photo-option" value="save"> Guardar</label>
+                        <label><input type="radio" name="photo-option" value="react"> Reaccionar</label>
+                    </div>
+                    <p role="alert">⚠️ Debe seleccionar una imagen antes de continuar.</p>
                 </div>
-                <p id="photo-error-message">Error: Si escoge una de las opciones de la izquierda, debe seleccionar una
-                    imagen</p>
             </div>
             <div id="gallery-grid">
                 <figure><img src="../Imagenes/1_Ropa.jpeg" alt="Prenda de ropa">
