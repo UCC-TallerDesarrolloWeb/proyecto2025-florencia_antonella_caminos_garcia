@@ -289,3 +289,101 @@ legend {
 #file-upload button {
     width: 100%;
 }
+
+#Projects progress {
+    width: 100%;
+    height: 1.5rem;
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-top: 0.5rem;
+    accent-color: var(--color-primario);
+}
+
+.projects-grid button {
+    margin-top: 0.5rem;
+    align-self: center;
+}
+
+.projects-grid input[type="checkbox"].quick-task-checkbox {
+    margin-right: 0.4rem;
+    transform: scale(1.2);
+    cursor: pointer;
+}
+
+.projects-grid li {
+    margin-bottom: 0.4rem;
+}
+
+.projects-grid ul.card-list,
+.projects-grid ol.card-list {
+    padding-left: 1.2rem;
+}
+
+.projects-grid h3 {
+    margin-bottom: 0.7rem;
+    font-size: 1.1rem;
+    color: var(--color-primario);
+    text-align: center;
+}
+
+.projects-grid article:hover {
+    transform: translateY(-5px);
+}
+
+.projects-grid article {
+    background-color: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 1rem;
+    flex: 1 1 250px;
+    /* que cada card tenga tamaño mínimo y crezca */
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s;
+}
+
+.projects-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+
+.error-msg {
+    color: red;
+    font-size: 0.85rem;
+    margin-top: -0.3rem;
+    margin-bottom: 0.5rem;
+    display: none;
+}
+
+#Projects {
+    margin-top: 2rem;
+}
+
+#Projects h2 {
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    color: var(--color-secundario);
+}
+
+#add-project-content {
+    background-color: white;
+    padding: 1rem;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    margin-bottom: 2rem;
+    max-width: 500px;
+}
+
+#add-project-content fieldset {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+#add-project-content button {
+    align-self: flex-start;
+    /* separa el botón del resto */
+    margin-top: 0.5rem;
+}
