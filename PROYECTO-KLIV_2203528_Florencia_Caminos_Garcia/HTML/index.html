@@ -522,25 +522,108 @@
 
         <section id="Settings">
             <h2>⚙️ Configuración</h2>
-            <div class="cards-container">
-                <div class="card">
-                    <h3>Perfil</h3>
-                    <ul>
-                        <li>Nombre: Juan Pérez <button>Editar</button></li>
-                        <li>Email: juan@mail.com <button>Editar</button></li>
-                        <li>Contraseña: ******** <button>Cambiar</button></li>
-                    </ul>
-                </div>
-                <div class="card">
-                    <h3>Preferencias</h3>
-                    <ul>
-                        <li>Notificaciones: Activadas <button>Modificar</button></li>
-                        <li>Idioma: Español <button>Modificar</button></li>
-                        <li>Privacidad: Pública <button>Modificar</button></li>
-                    </ul>
-                </div>
+
+            <div class="card">
+                <h3>Perfil</h3>
+                <form aria-label="Configuración de perfil">
+                    <fieldset>
+                        <legend>Datos personales</legend>
+
+                        <label for="user-photo">Foto de perfil:</label>
+                        <input id="user-photo" name="user-photo" type="file" accept="image/*" required>
+                        <small role="alert">⚠️ Debe subir una imagen de perfil.</small>
+                        <br><br>
+
+                        <label for="user-name">Nombre:</label>
+                        <input id="user-name" name="user-name" type="text" value="Juan Pérez" required minlength="3"
+                            maxlength="50" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+" title="Solo letras y espacios.">
+                        <small role="alert">⚠️ Solo letras y espacios (3 a 50 caracteres).</small>
+                        <br>
+
+                        <label for="user-email">Email:</label>
+                        <input id="user-email" name="user-email" type="email" value="juan@mail.com" required>
+                        <small role="alert">⚠️ Ingrese un correo válido (ejemplo@mail.com).</small>
+                        <br>
+                    </fieldset>
+
+                    <button type="submit">Guardar Perfil</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <h3>Preferencias</h3>
+                <form aria-label="Configuración de preferencias">
+                    <fieldset>
+                        <legend>Opciones de usuario</legend>
+
+                        <label for="notif">Notificaciones:</label>
+                        <select id="notif" name="notif" required>
+                            <option value="on" selected>Activadas</option>
+                            <option value="off">Desactivadas</option>
+                        </select>
+                        <small role="alert">⚠️ Debe seleccionar una opción.</small>
+                        <br>
+
+                        <label for="lang">Idioma:</label>
+                        <select id="lang" name="lang" required>
+                            <option value="es" selected>Español</option>
+                            <option value="en">Inglés</option>
+                            <option value="pt">Portugués</option>
+                        </select>
+                        <small role="alert">⚠️ Seleccione un idioma válido.</small>
+                        <br>
+
+                        <label for="privacy">Privacidad:</label>
+                        <select id="privacy" name="privacy" required>
+                            <option value="public" selected>Pública</option>
+                            <option value="private">Privada</option>
+                            <option value="team">Solo equipo</option>
+                        </select>
+                        <small role="alert">⚠️ Elija un nivel de privacidad.</small>
+                    </fieldset>
+
+                    <button type="submit">Guardar Preferencias</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <h3>Seguridad</h3>
+                <form aria-label="Configuración de seguridad">
+                    <fieldset>
+                        <legend>Credenciales</legend>
+
+                        <label for="user-password">Nueva contraseña:</label>
+                        <input id="user-password" name="user-password" type="password" required minlength="6"
+                            maxlength="20" title="Debe tener entre 6 y 20 caracteres.">
+                        <small role="alert">⚠️ Entre 6 y 20 caracteres.</small>
+                        <br>
+
+                        <label for="confirm-password">Confirmar contraseña:</label>
+                        <input id="confirm-password" name="confirm-password" type="password" required minlength="6"
+                            maxlength="20" title="Repita la contraseña.">
+                        <small role="alert">⚠️ Repita la contraseña para confirmación.</small>
+                        <br><br>
+
+                        <label for="security-question">Pregunta de seguridad:</label>
+                        <select id="security-question" name="security-question" required>
+                            <option value="" disabled selected>Seleccionar...</option>
+                            <option value="pet">¿Nombre de tu primera mascota?</option>
+                            <option value="school">¿Nombre de tu escuela primaria?</option>
+                            <option value="city">¿Ciudad donde naciste?</option>
+                        </select>
+                        <small role="alert">⚠️ Seleccione una pregunta de seguridad.</small>
+                        <br>
+
+                        <label for="security-answer">Respuesta:</label>
+                        <input id="security-answer" name="security-answer" type="text" required>
+                        <small role="alert">⚠️ La respuesta es obligatoria.</small>
+                    </fieldset>
+
+                    <button type="submit">Guardar Seguridad</button>
+                </form>
             </div>
         </section>
+
 
         <section id="Help">
             <h2>🆘 Ayuda y Comunidad</h2>
