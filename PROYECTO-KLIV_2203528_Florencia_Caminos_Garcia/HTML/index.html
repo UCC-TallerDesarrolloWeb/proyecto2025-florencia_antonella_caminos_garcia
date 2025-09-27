@@ -217,12 +217,15 @@
                     </ul>
                 </article>
             </div>
+
+            <h2>Avance General</h2>
+            <p>Progreso de proyecto Beta:</p>
+            <progress value="65" max="100">65%</progress>
         </section>
 
         <section id="Gallery">
             <h2>Galería de Contenidos</h2>
             <div id="photo-section">
-                <h2>Galería de Contenidos</h2>
                 <div id="photo-section">
                     <h3>Ver Foto</h3>
                     <div id="photo-options">
@@ -268,7 +271,6 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Cada fila incluye un checkbox para completar -->
                     <tr>
                         <td>
                             <label>
@@ -542,30 +544,23 @@
 
         <section id="Help">
             <h2>🆘 Ayuda y Comunidad</h2>
-            <div class="cards-container">
-                <div class="card">
-                    <h3>Preguntas Frecuentes</h3>
-                    <ul>
-                        <li>¿Cómo restablecer mi contraseña? <button>Ver</button></li>
-                        <li>¿Cómo crear un proyecto? <button>Ver</button></li>
-                        <li>¿Cómo invitar a otros usuarios? <button>Ver</button></li>
-                    </ul>
-                </div>
-                <div class="card">
-                    <h3>Contactar Soporte</h3>
-                    <p>Envía un mensaje a nuestro equipo de soporte:</p>
-                    <button>Enviar Mensaje</button>
-                </div>
-                <div class="card">
-                    <h3>Comunidad</h3>
-                    <ul>
-                        <li>Foro de preguntas <button>Entrar</button></li>
-                        <li>Tips y tutoriales <button>Ver</button></li>
-                        <li>Eventos y webinars <button>Ver</button></li>
-                    </ul>
-                </div>
-            </div>
+
+            <details>
+                <summary>¿Cómo restablecer mi contraseña?</summary>
+                <p>Dirígete a Configuración → Perfil → Cambiar contraseña.</p>
+            </details>
+
+            <details>
+                <summary>¿Cómo crear un proyecto?</summary>
+                <p>En el apartado "Proyectos", selecciona ➕ Añadir proyecto.</p>
+            </details>
+
+            <details>
+                <summary>¿Cómo invitar a otros usuarios?</summary>
+                <p>En Configuración → Comunidad, elige "Invitar usuarios".</p>
+            </details>
         </section>
+
 
     </main>
 </body>
