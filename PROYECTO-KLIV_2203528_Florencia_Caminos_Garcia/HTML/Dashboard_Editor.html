@@ -1,199 +1,222 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard_Editor</title>
+    <title>Dashboard Editor</title>
     <link rel="stylesheet" href="../CSS/Dashboard_Editor.css">
-    <script src="../JS/Dashboard_Editor.js" defer></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&family=SUSE+Mono:ital,wght@0,100..800;1,100..800&family=Source+Code+Pro:ital,wght@1,700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&family=SUSE+Mono:ital,wght@0,100..800;1,100..800&family=Source+Code+Pro:ital,wght@1,700&display=swap"
+        rel="stylesheet">
 </head>
+
 <body>
+    <aside id="sidebar-edit">
+        <header class="editor-header" role="banner">
+            <div class="header-content">
+                <h1>Editor de Dashboard</h1>
+                <p class="subtitle">Configura y organiza tus paneles de datos de forma dinámica</p>
+            </div>
+            <nav class="breadcrumb" aria-label="Ruta de navegación">
+                <ol>
+                    <li><a href="../HTML/Index.html">Dashboard</a></li>
+                    <li><span aria-current="page">Editor</span></li>
+                </ol>
+            </nav>
+        </header>
 
-<aside id="sidebar-edit">
-    <h2>Opciones de edición</h2>
-    <nav>
-        <ul>
-            <li><button id="addChart">➕ Agregar gráfico</button></li>
-            <li><button id="addTable">➕ Agregar tabla</button></li>
-            <li><button id="addText">➕ Agregar texto</button></li>
-            <li><button id="changeColors">🎨 Cambiar colores</button></li>
-            <li><button id="addFilter">🔍 Agregar filtro</button></li>
-            <li><button id="saveDashboard">💾 Guardar dashboard</button></li>
-            <li><button id="loadDashboard">📂 Cargar dashboard</button></li>
-            <li><button id="previewMode">👀 Vista previa</button></li>
-        </ul>
-    </nav>
-    <h2>Proyectos</h2>
-    <ul>
-        <li><button>Personal</button></li>
-        <li><button>Trabajo</button></li>
-        <li><button>Estudios</button></li>
-    </ul>
-    <h2>Filtros</h2>
-    <form id="project-filters">
-        <label><input type="checkbox" name="filter" value="Alta"> Prioridad Alta</label>
-        <label><input type="checkbox" name="filter" value="Media"> Prioridad Media</label>
-        <label><input type="checkbox" name="filter" value="Baja"> Prioridad Baja</label>
-        <label><input type="checkbox" name="filter" value="Urgente"> Urgente</label>
-        <label><input type="checkbox" name="filter" value="Importante"> Importante</label>
-    </form>
-</aside>
+        <aside id="editor-sidebar" class="editor-sidebar" role="complementary" aria-label="Herramientas de edición">
+            <section class="sidebar-section">
+                <h2 class="sidebar-title">Opciones</h2>
+                <ul class="tool-list" role="list">
+                    <li><button id="addChart" class="tool-btn" data-type="chart">➕ Gráfico</button></li>
+                    <li><button id="addTable" class="tool-btn" data-type="table">➕ Tabla</button></li>
+                    <li><button id="addText" class="tool-btn" data-type="text">➕ Texto</button></li>
+                    <li><button id="changeColors" class="tool-btn" data-type="color">🎨 Colores</button></li>
+                    <li><button id="addFilter" class="tool-btn" data-type="filter">🔍 Filtro</button></li>
+                </ul>
+            </section>
 
-<main id="dashboard-canvas">
-    <header>
-        <h1>Editor de Dashboard</h1>
-        <p>Configura y organiza tus paneles de datos de forma dinámica.</p>
-    </header>
+            <section class="sidebar-section">
+                <h2 class="sidebar-title">Gestión</h2>
+                <ul class="action-list" role="list">
+                    <li><button id="saveDashboard" class="action-btn primary">💾 Guardar</button></li>
+                    <li><button id="loadDashboard" class="action-btn secondary">📂 Cargar</button></li>
+                    <li><button id="previewMode" class="action-btn tertiary">👀 Vista previa</button></li>
+                </ul>
+            </section>
 
-    <section class="column" id="todo">
-        <h2>To Do</h2>
-        <ul class="task-list"></ul>
-    </section>
+            <section class="sidebar-section">
+                <h2 class="sidebar-title">Proyectos</h2>
+                <ul class="project-list" role="list">
+                    <li><button class="project-btn" data-project="personal">📁 Personal</button></li>
+                    <li><button class="project-btn" data-project="trabajo">💼 Trabajo</button></li>
+                    <li><button class="project-btn" data-project="estudios">📚 Estudios</button></li>
+                </ul>
+            </section>
 
-    <section id="metrics">
-        <h2>Seleccionar métricas</h2>
-        <form>
-            <label><input type="checkbox" name="metric" value="visitas"> Visitas</label>
-            <label><input type="checkbox" name="metric" value="usuarios"> Usuarios</label>
-            <label><input type="checkbox" name="metric" value="conversiones"> Conversiones</label>
-            <label><input type="checkbox" name="metric" value="ingresos"> Ingresos</label>
-        </form>
-    </section>
+            <section class="sidebar-section">
+                <h2 class="sidebar-title">Filtros</h2>
+                <form id="project-filters" class="filter-form" aria-label="Filtros de proyecto">
+                    <fieldset>
+                        <legend class="visually-hidden">Seleccionar filtros</legend>
+                        <label><input type="checkbox" name="priority" value="Alta"> Alta prioridad</label>
+                        <label><input type="checkbox" name="priority" value="Media"> Media prioridad</label>
+                        <label><input type="checkbox" name="priority" value="Baja"> Baja prioridad</label>
+                        <label><input type="checkbox" name="priority" value="Urgente"> Urgente</label>
+                        <label><input type="checkbox" name="priority" value="Importante"> Importante</label>
+                    </fieldset>
+                </form>
+            </section>
+        </aside>
+    </aside>
 
-    <section id="date-range">
-        <h2>Rango de fechas</h2>
-        <form>
-            <label for="startDate">Desde:</label>
-            <input type="date" id="startDate" name="startDate">
-            <label for="endDate">Hasta:</label>
-            <input type="date" id="endDate" name="endDate">
-        </form>
-    </section>
+    <main id="dashboard-main" class="dashboard-main" role="main">
 
-    <section id="filters-section">
-        <h2>Filtros</h2>
-        <form>
-            <label for="device">Dispositivo:</label>
-            <select id="device" name="device">
-                <option value="all">Todos</option>
-                <option value="desktop">Escritorio</option>
-                <option value="mobile">Móvil</option>
-                <option value="tablet">Tablet</option>
-            </select>
-            <label for="region">Región:</label>
-            <select id="region" name="region">
-                <option value="all">Todas</option>
-                <option value="america">América</option>
-                <option value="europa">Europa</option>
-                <option value="asia">Asia</option>
-            </select>
-            <label><input type="checkbox" name="newUsers" value="new"> Solo nuevos usuarios</label>
-        </form>
-    </section>
+        <section class="config-panel">
+            <details open>
+                <summary>Configuración del Dashboard</summary>
 
-    <section id="chart-type">
-        <h2>Tipo de gráfica</h2>
-        <form>
-            <label for="chartSelect">Elegir gráfica:</label>
-            <select id="chartSelect" name="chartSelect">
-                <option value="line">Línea</option>
-                <option value="bar">Barras</option>
-                <option value="pie">Circular</option>
-                <option value="area">Área</option>
-            </select>
-        </form>
-    </section>
+                <div class="config-section">
+                    <details open>
+                        <summary>Métricas</summary>
+                        <label><input type="checkbox" name="metric" value="visitas" checked> 👥 Visitas</label>
+                        <label><input type="checkbox" name="metric" value="usuarios" checked> 👤 Usuarios</label>
+                        <label><input type="checkbox" name="metric" value="conversiones"> 🔄 Conversiones</label>
+                        <label><input type="checkbox" name="metric" value="ingresos"> 💰 Ingresos</label>
+                    </details>
+                </div>
 
-    <section id="panels">
-        <h2>Paneles</h2>
-        <form>
-            <label><input type="checkbox" name="panel" value="visitas"> Panel de visitas</label>
-            <label><input type="checkbox" name="panel" value="conversiones"> Panel de conversiones</label>
-            <label><input type="checkbox" name="panel" value="usuarios"> Panel de usuarios</label>
-            <label><input type="checkbox" name="panel" value="fuente"> Panel de fuentes</label>
-        </form>
-    </section>
+                <div class="config-section">
+                    <details>
+                        <summary>Rango de fechas</summary>
+                        <label>Desde: <input type="date" name="startDate"></label>
+                        <label>Hasta: <input type="date" name="endDate"></label>
+                    </details>
+                </div>
 
-    <section id="export-view">
-        <h2>Exportar / Vista</h2>
-        <form>
-            <button type="button">📊 Exportar PDF</button>
-            <button type="button">📈 Exportar Excel</button>
-            <button type="button">🔄 Actualizar datos</button>
-        </form>
-    </section>
+                <div class="config-section">
+                    <details>
+                        <summary>Filtros avanzados</summary>
+                        <label>Dispositivo:
+                            <select name="device">
+                                <option value="all">Todos</option>
+                                <option value="desktop">💻 Escritorio</option>
+                                <option value="mobile">📱 Móvil</option>
+                                <option value="tablet">📟 Tablet</option>
+                            </select>
+                        </label>
+                        <label>Región:
+                            <select name="region">
+                                <option value="all">Todas 🌎</option>
+                                <option value="america">América</option>
+                                <option value="europa">Europa</option>
+                                <option value="asia">Asia</option>
+                            </select>
+                        </label>
+                        <label><input type="checkbox" name="newUsers"> Solo nuevos usuarios</label>
+                    </details>
+                </div>
 
-    <section id="toolbar">
-        <h2>Herramientas rápidas</h2>
-        <div>
-            <button id="btnAddChart">➕ Gráfico</button>
-            <button id="btnAddTable">📋 Tabla</button>
-            <button id="btnAddText">📝 Texto</button>
-            <button id="btnAddFilter">🔍 Filtro</button>
-        </div>
-    </section>
+                <div class="config-section">
+                    <details>
+                        <summary>Tipo de visualización</summary>
+                        <label>Gráfica:
+                            <select name="chartSelect">
+                                <option value="line">📈 Línea</option>
+                                <option value="bar">📊 Barras</option>
+                                <option value="pie">🥧 Circular</option>
+                                <option value="area">🔲 Área</option>
+                                <option value="scatter">✨ Dispersión</option>
+                            </select>
+                        </label>
+                    </details>
+                </div>
 
-    <section id="workspace">
-        <h2>Zona de trabajo</h2>
-        <p>Aquí podrás arrastrar y organizar los elementos de tu dashboard.</p>
-        <div id="widgets-container">
-            <article class="widget">
-                <h3>📊 Gráfico de ejemplo</h3>
-                <p>Este es un espacio reservado para un gráfico.</p>
+                <div class="config-section">
+                    <details>
+                        <summary>Personalización</summary>
+                        <label>Colores:
+                            <select name="colorScheme">
+                                <option value="default">🎨 Predeterminado</option>
+                                <option value="dark">🌙 Oscuro</option>
+                                <option value="light">☀️ Claro</option>
+                                <option value="vibrant">🌈 Vibrante</option>
+                            </select>
+                        </label>
+                        <label>Tipografía:
+                            <select name="fontSelect">
+                                <option value="sans-serif">🔤 Sans Serif</option>
+                                <option value="serif">✒️ Serif</option>
+                                <option value="monospace">⌨️ Monospace</option>
+                            </select>
+                        </label>
+                    </details>
+                </div>
+
+            </details>
+        </section>
+
+        <section class="workspace">
+            <h2>Zona de trabajo</h2>
+            <div id="widgets-container" role="region">
+                <article class="widget" draggable="true">
+                    <h3>📊 Gráfico de visitas</h3>
+                    <p>Este espacio mostrará un gráfico de líneas con las visitas del último mes.</p>
+                </article>
+                <article class="widget" draggable="true">
+                    <h3>📋 Tabla de métricas</h3>
+                    <p>Aquí se mostrará una tabla comparativa de métricas clave.</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="preview-panel">
+            <h2>Vista previa de archivos</h2>
+            <div class="preview-grid" aria-live="polite">
+                <article class="preview-card">
+                    <img src="https://via.placeholder.com/150/5CA7DB/FFFFFF?text=IMG" alt="Archivo gráfico">
+                    <p>archivo_grafico.png (250 KB)</p>
+                </article>
+                <article class="preview-card">
+                    <img src="https://via.placeholder.com/150/5624E0/FFFFFF?text=PDF" alt="Documento PDF">
+                    <p>reporte_analitico.pdf (1.2 MB)</p>
+                </article>
+                <article class="preview-card">
+                    <img src="https://via.placeholder.com/150/427CDB/FFFFFF?text=JPG" alt="Imagen">
+                    <p>captura_dashboard.jpg (580 KB)</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="file-panel">
+            <h2>Archivos, fotos y notas</h2>
+            <div id="file-list"></div>
+        </section>
+
+        <section class="canvas-panel">
+            <h2>Canvas de trabajo</h2>
+            <canvas id="dashboardCanvas"></canvas>
+        </section>
+
+        <template id="widget-template">
+            <article class="widget" draggable="true">
+                <h3>Nombre Widget</h3>
+                <p>Contenido dinámico</p>
             </article>
-            <article class="widget">
-                <h3>📋 Tabla de ejemplo</h3>
-                <p>Aquí iría una tabla con datos.</p>
+        </template>
+
+        <template id="file-template">
+            <article class="preview-card">
+                <img src="" alt="Archivo dinámico">
+                <p>Nombre de archivo (Tamaño)</p>
             </article>
-        </div>
-    </section>
+        </template>
 
-    <section id="customization">
-        <h2>Personalización</h2>
-        <form>
-            <label for="colorScheme">Esquema de colores:</label>
-            <select id="colorScheme" name="colorScheme">
-                <option value="default">Predeterminado</option>
-                <option value="dark">Oscuro</option>
-                <option value="light">Claro</option>
-            </select>
-            <label for="fontSelect">Fuente:</label>
-            <select id="fontSelect" name="fontSelect">
-                <option value="sans-serif">Sans Serif</option>
-                <option value="serif">Serif</option>
-                <option value="monospace">Monospace</option>
-            </select>
-        </form>
-    </section>
-
-    <section id="actions">
-        <h2>Acciones</h2>
-        <button id="btnSave">💾 Guardar Dashboard</button>
-        <button id="btnLoad">📂 Cargar Dashboard</button>
-        <button id="btnPreview">👀 Vista previa</button>
-    </section>
-
-    <section id="preview-board">
-        <h2>Vista previa de archivos</h2>
-        <div id="preview-container">
-            <div class="preview-card">
-                <img src="https://via.placeholder.com/150" alt="Archivo ejemplo">
-                <footer><p>archivo_ejemplo.png</p></footer>
-            </div>
-            <div class="preview-card">
-                <img src="https://via.placeholder.com/150" alt="Otro archivo">
-                <footer><p>documento_reporte.pdf</p></footer>
-            </div>
-            <div class="preview-card">
-                <img src="https://via.placeholder.com/150" alt="Foto">
-                <footer><p>foto_evento.jpg</p></footer>
-            </div>
-        </div>
-    </section>
-
-</main>
+    </main>
 </body>
+
 </html>
