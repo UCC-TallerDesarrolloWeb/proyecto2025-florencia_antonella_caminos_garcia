@@ -192,3 +192,89 @@ function setupSidebarEvents() {
         });
     }
 }
+
+function handleSearch() {
+    const query = document.getElementById('searchBox').value.trim().toLowerCase();
+    const errorMsg = document.getElementById('errorMessage');
+
+    if (!query) {
+        errorMsg.style.display = 'block';
+        errorMsg.textContent = '⚠️ Por favor ingrese un término de búsqueda.';
+        return;
+    }
+
+    errorMsg.style.display = 'none';
+
+    document.querySelectorAll('.search-highlight').forEach(el => {
+        el.classList.remove('search-highlight');
+    });
+
+    const contentBlocks = document.querySelectorAll('main section');
+    let found = false;
+
+    contentBlocks.forEach(section => {
+        if (section.textContent.toLowerCase().includes(query)) {
+            section.style.display = 'block';
+            section.querySelectorAll('*').forEach(el => {
+                if (el.textContent.toLowerCase().includes(query)) {
+                    el.classList.add('search-highlight');
+                    found = true;
+                }
+            });
+        } else {
+            section.style.display = 'none';
+        }
+    });
+
+    if (!found) {
+        errorMsg.style.display = 'block';
+        errorMsg.textContent = '🔍 No se encontraron coincidencias.';
+    }
+}
+
+function toggleSection(sectionId) {
+    document.querySelectorAll('main section').forEach(section => {
+        section.style.display = 'none';
+    });
+
+    const target = document.getElementById(sectionId);
+    if (target) {
+        target.style.opacity = 0;
+        target.style.display = 'block';
+        setTimeout(() => {
+            target.style.opacity = 1;
+            target.style.transition = 'opacity 0.5s ease-in-out';
+        }, 50);
+    }
+}
+
+function showError(message, targetId = 'errorMessage') {
+    const errorContainer = document.getElementById(targetId);
+    if (errorContainer) {
+        errorContainer.textContent = message;
+        errorContainer.style.display = 'block';
+    }
+}
+
+function hideError(targetId = 'errorMessage') {
+    const errorContainer = document.getElementById(targetId);
+    if (errorContainer) {
+        errorContainer.style.display = 'none';
+        errorContainer.textContent = '';
+    }
+}
+
+document.addEventListener('keydown', function (e) {
+    const sections = ['Dashboard', 'Projects', 'Tasks', 'Settings', 'Help'];
+    let currentIndex = sections.findIndex(id => document.getElementById(id).style.display === 'block');
+
+    if (e.key === 'ArrowRight') {
+        const next = sections[(currentIndex + 1) % sections.length];
+        toggleSection(next);
+    }
+
+    if (e.key === 'ArrowLeft') {
+        const prev = sections[(currentIndex - 1 + sections.length) % sections.length];
+        toggleSection(prev);
+    }
+});
