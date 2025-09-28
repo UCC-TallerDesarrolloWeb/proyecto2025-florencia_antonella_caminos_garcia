@@ -90,7 +90,7 @@ body {
 }
 
 #searchBox {
-    flex: 1; 
+    flex: 1;
     padding: 8px;
 }
 
@@ -99,6 +99,10 @@ body {
     cursor: pointer;
 }
 
+.search-highlight {
+    background-color: yellow;
+    font-weight: bold;
+}
 
 #sidebar {
     width: 250px;
@@ -432,9 +436,9 @@ figcaption {
 #Settings .card input[type="file"],
 #Settings .card select {
     width: 100%;
-    padding: 1rem 0;  
-    border: none;    
-    border-bottom: 2px solid #e0e0e0;  
+    padding: 1rem 0;
+    border: none;
+    border-bottom: 2px solid #e0e0e0;
     border-radius: 0;
     font-family: inherit;
     font-size: 1rem;
@@ -446,7 +450,7 @@ figcaption {
 #Settings .card input:focus,
 #Settings .card select:focus {
     border-bottom-color: var(--color-primario);
-    box-shadow: none; 
+    box-shadow: none;
 }
 
 #Settings .card input::placeholder {

@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("keydown", function () {
     inicializeApp();
     setupHeaderEvents();
     setupSidebarEvents();
@@ -8,6 +8,22 @@ document.addEventListener("DOMContentLoaded", function () {
     setupSettingsEvents();
     setupHelpEvents();
     setupGlobalEvents();
+
+    const sections = ['Dashboard', 'Projects', 'Tasks', 'Settings', 'Help'];
+    let currentIndex = sections.findIndex(id => {
+        const section = document.getElementById(id);
+        return section && section.classList.contains('active-section');
+    });
+
+    if (currentIndex === -1) currentIndex = 0;
+
+    if (e.key === 'ArrowRight') {
+        activateSection(sections[(currentIndex + 1) % sections.length]);
+    }
+
+    if (e.key === 'ArrowLeft') {
+        activateSection(sections[(currentIndex - 1 + sections.length) % sections.length]);
+    }
 });
 
 function inicializeApp() {
@@ -195,26 +211,23 @@ function setupSidebarEvents() {
 
 function handleSearch() {
     const query = document.getElementById('searchBox').value.trim().toLowerCase();
-    const errorMsg = document.getElementById('errorMessage');
 
     if (!query) {
-        errorMsg.style.display = 'block';
-        errorMsg.textContent = '⚠️ Por favor ingrese un término de búsqueda.';
+        showError('⚠️ Por favor ingrese un término de búsqueda.');
         return;
     }
 
-    errorMsg.style.display = 'none';
+    hideError();
 
     document.querySelectorAll('.search-highlight').forEach(el => {
         el.classList.remove('search-highlight');
     });
 
-    const contentBlocks = document.querySelectorAll('main section');
     let found = false;
-
-    contentBlocks.forEach(section => {
+    document.querySelectorAll('main section').forEach(section => {
         if (section.textContent.toLowerCase().includes(query)) {
             section.style.display = 'block';
+            section.classList.add('active-section');
             section.querySelectorAll('*').forEach(el => {
                 if (el.textContent.toLowerCase().includes(query)) {
                     el.classList.add('search-highlight');
@@ -223,14 +236,15 @@ function handleSearch() {
             });
         } else {
             section.style.display = 'none';
+            section.classList.remove('active-section');
         }
     });
 
     if (!found) {
-        errorMsg.style.display = 'block';
-        errorMsg.textContent = '🔍 No se encontraron coincidencias.';
+        showError('🔍 No se encontraron coincidencias.');
     }
 }
+
 
 function toggleSection(sectionId) {
     document.querySelectorAll('main section').forEach(section => {
@@ -264,6 +278,7 @@ function hideError(targetId = 'errorMessage') {
     }
 }
 
+
 document.addEventListener('keydown', function (e) {
     const sections = ['Dashboard', 'Projects', 'Tasks', 'Settings', 'Help'];
     let currentIndex = sections.findIndex(id => document.getElementById(id).style.display === 'block');
@@ -278,3 +293,26 @@ document.addEventListener('keydown', function (e) {
         toggleSection(prev);
     }
 });
+
+function activateSection(sectionId) {
+    document.querySelectorAll('main section').forEach(section => {
+        section.style.display = 'none';
+        section.classList.remove('active-section');
+    });
+
+    const target = document.getElementById(sectionId);
+    if (target) {
+        target.style.display = 'block';
+        target.classList.add('active-section');
+    }
+
+    document.querySelectorAll('.sidebar-item').forEach(item => {
+        item.classList.remove('active');
+    });
+
+    const menuItem = document.getElementById(`menu-${sectionId.toLowerCase()}`);
+    if (menuItem) {
+        menuItem.classList.add('active');
+    }
+}
+
