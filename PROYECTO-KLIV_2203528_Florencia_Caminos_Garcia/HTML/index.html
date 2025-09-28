@@ -22,12 +22,23 @@
             <h2 id="dashboard-subtitle">Dashboard Principal</h2>
         </div>
 
+        <div id="search-Section">
+            <input type="text" id="searchBox" placeholder="Buscar en el dashboard...">
+            <button id="searchButton">Buscar</button>
+
+            <div id="short-Term-Error">
+                <p role=" alert" class="error-msg">⚠️ Su busqueda no ha arrujado resultados</p>
+            </div>
+        </div>
+
         <div id="user-info">
             <div id="user-avatar">
                 <img src="../Imagenes/avatar.jpg" alt="Avatar de usuario">
             </div>
             <span id="user-name">Flor</span>
         </div>
+
+
     </header>
 
     <aside id="sidebar">
@@ -111,8 +122,11 @@
                 </article>
             </div>
             <div class="file-upload">
-                <button onclick="window.location.href='../HTML/Dashboard_Editor.html'">Ir al Dashboard Editor</button>
-                <p role="alert" class="error-msg">⚠️ No se pudo abrir el editor, revise la conexión.</p>
+                <button id="open-editor">Ir al Dashboard Editor</button>
+
+                <div id="short-Term-Error">
+                    <p role="alert" class="error-msg">⚠️ No se pudo abrir el editor, revise la conexión.</p>
+                </div>
             </div>
         </section>
 
@@ -135,13 +149,19 @@
                             <option value="documentos">📂 Documentos</option>
                             <option value="avances">🚀 Avances</option>
                         </select>
-                        <span class="error-msg" role="alert">⚠️ Debe elegir una tarjeta antes de continuar.</span>
+
+                        <div id="short-Term-Error">
+                            <span class="error-msg" role="alert">⚠️ Debe elegir una tarjeta antes de continuar.</span>
+                        </div>
 
                         <label for="project-content-text">Contenido:</label>
                         <input id="project-content-text" name="project-content-text" type="text"
                             placeholder="Texto para agregar" required minlength="5" maxlength="100"
                             pattern="[A-Za-z0-9 áéíóúÁÉÍÓÚñÑ,.-]+" title="Solo letras, números y signos básicos." />
-                        <span class="error-msg" role="alert">⚠️ Entre 5 y 100 caracteres, sin símbolos raros.</span>
+
+                        <div>
+                            <span class="error-msg" role="alert">⚠️ Entre 5 y 100 caracteres, sin símbolos raros.</span>
+                        </div>
                     </div>
                     <div class="button-group">
                         <button type="submit" class="btn-primary">Agregar</button>
@@ -648,7 +668,7 @@
                 </div>
             </div>
         </section>
-        
+
         <section id="Help">
             <h2>🆘 Ayuda y Comunidad</h2>
 
