@@ -17,30 +17,29 @@
 <body>
     <aside id="sidebar">
         <h2>Proyectos
-            <button id="btnNewProject" class="icon-btn">➕ Nuevo</button>
+            <button id="btnNewProject" class="icon-btn" type="button">➕ Nuevo</button>
         </h2>
         <div id="projects-container">
             <ul id="project-list">
-                <li><button class="project-btn active" data-project="personal">🏠 Personal</button></li>
-                <li><button class="project-btn" data-project="trabajo">💼 Trabajo</button></li>
-                <li><button class="project-btn" data-project="estudios">📚 Estudios</button></li>
+                <li><button class="project-btn active" data-project="personal" type="button">🏠 Personal</button></li>
+                <li><button class="project-btn" data-project="trabajo" type="button">💼 Trabajo</button></li>
+                <li><button class="project-btn" data-project="estudios" type="button">📚 Estudios</button></li>
             </ul>
         </div>
 
         <div class="toolbar">
-            <button id="new-task">➕ Nueva tarea</button>
-            <button id="menu">📂 Menú</button>
+            <button id="new-task" type="button">➕ Nueva tarea</button>
+            <button id="menu" type="button">📂 Menú</button>
         </div>
 
         <div class="search-container">
-            <input type="text" id="search-tasks" placeholder="🔍 Buscar tareas...">
-            <select id="sort-tasks">
+            <input type="text" id="search-tasks-sidebar" placeholder="🔍 Buscar tareas...">
+            <select id="sort-tasks-sidebar">
                 <option value="fecha">Ordenar por fecha</option>
                 <option value="prioridad">Ordenar por prioridad</option>
                 <option value="nombre">Ordenar por nombre</option>
             </select>
         </div>
-
 
         <div id="stats">
             <h3>Estadísticas</h3>
@@ -76,24 +75,24 @@
             <h1>Task Manager Pro</h1>
             <div class="header-controls">
                 <div id="notifications">
-                    <button id="btn-notifications">🔔 <span id="notification-count">0</span></button>
-                    <div id="notification-list" class="dropdown">
+                    <button id="btn-notifications" type="button">🔔 <span id="notification-count">0</span></button>
+                    <div id="notification-list" class="dropdown" style="display: none;">
                         <div class="notification-item">No hay notificaciones</div>
                     </div>
                 </div>
-                <button id="theme-toggle">🌙</button>
-                <button id="btn-help">?</button>
-                <button id="btnNewTask">➕ Nueva Tarea</button>
+                <button id="theme-toggle" type="button">🌙</button>
+                <button id="btn-help" type="button">?</button>
+                <button id="btnNewTask" type="button">➕ Nueva Tarea</button>
             </div>
         </header>
 
         <div class="search-container">
-            <label for="search-tasks" class="visually-hidden">Buscar tareas</label>
-            <input type="search" id="search-tasks" name="search-tasks" placeholder="🔍 Buscar tareas..."
+            <label for="search-tasks-main" class="visually-hidden">Buscar tareas</label>
+            <input type="search" id="search-tasks-main" name="search-tasks-main" placeholder="🔍 Buscar tareas..."
                 aria-label="Buscar tareas">
 
-            <label for="sort-tasks" class="visually-hidden">Ordenar tareas</label>
-            <select id="sort-tasks" name="sort-tasks" aria-label="Ordenar tareas">
+            <label for="sort-tasks-main" class="visually-hidden">Ordenar tareas</label>
+            <select id="sort-tasks-main" name="sort-tasks-main" aria-label="Ordenar tareas">
                 <option value="fecha">📅 Ordenar por fecha</option>
                 <option value="prioridad">⚡ Ordenar por prioridad</option>
                 <option value="nombre">🔠 Ordenar por nombre</option>
@@ -101,39 +100,39 @@
         </div>
 
         <div class="view-toggle">
-            <button id="btn-kanban-view" class="active">📋 Vista Kanban</button>
-            <button id="btn-calendar-view">📅 Vista Calendario</button>
-            <button id="btn-list-view">📝 Vista Lista</button>
+            <button id="btn-kanban-view" class="active" type="button">📋 Vista Kanban</button>
+            <button id="btn-calendar-view" type="button">📅 Vista Calendario</button>
+            <button id="btn-list-view" type="button">📝 Vista Lista</button>
         </div>
 
         <div id="board" class="view active">
-            <section class="column" id="todo">
+            <section class="column" id="todo" data-status="todo">
                 <h2>To Do <span class="task-count">0</span></h2>
-                <ul class="task-list"></ul>
+                <ul class="task-list" data-status="todo"></ul>
             </section>
 
-            <section class="column" id="inprogress">
+            <section class="column" id="inprogress" data-status="inprogress">
                 <h2>In Progress <span class="task-count">0</span></h2>
-                <ul class="task-list"></ul>
+                <ul class="task-list" data-status="inprogress"></ul>
             </section>
 
-            <section class="column" id="done">
+            <section class="column" id="done" data-status="done">
                 <h2>Done <span class="task-count">0</span></h2>
-                <ul class="task-list"></ul>
+                <ul class="task-list" data-status="done"></ul>
             </section>
         </div>
 
         <div id="calendar-view" class="view">
             <h2>Vista Calendario</h2>
             <div id="calendar-header">
-                <button id="prev-month">◀</button>
+                <button id="prev-month" type="button">◀</button>
                 <h3 id="current-month">Septiembre 2023</h3>
-                <button id="next-month">▶</button>
+                <button id="next-month" type="button">▶</button>
             </div>
             <div id="calendar"></div>
         </div>
 
-        <div id="list-view" class="view">
+        <div id="list-view" class="view";">
             <h2>Vista Lista</h2>
             <table id="task-table">
                 <thead>
@@ -151,10 +150,12 @@
             </table>
         </div>
 
-        <section id="task-form" class="modal">
+        <section id="task-form" class="modal";">
             <div class="modal-content">
                 <h2>Crear / Editar Tarea</h2>
                 <form id="formTask">
+                    <input type="hidden" id="taskId" name="taskId">
+
                     <label for="taskProject">Proyecto:</label>
                     <select id="taskProject" name="taskProject">
                         <option value="personal">Personal</option>
@@ -209,36 +210,36 @@
                     <label for="attachments">Adjuntar archivos:</label>
                     <input type="file" id="attachments" name="attachments" multiple>
 
-                    <div id="task-comments"">
+                    <div id="task-comments" style="display: none;">
                         <h3>Comentarios</h3>
-                        <div id=" comments-list"></div>
-                    <textarea id="new-comment" placeholder="Escribe un comentario..."></textarea>
-                    <button type="button" id="add-comment">Agregar comentario</button>
-            </div>
+                        <div id="comments-list"></div>
+                        <textarea id="new-comment" placeholder="Escribe un comentario..."></textarea>
+                        <button type="button" id="add-comment">Agregar comentario</button>
+                    </div>
 
-            <div class="form-actions">
-                <button type="submit">Guardar Tarea</button>
-                <button type="button" id="btn-show-comments">Mostrar Comentarios</button>
-                <button type="reset">Limpiar</button>
-                <button type="button" id="btn-cancel-task">Cancelar</button>
-            </div>
-            </form>
+                    <div class="form-actions">
+                        <button type="submit">Guardar Tarea</button>
+                        <button type="button" id="btn-show-comments">Mostrar Comentarios</button>
+                        <button type="reset">Limpiar</button>
+                        <button type="button" id="btn-cancel-task">Cancelar</button>
+                    </div>
+                </form>
             </div>
         </section>
     </main>
 
-    <div id="project-modal" class="modal">
+    <div id="project-modal" class="modal";">
         <div class="modal-content">
             <h3>Nuevo Proyecto</h3>
             <input type="text" id="new-project-name" placeholder="Nombre del proyecto">
             <div class="modal-actions">
-                <button id="save-project">Guardar</button>
-                <button id="cancel-project">Cancelar</button>
+                <button id="save-project" type="button">Guardar</button>
+                <button id="cancel-project" type="button">Cancelar</button>
             </div>
         </div>
     </div>
 
-    <div id="shortcut-help" class="modal">
+    <div id="shortcut-help" class="modal";">
         <div class="modal-content">
             <h3>Atajos de teclado</h3>
             <ul>
@@ -248,17 +249,17 @@
                 <li><kbd>Ctrl + S</kbd> Guardar tarea</li>
                 <li><kbd>1, 2, 3</kbd> Cambiar vista (Kanban, Calendario, Lista)</li>
             </ul>
-            <button id="close-help">Cerrar</button>
+            <button id="close-help" type="button">Cerrar</button>
         </div>
     </div>
 
-    <div id="delete-confirm" class="modal">
+    <div id="delete-confirm" class="modal"">
         <div class="modal-content">
             <h3>¿Eliminar tarea?</h3>
             <p>¿Estás seguro de que quieres eliminar esta tarea? Esta acción no se puede deshacer.</p>
             <div class="modal-actions">
-                <button id="confirm-delete">Sí, eliminar</button>
-                <button id="cancel-delete">Cancelar</button>
+                <button id="confirm-delete" type="button">Sí, eliminar</button>
+                <button id="cancel-delete" type="button">Cancelar</button>
             </div>
         </div>
     </div>
