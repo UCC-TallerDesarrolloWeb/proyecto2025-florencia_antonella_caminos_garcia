@@ -83,6 +83,23 @@ body {
     font-size: 1rem;
 }
 
+#search-Section {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+#searchBox {
+    flex: 1; 
+    padding: 8px;
+}
+
+#searchButton {
+    padding: 8px 16px;
+    cursor: pointer;
+}
+
+
 #sidebar {
     width: 250px;
     background: linear-gradient(180deg, var(--color-boton), var(--color-secundario));
