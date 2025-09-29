@@ -28,16 +28,18 @@
         </div>
 
         <div class="toolbar">
-            <button id="new-task" type="button">➕ Nueva tarea</button>
             <button id="menu" type="button">📂 Menú</button>
         </div>
 
         <div class="search-container">
+            <label for="search-tasks-sidebar">Buscar tareas:</label>
             <input type="text" id="search-tasks-sidebar" placeholder="🔍 Buscar tareas...">
+
+            <label for="sort-tasks-sidebar">Ordenar por:</label>
             <select id="sort-tasks-sidebar">
-                <option value="fecha">Ordenar por fecha</option>
-                <option value="prioridad">Ordenar por prioridad</option>
-                <option value="nombre">Ordenar por nombre</option>
+                <option value="fecha">Fecha</option>
+                <option value="prioridad">Prioridad</option>
+                <option value="nombre">Nombre</option>
             </select>
         </div>
 
@@ -76,13 +78,12 @@
             <div class="header-controls">
                 <div id="notifications">
                     <button id="btn-notifications" type="button">🔔 <span id="notification-count">0</span></button>
-                    <div id="notification-list" class="dropdown" style="display: none;">
+                    <div id="notification-list" class="dropdown">
                         <div class="notification-item">No hay notificaciones</div>
                     </div>
                 </div>
                 <button id="theme-toggle" type="button">🌙</button>
                 <button id="btn-help" type="button">?</button>
-                <button id="btnNewTask" type="button">➕ Nueva Tarea</button>
             </div>
         </header>
 
@@ -132,7 +133,7 @@
             <div id="calendar"></div>
         </div>
 
-        <div id="list-view" class="view";">
+        <div id="list-view" class="view" ;">
             <h2>Vista Lista</h2>
             <table id="task-table">
                 <thead>
@@ -150,7 +151,7 @@
             </table>
         </div>
 
-        <section id="task-form" class="modal";">
+        <section id="task-form" class="modal" ;">
             <div class="modal-content">
                 <h2>Crear / Editar Tarea</h2>
                 <form id="formTask">
@@ -210,7 +211,7 @@
                     <label for="attachments">Adjuntar archivos:</label>
                     <input type="file" id="attachments" name="attachments" multiple>
 
-                    <div id="task-comments" style="display: none;">
+                    <div id="task-comments">
                         <h3>Comentarios</h3>
                         <div id="comments-list"></div>
                         <textarea id="new-comment" placeholder="Escribe un comentario..."></textarea>
@@ -228,7 +229,7 @@
         </section>
     </main>
 
-    <div id="project-modal" class="modal";">
+    <div id="project-modal" class="modal" ;">
         <div class="modal-content">
             <h3>Nuevo Proyecto</h3>
             <input type="text" id="new-project-name" placeholder="Nombre del proyecto">
@@ -239,11 +240,12 @@
         </div>
     </div>
 
-    <div id="shortcut-help" class="modal";">
+    <div id="shortcut-help" class="modal" ;">
         <div class="modal-content">
             <h3>Atajos de teclado</h3>
             <ul>
                 <li><kbd>N</kbd> Nueva tarea</li>
+                <li><kbd>P</kbd> Nuevo Proyecto</li>
                 <li><kbd>Esc</kbd> Cerrar modal</li>
                 <li><kbd>Ctrl + F</kbd> Buscar</li>
                 <li><kbd>Ctrl + S</kbd> Guardar tarea</li>
@@ -254,14 +256,14 @@
     </div>
 
     <div id="delete-confirm" class="modal"">
-        <div class="modal-content">
-            <h3>¿Eliminar tarea?</h3>
-            <p>¿Estás seguro de que quieres eliminar esta tarea? Esta acción no se puede deshacer.</p>
-            <div class="modal-actions">
-                <button id="confirm-delete" type="button">Sí, eliminar</button>
-                <button id="cancel-delete" type="button">Cancelar</button>
-            </div>
+        <div class=" modal-content">
+        <h3>¿Eliminar tarea?</h3>
+        <p>¿Estás seguro de que quieres eliminar esta tarea? Esta acción no se puede deshacer.</p>
+        <div class="modal-actions">
+            <button id="confirm-delete" type="button">Sí, eliminar</button>
+            <button id="cancel-delete" type="button">Cancelar</button>
         </div>
+    </div>
     </div>
 
 </body>
