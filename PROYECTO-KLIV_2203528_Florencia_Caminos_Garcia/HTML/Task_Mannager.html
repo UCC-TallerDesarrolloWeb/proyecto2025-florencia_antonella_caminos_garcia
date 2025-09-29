@@ -16,19 +16,11 @@
 
 <body>
     <aside id="sidebar">
-        <h2>Proyectos
-            <button id="btnNewProject" class="icon-btn" type="button">➕ Nuevo</button>
-        </h2>
-        <div id="projects-container">
-            <ul id="project-list">
-                <li><button class="project-btn active" data-project="personal" type="button">🏠 Personal</button></li>
-                <li><button class="project-btn" data-project="trabajo" type="button">💼 Trabajo</button></li>
-                <li><button class="project-btn" data-project="estudios" type="button">📚 Estudios</button></li>
-            </ul>
-        </div>
+
+        <h2>Proyectos</h2>
 
         <div class="toolbar">
-            <button id="menu" type="button">📂 Menú</button>
+            <p>📂 Menú</p>
         </div>
 
         <div class="search-container">
@@ -62,14 +54,34 @@
             </div>
         </div>
 
-        <h2>Filtros</h2>
-        <form id="project-filters">
-            <label><input type="checkbox" name="filter" value="Alta"> Prioridad Alta</label>
-            <label><input type="checkbox" name="filter" value="Media"> Prioridad Media</label>
-            <label><input type="checkbox" name="filter" value="Baja"> Prioridad Baja</label>
-            <label><input type="checkbox" name="filter" value="Urgente"> Urgente</label>
-            <label><input type="checkbox" name="filter" value="Importante"> Importante</label>
-        </form>
+        <div id="projects-container">
+            <ul id="project-list">
+                <li><button class="project-btn active" data-project="personal" type="button">🏠 Personal</button></li>
+                <li><button class="project-btn" data-project="trabajo" type="button">💼 Trabajo</button></li>
+                <li><button class="project-btn" data-project="estudios" type="button">📚 Estudios</button></li>
+            </ul>
+        </div>
+
+        <div id="project-filters">
+            <label for="opciones">Selecciona una opción</label>
+            <select name="opciones" id="opciones">
+                <option value="" disable selected>Elige una opción</option>
+                <option name="filter" value="Alta">Prioridad Alta</option>
+                <option name="filter" value="Media">Prioridad Media</option>
+                <option name="filter" value="Baja">Prioridad Baja</option>
+                <option name="filter" value="Urgente">Urgente</option>
+                <option name="filter" value="Importante">Importante</option>
+            </select>
+        </div>
+
+        <div>
+            <label for="sort-tasks-main" class="visually-hidden">Ordenar tareas</label>
+            <select id="sort-tasks-main" name="sort-tasks-main" aria-label="Ordenar tareas">
+                <option value="fecha">📅 Ordenar por fecha</option>
+                <option value="prioridad">⚡ Ordenar por prioridad</option>
+                <option value="nombre">🔠 Ordenar por nombre</option>
+            </select>
+        </div>
     </aside>
 
     <main id="kanban">
@@ -86,19 +98,6 @@
                 <button id="btn-help" type="button">?</button>
             </div>
         </header>
-
-        <div class="search-container">
-            <label for="search-tasks-main" class="visually-hidden">Buscar tareas</label>
-            <input type="search" id="search-tasks-main" name="search-tasks-main" placeholder="🔍 Buscar tareas..."
-                aria-label="Buscar tareas">
-
-            <label for="sort-tasks-main" class="visually-hidden">Ordenar tareas</label>
-            <select id="sort-tasks-main" name="sort-tasks-main" aria-label="Ordenar tareas">
-                <option value="fecha">📅 Ordenar por fecha</option>
-                <option value="prioridad">⚡ Ordenar por prioridad</option>
-                <option value="nombre">🔠 Ordenar por nombre</option>
-            </select>
-        </div>
 
         <div class="view-toggle">
             <button id="btn-kanban-view" class="active" type="button">📋 Vista Kanban</button>
