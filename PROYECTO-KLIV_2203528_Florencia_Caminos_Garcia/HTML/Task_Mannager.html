@@ -20,13 +20,21 @@
         <h2>Proyectos</h2>
 
         <div class="toolbar">
-            <p>📂 Menú</p>
+            <p>Acciones</p>
+            <div class="toolbar-buttons">
+                <button class="sidebar-btn" id="btn-new-task-sidebar" type="button">➕ Nueva Tarea</button>
+                <button class="sidebar-btn" id="btn-new-project" type="button">📁 Nuevo Proyecto</button>
+                <button class="sidebar-btn danger" id="btn-delete-completed-tasks" type="button">🗑️ Eliminar
+                    Completadas</button>
+                <button class="sidebar-btn danger" id="btn-delete-project" type="button">❌ Eliminar Proyecto</button>
+            </div>
         </div>
+
+        <button class="float-btn" id="btn-new-task-float" type="button">+</button>
 
         <div class="search-container">
             <label for="search-tasks-sidebar">Buscar tareas:</label>
             <input type="text" id="search-tasks-sidebar" placeholder="🔍 Buscar tareas...">
-
             <label for="sort-tasks-sidebar">Ordenar por:</label>
             <select id="sort-tasks-sidebar">
                 <option value="fecha">Fecha</option>
@@ -265,6 +273,7 @@
     </div>
     </div>
 
+    <button class="float-btn" id="btn-new-task" type="button">+</button>
 </body>
 
 </html>
