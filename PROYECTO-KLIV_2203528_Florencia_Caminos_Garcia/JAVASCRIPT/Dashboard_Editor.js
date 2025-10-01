@@ -40,6 +40,7 @@ class DashboardEditor {
         this.canvasItems = new Map();
         this.connections = [];
         this.draggingItem = null;
+        this.resizeTimeout = null;
 
         this.init();
     }
@@ -54,33 +55,46 @@ class DashboardEditor {
             this.renderCanvas();
         } catch (error) {
             console.error('Error initializing DashboardEditor:', error);
+            this.showNotification('Error al inicializar el editor', 'error');
         }
     }
 
     setupCanvas() {
-        if (!this.canvas) return;
+        if (!this.canvas) {
+            throw new Error('Canvas element not found');
+        }
 
         this.ctx = this.canvas.getContext('2d');
+        if (!this.ctx) {
+            throw new Error('Could not get 2D context from canvas');
+        }
+
         this.resizeCanvas();
         
         this.ctx.imageSmoothingEnabled = true;
         this.ctx.imageSmoothingQuality = 'high';
 
-        window.addEventListener('resize', () => {
-            this.resizeCanvas();
-            this.renderCanvas();
+        var self = this;
+        window.addEventListener('resize', function() {
+            if (self.resizeTimeout) {
+                clearTimeout(self.resizeTimeout);
+            }
+            self.resizeTimeout = setTimeout(function() {
+                self.resizeCanvas();
+                self.renderCanvas();
+            }, 250);
         });
     }
 
     resizeCanvas() {
-        if (!this.canvas) return;
+        if (!this.canvas || !this.ctx) return;
         
-        const container = this.canvas.parentElement;
+        var container = this.canvas.parentElement;
         if (!container) return;
 
-        const rect = container.getBoundingClientRect();
-        this.canvas.width = rect.width;
-        this.canvas.height = rect.height;
+        var rect = container.getBoundingClientRect();
+        this.canvas.width = Math.floor(rect.width);
+        this.canvas.height = Math.floor(rect.height);
         
         this.canvasBounds = {
             width: rect.width,
@@ -100,76 +114,130 @@ class DashboardEditor {
         this.managementSelect = document.querySelector(this.selectors.managementSelect);
         this.projects = document.querySelectorAll(this.selectors.projects);
         
-        this.filters = {};
-        Object.entries(this.selectors.filters).forEach(([key, selector]) => {
-            this.filters[key] = document.querySelector(selector);
-        });
+        this.filters = {
+            priority: document.querySelector(this.selectors.filters.priority),
+            device: document.querySelector(this.selectors.filters.device),
+            region: document.querySelector(this.selectors.filters.region),
+            newUsers: document.querySelector(this.selectors.filters.newUsers)
+        };
 
         this.validateElements();
     }
 
     validateElements() {
-        const requiredElements = {
+        var requiredElements = {
             canvas: this.canvas,
             workspace: this.workspace,
             previewGrid: this.previewGrid
         };
 
-        Object.entries(requiredElements).forEach(([name, element]) => {
-            if (!element) throw new Error(`Required element ${name} not found`);
-        });
+        var missingElements = [];
+        for (var name in requiredElements) {
+            if (!requiredElements[name]) {
+                missingElements.push(name);
+            }
+        }
+
+        if (missingElements.length > 0) {
+            throw new Error('Required elements not found: ' + missingElements.join(', '));
+        }
     }
 
     setupEventListeners() {
-        this.sidebarAdd?.addEventListener('change', e => this.addItem(e.target.value));
-        this.sidebarDelete?.addEventListener('change', e => this.deleteItem(e.target.value));
-        this.managementSelect?.addEventListener('change', e => this.handleManagement(e.target.value));
-        
-        this.projects.forEach(btn => {
-            btn.addEventListener('click', e => this.switchProject(e.target.dataset.project));
-        });
+        var self = this;
 
-        Object.values(this.filters).forEach(filter => {
-            filter?.addEventListener('change', () => {
-                this.renderDashboard();
-                this.renderCanvas();
+        if (this.sidebarAdd) {
+            this.sidebarAdd.addEventListener('change', function(e) {
+                self.addItem(e.target.value);
             });
-        });
+        }
+
+        if (this.sidebarDelete) {
+            this.sidebarDelete.addEventListener('change', function(e) {
+                self.deleteItem(e.target.value);
+            });
+        }
+
+        if (this.managementSelect) {
+            this.managementSelect.addEventListener('change', function(e) {
+                self.handleManagement(e.target.value);
+            });
+        }
+        
+        if (this.projects) {
+            this.projects.forEach(function(btn) {
+                btn.addEventListener('click', function(e) {
+                    self.switchProject(e.target.dataset.project);
+                });
+            });
+        }
+
+        for (var key in this.filters) {
+            var filter = this.filters[key];
+            if (filter) {
+                filter.addEventListener('change', function() {
+                    self.renderDashboard();
+                    self.renderCanvas();
+                });
+            }
+        }
 
         this.setupCanvasEventListeners();
         
-        this.previewGrid?.addEventListener('click', e => {
-            const cardBtn = e.target.closest('.card-btn');
-            if (!cardBtn) return;
+        if (this.previewGrid) {
+            this.previewGrid.addEventListener('click', function(e) {
+                var cardBtn = e.target.closest('.card-btn');
+                if (!cardBtn) return;
 
-            const card = cardBtn.closest('.preview-card');
-            const id = parseInt(card?.dataset.id);
-            if (!id) return;
+                var card = cardBtn.closest('.preview-card');
+                var id = parseInt(card.dataset.id);
+                if (isNaN(id)) return;
 
-            if (cardBtn.classList.contains('btn-edit')) {
-                this.editItem(id);
-            } else if (cardBtn.classList.contains('btn-delete')) {
-                this.removeItem(id);
-            }
-        });
+                if (cardBtn.classList.contains('btn-edit')) {
+                    self.editItem(id);
+                } else if (cardBtn.classList.contains('btn-delete')) {
+                    self.removeItem(id);
+                }
+            });
+        }
     }
 
     setupCanvasEventListeners() {
         if (!this.canvas) return;
 
-        this.canvas.addEventListener('mousedown', e => this.handleCanvasMouseDown(e));
-        this.canvas.addEventListener('mousemove', e => this.handleCanvasMouseMove(e));
-        this.canvas.addEventListener('mouseup', e => this.handleCanvasMouseUp(e));
-        this.canvas.addEventListener('wheel', e => this.handleCanvasWheel(e));
-        this.canvas.addEventListener('dblclick', e => this.handleCanvasDoubleClick(e));
+        var self = this;
+
+        this.canvas.addEventListener('mousedown', function(e) {
+            self.handleCanvasMouseDown(e);
+        });
+        this.canvas.addEventListener('mousemove', function(e) {
+            self.handleCanvasMouseMove(e);
+        });
+        this.canvas.addEventListener('mouseup', function(e) {
+            self.handleCanvasMouseUp(e);
+        });
+        this.canvas.addEventListener('wheel', function(e) {
+            self.handleCanvasWheel(e);
+        });
+        this.canvas.addEventListener('dblclick', function(e) {
+            self.handleCanvasDoubleClick(e);
+        });
         
-        this.canvas.addEventListener('touchstart', e => this.handleCanvasTouchStart(e));
-        this.canvas.addEventListener('touchmove', e => this.handleCanvasTouchMove(e));
-        this.canvas.addEventListener('touchend', e => this.handleCanvasTouchEnd(e));
+        this.canvas.addEventListener('touchstart', function(e) {
+            self.handleCanvasTouchStart(e);
+        });
+        this.canvas.addEventListener('touchmove', function(e) {
+            self.handleCanvasTouchMove(e);
+        });
+        this.canvas.addEventListener('touchend', function(e) {
+            self.handleCanvasTouchEnd(e);
+        });
     }
 
     getCanvasMousePos(e) {
-        const rect = this.canvas.getBoundingClientRect();
+        if (!this.canvas) return { x: 0, y: 0 };
+        
+        var rect = this.canvas.getBoundingClientRect();
         return {
             x: (e.clientX - rect.left) / this.state.canvasZoom,
             y: (e.clientY - rect.top) / this.state.canvasZoom
@@ -177,32 +245,32 @@ class DashboardEditor {
     }
 
     handleCanvasMouseDown(e) {
-        const pos = this.getCanvasMousePos(e);
-        const item = this.getItemAtPosition(pos.x, pos.y);
+        var pos = this.getCanvasMousePos(e);
+        var item = this.getItemAtPosition(pos.x, pos.y);
         
         if (item) {
             this.draggingItem = item;
-            this.state.dragStart = { ...pos };
+            this.state.dragStart = { x: pos.x, y: pos.y };
             this.canvas.style.cursor = 'grabbing';
         } else {
             this.state.isDragging = true;
-            this.state.dragStart = { ...pos };
+            this.state.dragStart = { x: pos.x, y: pos.y };
         }
         
         e.preventDefault();
     }
 
     handleCanvasMouseMove(e) {
-        const pos = this.getCanvasMousePos(e);
+        var pos = this.getCanvasMousePos(e);
         
         if (this.draggingItem) {
             this.draggingItem.canvasX = pos.x - this.draggingItem.width / 2;
             this.draggingItem.canvasY = pos.y - this.draggingItem.height / 2;
             this.renderCanvas();
         } else if (this.state.isDragging) {
-
+            // Canvas panning can be implemented here
         } else {
-            const item = this.getItemAtPosition(pos.x, pos.y);
+            var item = this.getItemAtPosition(pos.x, pos.y);
             this.canvas.style.cursor = item ? 'grab' : 'default';
         }
     }
@@ -219,11 +287,11 @@ class DashboardEditor {
     handleCanvasWheel(e) {
         e.preventDefault();
         
-        const zoomIntensity = 0.1;
-        const mousePos = this.getCanvasMousePos(e);
+        var zoomIntensity = 0.1;
+        var mousePos = this.getCanvasMousePos(e);
         
-        const wheel = e.deltaY < 0 ? 1 : -1;
-        const zoomFactor = wheel > 0 ? (1 + zoomIntensity) : (1 - zoomIntensity);
+        var wheel = e.deltaY < 0 ? 1 : -1;
+        var zoomFactor = wheel > 0 ? (1 + zoomIntensity) : (1 - zoomIntensity);
         
         this.state.canvasZoom *= zoomFactor;
         this.state.canvasZoom = Math.max(0.1, Math.min(3, this.state.canvasZoom));
@@ -232,8 +300,8 @@ class DashboardEditor {
     }
 
     handleCanvasDoubleClick(e) {
-        const pos = this.getCanvasMousePos(e);
-        const item = this.getItemAtPosition(pos.x, pos.y);
+        var pos = this.getCanvasMousePos(e);
+        var item = this.getItemAtPosition(pos.x, pos.y);
         
         if (item) {
             this.editItem(item.id);
@@ -244,10 +312,11 @@ class DashboardEditor {
 
     handleCanvasTouchStart(e) {
         if (e.touches.length === 1) {
-            const touch = e.touches[0];
-            const mouseEvent = new MouseEvent('mousedown', {
+            var touch = e.touches[0];
+            var mouseEvent = new MouseEvent('mousedown', {
                 clientX: touch.clientX,
-                clientY: touch.clientY
+                clientY: touch.clientY,
+                bubbles: true
             });
             this.handleCanvasMouseDown(mouseEvent);
         }
@@ -256,10 +325,11 @@ class DashboardEditor {
 
     handleCanvasTouchMove(e) {
         if (e.touches.length === 1) {
-            const touch = e.touches[0];
-            const mouseEvent = new MouseEvent('mousemove', {
+            var touch = e.touches[0];
+            var mouseEvent = new MouseEvent('mousemove', {
                 clientX: touch.clientX,
-                clientY: touch.clientY
+                clientY: touch.clientY,
+                bubbles: true
             });
             this.handleCanvasMouseMove(mouseEvent);
         }
@@ -267,13 +337,15 @@ class DashboardEditor {
     }
 
     handleCanvasTouchEnd(e) {
-        const mouseEvent = new MouseEvent('mouseup');
+        var mouseEvent = new MouseEvent('mouseup', { bubbles: true });
         this.handleCanvasMouseUp(mouseEvent);
         e.preventDefault();
     }
 
     getItemAtPosition(x, y) {
-        for (const item of this.canvasItems.values()) {
+        var items = Array.from(this.canvasItems.values());
+        for (var i = 0; i < items.length; i++) {
+            var item = items[i];
             if (x >= item.canvasX && x <= item.canvasX + item.width &&
                 y >= item.canvasY && y <= item.canvasY + item.height) {
                 return item;
@@ -283,22 +355,25 @@ class DashboardEditor {
     }
 
     promptAddItemAtPosition(x, y) {
-        const type = prompt('¿Qué tipo de elemento quieres agregar? (chart, table, text, color, filter, pdf)');
+        var type = prompt('¿Qué tipo de elemento quieres agregar? (chart, table, text, color, filter, pdf)');
         if (type && this.icons[type]) {
             this.addItem(type, x, y);
         }
     }
 
-    addItem(type, x = null, y = null) {
-        if (!type) return;
+    addItem(type, x, y) {
+        if (!type || !this.icons[type]) {
+            this.showNotification('Tipo de elemento no válido', 'error');
+            return;
+        }
 
-        const defaultX = x !== null ? x : 50 + Math.random() * (this.canvasBounds.width - 200);
-        const defaultY = y !== null ? y : 50 + Math.random() * (this.canvasBounds.height - 150);
+        var defaultX = x !== null && x !== undefined ? x : 50 + Math.random() * (this.canvasBounds.width - 200);
+        var defaultY = y !== null && y !== undefined ? y : 50 + Math.random() * (this.canvasBounds.height - 150);
 
-        const item = {
+        var item = {
             id: Date.now() + Math.random(),
-            type,
-            content: `${this.icons[type]} Nuevo ${type}`,
+            type: type,
+            content: this.icons[type] + ' Nuevo ' + type,
             priority: 'Media',
             device: 'all',
             region: 'all',
@@ -316,12 +391,16 @@ class DashboardEditor {
         this.renderDashboard();
         this.renderCanvas();
         this.saveState();
-        this.sidebarAdd.value = '';
-        this.showNotification(`Elemento ${type} agregado correctamente`);
+        
+        if (this.sidebarAdd) {
+            this.sidebarAdd.value = '';
+        }
+        
+        this.showNotification('Elemento ' + type + ' agregado correctamente');
     }
 
     getItemColor(type) {
-        const colors = {
+        var colors = {
             chart: '#4CAF50',
             table: '#2196F3',
             text: '#FF9800',
@@ -334,7 +413,8 @@ class DashboardEditor {
 
     updateCanvasItems() {
         this.canvasItems.clear();
-        this.state.dashboardItems.forEach(item => {
+        for (var i = 0; i < this.state.dashboardItems.length; i++) {
+            var item = this.state.dashboardItems[i];
             if (item.canvasX === undefined || item.canvasY === undefined) {
                 item.canvasX = 50 + Math.random() * (this.canvasBounds.width - 200);
                 item.canvasY = 50 + Math.random() * (this.canvasBounds.height - 150);
@@ -343,7 +423,7 @@ class DashboardEditor {
                 item.color = this.getItemColor(item.type);
             }
             this.canvasItems.set(item.id, item);
-        });
+        }
     }
 
     renderCanvas() {
@@ -356,9 +436,10 @@ class DashboardEditor {
 
         this.drawGrid();
         
-        this.canvasItems.forEach(item => {
-            this.drawCanvasItem(item);
-        });
+        var items = Array.from(this.canvasItems.values());
+        for (var i = 0; i < items.length; i++) {
+            this.drawCanvasItem(items[i]);
+        }
 
         this.drawConnections();
 
@@ -368,21 +449,23 @@ class DashboardEditor {
     }
 
     drawGrid() {
-        const gridSize = 20;
-        const width = this.canvasBounds.width;
-        const height = this.canvasBounds.height;
+        if (!this.ctx || !this.canvasBounds) return;
+
+        var gridSize = 20;
+        var width = this.canvasBounds.width;
+        var height = this.canvasBounds.height;
 
         this.ctx.strokeStyle = '#f0f0f0';
         this.ctx.lineWidth = 0.5;
 
-        for (let x = 0; x <= width; x += gridSize) {
+        for (var x = 0; x <= width; x += gridSize) {
             this.ctx.beginPath();
             this.ctx.moveTo(x, 0);
             this.ctx.lineTo(x, height);
             this.ctx.stroke();
         }
 
-        for (let y = 0; y <= height; y += gridSize) {
+        for (var y = 0; y <= height; y += gridSize) {
             this.ctx.beginPath();
             this.ctx.moveTo(0, y);
             this.ctx.lineTo(width, y);
@@ -391,7 +474,15 @@ class DashboardEditor {
     }
 
     drawCanvasItem(item) {
-        const { canvasX, canvasY, width, height, color, type, content } = item;
+        if (!this.ctx) return;
+
+        var canvasX = item.canvasX;
+        var canvasY = item.canvasY;
+        var width = item.width;
+        var height = item.height;
+        var color = item.color;
+        var type = item.type;
+        var content = item.content;
 
         this.ctx.shadowColor = 'rgba(0, 0, 0, 0.2)';
         this.ctx.shadowBlur = 8;
@@ -415,26 +506,32 @@ class DashboardEditor {
 
         this.ctx.font = 'bold 14px Arial';
         this.ctx.fillStyle = '#333';
-        this.ctx.fillText(type.charAt(0).toUpperCase() + type.slice(1), canvasX + 45, canvasY + 30);
+        this.ctx.fillText(
+            type.charAt(0).toUpperCase() + type.slice(1), 
+            canvasX + 45, 
+            canvasY + 30
+        );
 
         this.ctx.font = '12px Arial';
         this.ctx.fillStyle = '#666';
-        const lines = this.wrapText(content, canvasX + 10, canvasY + 50, width - 20, 12);
-        lines.forEach((line, index) => {
-            this.ctx.fillText(line, canvasX + 10, canvasY + 50 + (index * 14));
-        });
+        var lines = this.wrapText(content, canvasX + 10, canvasY + 50, width - 20, 12);
+        for (var i = 0; i < lines.length; i++) {
+            this.ctx.fillText(lines[i], canvasX + 10, canvasY + 50 + (i * 14));
+        }
 
         this.drawPriorityBadge(item);
     }
 
     wrapText(text, x, y, maxWidth, lineHeight) {
-        const words = text.split(' ');
-        const lines = [];
-        let currentLine = words[0];
+        if (!this.ctx) return [text];
 
-        for (let i = 1; i < words.length; i++) {
-            const word = words[i];
-            const width = this.ctx.measureText(currentLine + " " + word).width;
+        var words = text.split(' ');
+        var lines = [];
+        var currentLine = words[0];
+
+        for (var i = 1; i < words.length; i++) {
+            var word = words[i];
+            var width = this.ctx.measureText(currentLine + " " + word).width;
             if (width < maxWidth) {
                 currentLine += " " + word;
             } else {
@@ -447,16 +544,18 @@ class DashboardEditor {
     }
 
     drawPriorityBadge(item) {
-        const priorityColors = {
+        if (!this.ctx) return;
+
+        var priorityColors = {
             Alta: '#f44336',
             Media: '#ff9800',
             Baja: '#4caf50'
         };
 
-        const badgeWidth = 40;
-        const badgeHeight = 16;
-        const x = item.canvasX + item.width - badgeWidth - 5;
-        const y = item.canvasY + 5;
+        var badgeWidth = 40;
+        var badgeHeight = 16;
+        var x = item.canvasX + item.width - badgeWidth - 5;
+        var y = item.canvasY + 5;
 
         this.ctx.fillStyle = priorityColors[item.priority] || '#666';
         this.ctx.fillRect(x, y, badgeWidth, badgeHeight);
@@ -469,33 +568,36 @@ class DashboardEditor {
     }
 
     drawConnections() {
-        if (this.connections.length === 0) return;
+        if (!this.ctx || this.connections.length === 0) return;
 
         this.ctx.strokeStyle = '#999';
         this.ctx.lineWidth = 1;
         this.ctx.setLineDash([5, 3]);
 
-        this.connections.forEach(connection => {
-            const fromItem = this.canvasItems.get(connection.from);
-            const toItem = this.canvasItems.get(connection.to);
+        for (var i = 0; i < this.connections.length; i++) {
+            var connection = this.connections[i];
+            var fromItem = this.canvasItems.get(connection.from);
+            var toItem = this.canvasItems.get(connection.to);
             
             if (fromItem && toItem) {
-                const fromX = fromItem.canvasX + fromItem.width / 2;
-                const fromY = fromItem.canvasY + fromItem.height;
-                const toX = toItem.canvasX + toItem.width / 2;
-                const toY = toItem.canvasY;
+                var fromX = fromItem.canvasX + fromItem.width / 2;
+                var fromY = fromItem.canvasY + fromItem.height;
+                var toX = toItem.canvasX + toItem.width / 2;
+                var toY = toItem.canvasY;
 
                 this.ctx.beginPath();
                 this.ctx.moveTo(fromX, fromY);
                 this.ctx.lineTo(toX, toY);
                 this.ctx.stroke();
             }
-        });
+        }
 
         this.ctx.setLineDash([]);
     }
 
     drawZoomInfo() {
+        if (!this.ctx) return;
+
         this.ctx.save();
         this.ctx.setTransform(1, 0, 0, 1, 0, 0);
         
@@ -504,14 +606,14 @@ class DashboardEditor {
         
         this.ctx.font = '12px Arial';
         this.ctx.fillStyle = 'white';
-        this.ctx.fillText(`Zoom: ${Math.round(this.state.canvasZoom * 100)}%`, 20, 25);
+        this.ctx.fillText('Zoom: ' + Math.round(this.state.canvasZoom * 100) + '%', 20, 25);
         
         this.ctx.restore();
     }
 
     saveState() {
         try {
-            const data = JSON.parse(localStorage.getItem('dashboardData')) || {};
+            var data = JSON.parse(localStorage.getItem('dashboardData')) || {};
             data[this.state.currentProject] = this.state.dashboardItems;
             localStorage.setItem('dashboardData', JSON.stringify(data));
         } catch (error) {
@@ -522,7 +624,7 @@ class DashboardEditor {
 
     loadState() {
         try {
-            const data = JSON.parse(localStorage.getItem('dashboardData')) || {};
+            var data = JSON.parse(localStorage.getItem('dashboardData')) || {};
             this.state.dashboardItems = data[this.state.currentProject] || [];
             this.updateCanvasItems();
         } catch (error) {
@@ -534,113 +636,141 @@ class DashboardEditor {
     renderDashboard() {
         if (!this.previewGrid) return;
 
-        const filteredItems = this.state.dashboardItems.filter(item => this.applyFilters(item));
+        var filteredItems = this.state.dashboardItems.filter(function(item) {
+            return this.applyFilters(item);
+        }.bind(this));
         
         if (filteredItems.length === 0) {
-            this.previewGrid.innerHTML = `
-                <div class="empty-state">
-                    <p>No hay elementos para mostrar</p>
-                    <p>Usa el panel de agregar para incluir nuevos elementos</p>
-                </div>
-            `;
+            this.previewGrid.innerHTML = '<div class="empty-state"><p>No hay elementos para mostrar</p><p>Usa el panel de agregar para incluir nuevos elementos</p></div>';
             return;
         }
 
-        this.previewGrid.innerHTML = filteredItems.map(item => `
-            <div class="preview-card" data-id="${item.id}">
-                <div class="card-header">
-                    <span class="card-icon">${this.icons[item.type]}</span>
-                    <span class="card-title">${item.type.charAt(0).toUpperCase() + item.slice(1)}</span>
-                    <span class="card-badge ${item.priority.toLowerCase()}">${item.priority}</span>
-                </div>
-                <div class="card-content">${item.content}</div>
-                <div class="card-actions">
-                    <button class="card-btn btn-edit">Editar</button>
-                    <button class="card-btn btn-delete primary">Eliminar</button>
-                </div>
-                <div class="card-meta">
-                    <small>Creado: ${new Date(item.createdAt).toLocaleDateString()}</small>
-                </div>
-            </div>
-        `).join('');
+        var html = '';
+        for (var i = 0; i < filteredItems.length; i++) {
+            var item = filteredItems[i];
+            var typeFormatted = item.type.charAt(0).toUpperCase() + item.type.slice(1);
+            var dateFormatted = new Date(item.createdAt).toLocaleDateString();
+            
+            html += '<div class="preview-card" data-id="' + item.id + '">' +
+                '<div class="card-header">' +
+                '<span class="card-icon">' + this.icons[item.type] + '</span>' +
+                '<span class="card-title">' + typeFormatted + '</span>' +
+                '<span class="card-badge ' + item.priority.toLowerCase() + '">' + item.priority + '</span>' +
+                '</div>' +
+                '<div class="card-content">' + item.content + '</div>' +
+                '<div class="card-actions">' +
+                '<button class="card-btn btn-edit">Editar</button>' +
+                '<button class="card-btn btn-delete primary">Eliminar</button>' +
+                '</div>' +
+                '<div class="card-meta">' +
+                '<small>Creado: ' + dateFormatted + '</small>' +
+                '</div>' +
+                '</div>';
+        }
+        this.previewGrid.innerHTML = html;
     }
 
     applyFilters(item) {
-        const filterConditions = {
-            priority: () => this.filters.priority.value === 'all' || item.priority === this.filters.priority.value,
-            device: () => this.filters.device.value === 'all' || item.device === this.filters.device.value,
-            region: () => this.filters.region.value === 'all' || item.region === this.filters.region.value,
-            newUsers: () => !this.filters.newUsers.checked || item.newUsers
-        };
+        var priorityFilter = this.filters.priority ? this.filters.priority.value : 'all';
+        var deviceFilter = this.filters.device ? this.filters.device.value : 'all';
+        var regionFilter = this.filters.region ? this.filters.region.value : 'all';
+        var newUsersFilter = this.filters.newUsers ? this.filters.newUsers.checked : false;
 
-        return Object.values(filterConditions).every(condition => condition());
+        if (priorityFilter !== 'all' && item.priority !== priorityFilter) return false;
+        if (deviceFilter !== 'all' && item.device !== deviceFilter) return false;
+        if (regionFilter !== 'all' && item.region !== regionFilter) return false;
+        if (newUsersFilter && !item.newUsers) return false;
+        
+        return true;
     }
 
     deleteItem(type) {
         if (!type) return;
 
-        if (!confirm(`¿Estás seguro de que quieres eliminar todos los elementos de tipo ${type}?`)) {
-            this.sidebarDelete.value = '';
+        if (!confirm('¿Estás seguro de que quieres eliminar todos los elementos de tipo ' + type + '?')) {
+            if (this.sidebarDelete) {
+                this.sidebarDelete.value = '';
+            }
             return;
         }
 
-        const initialLength = this.state.dashboardItems.length;
-        this.state.dashboardItems = this.state.dashboardItems.filter(item => item.type !== type);
+        var initialLength = this.state.dashboardItems.length;
+        this.state.dashboardItems = this.state.dashboardItems.filter(function(item) {
+            return item.type !== type;
+        });
         
         if (initialLength === this.state.dashboardItems.length) {
-            this.showNotification(`No se encontraron elementos de tipo ${type}`, 'warning');
+            this.showNotification('No se encontraron elementos de tipo ' + type, 'warning');
         } else {
             this.updateCanvasItems();
             this.renderDashboard();
             this.renderCanvas();
             this.saveState();
-            this.showNotification(`Elementos de tipo ${type} eliminados correctamente`);
+            this.showNotification('Elementos de tipo ' + type + ' eliminados correctamente');
         }
         
-        this.sidebarDelete.value = '';
+        if (this.sidebarDelete) {
+            this.sidebarDelete.value = '';
+        }
     }
 
     handleManagement(action) {
-        const actions = {
-            saveDashboard: () => {
+        var actions = {
+            saveDashboard: function() {
                 this.saveState();
                 this.showNotification('Dashboard guardado correctamente');
-            },
-            loadDashboard: () => {
+            }.bind(this),
+            loadDashboard: function() {
                 this.loadState();
                 this.renderDashboard();
                 this.renderCanvas();
                 this.showNotification('Dashboard cargado correctamente');
-            },
-            previewMode: () => this.togglePreview(),
-            exportData: () => this.exportData()
+            }.bind(this),
+            previewMode: function() {
+                this.togglePreview();
+            }.bind(this),
+            exportData: function() {
+                this.exportData();
+            }.bind(this)
         };
 
         if (actions[action]) {
             actions[action]();
         } else {
-            console.warn(`Unknown action: ${action}`);
+            console.warn('Unknown action: ' + action);
+            this.showNotification('Acción desconocida: ' + action, 'error');
         }
 
-        this.managementSelect.value = '';
+        if (this.managementSelect) {
+            this.managementSelect.value = '';
+        }
     }
 
     switchProject(projectId) {
         this.state.currentProject = projectId;
         
-        this.projects.forEach(btn => btn.classList.toggle('active', btn.dataset.project === projectId));
+        if (this.projects) {
+            this.projects.forEach(function(btn) {
+                btn.classList.toggle('active', btn.dataset.project === projectId);
+            });
+        }
         
         this.loadState();
         this.renderDashboard();
         this.renderCanvas();
-        this.showNotification(`Proyecto ${projectId} cargado`);
+        this.showNotification('Proyecto ' + projectId + ' cargado');
     }
 
     editItem(id) {
-        const item = this.state.dashboardItems.find(i => i.id === id);
-        if (!item) return;
+        var item = this.state.dashboardItems.find(function(i) {
+            return i.id === id;
+        });
+        if (!item) {
+            this.showNotification('Elemento no encontrado', 'error');
+            return;
+        }
 
-        const newContent = prompt('Editar contenido:', item.content);
+        var newContent = prompt('Editar contenido:', item.content);
         if (newContent && newContent.trim()) {
             item.content = newContent.trim();
             item.updatedAt = new Date().toISOString();
@@ -652,12 +782,19 @@ class DashboardEditor {
     }
 
     removeItem(id) {
-        const item = this.state.dashboardItems.find(i => i.id === id);
-        if (!item) return;
+        var item = this.state.dashboardItems.find(function(i) {
+            return i.id === id;
+        });
+        if (!item) {
+            this.showNotification('Elemento no encontrado', 'error');
+            return;
+        }
 
-        if (!confirm(`¿Estás seguro de que quieres eliminar este elemento ${item.type}?`)) return;
+        if (!confirm('¿Estás seguro de que quieres eliminar este elemento ' + item.type + '?')) return;
 
-        this.state.dashboardItems = this.state.dashboardItems.filter(i => i.id !== id);
+        this.state.dashboardItems = this.state.dashboardItems.filter(function(i) {
+            return i.id !== id;
+        });
         this.updateCanvasItems();
         this.renderDashboard();
         this.renderCanvas();
@@ -667,7 +804,9 @@ class DashboardEditor {
 
     togglePreview() {
         this.state.isPreviewMode = !this.state.isPreviewMode;
-        this.workspace?.classList.toggle('preview-mode', this.state.isPreviewMode);
+        if (this.workspace) {
+            this.workspace.classList.toggle('preview-mode', this.state.isPreviewMode);
+        }
         
         this.showNotification(
             this.state.isPreviewMode ? 'Modo vista previa activado' : 'Modo vista previa desactivado'
@@ -676,17 +815,17 @@ class DashboardEditor {
 
     exportData() {
         try {
-            const data = {
+            var data = {
                 project: this.state.currentProject,
                 exportDate: new Date().toISOString(),
                 items: this.state.dashboardItems
             };
             
-            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
+            var blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            var url = URL.createObjectURL(blob);
+            var a = document.createElement('a');
             a.href = url;
-            a.download = `dashboard-${this.state.currentProject}-${Date.now()}.json`;
+            a.download = 'dashboard-' + this.state.currentProject + '-' + Date.now() + '.json';
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
@@ -699,34 +838,54 @@ class DashboardEditor {
         }
     }
 
-    showNotification(message, type = 'success') {
-        const notification = document.createElement('div');
-        notification.className = `notification ${type}`;
+    showNotification(message, type) {
+        if (type === undefined) type = 'success';
+        
+        var notification = document.createElement('div');
+        notification.className = 'notification ' + type;
         notification.textContent = message;
-        notification.style.cssText = `
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 12px 20px;
-            background: ${type === 'error' ? '#f44336' : '#4CAF50'};
-            color: white;
-            border-radius: 4px;
-            z-index: 1000;
-            animation: slideIn 0.3s ease;
-        `;
+        notification.style.cssText = 'position: fixed; top: 20px; right: 20px; padding: 12px 20px; background: ' + (type === 'error' ? '#f44336' : type === 'warning' ? '#ff9800' : '#4CAF50') + '; color: white; border-radius: 4px; z-index: 1000; animation: slideIn 0.3s ease; max-width: 300px; word-wrap: break-word;';
 
         document.body.appendChild(notification);
 
-        setTimeout(() => {
-            notification.remove();
+        setTimeout(function() {
+            if (notification.parentNode) {
+                notification.parentNode.removeChild(notification);
+            }
         }, 3000);
+    }
+
+    destroy() {
+        if (this.resizeTimeout) {
+            clearTimeout(this.resizeTimeout);
+        }
+
+        if (this.canvas) {
+            var newCanvas = this.canvas.cloneNode(true);
+            if (this.canvas.parentNode) {
+                this.canvas.parentNode.replaceChild(newCanvas, this.canvas);
+            }
+        }
+
+        this.resizeTimeout = null;
+        this.draggingItem = null;
+        this.canvasItems.clear();
+        this.connections = [];
     }
 }
 
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-        window.dashboardEditor = new DashboardEditor();
+    document.addEventListener('DOMContentLoaded', function() {
+        try {
+            window.dashboardEditor = new DashboardEditor();
+        } catch (error) {
+            console.error('Failed to initialize DashboardEditor:', error);
+        }
     });
 } else {
-    window.dashboardEditor = new DashboardEditor();
+    try {
+        window.dashboardEditor = new DashboardEditor();
+    } catch (error) {
+        console.error('Failed to initialize DashboardEditor:', error);
+    }
 }
