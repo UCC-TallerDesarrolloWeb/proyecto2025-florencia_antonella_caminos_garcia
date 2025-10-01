@@ -24,16 +24,26 @@
                 </ol>
             </nav>
         </header>
-
-        <label for="sidebar-options">Selecciona una opción:</label>
-        <select id="sidebar-options" class="tool-select">
-            <option value="" disabled selected>Selecciona una opción...</option>
-            <option value="chart">➕ Gráfico</option>
-            <option value="table">➕ Tabla</option>
-            <option value="text">➕ Texto</option>
+        <label for="sidebar-add-options">Agregar elemento</label>
+        <select id="sidebar-add-options" class="tool-select">
+            <option value="" disabled selected>Seleccionar...</option>
+            <option value="chart">📊 Gráfico</option>
+            <option value="table">📋 Tabla</option>
+            <option value="text">📝 Texto</option>
             <option value="color">🎨 Colores</option>
             <option value="filter">🔍 Filtro</option>
         </select>
+
+        <label for="sidebar-delete-options">Eliminar elemento</label>
+        <select id="sidebar-delete-options" class="tool-select">
+            <option value="" disabled selected>Seleccionar...</option>
+            <option value="chart">🗑️ Gráfico</option>
+            <option value="table">🗑️ Tabla</option>
+            <option value="text">🗑️ Texto</option>
+            <option value="color">🗑️ Colores</option>
+            <option value="filter">🗑️ Filtro</option>
+        </select>
+
 
         <details open class="sidebar-section">
             <summary>Filtros y Gestión</summary>
@@ -87,121 +97,55 @@
             </ul>
         </details>
     </aside>
-
-    <main>
-        <section class="workspace">
-            <h2>Zona de trabajo</h2>
-            <div id="widgets-container" role="region">
-                <article class="widget" draggable="true" id="widget1">
-                    <h3>📊 Gráfico de visitas</h3>
-                    <p>Este espacio mostrará un gráfico de líneas con las visitas del último mes.</p>
-                </article>
-                <article class="widget" draggable="true" id="widget2">
-                    <h3>📋 Tabla de métricas</h3>
-                    <p>Aquí se mostrará una tabla comparativa de métricas clave.</p>
-                </article>
-            </div>
+    <main class="workspace">
+        <section class="canvas-panel">
+            <h2>Dashboard</h2>
+            <canvas id="dashboardCanvas"></canvas>
         </section>
 
         <section class="preview-panel">
-            <h2>Vista previa de archivos</h2>
-            <div class="preview-grid" aria-live="polite">
-                <article class="preview-card pdf">
-                    <header class="card-header">
-                        <div class="card-icon">📄</div>
-                        <h3 class="card-title">Reporte_Trimestral.pdf</h3>
-                    </header>
-                    <div class="card-preview pdf-preview">📊 PDF</div>
-                    <footer class="card-actions">
-                        <button class="card-btn" data-action="preview">👁️ Vista previa</button>
-                        <button class="card-btn primary" data-action="download">⬇️ Descargar</button>
-                    </footer>
-                </article>
+            <h2>Vista previa</h2>
+            <div class="preview-grid">
+                <div class="preview-card">
+                    <div class="card-header">
+                        <span class="card-icon">📊</span>
+                        <span class="card-title">Gráfico</span>
+                    </div>
+                    <div class="card preview">Contenido de gráfico</div>
+                    <div class="card-actions">
+                        <button class="card-btn">Editar</button>
+                        <button class="card-btn primary">Aplicar</button>
+                    </div>
+                </div>
+
+                <div class="preview-card">
+                    <div class="card-header">
+                        <span class="card-icon">📑</span>
+                        <span class="card-title">PDF</span>
+                    </div>
+                    <div class="card preview pdf-preview">📄</div>
+                    <div class="card-actions">
+                        <button class="card-btn">Descargar</button>
+                        <button class="card-btn primary">Compartir</button>
+                    </div>
+                </div>
             </div>
         </section>
 
         <section class="file-panel">
-            <h2>Archivos, fotos y notas</h2>
-            <div id="file-list"></div>
+            <h2>Archivos</h2>
+            <button class="action-btn">➕ Agregar archivo</button>
+            <div id="file-list">
+                <div class="widget" id="widget1">
+                    <h3>Archivo 1</h3>
+                    <p>Ejemplo de contenido</p>
+                </div>
+                <div class="widget" id="widget2">
+                    <h3>Archivo 2</h3>
+                    <p>Ejemplo de contenido</p>
+                </div>
+            </div>
         </section>
-
-        <section class="canvas-panel">
-            <h2>Canvas de trabajo</h2>
-            <canvas id="dashboardCanvas"></canvas>
-        </section>
-
-        <section class="config-panel">
-            <details open>
-                <summary>Configuración del Dashboard</summary>
-
-                <div class="config-section">
-                    <details open>
-                        <summary>Métricas</summary>
-                        <label><input type="checkbox" name="metric" value="visitas" checked> 👥 Visitas</label>
-                        <label><input type="checkbox" name="metric" value="usuarios" checked> 👤 Usuarios</label>
-                        <label><input type="checkbox" name="metric" value="conversiones"> 🔄 Conversiones</label>
-                        <label><input type="checkbox" name="metric" value="ingresos"> 💰 Ingresos</label>
-                    </details>
-                </div>
-
-                <div class="config-section">
-                    <details>
-                        <summary>Rango de fechas</summary>
-                        <label>Desde: <input type="date" name="startDate"></label>
-                        <label>Hasta: <input type="date" name="endDate"></label>
-                    </details>
-                </div>
-
-                <div class="config-section">
-                    <details>
-                        <summary>Tipo de visualización</summary>
-                        <label>Gráfica:
-                            <select name="chartSelect">
-                                <option value="line">📈 Línea</option>
-                                <option value="bar">📊 Barras</option>
-                                <option value="pie">🥧 Circular</option>
-                                <option value="area">🔲 Área</option>
-                                <option value="scatter">✨ Dispersión</option>
-                            </select>
-                        </label>
-                    </details>
-                </div>
-
-                <div class="config-section">
-                    <details>
-                        <summary>Personalización</summary>
-                        <label>Colores:
-                            <select name="colorScheme">
-                                <option value="default">🎨 Predeterminado</option>
-                                <option value="dark">🌙 Oscuro</option>
-                                <option value="light">☀️ Claro</option>
-                                <option value="vibrant">🌈 Vibrante</option>
-                            </select>
-                        </label>
-                        <label>Tipografía:
-                            <select name="fontSelect">
-                                <option value="sans-serif">🔤 Sans Serif</option>
-                                <option value="serif">✒️ Serif</option>
-                                <option value="monospace">⌨️ Monospace</option>
-                            </select>
-                        </label>
-                    </details>
-                </div>
-            </details>
-        </section>
-
-        <template id="widget-template">
-            <article class="widget" draggable="true">
-                <h3>Nombre Widget</h3>
-                <p>Contenido dinámico</p>
-                <footer class="card-actions">
-                    <button class="card-btn" data-action="preview">👁️ Vista previa</button>
-                    <button class="card-btn" data-action="analyze">🔍 Analizar</button>
-                    <button class="card-btn" data-action="download">⬇️ Descargar</button>
-                </footer>
-            </article>
-        </template>
     </main>
-</body>
 
 </html>
