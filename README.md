@@ -42,7 +42,7 @@ Tener en cuenta:
       - Carpeta de Componentes
       - Carpeta de Pages
       - Carpeta de Styles
-- [ ] Identar correctamente el código (en Webstorm Ctrl+Alt+L)
+- [X] Identar correctamente el código (en Webstorm Ctrl+Alt+L)
 - [X] No debe haber errores presentes (realizar *Code* > *Inspect Code* para verificar que no haya errores)
 - [X] Se debe emplear algún favicon
 - [X] Emplear alguna fuente de google fonts o subir al proyecto alguna fuente externa
