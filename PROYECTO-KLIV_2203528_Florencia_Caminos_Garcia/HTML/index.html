@@ -277,7 +277,7 @@
                         <label><input type="radio" name="photo-option" value="save"> Guardar</label>
                         <label><input type="radio" name="photo-option" value="react"> Reaccionar</label>
                     </div>
-                    <p role="alert">⚠️ Debe seleccionar una imagen antes de continuar.</p>
+                    <p role="alert" class="error-msg">⚠️ Debe seleccionar una imagen antes de continuar.</p>
                 </div>
             </div>
             <div id="gallery-grid">
@@ -579,21 +579,21 @@
                             <div class="form-group">
                                 <label for="user-photo">Foto de perfil:</label>
                                 <input id="user-photo" name="user-photo" type="file" accept="image/*">
-                                <small role="alert">Debe subir una imagen de perfil.</small>
+                                <small role="alert" class="error-msg">Debe subir una imagen de perfil.</small>
                             </div>
 
                             <div class="form-group">
                                 <label for="user-name">Nombre:</label>
                                 <input id="user-name" name="user-name" type="text" value="Juan Pérez"
                                     placeholder="Ingrese su nombre">
-                                <small role="alert">Solo letras y espacios (3 a 50 caracteres).</small>
+                                <small role="alert" class="error-msg">Solo letras y espacios (3 a 50 caracteres).</small>
                             </div>
 
                             <div class="form-group">
                                 <label for="user-email">Email:</label>
                                 <input id="user-email" name="user-email" type="email" value="juan@mail.com"
                                     placeholder="Ingrese su email">
-                                <small role="alert">Ingrese un correo válido (ejemplo@mail.com).</small>
+                                <small role="alert" class="error-msg">Ingrese un correo válido (ejemplo@mail.com).</small>
                             </div>
                         </fieldset>
                         <button type="submit">Guardar Perfil</button>
@@ -612,7 +612,7 @@
                                     <option value="on" selected>Activadas</option>
                                     <option value="off">Desactivadas</option>
                                 </select>
-                                <small role="alert">Debe seleccionar una opción.</small>
+                                <small role="alert" class="error-msg">Debe seleccionar una opción.</small>
                             </div>
 
                             <div class="form-group">
@@ -622,7 +622,7 @@
                                     <option value="en">Inglés</option>
                                     <option value="pt">Portugués</option>
                                 </select>
-                                <small role="alert">Seleccione un idioma válido.</small>
+                                <small role="alert" class="error-msg">Seleccione un idioma válido.</small>
                             </div>
 
                             <div class="form-group">
@@ -632,7 +632,7 @@
                                     <option value="private">Privada</option>
                                     <option value="team">Solo equipo</option>
                                 </select>
-                                <small role="alert">Elija un nivel de privacidad.</small>
+                                <small role="alert" class="error-msg">Elija un nivel de privacidad.</small>
                             </div>
                         </fieldset>
                         <button type="submit">Guardar Preferencias</button>
@@ -649,14 +649,14 @@
                                 <label for="user-password">Nueva contraseña:</label>
                                 <input id="user-password" name="user-password" type="password"
                                     placeholder="Ingrese nueva contraseña">
-                                <small role="alert">Entre 6 y 20 caracteres.</small>
+                                <small role="alert" class="error-msg">Entre 6 y 20 caracteres.</small>
                             </div>
 
                             <div class="form-group">
                                 <label for="confirm-password">Confirmar contraseña:</label>
                                 <input id="confirm-password" name="confirm-password" type="password"
                                     placeholder="Confirme la contraseña">
-                                <small role="alert">Repita la contraseña para confirmación.</small>
+                                <small role="alert" class="error-msg">Repita la contraseña para confirmación.</small>
                             </div>
 
                             <div class="form-group">
@@ -667,14 +667,14 @@
                                     <option value="school">¿Nombre de tu escuela primaria?</option>
                                     <option value="city">¿Ciudad donde naciste?</option>
                                 </select>
-                                <small role="alert">Seleccione una pregunta de seguridad.</small>
+                                <small role="alert" class="error-msg">Seleccione una pregunta de seguridad.</small>
                             </div>
 
                             <div class="form-group">
                                 <label for="security-answer">Respuesta:</label>
                                 <input id="security-answer" name="security-answer" type="text"
                                     placeholder="Ingrese su respuesta">
-                                <small role="alert">La respuesta es obligatoria.</small>
+                                <small role="alert" class="error-msg">La respuesta es obligatoria.</small>
                             </div>
                         </fieldset>
                         <button type="submit">Guardar Seguridad</button>
