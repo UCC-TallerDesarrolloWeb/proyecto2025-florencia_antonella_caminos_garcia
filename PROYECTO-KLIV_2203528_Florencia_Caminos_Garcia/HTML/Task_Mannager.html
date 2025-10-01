@@ -184,9 +184,7 @@
                     <input type="text" id="taskTitle" name="taskTitle" placeholder="Escribe el título" required>
 
                     <label for="taskDescription">Descripción:</label>
-                    <textarea id="taskDescription" name="taskDescription" rows="3"
-                        placeholder="Escribe la descripción"></textarea>
-
+                    <textarea id="taskDescription" name="taskDescription" rows="3" placeholder="Escribe la descripción" maxlength="200"></textarea>
                     <fieldset>
                         <legend>Prioridad:</legend>
                         <input type="radio" id="high" name="priority" value="Alta">
@@ -222,7 +220,7 @@
                     <div id="task-comments">
                         <h3>Comentarios</h3>
                         <div id="comments-list"></div>
-                        <textarea id="new-comment" placeholder="Escribe un comentario..."></textarea>
+                        <textarea id="new-comment" placeholder="Escribe un comentario..." maxlength="200"></textarea>
                         <button type="button" id="add-comment">Agregar comentario</button>
                     </div>
 
