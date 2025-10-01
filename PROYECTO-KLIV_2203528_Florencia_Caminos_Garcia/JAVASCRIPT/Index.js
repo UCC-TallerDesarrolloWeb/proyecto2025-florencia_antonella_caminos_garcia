@@ -1,13 +1,25 @@
+// =============================================
+// CONFIGURACIÓN GLOBAL DE LA APLICACIÓN
+// =============================================
+
+/**
+ * Configuración principal del dashboard
+ * Define constantes y parámetros globales
+ */
 const CONFIG = {
-    SECTIONS: ['Dashboard', 'Projects', 'Tasks', 'Settings', 'Help'],
-    DEFAULT_SECTION: 'Dashboard',
-    ANIMATION_DELAY: 50,
-    SEARCH_MIN_LENGTH: 2,
-    AUTO_SAVE_DELAY: 1000,
-    TOAST_DURATION: 3000,
-    SUGGESTION_MIN_LENGTH: 1
+    SECTIONS: ['Dashboard', 'Projects', 'Tasks', 'Settings', 'Help'], // Secciones disponibles
+    DEFAULT_SECTION: 'Dashboard', // Sección por defecto al cargar
+    ANIMATION_DELAY: 50, // Retardo para animaciones (ms)
+    SEARCH_MIN_LENGTH: 2, // Longitud mínima para búsquedas
+    AUTO_SAVE_DELAY: 1000, // Retardo para autoguardado (ms)
+    TOAST_DURATION: 3000, // Duración de notificaciones toast (ms)
+    SUGGESTION_MIN_LENGTH: 1 // Longitud mínima para sugerencias
 };
 
+/**
+ * Selectores CSS para elementos del DOM
+ * Centraliza todos los selectores para fácil mantenimiento
+ */
 const SELECTORS = {
     errorMessages: '.error-msg',
     sections: 'main section',
@@ -16,7 +28,17 @@ const SELECTORS = {
     forms: 'form'
 };
 
+// =============================================
+// UTILIDADES - Funciones helper reutilizables
+// =============================================
+
 const Utils = {
+    /**
+     * Debounce: Evita llamadas excesivas a funciones
+     * @param {Function} func - Función a ejecutar
+     * @param {number} wait - Tiempo de espera en ms
+     * @returns {Function} Función debounceada
+     */
     debounce(func, wait) {
         let timeout;
         return function executedFunction(...args) {
@@ -29,6 +51,12 @@ const Utils = {
         };
     },
 
+    /**
+     * Animación suave de números
+     * @param {HTMLElement} element - Elemento donde mostrar el número
+     * @param {number} targetNumber - Número objetivo
+     * @param {number} duration - Duración de la animación (ms)
+     */
     animateNumber(element, targetNumber, duration = 1000) {
         const start = parseInt(element.textContent) || 0;
         const step = (targetNumber - start) / (duration / 16);
@@ -38,6 +66,7 @@ const Utils = {
             current += step;
             element.textContent = Math.round(current);
 
+            // Detener animación cuando se alcanza el objetivo
             if (Math.abs(current - targetNumber) < 1) {
                 element.textContent = targetNumber;
                 clearInterval(timer);
@@ -45,6 +74,13 @@ const Utils = {
         }, 16);
     },
 
+    /**
+     * Crea elementos DOM de forma simplificada
+     * @param {string} tag - Tag del elemento
+     * @param {string} className - Clase CSS
+     * @param {string} content - Contenido HTML
+     * @returns {HTMLElement} Elemento creado
+     */
     createElement(tag, className, content) {
         const element = document.createElement(tag);
         if (className) element.className = className;
@@ -53,7 +89,16 @@ const Utils = {
     }
 };
 
+// =============================================
+// GESTOR DE NOTIFICACIONES
+// =============================================
+
 class NotificationManager {
+    /**
+     * Muestra mensaje de error
+     * @param {string} message - Mensaje a mostrar
+     * @param {string} targetId - ID del contenedor de error
+     */
     static showError(message, targetId = 'errorMessage') {
         const errorContainer = document.getElementById(targetId);
         if (errorContainer) {
@@ -62,6 +107,10 @@ class NotificationManager {
         }
     }
 
+    /**
+     * Oculta mensaje de error
+     * @param {string} targetId - ID del contenedor de error
+     */
     static hideError(targetId = 'errorMessage') {
         const errorContainer = document.getElementById(targetId);
         if (errorContainer) {
@@ -70,6 +119,11 @@ class NotificationManager {
         }
     }
 
+    /**
+     * Muestra notificación toast temporal
+     * @param {string} message - Mensaje a mostrar
+     * @param {string} type - Tipo de notificación ('success' o 'error')
+     */
     static showToast(message, type = 'success') {
         const toast = Utils.createElement('div', `toast toast-${type}`, `
             <div class="toast-content">
@@ -81,6 +135,7 @@ class NotificationManager {
         document.body.appendChild(toast);
         toast.style.animation = 'fadeInUp 0.6s ease-out forwards';
 
+        // Remover toast después del tiempo configurado
         setTimeout(() => {
             toast.style.opacity = '0';
             toast.style.transform = 'translateY(-30px)';
@@ -88,6 +143,9 @@ class NotificationManager {
         }, CONFIG.TOAST_DURATION);
     }
 
+    /**
+     * Muestra indicador de guardado automático
+     */
     static showSaveIndicator() {
         const indicator = Utils.createElement('div', 'save-indicator', '✓ Guardado automáticamente');
         document.body.appendChild(indicator);
@@ -95,18 +153,31 @@ class NotificationManager {
     }
 }
 
+// =============================================
+// GESTOR DE NAVEGACIÓN
+// =============================================
+
 class NavigationManager {
+    /**
+     * @param {DashboardApp} dashboardApp - Instancia de la app principal
+     */
     constructor(dashboardApp) {
         this.app = dashboardApp;
         this.currentSection = CONFIG.DEFAULT_SECTION;
     }
 
+    /**
+     * Activa una sección específica
+     * @param {string} sectionId - ID de la sección a activar
+     */
     activateSection(sectionId) {
+        // Ocultar todas las secciones
         document.querySelectorAll(SELECTORS.sections).forEach(section => {
             section.style.display = 'none';
             section.classList.remove('active-section');
         });
 
+        // Mostrar sección objetivo
         const target = document.getElementById(sectionId);
         if (target) {
             this._animateSection(target);
@@ -116,6 +187,10 @@ class NavigationManager {
         this.currentSection = sectionId;
     }
 
+    /**
+     * Animación de transición de sección
+     * @param {HTMLElement} target - Elemento de la sección
+     */
     _animateSection(target) {
         target.style.opacity = 0;
         target.style.display = 'block';
@@ -127,6 +202,10 @@ class NavigationManager {
         }, CONFIG.ANIMATION_DELAY);
     }
 
+    /**
+     * Actualiza estado activo en el sidebar
+     * @param {string} sectionId - ID de la sección activa
+     */
     _updateSidebar(sectionId) {
         document.querySelectorAll(SELECTORS.sidebarItems).forEach(item => {
             item.classList.remove('active');
@@ -139,15 +218,26 @@ class NavigationManager {
     }
 }
 
+// =============================================
+// GESTOR DE BÚSQUEDA
+// =============================================
+
 class SearchManager {
+    /**
+     * @param {NotificationManager} notificationManager - Gestor de notificaciones
+     */
     constructor(notificationManager) {
         this.notifications = notificationManager;
         this.setupAdvancedSearch();
     }
 
+    /**
+     * Maneja la búsqueda de contenido
+     */
     handleSearch() {
         const query = document.getElementById('searchBox').value.trim().toLowerCase();
 
+        // Validar longitud mínima
         if (!query) {
             NotificationManager.showError('⚠️ Por favor ingrese un término de búsqueda.');
             return;
@@ -158,17 +248,26 @@ class SearchManager {
 
         const found = this._searchInSections(query);
 
+        // Mostrar error si no se encuentran resultados
         if (!found) {
             NotificationManager.showError('🔍 No se encontraron coincidencias.');
         }
     }
 
+    /**
+     * Limpia resaltados anteriores
+     */
     _clearHighlights() {
         document.querySelectorAll('.search-highlight').forEach(el => {
             el.classList.remove('search-highlight');
         });
     }
 
+    /**
+     * Busca texto en todas las secciones
+     * @param {string} query - Término de búsqueda
+     * @returns {boolean} True si se encontraron resultados
+     */
     _searchInSections(query) {
         let found = false;
         document.querySelectorAll(SELECTORS.sections).forEach(section => {
@@ -185,6 +284,11 @@ class SearchManager {
         return found;
     }
 
+    /**
+     * Resalta coincidencias en una sección
+     * @param {HTMLElement} section - Sección donde buscar
+     * @param {string} query - Término a resaltar
+     */
     _highlightMatches(section, query) {
         section.querySelectorAll('*').forEach(el => {
             if (el.textContent.toLowerCase().includes(query)) {
@@ -193,6 +297,9 @@ class SearchManager {
         });
     }
 
+    /**
+     * Configura búsqueda con sugerencias
+     */
     setupAdvancedSearch() {
         const searchBox = document.getElementById('searchBox');
         if (!searchBox) return;
@@ -200,6 +307,7 @@ class SearchManager {
         const suggestionsHTML = '<div id="search-suggestions" class="search-suggestions"></div>';
         searchBox.parentNode.insertAdjacentHTML('afterend', suggestionsHTML);
 
+        // Búsqueda con debounce para mejor performance
         searchBox.addEventListener('input', Utils.debounce((e) => {
             if (e.target.value.length > CONFIG.SUGGESTION_MIN_LENGTH) {
                 this.showSearchSuggestions(e.target.value);
@@ -207,6 +315,10 @@ class SearchManager {
         }, 300));
     }
 
+    /**
+     * Muestra sugerencias de búsqueda
+     * @param {string} query - Término de búsqueda
+     */
     showSearchSuggestions(query) {
         const suggestions = CONFIG.SECTIONS
             .concat(['Tareas pendientes', 'Configuración', 'Galería de fotos'])
@@ -221,7 +333,14 @@ class SearchManager {
     }
 }
 
+// =============================================
+// GESTOR DE TAREAS
+// =============================================
+
 class TaskManager {
+    /**
+     * Actualiza estadísticas de tareas
+     */
     updateStatistics() {
         const total = document.querySelectorAll(SELECTORS.taskCheckboxes).length;
         const completed = document.querySelectorAll('.task-checkbox:checked').length;
@@ -230,11 +349,16 @@ class TaskManager {
         this._updateProgressBar(percentage);
         this._updateCounter(completed);
 
+        // Notificación cuando todas las tareas están completadas
         if (percentage === 100) {
             NotificationManager.showToast('¡Todas las tareas completadas! 🎉', 'success');
         }
     }
 
+    /**
+     * Actualiza barra de progreso
+     * @param {number} percentage - Porcentaje de completitud
+     */
     _updateProgressBar(percentage) {
         const progressBar = document.querySelector('progress');
         if (progressBar) {
@@ -242,6 +366,10 @@ class TaskManager {
         }
     }
 
+    /**
+     * Actualiza contador de tareas con animación
+     * @param {number} completed - Número de tareas completadas
+     */
     _updateCounter(completed) {
         const counter = document.querySelector('.task-counter');
         if (counter) {
@@ -249,6 +377,9 @@ class TaskManager {
         }
     }
 
+    /**
+     * Elimina tareas completadas
+     */
     removeCompletedTasks() {
         document.querySelectorAll('.task-checkbox:checked').forEach(checkbox => {
             const row = checkbox.closest('tr');
@@ -259,6 +390,10 @@ class TaskManager {
         this.updateStatistics();
     }
 
+    /**
+     * Permite edición inline de tareas
+     * @param {HTMLElement} row - Fila de la tabla a editar
+     */
     editTaskInline(row) {
         const cell = row.querySelector('td:nth-child(2)');
         if (cell) {
@@ -270,10 +405,12 @@ class TaskManager {
             cell.appendChild(input);
             input.focus();
 
+            // Guardar cambios al perder foco
             input.addEventListener('blur', () => {
                 cell.textContent = input.value || originalText;
             });
 
+            // Guardar cambios con Enter
             input.addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') {
                     input.blur();
@@ -282,6 +419,10 @@ class TaskManager {
         }
     }
 }
+
+// =============================================
+// APLICACIÓN PRINCIPAL - DASHBOARD APP
+// =============================================
 
 class DashboardApp {
     constructor() {
@@ -294,6 +435,9 @@ class DashboardApp {
         this.init();
     }
 
+    /**
+     * Inicializa la aplicación
+     */
     init() {
         this.initializeApp();
         this.setupAllEvents();
@@ -301,16 +445,25 @@ class DashboardApp {
         console.log("Kliv Dashboard Initialized, nice to see you again!");
     }
 
+    /**
+     * Configuración inicial de la aplicación
+     */
     initializeApp() {
+        // Ocultar mensajes de error
         document.querySelectorAll(SELECTORS.errorMessages)
             .forEach(el => el.style.display = 'none');
 
+        // Ocultar todas las secciones
         document.querySelectorAll(SELECTORS.sections)
             .forEach(section => section.style.display = 'none');
 
+        // Activar sección por defecto
         this.navigationManager.activateSection(CONFIG.DEFAULT_SECTION);
     }
 
+    /**
+     * Configura todos los event listeners
+     */
     setupAllEvents() {
         this.setupKeyboardNavigation();
         this.setupHeaderEvents();
@@ -323,14 +476,20 @@ class DashboardApp {
         this.setupGlobalEvents();
     }
 
+    /**
+     * Configura mejoras y funcionalidades adicionales
+     */
     setupEnhancements() {
         this.setupThemeToggle();
         this.setupAutoSave();
         this.setupCharacterCounters();
         this.setupDragAndDrop();
-        this.setupImageModal();
+        this.setupLikes(); // Sistema de me gusta
     }
 
+    /**
+     * Navegación por teclado
+     */
     setupKeyboardNavigation() {
         document.addEventListener('keydown', (e) => {
             const currentIndex = this.sections.findIndex(id => {
@@ -357,6 +516,9 @@ class DashboardApp {
         });
     }
 
+    /**
+     * Eventos del header (búsqueda y usuario)
+     */
     setupHeaderEvents() {
         const elements = {
             searchButton: document.getElementById('searchButton'),
@@ -365,6 +527,7 @@ class DashboardApp {
             userName: document.getElementById('user-name')
         };
 
+        // Configurar eventos de búsqueda
         if (elements.searchButton && elements.searchBox) {
             elements.searchButton.addEventListener('click', () => this.searchManager.handleSearch());
             elements.searchBox.addEventListener('keypress', (e) => {
@@ -377,6 +540,7 @@ class DashboardApp {
             });
         }
 
+        // Configurar eventos de usuario
         if (elements.userAvatar && elements.userName) {
             [elements.userAvatar, elements.userName].forEach(el => {
                 el.addEventListener('click', () => this.toggleUserMenu());
@@ -384,14 +548,20 @@ class DashboardApp {
         }
     }
 
+    /**
+     * Eventos del sidebar (navegación)
+     */
     setupSidebarEvents() {
         document.querySelectorAll(SELECTORS.sidebarItems).forEach(item => {
             item.addEventListener('click', () => {
-
+                // Remover activo de todos los items
                 document.querySelectorAll(SELECTORS.sidebarItems)
                     .forEach(i => i.classList.remove('active'));
+                
+                // Agregar activo al item clickeado
                 item.classList.add('active');
 
+                // Activar sección correspondiente
                 const sectionId = item.id.replace('menu-', '');
                 if (sectionId) {
                     const formattedId = sectionId.charAt(0).toUpperCase() + sectionId.slice(1);
@@ -401,7 +571,11 @@ class DashboardApp {
         });
     }
 
+    /**
+     * Eventos de la sección de tareas
+     */
     setupTasksEvents() {
+        // Eventos para checkboxes de tareas
         document.querySelectorAll(SELECTORS.taskCheckboxes).forEach(checkbox => {
             checkbox.addEventListener('change', () => {
                 const row = checkbox.closest('tr');
@@ -413,18 +587,21 @@ class DashboardApp {
         const addTaskBtn = document.querySelector('.task-actions .btn-primary');
         const removeTaskBtn = document.querySelector('.task-actions .btn-danger');
 
+        // Botón añadir tarea
         if (addTaskBtn) {
             addTaskBtn.addEventListener('click', () => {
                 this.navigationManager.activateSection('Tasks');
             });
         }
 
+        // Botón eliminar tareas completadas
         if (removeTaskBtn) {
             removeTaskBtn.addEventListener('click', () => {
                 this.taskManager.removeCompletedTasks();
             });
         }
 
+        // Doble click para editar tareas
         document.querySelectorAll('#tasks-table tbody tr').forEach(row => {
             row.addEventListener('dblclick', () => {
                 this.taskManager.editTaskInline(row);
@@ -432,6 +609,9 @@ class DashboardApp {
         });
     }
 
+    /**
+     * Sistema de autoguardado para formularios
+     */
     setupAutoSave() {
         document.querySelectorAll(SELECTORS.forms).forEach(form => {
             const inputs = form.querySelectorAll('input, textarea, select');
@@ -447,6 +627,9 @@ class DashboardApp {
         });
     }
 
+    /**
+     * Toggle entre modo claro y oscuro
+     */
     setupThemeToggle() {
         const themeToggle = Utils.createElement('button', 'btn-tertiary', '🌙 Modo Oscuro');
         themeToggle.id = 'theme-toggle';
@@ -465,6 +648,9 @@ class DashboardApp {
         }
     }
 
+    /**
+     * Contadores de caracteres para inputs
+     */
     setupCharacterCounters() {
         document.querySelectorAll('input[type="text"], textarea').forEach(input => {
             const maxLength = input.getAttribute('maxlength');
@@ -478,12 +664,15 @@ class DashboardApp {
                     counter.style.color = remaining < 10 ? '#e74c3c' : '#666';
                 });
 
-                // Trigger inicial
+                // Trigger inicial para mostrar estado actual
                 input.dispatchEvent(new Event('input'));
             }
         });
     }
 
+    /**
+     * Eventos del dashboard principal
+     */
     setupDashboardEvents() {
         const openEditorBtn = document.getElementById('open-editor');
         if (!openEditorBtn) return;
@@ -500,7 +689,6 @@ class DashboardApp {
                 window.location.href = '../HTML/Dashboard_Editor.html';
             } catch (error) {
                 console.error("Error al cargar el editor:", error);
-
                 window.location.href = '../HTML/Dashboard_Editor.html';
             } finally {
                 openEditorBtn.textContent = 'Ir al Dashboard Editor';
@@ -509,6 +697,9 @@ class DashboardApp {
         });
     }
 
+    /**
+     * Simula carga del editor (para demostración)
+     */
     async simulateEditorLoad() {
         return new Promise((resolve, reject) => {
             setTimeout(() => {
@@ -517,6 +708,9 @@ class DashboardApp {
         });
     }
 
+    /**
+     * Eventos de la sección de proyectos
+     */
     setupProjectsEvents() {
         const form = document.getElementById('add-project-content');
         const clearBtn = document.getElementById('clear-form');
@@ -535,6 +729,9 @@ class DashboardApp {
         }
     }
 
+    /**
+     * Maneja envío de formulario de proyectos
+     */
     handleProjectSubmit(e) {
         e.preventDefault();
         const contentInput = document.getElementById('project-content-text');
@@ -549,6 +746,9 @@ class DashboardApp {
         NotificationManager.showToast('Proyecto creado exitosamente');
     }
 
+    /**
+     * Limpia formulario de proyectos
+     */
     clearProjectForm() {
         const contentInput = document.getElementById('project-content-text');
         const targetCardSelect = document.getElementById('target-card');
@@ -558,6 +758,9 @@ class DashboardApp {
         NotificationManager.hideError();
     }
 
+    /**
+     * Muestra vista previa de proyecto
+     */
     previewProject() {
         const contentInput = document.getElementById('project-content-text');
 
@@ -569,6 +772,9 @@ class DashboardApp {
         alert(`🔍 Vista previa:\n${contentInput.value}`);
     }
 
+    /**
+     * Eventos de la sección de configuración
+     */
     setupSettingsEvents() {
         document.querySelectorAll('#Settings form').forEach(form => {
             form.addEventListener('submit', (e) => {
@@ -581,6 +787,9 @@ class DashboardApp {
         this.setupPasswordValidation();
     }
 
+    /**
+     * Validación de contraseñas coincidentes
+     */
     setupPasswordValidation() {
         const passwordField = document.getElementById('user-password');
         const confirmPasswordField = document.getElementById('confirm-password');
@@ -599,6 +808,9 @@ class DashboardApp {
         }
     }
 
+    /**
+     * Eventos de la sección de ayuda
+     */
     setupHelpEvents() {
         document.querySelectorAll('#Help details').forEach(detail => {
             detail.addEventListener('toggle', () => {
@@ -610,6 +822,9 @@ class DashboardApp {
         });
     }
 
+    /**
+     * Eventos globales (atajos de teclado)
+     */
     setupGlobalEvents() {
         document.addEventListener('keydown', (e) => {
             const shortcuts = {
@@ -632,6 +847,9 @@ class DashboardApp {
         });
     }
 
+    /**
+     * Sistema de drag and drop para proyectos
+     */
     setupDragAndDrop() {
         const cards = document.querySelectorAll('.projects-grid article');
 
@@ -649,52 +867,76 @@ class DashboardApp {
         });
     }
 
-    setupImageModal() {
-        const images = document.querySelectorAll('#gallery-grid img, #dashboard-grid img');
+    /**
+     * Sistema simple de "me gusta" para imágenes
+     */
+    setupLikes() {
+        document.querySelectorAll('.like-icon').forEach(icon => {
+            icon.addEventListener('click', function() {
+                const figure = this.closest('figure');
+                const likeCount = figure.querySelector('.like-count');
+                const img = figure.querySelector('img');
 
-        const modalHTML = `
-            <div id="image-modal" class="modal">
-                <div class="modal-content">
-                    <span class="modal-close">&times;</span>
-                    <img id="modal-image" src="" alt="">
-                    <div class="modal-actions">
-                        <button class="btn-primary">❤️ Me gusta</button>
-                    </div>
-                </div>
-            </div>
-        `;
-
-        document.body.insertAdjacentHTML('beforeend', modalHTML);
-
-        images.forEach(img => {
-            img.addEventListener('click', () => {
-                const modalImage = document.getElementById('modal-image');
-                const modal = document.getElementById('image-modal');
-
-                if (modalImage && modal) {
-                    modalImage.src = img.src;
-                    modal.style.display = 'flex';
+                if (this.textContent === '🤍') {
+                    // Dar like
+                    this.textContent = '❤️';
+                    likeCount.textContent = parseInt(likeCount.textContent) + 1;
+                    localStorage.setItem(`likes-${img.src}`, likeCount.textContent);
+                    localStorage.setItem(`liked-${img.src}`, 'true');
+                } else {
+                    // Quitar like
+                    this.textContent = '🤍';
+                    likeCount.textContent = Math.max(0, parseInt(likeCount.textContent) - 1);
+                    localStorage.setItem(`likes-${img.src}`, likeCount.textContent);
+                    localStorage.setItem(`liked-${img.src}`, 'false');
                 }
             });
         });
 
-        document.addEventListener('click', (e) => {
-            if (e.target.classList.contains('modal-close') || e.target.id === 'image-modal') {
-                document.getElementById('image-modal').style.display = 'none';
-            }
+        // Cargar likes guardados al iniciar
+        this.loadSavedLikes();
+    }
+
+    /**
+     * Carga los "me gusta" guardados desde localStorage
+     */
+    loadSavedLikes() {
+        document.querySelectorAll('figure').forEach(figure => {
+            const img = figure.querySelector('img');
+            const likeIcon = figure.querySelector('.like-icon');
+            const likeCount = figure.querySelector('.like-count');
+
+            const savedLikes = localStorage.getItem(`likes-${img.src}`);
+            const savedLiked = localStorage.getItem(`liked-${img.src}`);
+
+            if (savedLikes) likeCount.textContent = savedLikes;
+            if (savedLiked === 'true') likeIcon.textContent = '❤️';
         });
     }
 
+    /**
+     * Muestra/oculta menú de usuario
+     */
     toggleUserMenu() {
         console.log('User menu toggled');
     }
 
+    /**
+     * Maneja envío de formularios de configuración
+     */
     handleSettingsSubmit(form) {
         console.log('Settings form submitted:', form.id);
         NotificationManager.showToast('Configuración guardada');
     }
 }
 
+// =============================================
+// INICIALIZACIÓN DE LA APLICACIÓN
+// =============================================
+
+/**
+ * Inicializa la aplicación cuando el DOM está listo
+ */
 document.addEventListener('DOMContentLoaded', () => {
     window.dashboardApp = new DashboardApp();
 });
