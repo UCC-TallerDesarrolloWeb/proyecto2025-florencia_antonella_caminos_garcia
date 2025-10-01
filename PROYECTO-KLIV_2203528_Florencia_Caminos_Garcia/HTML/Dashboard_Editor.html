@@ -14,67 +14,121 @@
 </head>
 
 <body>
-    <aside id="sidebar-edit">
-        <header class="editor-header" role="banner">
-            <div class="header-content">
-                <h1>Editor de Dashboard</h1>
-                <p class="subtitle">Configura y organiza tus paneles de datos de forma dinámica</p>
-            </div>
+    <aside id="sidebar-edit" class="editor-sidebar" role="complementary" aria-label="Herramientas de edición">
+        <header class="editor-header">
+            <h1>Editor de Dashboard</h1>
+            <p class="subtitle">Configura y organiza tus paneles de datos de forma dinámica</p>
             <nav class="breadcrumb" aria-label="Ruta de navegación">
                 <ol>
-                    <li><a href="../HTML/Index.html">Dashboard</a></li>
-                    <li><span aria-current="page">Editor</span></li>
+                    <li><a href="../HTML/Index.html">Inicio</a></li>
                 </ol>
             </nav>
         </header>
 
-        <aside id="editor-sidebar" class="editor-sidebar" role="complementary" aria-label="Herramientas de edición">
-            <section class="sidebar-section">
-                <h2 class="sidebar-title">Opciones</h2>
-                <ul class="tool-list" role="list">
-                    <li><button id="addChart" class="tool-btn" data-type="chart">➕ Gráfico</button></li>
-                    <li><button id="addTable" class="tool-btn" data-type="table">➕ Tabla</button></li>
-                    <li><button id="addText" class="tool-btn" data-type="text">➕ Texto</button></li>
-                    <li><button id="changeColors" class="tool-btn" data-type="color">🎨 Colores</button></li>
-                    <li><button id="addFilter" class="tool-btn" data-type="filter">🔍 Filtro</button></li>
-                </ul>
-            </section>
+        <label for="sidebar-options">Selecciona una opción:</label>
+        <select id="sidebar-options" class="tool-select">
+            <option value="" disabled selected>Selecciona una opción...</option>
+            <option value="chart">➕ Gráfico</option>
+            <option value="table">➕ Tabla</option>
+            <option value="text">➕ Texto</option>
+            <option value="color">🎨 Colores</option>
+            <option value="filter">🔍 Filtro</option>
+        </select>
 
-            <section class="sidebar-section">
-                <h2 class="sidebar-title">Gestión</h2>
-                <ul class="action-list" role="list">
-                    <li><button id="saveDashboard" class="action-btn primary">💾 Guardar</button></li>
-                    <li><button id="loadDashboard" class="action-btn secondary">📂 Cargar</button></li>
-                    <li><button id="previewMode" class="action-btn tertiary">👀 Vista previa</button></li>
-                </ul>
-            </section>
+        <details open class="sidebar-section">
+            <summary>Filtros y Gestión</summary>
+            <div class="filter-group">
+                <label>Prioridad:
+                    <select name="priority-filter">
+                        <option value="all">Todas</option>
+                        <option value="Alta">Alta</option>
+                        <option value="Media">Media</option>
+                        <option value="Baja">Baja</option>
+                        <option value="Urgente">Urgente</option>
+                        <option value="Importante">Importante</option>
+                    </select>
+                </label>
 
-            <section class="sidebar-section">
-                <h2 class="sidebar-title">Proyectos</h2>
-                <ul class="project-list" role="list">
-                    <li><button class="project-btn" data-project="personal">📁 Personal</button></li>
-                    <li><button class="project-btn" data-project="trabajo">💼 Trabajo</button></li>
-                    <li><button class="project-btn" data-project="estudios">📚 Estudios</button></li>
-                </ul>
-            </section>
+                <label>Dispositivo:
+                    <select name="device">
+                        <option value="all">Todos</option>
+                        <option value="desktop">💻 Escritorio</option>
+                        <option value="mobile">📱 Móvil</option>
+                        <option value="tablet">📟 Tablet</option>
+                    </select>
+                </label>
 
-            <section class="sidebar-section">
-                <h2 class="sidebar-title">Filtros</h2>
-                <form id="project-filters" class="filter-form" aria-label="Filtros de proyecto">
-                    <fieldset>
-                        <legend class="visually-hidden">Seleccionar filtros</legend>
-                        <label><input type="checkbox" name="priority" value="Alta"> Alta prioridad</label>
-                        <label><input type="checkbox" name="priority" value="Media"> Media prioridad</label>
-                        <label><input type="checkbox" name="priority" value="Baja"> Baja prioridad</label>
-                        <label><input type="checkbox" name="priority" value="Urgente"> Urgente</label>
-                        <label><input type="checkbox" name="priority" value="Importante"> Importante</label>
-                    </fieldset>
-                </form>
-            </section>
-        </aside>
+                <label>Región:
+                    <select name="region">
+                        <option value="all">Todas 🌎</option>
+                        <option value="america">América</option>
+                        <option value="europa">Europa</option>
+                        <option value="asia">Asia</option>
+                    </select>
+                </label>
+
+                <label><input type="checkbox" name="newUsers"> Solo nuevos usuarios</label>
+
+                <label for="management">Gestión:</label>
+                <select id="management">
+                    <option value="saveDashboard">💾 Guardar</option>
+                    <option value="loadDashboard">📂 Cargar</option>
+                    <option value="previewMode">👀 Vista previa</option>
+                </select>
+            </div>
+        </details>
+
+        <details class="sidebar-section">
+            <summary>Proyectos</summary>
+            <ul class="project-list">
+                <li><button class="project-btn" data-project="personal">📁 Personal</button></li>
+                <li><button class="project-btn" data-project="trabajo">💼 Trabajo</button></li>
+                <li><button class="project-btn" data-project="estudios">📚 Estudios</button></li>
+            </ul>
+        </details>
     </aside>
 
-    <main id="dashboard-main" class="dashboard-main" role="main">
+    <main>
+        <section class="workspace">
+            <h2>Zona de trabajo</h2>
+            <div id="widgets-container" role="region">
+                <article class="widget" draggable="true" id="widget1">
+                    <h3>📊 Gráfico de visitas</h3>
+                    <p>Este espacio mostrará un gráfico de líneas con las visitas del último mes.</p>
+                </article>
+                <article class="widget" draggable="true" id="widget2">
+                    <h3>📋 Tabla de métricas</h3>
+                    <p>Aquí se mostrará una tabla comparativa de métricas clave.</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="preview-panel">
+            <h2>Vista previa de archivos</h2>
+            <div class="preview-grid" aria-live="polite">
+                <article class="preview-card pdf">
+                    <header class="card-header">
+                        <div class="card-icon">📄</div>
+                        <h3 class="card-title">Reporte_Trimestral.pdf</h3>
+                    </header>
+                    <div class="card-preview pdf-preview">📊 PDF</div>
+                    <footer class="card-actions">
+                        <button class="card-btn" data-action="preview">👁️ Vista previa</button>
+                        <button class="card-btn primary" data-action="download">⬇️ Descargar</button>
+                    </footer>
+                </article>
+            </div>
+        </section>
+
+        <section class="file-panel">
+            <h2>Archivos, fotos y notas</h2>
+            <div id="file-list"></div>
+        </section>
+
+        <section class="canvas-panel">
+            <h2>Canvas de trabajo</h2>
+            <canvas id="dashboardCanvas"></canvas>
+        </section>
 
         <section class="config-panel">
             <details open>
@@ -95,29 +149,6 @@
                         <summary>Rango de fechas</summary>
                         <label>Desde: <input type="date" name="startDate"></label>
                         <label>Hasta: <input type="date" name="endDate"></label>
-                    </details>
-                </div>
-
-                <div class="config-section">
-                    <details>
-                        <summary>Filtros avanzados</summary>
-                        <label>Dispositivo:
-                            <select name="device">
-                                <option value="all">Todos</option>
-                                <option value="desktop">💻 Escritorio</option>
-                                <option value="mobile">📱 Móvil</option>
-                                <option value="tablet">📟 Tablet</option>
-                            </select>
-                        </label>
-                        <label>Región:
-                            <select name="region">
-                                <option value="all">Todas 🌎</option>
-                                <option value="america">América</option>
-                                <option value="europa">Europa</option>
-                                <option value="asia">Asia</option>
-                            </select>
-                        </label>
-                        <label><input type="checkbox" name="newUsers"> Solo nuevos usuarios</label>
                     </details>
                 </div>
 
@@ -156,61 +187,18 @@
                         </label>
                     </details>
                 </div>
-
             </details>
-        </section>
-
-        <section class="workspace">
-            <h2>Zona de trabajo</h2>
-            <div id="widgets-container" role="region">
-                <article class="widget" draggable="true" id="widget1">
-                    <h3>📊 Gráfico de visitas</h3>
-                    <p>Este espacio mostrará un gráfico de líneas con las visitas del último mes.</p>
-                </article>
-                <article class="widget" draggable="true" id="widget2">
-                    <h3>📋 Tabla de métricas</h3>
-                    <p>Aquí se mostrará una tabla comparativa de métricas clave.</p>
-                </article>
-            </div>
-        </section>
-
-        <section class="preview-panel">
-            <h2>Vista previa de archivos</h2>
-            <div class="preview-grid" aria-live="polite">
-                <!-- Ejemplo: cada botón tiene data-action -->
-                <article class="preview-card pdf">
-                    <div class="card-header">
-                        <div class="card-icon">📄</div>
-                        <h3 class="card-title">Reporte_Trimestral.pdf</h3>
-                    </div>
-                    <div class="card-preview pdf-preview">📊 PDF</div>
-                    <div class="card-actions">
-                        <button class="card-btn" data-action="preview">👁️ Vista previa</button>
-                        <button class="card-btn primary" data-action="download">⬇️ Descargar</button>
-                    </div>
-                </article>
-            </div>
-        </section>
-
-        <section class="file-panel">
-            <h2>Archivos, fotos y notas</h2>
-            <div id="file-list"></div>
-        </section>
-
-        <section class="canvas-panel">
-            <h2>Canvas de trabajo</h2>
-            <canvas id="dashboardCanvas"></canvas>
         </section>
 
         <template id="widget-template">
             <article class="widget" draggable="true">
                 <h3>Nombre Widget</h3>
                 <p>Contenido dinámico</p>
-                <div class="card-actions">
+                <footer class="card-actions">
                     <button class="card-btn" data-action="preview">👁️ Vista previa</button>
                     <button class="card-btn" data-action="analyze">🔍 Analizar</button>
                     <button class="card-btn" data-action="download">⬇️ Descargar</button>
-                </div>
+                </footer>
             </article>
         </template>
     </main>
