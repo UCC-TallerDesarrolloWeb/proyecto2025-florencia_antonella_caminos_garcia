@@ -62,7 +62,7 @@ Tener en cuenta:
 - [X] Debe contener al menos 3 elementos de tipo ```<input>``` o ```<select>``` ó ```<button>``` que le permitan al usuario ingresar valores para poder realizar un cálculo de un ejercicio.
 - [X] Emplear el atributo [**placeholder**](U2_HTML_avanzado.html#/19) (mínimamente en 1 input)
 - [X] Emplear el atributo **size** para que el tamaño de los inputs sea prolijo
-- [ ] Emplear el atributo **maxlength** para que el usurario no pueda ingresar valores "muy grandes"
+- [X] Emplear el atributo **maxlength** para que el usurario no pueda ingresar valores "muy grandes"
 - [X] No espaciar con excesivos ```<br>```. Utilizar márgenes, paddings, etc.
 - [X] La anidación de etiquetas HTML debe ser correcta.
 - [X] No utilizar etiquetas deprecadas.
@@ -73,8 +73,8 @@ Tener en cuenta:
 - [X] Debe contener por lo menos una etiqueta ```<img>``` en la página.
 - [X] Todas las imágenes deben ser incluidas en el repositorio dentro de una carpeta llamada **imagenes** (salvo que sean demasiado pesadas. En ese caso, se puede emplear un servidor externo).
 - [X] No se deben subir videos en el repositorio (excepto que sean MUY livianos).
-- [ ] Toda imagen debe tener su atributo alt
-- [ ] Las imágenes deben poseer un nombre representativo 
+- [X] Toda imagen debe tener su atributo alt
+- [X] Las imágenes deben poseer un nombre representativo 
 
 ### Sobre el CSS
 - [X] El estilo de los elementos debe establecerse en un archivo CSS (prohibido poner el atributo style a los elementos o emplear estilos incrustados).
@@ -85,7 +85,7 @@ Tener en cuenta:
 - [X] En la primera etapa debe existir un único archivo CSS (se debe evitar código duplicado. Se debe aplicar re-utilización de código/estilos)
 
 ### Sobre Accesibilidad:
-- [ ] Toda imagen debe tener su etiqueta alt
+- [X] Toda imagen debe tener su etiqueta alt
 - [X] Todo ```<input>``` o ```<select>``` debe tener su ```<label>```
 - [X] Los labels deben contener el atributo **for** (el for debe contener el id del input al cual se referencia) 
 - [X] Si hay una tabla en la página, debe contener ```<caption></caption>```
