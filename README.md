@@ -93,16 +93,16 @@ Tener en cuenta:
 ### Sobre la funcionalidad JavaScript
 Se debe agregar funcionalidad Js a la página HTML+CSS desarrollada
 - [X] Una función que compruebe si los valores ingresados son correctos, y si no lo son, que le indique al usuario por un alert o dialog, y que blanquee el contenido del campo.
-- [ ] Una función que calcule/muestre algo en base a los valores ingresados por el usuario en los inputs.
+- [X] Una función que calcule/muestre algo en base a los valores ingresados por el usuario en los inputs.
 - [X] El código Js debe estar en un archivo externo
 - [X] Se debe emplear var, let o const según corresponda para mayor eficiencia
-- [ ] No deben existir funciones innecesarias que no se llamen en ninguna sección del código
+- [X] No deben existir funciones innecesarias que no se llamen en ninguna sección del código
 - [X] Las funciones deben estar escritas cómo **función flecha**
 - [X] No debe haber errores JavaScript presentes (F12 > Consola)
 - [X] El funcionamiento de la página debe ser consistente.
 
 ### Sobre la documentación
-- [ ] TODAS las funciones javaScript deben estar comentadas adecuadamente. [JsDoc](https://jsdoc.app/about-getting-started.html)
+- [-] TODAS las funciones javaScript deben estar comentadas adecuadamente. [JsDoc](https://jsdoc.app/about-getting-started.html)
    ```/**
      * Descripción de que hace la función
      * @method Nombre de la función
