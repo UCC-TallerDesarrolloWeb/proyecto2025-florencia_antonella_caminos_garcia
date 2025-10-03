@@ -45,83 +45,83 @@ El enfoque principal es la **usabilidad y personalización**, permitiendo a los 
 | **Herramientas**| Canvas API, Drag & Drop API                          | Interactividad y renderizado. |
 | **Almacenamiento** | localStorage, IndexedDB (opcional)                | Persistencia de datos offline. |
 
-- **Clona el repositorio:
+- Clona el repositorio:
 
-- **Run
-- **Copy code
-- **git clone https://github.com/UCC-TallerDesarrolloWeb/proyecto2025-florencia_antonella_caminos_garcia.git
-- **cd HTML
-- **start chrome index.html
-- **Abre en un navegador:
+- Run
+- Copy code
+- git clone https://github.com/UCC-TallerDesarrolloWeb/proyecto2025-florencia_antonella_caminos_garcia.git
+- cd HTML
+- start chrome index.html
+- Abre en un navegador:
 
-- **No requiere servidor backend. Abre index.html directamente en un navegador moderno (Chrome, Firefox, Edge).
-- **Para desarrollo local, usa un servidor simple como Live Server en VS Code o python -m http.server 8000.
-- **Requisitos:
+- No requiere servidor backend. Abre index.html directamente en un navegador moderno (Chrome, Firefox, Edge).
+- Para desarrollo local, usa un servidor simple como Live Server en VS Code o python -m http.server 8000.
+- Requisitos:
 
-- **Navegador con soporte para ES6+ y Canvas API.
-- **Conexión a internet para cargar fuentes e iconos (Font Awesome, Google Fonts).
-- **Personalización:
+- Navegador con soporte para ES6+ y Canvas API.
+- Conexión a internet para cargar fuentes e iconos (Font Awesome, Google Fonts).
+- Personalización:
 
-- **Edita CSS/Index.css para temas personalizados.
-- **Agrega imágenes en /Imagenes/ para la galería.
-- **Uso
-- **Navegación:
+- Edita CSS/Index.css para temas personalizados.
+  Agrega imágenes en /Imagenes/ para la galería.
+- Uso
+- Navegación:
 
-- **Usa el sidebar izquierdo para cambiar entre secciones: Dashboard, Proyectos, Tareas, Galería, Configuración y Ayuda.
-- **Atajos: Ctrl + N para nueva tarea, 1/2/3 para vistas (Kanban/Calendario/Lista).
-- **Gestión de Tareas:
+- Usa el sidebar izquierdo para cambiar entre secciones: Dashboard, Proyectos, Tareas, Galería, Configuración y Ayuda.
+- Atajos: Ctrl + N para nueva tarea, 1/2/3 para vistas (Kanban/Calendario/Lista).
+- Gestión de Tareas:
 
-- **Accede a Task Manager.
-- **Crea tareas con plantillas (reunión, revisión, estudio).
-- **Arrastra tareas entre columnas (To Do → In Progress → Done).
-- **Galería:
+- Accede a Task Manager.
+- Crea tareas con plantillas (reunión, revisión, estudio).
+- Arrastra tareas entre columnas (To Do → In Progress → Done).
+- Galería:
 
-- **Sube imágenes vía drag & drop o clic.
-- **Da like con doble clic o botón ❤️.
-- **Filtra por "Todas", "Recientes" o "Favoritas".
-- **Editor de Dashboard:
+- Sube imágenes vía drag & drop o clic.
+- Da like con doble clic o botón ❤️.
+- Filtra por "Todas", "Recientes" o "Favoritas".
+- Editor de Dashboard:
 
-- **Ve a Dashboard Editor.
-- **Agrega elementos (gráficos, tablas) al canvas.
-- **Usa zoom (+/-) y arrastra para reposicionar.
-- **Configuración:
+- Ve a Dashboard Editor.
+- Agrega elementos (gráficos, tablas) al canvas.
+- Usa zoom (+/-) y arrastra para reposicionar.
+- Configuración:
 
-- **Cambia tema.
-- **Configura notificaciones y privacidad en Configuración > Preferencias/ Seguridad.
+- Cambia tema.
+- Configura notificaciones y privacidad en Configuración > Preferencias/ Seguridad.
 
-- **Secciones Principales
-- **Dashboard Principal
-- **__Vista inicial con estadísticas y galería de imágenes.
-- **__Filtros: Todas, Populares, Me gustan.
-- **__Botón para abrir el editor.
-- **__Proyectos
-- **__Agrega contenido a cards predefinidas (Recordatorios, Notificaciones, etc.).
-- **__Drag & drop para reorganizar.
-- **__Progreso general con barra de avance.
-- **__Tareas
-- **__Integración con Task Manager.
-- **__Tabla editable con checkboxes y prioridades.
-- **__Eliminación masiva de completadas.
+- Secciones Principales
+- Dashboard Principal
+- __Vista inicial con estadísticas y galería de imágenes.
+- __Filtros: Todas, Populares, Me gustan.
+- __Botón para abrir el editor.
+- __Proyectos
+- __Agrega contenido a cards predefinidas (Recordatorios, Notificaciones, etc.).
+  __Drag & drop para reorganizar.
+  __Progreso general con barra de avance.
+- __Tareas
+- __Integración con Task Manager.
+- __Tabla editable con checkboxes y prioridades.
+- __Eliminación masiva de completadas.
 
-- **Galería
-- **__Subida múltiple con previsualización.
-- **__Sistema de likes con partículas y animaciones.
-- **__Estadísticas: Total fotos, espacio usado, favoritas.
-- **__Configuración
-- **__Perfil: Foto, nombre, email.
-- **__Preferencias: Notificaciones, idioma, privacidad.
-- **__Seguridad: Contraseña, pregunta de seguridad.
+- Galería
+- __Subida múltiple con previsualización.
+- __Sistema de likes con partículas y animaciones.
+- __Estadísticas: Total fotos, espacio usado, favoritas.
+- __Configuración
+- __Perfil: Foto, nombre, email.
+- __Preferencias: Notificaciones, idioma, privacidad.
+- __Seguridad: Contraseña, pregunta de seguridad.
 
-- **Ayuda
-- **__FAQs expandibles con detalles de uso.
-- **__Atajos de teclado y tutoriales.
+- Ayuda
+- __FAQs expandibles con detalles de uso.
+- __Atajos de teclado y tutoriales.
 
-- **Contacto
-- **Desarrolladora: Florencia Caminos García
-- **Email: florcaminosgarcia@gmail.com
-- **GitHub: FlorenciaCaminosGarcia
-- **Proyecto: Kliv Dashboard
-- **¡Gracias por tu interés en Kliv! 🚀
+- Contacto
+- Desarrolladora: Florencia Caminos García
+- Email: florcaminosgarcia@gmail.com
+- GitHub: FlorenciaCaminosGarcia
+- Proyecto: Kliv Dashboard
+- ¡Gracias por tu interés en Kliv! 🚀
 
 ## Requisitos del Primer Parcial
 
