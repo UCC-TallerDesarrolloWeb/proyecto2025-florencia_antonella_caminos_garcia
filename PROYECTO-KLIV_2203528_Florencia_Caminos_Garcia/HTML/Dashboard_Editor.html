@@ -7,147 +7,165 @@
     <title>Dashboard Editor</title>
     <link rel="icon" href="../Favicon/Favicon.png" type="image-icon">
     <link rel="stylesheet" href="../CSS/Dashboard_Editor.css">
-    <script src="../JAVASCRIPT/Dashboard_Editor.js"></script>
+    <script src="../JAVASCRIPT/Dashboard_Editor.js" defer></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
         href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&family=SUSE+Mono:ital,wght@0,100..800;1,100..800&family=Source+Code+Pro:ital,wght@1,700&display=swap"
         rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
 </head>
 
 <body>
-    <aside id="sidebar-edit" class="editor-sidebar" role="complementary" aria-label="Herramientas de edición">
-        <header class="editor-header">
-            <h1>Editor de Dashboard</h1>
-            <p class="subtitle">Configura y organiza tus paneles de datos de forma dinámica</p>
-            <nav class="breadcrumb" aria-label="Ruta de navegación">
-                <ol>
-                    <li><a href="../HTML/Index.html">Inicio</a></li>
-                </ol>
-            </nav>
-        </header>
-        <label for="sidebar-add-options">Agregar elemento</label>
-        <select id="sidebar-add-options" class="tool-select">
-            <option value="" disabled selected>Seleccionar...</option>
-            <option value="chart">📊 Gráfico</option>
-            <option value="table">📋 Tabla</option>
-            <option value="text">📝 Texto</option>
-            <option value="color">🎨 Colores</option>
-            <option value="filter">🔍 Filtro</option>
-        </select>
+    <header class="main-header" role="banner">
+        <h1>Dashboard</h1>
+    </header>
 
-        <label for="sidebar-delete-options">Eliminar elemento</label>
-        <select id="sidebar-delete-options" class="tool-select">
-            <option value="" disabled selected>Seleccionar...</option>
-            <option value="chart">🗑️ Gráfico</option>
-            <option value="table">🗑️ Tabla</option>
-            <option value="text">🗑️ Texto</option>
-            <option value="color">🗑️ Colores</option>
-            <option value="filter">🗑️ Filtro</option>
-        </select>
+    <div class="dashboard-container" role="main">
 
+        <aside class="sidebar" aria-label="Panel de control del dashboard">
+            <div class="sidebar-header">
+                <h2>Opciones del Dashboard</h2>
+            </div>
 
-        <details open class="sidebar-section">
-            <summary>Filtros y Gestión</summary>
-            <div class="filter-group">
-                <label>Prioridad:
-                    <select name="priority-filter">
-                        <option value="all">Todas</option>
-                        <option value="Alta">Alta</option>
-                        <option value="Media">Media</option>
-                        <option value="Baja">Baja</option>
-                        <option value="Urgente">Urgente</option>
-                        <option value="Importante">Importante</option>
-                    </select>
-                </label>
+            <div class="sidebar-section">
+                <h3>📁 Proyectos</h3>
+                <div class="project-buttons" role="group" aria-label="Selección de proyectos">
+                    <button class="project-btn active" data-project="personal" aria-pressed="true">
+                        <span aria-hidden="true">👤</span>
+                        <span class="sr-only">Proyecto</span> Personal
+                    </button>
+                    <button class="project-btn" data-project="trabajo" aria-pressed="false">
+                        <span aria-hidden="true">💼</span>
+                        <span class="sr-only">Proyecto</span> Trabajo
+                    </button>
+                    <button class="project-btn" data-project="estudio" aria-pressed="false">
+                        <span aria-hidden="true">📚</span>
+                        <span class="sr-only">Proyecto</span> Estudio
+                    </button>
+                </div>
+            </div>
 
-                <label>Dispositivo:
-                    <select name="device">
-                        <option value="all">Todos</option>
-                        <option value="desktop">💻 Escritorio</option>
-                        <option value="mobile">📱 Móvil</option>
-                        <option value="tablet">📟 Tablet</option>
-                    </select>
-                </label>
-
-                <label>Región:
-                    <select name="region">
-                        <option value="all">Todas 🌎</option>
-                        <option value="america">América</option>
-                        <option value="europa">Europa</option>
-                        <option value="asia">Asia</option>
-                    </select>
-                </label>
-
-                <label><input type="checkbox" name="newUsers"> Solo nuevos usuarios</label>
-
-                <label for="management">Gestión:</label>
-                <select id="management">
-                    <option value="saveDashboard">💾 Guardar</option>
-                    <option value="loadDashboard">📂 Cargar</option>
-                    <option value="previewMode">👀 Vista previa</option>
+            <div class="sidebar-section">
+                <h3 id="add-label">➕ Agregar</h3>
+                <label for="sidebar-add-options" class="sr-only">Seleccionar tipo de elemento para agregar</label>
+                <select id="sidebar-add-options" aria-labelledby="add-label">
+                    <option value="">Selecciona un elemento...</option>
+                    <option value="chart">📊 Gráfico</option>
+                    <option value="table">📋 Tabla</option>
+                    <option value="text">📝 Texto</option>
+                    <option value="color">🎨 Color</option>
+                    <option value="filter">🔍 Filtro</option>
+                    <option value="pdf">📄 PDF</option>
                 </select>
             </div>
-        </details>
 
-        <details class="sidebar-section">
-            <summary>Proyectos</summary>
-            <ul class="project-list">
-                <li><button class="project-btn" data-project="personal">📁 Personal</button></li>
-                <li><button class="project-btn" data-project="trabajo">💼 Trabajo</button></li>
-                <li><button class="project-btn" data-project="estudios">📚 Estudios</button></li>
-            </ul>
-        </details>
-    </aside>
-    <main class="workspace">
-        <section class="canvas-panel">
-            <h2>Dashboard</h2>
-            <canvas id="dashboardCanvas"></canvas>
-        </section>
+            <div class="sidebar-section">
+                <h3 id="delete-label">🗑️ Eliminar</h3>
+                <label for="sidebar-delete-options" class="sr-only">Seleccionar tipo de elemento para eliminar</label>
+                <select id="sidebar-delete-options" aria-labelledby="delete-label">
+                    <option value="">Selecciona tipo a eliminar...</option>
+                    <option value="chart">📊 Gráficos</option>
+                    <option value="table">📋 Tablas</option>
+                    <option value="text">📝 Textos</option>
+                    <option value="color">🎨 Colores</option>
+                    <option value="filter">🔍 Filtros</option>
+                    <option value="pdf">📄 PDFs</option>
+                </select>
+            </div>
 
-        <section class="preview-panel">
-            <h2>Vista previa</h2>
-            <div class="preview-grid">
-                <div class="preview-card">
-                    <div class="card-header">
-                        <span class="card-icon">📊</span>
-                        <span class="card-title">Gráfico</span>
-                    </div>
-                    <div class="card preview">Contenido de gráfico</div>
-                    <div class="card-actions">
-                        <button class="card-btn">Editar</button>
-                        <button class="card-btn primary">Aplicar</button>
-                    </div>
-                </div>
+            <div class="sidebar-section">
+                <h3 id="filters-label">⚙️ Filtros</h3>
+                <div role="group" aria-labelledby="filters-label">
+                    <label for="priority-filter" class="sr-only">Filtrar por prioridad</label>
+                    <select id="priority-filter" name="priority-filter">
+                        <option value="all">Todas las prioridades</option>
+                        <option value="Alta">Alta prioridad</option>
+                        <option value="Media">Prioridad media</option>
+                        <option value="Baja">Baja prioridad</option>
+                    </select>
 
-                <div class="preview-card">
-                    <div class="card-header">
-                        <span class="card-icon">📑</span>
-                        <span class="card-title">PDF</span>
-                    </div>
-                    <div class="card preview pdf-preview">📄</div>
-                    <div class="card-actions">
-                        <button class="card-btn">Descargar</button>
-                        <button class="card-btn primary">Compartir</button>
+                    <label for="device-filter" class="sr-only">Filtrar por dispositivo</label>
+                    <select id="device-filter" name="device">
+                        <option value="all">Todos los dispositivos</option>
+                        <option value="mobile">Móvil</option>
+                        <option value="tablet">Tablet</option>
+                        <option value="desktop">Escritorio</option>
+                    </select>
+
+                    <label for="region-filter" class="sr-only">Filtrar por región</label>
+                    <select id="region-filter" name="region">
+                        <option value="all">Todas las regiones</option>
+                        <option value="norte">Norte</option>
+                        <option value="sur">Sur</option>
+                        <option value="este">Este</option>
+                        <option value="oeste">Oeste</option>
+                    </select>
+
+                    <div class="filter-checkbox">
+                        <input type="checkbox" id="newUsers" name="newUsers" aria-describedby="newUsers-desc">
+                        <label for="newUsers">Solo nuevos usuarios</label>
+                        <span id="newUsers-desc" class="sr-only">Filtrar para mostrar solo elementos de nuevos
+                            usuarios</span>
                     </div>
                 </div>
             </div>
-        </section>
 
-        <section class="file-panel">
-            <h2>Archivos</h2>
-            <button class="action-btn">➕ Agregar archivo</button>
-            <div id="file-list">
-                <div class="widget" id="widget1">
-                    <h3>Archivo 1</h3>
-                    <p>Ejemplo de contenido</p>
-                </div>
-                <div class="widget" id="widget2">
-                    <h3>Archivo 2</h3>
-                    <p>Ejemplo de contenido</p>
+            <div class="sidebar-section">
+                <h3 id="management-label">🔧 Gestión</h3>
+                <label for="management" class="sr-only">Seleccionar acción de gestión</label>
+                <select id="management" aria-labelledby="management-label">
+                    <option value="">Acciones...</option>
+                    <option value="saveDashboard">💾 Guardar Dashboard</option>
+                    <option value="loadDashboard">📂 Cargar Dashboard</option>
+                    <option value="previewMode">👁️ Modo Vista Previa</option>
+                    <option value="exportData">📤 Exportar Datos</option>
+                </select>
+            </div>
+        </aside>
+
+        <div class="main-content">
+            <div class="app-header">
+                <h2>Mi Dashboard</h2>
+                <div class="header-controls">
+                    <button class="header-btn" id="saveBtn" aria-label="Guardar dashboard">
+                        <span aria-hidden="true">💾</span> Guardar
+                    </button>
+                    <button class="header-btn secondary" id="previewBtn" aria-label="Alternar vista previa">
+                        <span aria-hidden="true">👁️</span> Vista Previa
+                    </button>
+                    <button class="header-btn secondary" id="exportBtn" aria-label="Exportar datos del dashboard">
+                        <span aria-hidden="true">📤</span> Exportar
+                    </button>
                 </div>
             </div>
-        </section>
-    </main>
+
+            <div class="workspace">
+
+                <section class="canvas-container" aria-label="Área de edición del dashboard">
+                    <canvas id="dashboardCanvas" aria-label="Canvas para organizar elementos del dashboard"></canvas>
+                    <div class="canvas-controls" role="group" aria-label="Controles de zoom del canvas">
+                        <button class="canvas-btn" id="zoomInBtn" aria-label="Acercar zoom">+</button>
+                        <button class="canvas-btn" id="zoomOutBtn" aria-label="Alejar zoom">-</button>
+                        <button class="canvas-btn" id="resetZoomBtn" aria-label="Restablecer zoom">↺</button>
+                    </div>
+                </section>
+
+
+                <section class="preview-container" aria-label="Vista previa de elementos del dashboard">
+                    <div class="preview-grid">
+
+                        <div class="empty-state">
+                            <p>No hay elementos para mostrar</p>
+                            <p>Usa el panel de agregar para incluir nuevos elementos</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+</body>
 
 </html>
