@@ -1,631 +1,557 @@
-// Task_Manager.js - Gestor completo de tareas con múltiples vistas y funcionalidades
+// =============================================
+// TASK MANAGER - JavaScript Puro Optimizado
+// =============================================
 
+/**
+ * Gestor completo de tareas con múltiples vistas
+ * Implementado en JavaScript puro sin dependencias
+ */
 class TaskManager {
     constructor() {
-        this.tasks = JSON.parse(localStorage.getItem("tasks")) || [];
-        this.currentProject = "personal";
-        this.currentView = "kanban";
-        this.currentEditingTask = null;
-        this.filteredTasks = null;
-        this.currentMonth = new Date().getMonth();
-        this.currentYear = new Date().getFullYear();
-        this.hideCompletedTasks = localStorage.getItem('hideCompletedTasks') === 'true' || false;
-        this.dailyGoal = parseInt(localStorage.getItem("dailyGoal")) || 5;
-        this.customTags = JSON.parse(localStorage.getItem("customTags")) || [];
-        this.actionHistory = [];
-        this.activeTimers = {};
-        this.tutorialShown = localStorage.getItem("tutorialShown") === "true";
-        this.currentDeletingTask = null;
+        // Configuración inicial y estado
+        this.config = {
+            storageKeys: {
+                tasks: "tasks",
+                projects: "projects", 
+                theme: "theme",
+                dailyGoal: "dailyGoal",
+                customTags: "customTags",
+                tutorialShown: "tutorialShown",
+                hideCompleted: "hideCompletedTasks"
+            },
+            defaultProjects: [
+                { name: "personal", color: "#3b82f6", icon: "🏠" },
+                { name: "trabajo", color: "#ef4444", icon: "💼" },
+                { name: "estudios", color: "#10b981", icon: "📚" }
+            ],
+            priorityOrder: { Alta: 3, Media: 2, Baja: 1 },
+            views: ["kanban", "calendar", "list"],
+            taskTemplates: {
+                reunion: {
+                    title: 'Reunión Semanal',
+                    description: 'Reunión de seguimiento y planificación semanal.',
+                    priority: 'Media',
+                    tags: ['Importante', 'Reunión'],
+                    timeEstimate: '1.5',
+                    subtasks: ['Preparar agenda, Enviar invitaciones, Tomar notas']
+                },
+                revision: {
+                    title: 'Revisión de Código',
+                    description: 'Revisar pull requests y asegurar la calidad del código.',
+                    priority: 'Alta',
+                    tags: ['Urgente', 'Técnico'],
+                    timeEstimate: '2',
+                    subtasks: ['Revisar cambios, Probar funcionalidad, Dar feedback']
+                },
+                estudio: {
+                    title: 'Sesión de Estudio',
+                    description: 'Tiempo dedicado al aprendizaje y estudio.',
+                    priority: 'Media',
+                    tags: ['Aprendizaje', 'Personal'],
+                    timeEstimate: '3',
+                    subtasks: ['Repasar temas, Hacer ejercicios, Tomar apuntes']
+                }
+            },
+            colors: [
+                '#3b82f6', '#ef4444', '#10b981', '#f59e0b', '#8b5cf6',
+                '#06b6d4', '#84cc16', '#f97316', '#ec4899', '#14b8a6'
+            ]
+        };
 
-        this.init();
+        // Estado de la aplicación
+        this.state = {
+            tasks: [],
+            currentProject: "personal",
+            currentView: "kanban",
+            currentEditingTask: null,
+            filteredTasks: null,
+            currentMonth: new Date().getMonth(),
+            currentYear: new Date().getFullYear(),
+            hideCompletedTasks: false,
+            dailyGoal: 5,
+            customTags: [],
+            actionHistory: [],
+            activeTimers: {},
+            tutorialShown: false,
+            currentDeletingTask: null
+        };
+
+        // Referencias a elementos DOM
+        this.elements = {};
+
+        // Inicializar aplicación
+        this.initialize();
     }
 
-    init() {
-        this.loadTasks();
-        this.setupEventListeners();
-        this.updateStats();
-        this.renderAllViews();
-        this.loadProjects();
-        this.applySavedTheme();
-        this.setupCalendarNavigation();
-
-        if (!this.tutorialShown) {
-            setTimeout(() => this.showTutorial(), 1000);
+    /**
+     * Inicializa la aplicación
+     */
+    initialize() {
+        this.loadInitialData();
+        this.cacheDOMElements();
+        this.setupEventHandlers();
+        this.applySavedSettings();
+        this.renderApplication();
+        this.notifications = new NotificationManager(this);
+        
+        if (!this.state.tutorialShown) {
+            this.showTutorialWithDelay();
         }
     }
 
-    setupEventListeners() {
-        const self = this;
+    /**
+     * Carga datos iniciales desde localStorage
+     */
+    loadInitialData() {
+        const storage = this.config.storageKeys;
+        
+        this.state.tasks = this.getStoredData(storage.tasks) || [];
+        this.state.hideCompletedTasks = this.getStoredData(storage.hideCompleted) === 'true';
+        this.state.dailyGoal = parseInt(this.getStoredData(storage.dailyGoal)) || 5;
+        this.state.customTags = this.getStoredData(storage.customTags) || [];
+        this.state.tutorialShown = this.getStoredData(storage.tutorialShown) === "true";
+        
+        this.applyTheme(this.getStoredData(storage.theme) || "light");
+    }
 
-        // Configurar botones de cambio de vista
-        const viewButtons = [
-            "btn-kanban-view",
-            "btn-calendar-view",
-            "btn-list-view",
+    /**
+     * Obtiene datos almacenados
+     */
+    getStoredData(key) {
+        try {
+            return JSON.parse(localStorage.getItem(key));
+        } catch (error) {
+            console.warn('Error loading data for key:', key, error);
+            return null;
+        }
+    }
+
+    /**
+     * Guarda datos en localStorage
+     */
+    setStoredData(key, data) {
+        try {
+            localStorage.setItem(key, JSON.stringify(data));
+        } catch (error) {
+            console.error('Error saving data for key:', key, error);
+        }
+    }
+
+    /**
+     * Cachea referencias a elementos DOM importantes
+     */
+    cacheDOMElements() {
+        const ids = [
+            'sidebar', 'kanban', 'task-form', 'project-modal',
+            'shortcut-help', 'delete-confirm', 'notification-list',
+            'search-tasks-sidebar', 'sort-tasks-sidebar', 'opciones',
+            'task-table', 'calendar', 'current-month', 'project-list',
+            'total-tasks', 'completed-tasks', 'pending-tasks',
+            'btn-kanban-view', 'btn-calendar-view', 'btn-list-view',
+            'prev-month', 'next-month', 'formTask', 'taskId',
+            'taskTitle', 'taskDescription', 'taskProject', 'dueDate',
+            'time-estimate', 'subtasks', 'task-template', 'new-comment',
+            'comments-list', 'btn-new-task-sidebar', 'btn-new-project',
+            'btn-delete-completed-tasks', 'btn-delete-project',
+            'theme-toggle', 'btn-notifications', 'btn-help',
+            'btn-quick-add-task', 'btn-quick-add-project'
         ];
 
-        viewButtons.forEach((id) => {
-            const element = document.getElementById(id);
-            if (element) {
-                element.addEventListener("click", function () {
-                    self.switchView(id.replace("btn-", "").replace("-view", ""));
+        ids.forEach(id => {
+            this.elements[id] = document.getElementById(id);
+        });
+    }
+
+    /**
+     * Configura todos los manejadores de eventos
+     */
+    setupEventHandlers() {
+        this.setupViewHandlers();
+        this.setupButtonHandlers();
+        this.setupFormHandlers();
+        this.setupDynamicEventHandlers();
+        this.setupKeyboardHandlers();
+        this.setupDragAndDrop();
+    }
+
+    /**
+     * Configura manejadores para cambio de vistas
+     */
+    setupViewHandlers() {
+        const viewButtons = ['btn-kanban-view', 'btn-calendar-view', 'btn-list-view'];
+        
+        viewButtons.forEach(buttonId => {
+            const button = this.elements[buttonId];
+            if (button) {
+                button.addEventListener('click', () => {
+                    const view = buttonId.replace('btn-', '').replace('-view', '');
+                    this.switchToView(view);
                 });
             }
         });
 
-        // Mapeo de handlers para botones principales
-        const buttonHandlers = {
-            "btn-cancel-task": () => self.closeTaskForm(),
-            "theme-toggle": () => self.toggleTheme(),
-            "btn-notifications": () => self.toggleNotifications(),
-            "btn-help": () => self.showHelp(),
-            "close-help": () => self.closeHelp(),
-            "btn-new-task-sidebar": () => self.openTaskForm(),
-            "btn-new-task": () => self.openTaskForm(),
-            "btn-new-task-float": () => self.openTaskForm(),
-            "btn-new-project": () => self.openProjectModal(),
-            "btn-delete-completed-tasks": () => self.deleteCompletedTasks(),
-            "btn-delete-project": () => self.deleteCurrentProject(),
-            "save-project": () => self.createNewProjectFromModal(),
-            "cancel-project": () => self.closeProjectModal(),
-            "add-comment": () => self.addComment(),
-            "btn-show-comments": () => self.toggleComments(),
-            "confirm-delete": () => self.confirmDeleteTask(),
-            "cancel-delete": () => self.closeDeleteModal(),
-            "btn-daily-summary": () => this.showDailySummary(),
-            "btn-set-goal": () => this.setDailyGoal(),
-            "btn-add-tag": () => this.addCustomTag(),
-            "btn-undo": () => this.undoLastAction(),
-            "btn-tutorial": () => this.showTutorial(),
+        // Navegación del calendario
+        if (this.elements['prev-month']) {
+            this.elements['prev-month'].addEventListener('click', () => this.navigateCalendar(-1));
+        }
+        if (this.elements['next-month']) {
+            this.elements['next-month'].addEventListener('click', () => this.navigateCalendar(1));
+        }
+    }
+
+    /**
+     * Configura manejadores para botones principales
+     */
+    setupButtonHandlers() {
+        const buttonConfig = {
+            'btn-cancel-task': () => this.closeTaskForm(),
+            'theme-toggle': () => this.toggleTheme(),
+            'btn-notifications': () => this.toggleNotifications(),
+            'btn-help': () => this.showHelp(),
+            'close-help': () => this.closeHelp(),
+            'btn-new-task-sidebar': () => this.openTaskForm(),
+            'btn-new-task': () => this.openTaskForm(),
+            'btn-new-task-float': () => this.openTaskForm(),
+            'btn-new-project': () => this.openProjectModal(),
+            'btn-delete-completed-tasks': () => this.deleteCompletedTasks(),
+            'btn-delete-project': () => this.deleteCurrentProject(),
+            'save-project': () => this.createProjectFromModal(),
+            'cancel-project': () => this.closeProjectModal(),
+            'add-comment': () => this.addCommentToTask(),
+            'btn-show-comments': () => this.toggleCommentsVisibility(),
+            'confirm-delete': () => this.confirmTaskDeletion(),
+            'cancel-delete': () => this.closeDeleteModal(),
+            'btn-daily-summary': () => this.showDailySummary(),
+            'btn-set-goal': () => this.setDailyGoal(),
+            'btn-add-tag': () => this.addCustomTag(),
+            'btn-undo': () => this.undoLastAction(),
+            'btn-tutorial': () => this.showTutorial(),
+            'btn-quick-add-task': () => this.addTask(),
+            'btn-quick-add-project': () => this.addProject()
         };
 
-        Object.entries(buttonHandlers).forEach(([id, handler]) => {
-            const element = document.getElementById(id);
+        Object.keys(buttonConfig).forEach(buttonId => {
+            const element = document.getElementById(buttonId);
             if (element) {
-                element.addEventListener("click", handler);
+                element.addEventListener('click', buttonConfig[buttonId]);
             }
         });
 
-        // Formulario de tarea
-        const formTask = document.getElementById("formTask");
-        if (formTask) {
-            formTask.addEventListener("submit", (e) => self.handleTaskSubmit(e));
+        // Botones de acción rápida en columnas
+        document.querySelectorAll('.btn-quick-add').forEach(button => {
+            button.addEventListener('click', (event) => {
+                const project = event.currentTarget.dataset.project || this.state.currentProject;
+                const status = event.currentTarget.dataset.status || 'todo';
+                this.addTask({
+                    title: 'Nueva Tarea',
+                    project: project,
+                    status: status
+                });
+            });
+        });
+    }
+
+    /**
+     * Configura manejadores para formularios
+     */
+    setupFormHandlers() {
+        // Formulario principal de tareas
+        if (this.elements['formTask']) {
+            this.elements['formTask'].addEventListener('submit', (event) => {
+                this.handleTaskFormSubmit(event);
+            });
         }
 
         // Búsqueda y filtros
-        const searchInput = document.getElementById("search-tasks-sidebar");
-        if (searchInput) {
-            searchInput.addEventListener("input", (e) => self.searchTasks(e.target.value));
+        if (this.elements['search-tasks-sidebar']) {
+            this.elements['search-tasks-sidebar'].addEventListener('input', (event) => {
+                this.searchTasks(event.target.value);
+            });
         }
 
-        const sortSelects = ["sort-tasks-sidebar", "sort-tasks-main"];
-        sortSelects.forEach((id) => {
-            const element = document.getElementById(id);
+        // Ordenamiento
+        ['sort-tasks-sidebar', 'sort-tasks-main'].forEach(selectId => {
+            const element = document.getElementById(selectId);
             if (element) {
-                element.addEventListener("change", (e) => self.sortTasks(e.target.value));
-            }
-        });
-
-        const filterSelect = document.getElementById("opciones");
-        if (filterSelect) {
-            filterSelect.addEventListener("change", (e) => self.filterTasks(e.target.value));
-        }
-
-        // Botones de proyecto
-        document.addEventListener('click', (e) => {
-            if (e.target.classList.contains('project-btn')) {
-                this.switchProject(e.target.dataset.project);
-            }
-        });
-
-        // Plantillas de tarea
-        const taskTemplate = document.getElementById("task-template");
-        if (taskTemplate) {
-            taskTemplate.addEventListener("change", (e) => this.applyTaskTemplate(e.target.value));
-        }
-
-        // Botones adicionales en tarjetas
-        document.addEventListener('click', (e) => {
-            if (e.target.classList.contains('btn-favorite')) {
-                const taskId = e.target.closest('.task-card').dataset.taskId;
-                this.toggleFavorite(taskId);
-            }
-            if (e.target.classList.contains('btn-timer')) {
-                const taskId = e.target.closest('.task-card').dataset.taskId;
-                this.toggleTimer(taskId);
-            }
-            if (e.target.classList.contains('btn-export')) {
-                const taskId = e.target.closest('.task-card').dataset.taskId;
-                this.exportTask(taskId);
-            }
-            if (e.target.classList.contains('btn-edit-task')) {
-                const taskId = e.target.closest('.task-card').dataset.taskId;
-                this.openTaskForm(this.getTaskById(taskId));
-            }
-            if (e.target.classList.contains('btn-delete-task')) {
-                const taskId = e.target.closest('.list-task-item').dataset.taskId;
-                this.showDeleteModal(taskId);
-            }
-        });
-
-        this.setupDragAndDrop();
-        this.setupKeyboardShortcuts();
-    }
-
-    setupCalendarNavigation() {
-        const prevMonth = document.getElementById("prev-month");
-        const nextMonth = document.getElementById("next-month");
-
-        if (prevMonth) {
-            prevMonth.addEventListener("click", () => this.navigateCalendar(-1));
-        }
-        if (nextMonth) {
-            nextMonth.addEventListener("click", () => this.navigateCalendar(1));
-        }
-    }
-
-    navigateCalendar(direction) {
-        this.currentMonth += direction;
-
-        if (this.currentMonth < 0) {
-            this.currentMonth = 11;
-            this.currentYear--;
-        } else if (this.currentMonth > 11) {
-            this.currentMonth = 0;
-            this.currentYear++;
-        }
-
-        this.renderCalendarView();
-    }
-
-    switchView(view) {
-        this.currentView = view;
-
-        const viewButtons = document.querySelectorAll(".view-toggle button");
-        viewButtons.forEach(function (btn) {
-            btn.classList.remove("active");
-        });
-
-        const activeButton = document.getElementById("btn-" + view + "-view");
-        if (activeButton) {
-            activeButton.classList.add("active");
-        }
-
-        const views = document.querySelectorAll(".view");
-        views.forEach(function (v) {
-            v.classList.remove("active");
-        });
-
-        let viewId = "";
-        switch (view) {
-            case "kanban":
-                viewId = "board";
-                break;
-            case "calendar":
-                viewId = "calendar-view";
-                break;
-            case "list":
-                viewId = "list-view";
-                break;
-        }
-
-        const activeView = document.getElementById(viewId);
-        if (activeView) {
-            activeView.classList.add("active");
-        }
-
-        this.renderAllViews();
-    }
-
-    switchProject(project) {
-        this.currentProject = project;
-
-        const projectButtons = document.querySelectorAll(".project-btn");
-        projectButtons.forEach(function (btn) {
-            btn.classList.remove("active");
-        });
-
-        const activeButton = document.querySelector('[data-project="' + project + '"]');
-        if (activeButton) {
-            activeButton.classList.add("active");
-        }
-
-        const taskProjectSelect = document.getElementById("taskProject");
-        if (taskProjectSelect) {
-            taskProjectSelect.value = project;
-        }
-
-        this.filteredTasks = null;
-        this.renderAllViews();
-        this.updateStats();
-    }
-
-    searchTasks(query) {
-        if (!query.trim()) {
-            this.filteredTasks = null;
-            this.renderAllViews();
-            return;
-        }
-
-        const searchTerm = query.toLowerCase();
-        this.filteredTasks = this.tasks.filter(
-            (task) =>
-                task.project === this.currentProject &&
-                (task.title.toLowerCase().includes(searchTerm) ||
-                    task.description.toLowerCase().includes(searchTerm) ||
-                    (task.tags && task.tags.some((tag) => tag.toLowerCase().includes(searchTerm))))
-        );
-
-        this.renderAllViews();
-    }
-
-    sortTasks(criteria) {
-        const tasksToSort = this.filteredTasks || this.tasks.filter((task) => task.project === this.currentProject);
-
-        switch (criteria) {
-            case "fecha":
-                tasksToSort.sort((a, b) => {
-                    const dateA = a.dueDate ? new Date(a.dueDate) : new Date(0);
-                    const dateB = b.dueDate ? new Date(b.dueDate) : new Date(0);
-                    return dateA - dateB;
+                element.addEventListener('change', (event) => {
+                    this.sortTasks(event.target.value);
                 });
-                break;
-            case "prioridad":
-                const priorityOrder = { Alta: 3, Media: 2, Baja: 1 };
-                tasksToSort.sort((a, b) => priorityOrder[b.priority] - priorityOrder[a.priority]);
-                break;
-            case "nombre":
-            case "titulo":
-                tasksToSort.sort((a, b) => a.title.localeCompare(b.title));
-                break;
-            case "reciente":
-                tasksToSort.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-                break;
-            default:
-                return;
-        }
-
-        this.filteredTasks = tasksToSort;
-        this.renderAllViews();
-    }
-
-    filterTasks(filter) {
-        const allProjectTasks = this.tasks.filter((task) => task.project === this.currentProject);
-
-        switch (filter) {
-            case "Alta":
-                this.filteredTasks = allProjectTasks.filter((task) => task.priority === "Alta");
-                break;
-            case "Media":
-                this.filteredTasks = allProjectTasks.filter((task) => task.priority === "Media");
-                break;
-            case "Baja":
-                this.filteredTasks = allProjectTasks.filter((task) => task.priority === "Baja");
-                break;
-            case "Urgente":
-                this.filteredTasks = allProjectTasks.filter((task) => task.tags && task.tags.includes("Urgente"));
-                break;
-            case "Importante":
-                this.filteredTasks = allProjectTasks.filter((task) => task.tags && task.tags.includes("Importante"));
-                break;
-            case "todas":
-            default:
-                this.filteredTasks = null;
-                break;
-        }
-
-        this.renderAllViews();
-    }
-
-    renderCalendarView() {
-        const calendar = document.getElementById("calendar");
-        const currentMonthElement = document.getElementById("current-month");
-
-        if (!calendar) return;
-
-        const firstDay = new Date(this.currentYear, this.currentMonth, 1);
-        const lastDay = new Date(this.currentYear, this.currentMonth + 1, 0);
-        const daysInMonth = lastDay.getDate();
-        const startingDay = firstDay.getDay();
-
-        if (currentMonthElement) {
-            currentMonthElement.textContent = firstDay.toLocaleDateString("es-ES", {
-                month: "long",
-                year: "numeric",
-            });
-        }
-
-        const tasksToShow = this.filteredTasks || this.tasks.filter(
-            (task) => task.project === this.currentProject && task.dueDate
-        );
-
-        let calendarHTML = '<div class="calendar-grid">';
-        calendarHTML += '<div class="calendar-weekdays">';
-
-        const weekdays = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
-        weekdays.forEach((day) => {
-            calendarHTML += `<div class="weekday">${day}</div>`;
-        });
-
-        calendarHTML += "</div>";
-        calendarHTML += '<div class="calendar-days">';
-
-        for (let i = 0; i < startingDay; i++) {
-            calendarHTML += '<div class="calendar-day empty"></div>';
-        }
-
-        for (let day = 1; day <= daysInMonth; day++) {
-            const currentDate = new Date(this.currentYear, this.currentMonth, day);
-            const dateString = currentDate.toISOString().split("T")[0];
-            const dayTasks = tasksToShow.filter((task) => task.dueDate === dateString);
-            const isToday = this.isToday(currentDate);
-
-            calendarHTML += `<div class="calendar-day ${isToday ? "today" : ""}">`;
-            calendarHTML += `<div class="day-number">${day}</div>`;
-            calendarHTML += '<div class="day-tasks">';
-
-            dayTasks.slice(0, 2).forEach((task) => {
-                const priorityClass = task.priority ? `priority-${task.priority.toLowerCase()}` : "";
-                calendarHTML += `
-                    <div class="calendar-task ${priorityClass}" 
-                         onclick="window.taskManager.openTaskForm(window.taskManager.getTaskById('${task.id}'))"
-                         title="${task.title}">
-                        ${task.title}
-                    </div>
-                `;
-            });
-
-            if (dayTasks.length > 2) {
-                calendarHTML += `<div class="more-tasks">+${dayTasks.length - 2} más</div>`;
-            }
-
-            calendarHTML += "</div></div>";
-        }
-
-        calendarHTML += "</div></div>";
-        calendar.innerHTML = calendarHTML;
-    }
-
-    isToday(date) {
-        const today = new Date();
-        return (
-            date.getDate() === today.getDate() &&
-            date.getMonth() === today.getMonth() &&
-            date.getFullYear() === today.getFullYear()
-        );
-    }
-
-    createTaskElement(task) {
-        const taskElement = document.createElement("li");
-        taskElement.className = `task-card priority-${task.priority.toLowerCase()}`;
-        taskElement.draggable = true;
-        taskElement.dataset.taskId = task.id;
-
-        const dueDate = task.dueDate ? new Date(task.dueDate).toLocaleDateString() : "Sin fecha";
-        const tagsHTML = task.tags && task.tags.length > 0
-            ? `<div class="task-tags">${task.tags.map((tag) => `<span class="tag" data-tag="${this.escapeHtml(tag)}">${this.escapeHtml(tag)}</span>`).join("")}</div>`
-            : "";
-
-        const subtasksHTML = task.subtasks && task.subtasks.length > 0
-            ? `<div class="task-subtasks">📋 ${task.subtasks.length} subtareas</div>`
-            : "";
-
-        const favoriteIcon = task.favorite ? "⭐" : "☆";
-        const timerHTML = this.activeTimers[task.id]
-            ? `<span class="timer-active" data-timer-id="${task.id}">⏱️ 0s</span>`
-            : task.timeSpent
-                ? `<span class="time-spent">⏱️ ${this.formatTime(task.timeSpent)}</span>`
-                : "";
-
-        taskElement.innerHTML = `
-            <div class="task-header">
-                <div class="task-title-group">
-                    <button class="btn-favorite" title="Marcar como favorita">${favoriteIcon}</button>
-                    <h3>${this.escapeHtml(task.title)}</h3>
-                </div>
-                <div class="task-actions">
-                    <button class="btn-timer" title="Iniciar/Detener temporizador">⏱️</button>
-                    <button class="btn-export" title="Exportar tarea">📤</button>
-                    <button class="btn-edit-task" title="Editar">✏️</button>
-                </div>
-            </div>
-            <p>${this.escapeHtml(task.description || "Sin descripción")}</p>
-            ${tagsHTML}
-            ${subtasksHTML}
-            ${timerHTML}
-            <div class="task-meta">
-                <span class="priority-badge priority-${task.priority.toLowerCase()}">${task.priority}</span>
-                <span class="due-date">📅 ${dueDate}</span>
-            </div>
-        `;
-
-        const self = this;
-        taskElement.addEventListener("dragstart", function (e) {
-            e.dataTransfer.setData("text/plain", task.id);
-            taskElement.classList.add("dragging");
-        });
-
-        taskElement.addEventListener("dragend", function () {
-            taskElement.classList.remove("dragging");
-        });
-
-        taskElement.addEventListener("dblclick", function () {
-            self.openTaskForm(task);
-        });
-
-        taskElement.addEventListener("click", function (e) {
-            if (e.target.classList.contains("tag")) {
-                e.stopPropagation();
-                const tagName = e.target.dataset.tag;
-                self.searchByTag(tagName);
             }
         });
 
-        return taskElement;
-    }
-
-    handleTaskSubmit(e) {
-        e.preventDefault();
-
-        const formData = new FormData(e.target);
-        const title = formData.get("taskTitle")?.trim();
-
-        if (!title) {
-            this.showNotification("El título de la tarea es obligatorio.", "error");
-            return;
+        // Filtros
+        if (this.elements['opciones']) {
+            this.elements['opciones'].addEventListener('change', (event) => {
+                this.filterTasksByCriteria(event.target.value);
+            });
         }
 
-        const taskData = {
-            id: document.getElementById("taskId").value || "task-" + Date.now(),
-            title: title,
-            description: formData.get("taskDescription")?.trim() || "",
-            priority: formData.get("priority") || "Media",
-            dueDate: formData.get("dueDate") || "",
-            project: formData.get("taskProject") || this.currentProject,
-            status: formData.get("taskStatus") || "todo",
-            tags: [],
-            subtasks: formData.get("subtasks")
-                ? formData.get("subtasks").split(",").map((s) => s.trim()).filter((s) => s)
-                : [],
-            timeEstimate: formData.get("time-estimate") || "",
-            createdAt: this.currentEditingTask
-                ? this.getTaskById(this.currentEditingTask)?.createdAt || new Date().toISOString()
-                : new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
+        // Plantillas de tareas
+        if (this.elements['task-template']) {
+            this.elements['task-template'].addEventListener('change', (event) => {
+                this.applyTaskTemplate(event.target.value);
+            });
+        }
+    }
+
+    /**
+     * Configura manejadores para elementos dinámicos
+     */
+    setupDynamicEventHandlers() {
+        document.addEventListener('click', (event) => {
+            this.handleDynamicClick(event);
+        });
+
+        document.addEventListener('change', (event) => {
+            this.handleDynamicChange(event);
+        });
+    }
+
+    /**
+     * Maneja clicks en elementos dinámicos
+     */
+    handleDynamicClick(event) {
+        const target = event.target;
+        const taskCard = target.closest('[data-task-id]');
+        
+        if (!taskCard) return;
+
+        const taskId = taskCard.dataset.taskId;
+        const task = this.getTaskById(taskId);
+
+        if (!task) return;
+
+        // Botones de acción en tarjetas
+        if (target.classList.contains('btn-favorite') || target.closest('.btn-favorite')) {
+            this.toggleTaskFavorite(taskId);
+        }
+        else if (target.classList.contains('btn-timer') || target.closest('.btn-timer')) {
+            this.toggleTaskTimer(taskId);
+        }
+        else if (target.classList.contains('btn-export') || target.closest('.btn-export')) {
+            this.exportTaskData(taskId);
+        }
+        else if (target.classList.contains('btn-edit-task') || target.closest('.btn-edit-task')) {
+            this.openTaskForm(task);
+        }
+        else if (target.classList.contains('btn-delete-task') || target.closest('.btn-delete-task')) {
+            this.showDeleteConfirmation(taskId);
+        }
+        else if (target.classList.contains('project-btn') || target.closest('.project-btn')) {
+            const projectBtn = target.classList.contains('project-btn') ? target : target.closest('.project-btn');
+            this.switchToProject(projectBtn.dataset.project);
+        }
+        else if (target.classList.contains('tag')) {
+            event.stopPropagation();
+            this.searchByTag(target.dataset.tag);
+        }
+        else if (target.classList.contains('btn-delete-comment') || target.closest('.btn-delete-comment')) {
+            const commentElement = target.closest('.comment');
+            if (commentElement) {
+                this.deleteTaskComment(commentElement.dataset.commentId, this.state.currentEditingTask);
+            }
+        }
+        else if (target.classList.contains('calendar-task') || target.closest('.calendar-task')) {
+            const taskElement = target.classList.contains('calendar-task') ? target : target.closest('.calendar-task');
+            const calendarTaskId = taskElement.dataset.taskId;
+            if (calendarTaskId) {
+                const calendarTask = this.getTaskById(calendarTaskId);
+                if (calendarTask) {
+                    this.openTaskForm(calendarTask);
+                }
+            }
+        }
+    }
+
+    /**
+     * Maneja cambios en elementos dinámicos
+     */
+    handleDynamicChange(event) {
+        const target = event.target;
+        
+        if (target.type === 'checkbox' && target.closest('.list-task-item')) {
+            const taskCard = target.closest('[data-task-id]');
+            if (taskCard) {
+                this.toggleTaskStatus(taskCard.dataset.taskId);
+            }
+        }
+    }
+
+    /**
+     * Configura atajos de teclado
+     */
+    setupKeyboardHandlers() {
+        document.addEventListener('keydown', (event) => {
+            // Atajos con Ctrl/Cmd
+            if (event.ctrlKey || event.metaKey) {
+                switch(event.key) {
+                    case 'n':
+                        event.preventDefault();
+                        this.openTaskForm();
+                        break;
+                    case 'k':
+                        event.preventDefault();
+                        this.switchToView('kanban');
+                        break;
+                    case 'l':
+                        event.preventDefault();
+                        this.switchToView('list');
+                        break;
+                    case 'c':
+                        event.preventDefault();
+                        this.switchToView('calendar');
+                        break;
+                }
+            }
+
+            // Atajos numéricos para vistas
+            if (event.key >= '1' && event.key <= '3') {
+                event.preventDefault();
+                const viewIndex = parseInt(event.key) - 1;
+                if (this.config.views[viewIndex]) {
+                    this.switchToView(this.config.views[viewIndex]);
+                }
+            }
+
+            // Atajos con Shift
+            if (event.shiftKey) {
+                switch(event.key) {
+                    case 'N':
+                        event.preventDefault();
+                        this.addTask();
+                        break;
+                    case 'P':
+                        event.preventDefault();
+                        this.addProject();
+                        break;
+                }
+            }
+        });
+    }
+
+    /**
+     * Configura sistema de drag and drop
+     */
+    setupDragAndDrop() {
+        const columns = document.querySelectorAll('.task-column');
+        
+        columns.forEach(column => {
+            column.addEventListener('dragover', (event) => {
+                event.preventDefault();
+                column.classList.add('drag-over');
+            });
+
+            column.addEventListener('dragleave', () => {
+                column.classList.remove('drag-over');
+            });
+
+            column.addEventListener('drop', (event) => {
+                event.preventDefault();
+                column.classList.remove('drag-over');
+                
+                const taskId = event.dataTransfer.getData('text/plain');
+                const newStatus = column.id.replace('-tasks', '');
+                this.updateTaskStatus(taskId, newStatus);
+            });
+        });
+    }
+
+    /**
+     * Aplica configuraciones guardadas
+     */
+    applySavedSettings() {
+        this.loadProjectsList();
+    }
+
+    /**
+     * Renderiza toda la aplicación
+     */
+    renderApplication() {
+        this.updateStatistics();
+        this.renderCurrentView();
+    }
+
+    // =============================================
+    // MÉTODOS DE GESTIÓN DE VISTAS
+    // =============================================
+
+    /**
+     * Cambia entre vistas de la aplicación
+     */
+    switchToView(view) {
+        this.state.currentView = view;
+        this.state.filteredTasks = null;
+
+        // Actualizar botones activos
+        document.querySelectorAll('.view-toggle button').forEach(button => {
+            button.classList.remove('active');
+        });
+
+        const activeButton = this.elements['btn-' + view + '-view'];
+        if (activeButton) {
+            activeButton.classList.add('active');
+        }
+
+        // Mostrar vista activa
+        document.querySelectorAll('.view').forEach(viewElement => {
+            viewElement.classList.remove('active');
+        });
+
+        const viewIdMap = {
+            kanban: 'board',
+            calendar: 'calendar-view',
+            list: 'list-view'
         };
 
-        // Procesar etiquetas
-        const tagCheckboxes = document.querySelectorAll('input[name="tags"]:checked');
-        taskData.tags = Array.from(tagCheckboxes).map(cb => cb.value);
-
-        // Procesar favoritos
-        const favoriteCheckbox = document.getElementById("taskFavorite");
-        if (favoriteCheckbox) {
-            taskData.favorite = favoriteCheckbox.checked;
+        const activeView = document.getElementById(viewIdMap[view]);
+        if (activeView) {
+            activeView.classList.add('active');
         }
 
-        // Actualizar o crear tarea
-        const existingTaskIndex = this.tasks.findIndex(t => t.id === taskData.id);
-        if (existingTaskIndex !== -1) {
-            // Preservar datos existentes
-            const existingTask = this.tasks[existingTaskIndex];
-            taskData.timeSpent = existingTask.timeSpent || 0;
-            taskData.comments = existingTask.comments || [];
-            taskData.favorite = existingTask.favorite || false;
-            this.tasks[existingTaskIndex] = taskData;
-            this.addToHistory("Tarea actualizada: " + taskData.title);
-        } else {
-            // Crear nueva tarea
-            taskData.timeSpent = 0;
-            taskData.comments = [];
-            taskData.favorite = false;
-            this.tasks.push(taskData);
-            this.addToHistory("Tarea creada: " + taskData.title);
+        this.renderCurrentView();
+    }
+
+    /**
+     * Renderiza la vista actual
+     */
+    renderCurrentView() {
+        switch (this.state.currentView) {
+            case 'kanban':
+                this.renderKanbanView();
+                break;
+            case 'calendar':
+                this.renderCalendarView();
+                break;
+            case 'list':
+                this.renderListView();
+                break;
         }
-
-        this.saveTasks();
-        this.closeTaskForm();
-        this.renderAllViews();
-        this.updateStats();
-        this.showNotification("Tarea guardada correctamente", "success");
+        
+        this.updateStatistics();
     }
 
-    saveTasks() {
-        localStorage.setItem("tasks", JSON.stringify(this.tasks));
-    }
-
-    loadTasks() {
-        const savedTasks = localStorage.getItem("tasks");
-        if (savedTasks) {
-            this.tasks = JSON.parse(savedTasks);
-        }
-    }
-
-    getTaskById(id) {
-        return this.tasks.find(task => task.id === id);
-    }
-
-    openTaskForm(task = null) {
-        this.currentEditingTask = task ? task.id : null;
-        const form = document.getElementById("task-form");
-
-        if (!form) return;
-
-        if (task) {
-            // Modo edición
-            document.getElementById("taskId").value = task.id;
-            document.getElementById("taskTitle").value = task.title;
-            document.getElementById("taskDescription").value = task.description || "";
-            document.getElementById("priority").value = task.priority;
-            document.getElementById("dueDate").value = task.dueDate || "";
-            document.getElementById("taskProject").value = task.project;
-            document.getElementById("time-estimate").value = task.timeEstimate || "";
-            document.getElementById("subtasks").value = task.subtasks ? task.subtasks.join(", ") : "";
-
-            // Limpiar y marcar etiquetas
-            document.querySelectorAll('input[name="tags"]').forEach(checkbox => {
-                checkbox.checked = false;
-            });
-
-            if (task.tags) {
-                task.tags.forEach(tag => {
-                    const checkbox = document.querySelector(`input[name="tags"][value="${tag}"]`);
-                    if (checkbox) {
-                        checkbox.checked = true;
-                    }
-                });
-            }
-
-            // Cargar comentarios si existen
-            if (task.comments) {
-                this.renderComments(task.comments);
-            }
-        } else {
-            // Modo creación
-            document.getElementById("formTask").reset();
-            document.getElementById("taskId").value = "";
-            document.getElementById("taskProject").value = this.currentProject;
-            document.getElementById("comments-list").innerHTML = '<div class="empty-state">No hay comentarios</div>';
-        }
-
-        form.classList.add("active");
-    }
-
-    closeTaskForm() {
-        const form = document.getElementById("task-form");
-        if (form) {
-            form.classList.remove("active");
-        }
-        this.currentEditingTask = null;
-    }
-
-    renderAllViews() {
-        this.renderKanbanView();
-        this.renderListView();
-        this.renderCalendarView();
-        this.updateStats();
-    }
-
+    /**
+     * Renderiza vista Kanban
+     */
     renderKanbanView() {
-        if (this.currentView !== "kanban") return;
-
         const columns = {
-            todo: document.getElementById("todo-tasks"),
-            inprogress: document.getElementById("inprogress-tasks"),
-            done: document.getElementById("done-tasks")
+            todo: document.getElementById('todo-tasks'),
+            inprogress: document.getElementById('inprogress-tasks'),
+            done: document.getElementById('done-tasks')
         };
 
         // Limpiar columnas
         Object.values(columns).forEach(column => {
-            if (column) column.innerHTML = "";
+            if (column) column.innerHTML = '';
         });
 
-        const tasksToShow = this.filteredTasks || this.tasks.filter(task => task.project === this.currentProject);
+        const tasksToShow = this.state.filteredTasks || 
+            this.state.tasks.filter(task => task.project === this.state.currentProject);
 
-        // Aplicar filtro de tareas completadas si está activo
-        const filteredTasks = this.hideCompletedTasks
-            ? tasksToShow.filter(task => task.status !== 'done')
-            : tasksToShow;
+        // Filtrar tareas completadas si está activo
+        const filteredTasks = this.state.hideCompletedTasks ?
+            tasksToShow.filter(task => task.status !== 'done') :
+            tasksToShow;
 
         // Distribuir tareas en columnas
         filteredTasks.forEach(task => {
@@ -636,35 +562,22 @@ class TaskManager {
             }
         });
 
-        // Actualizar contadores
         this.updateColumnCounters();
     }
 
-    updateColumnCounters() {
-        const columns = ['todo', 'inprogress', 'done'];
-        columns.forEach(status => {
-            const counter = document.querySelector(`#${status} .task-count`);
-            if (counter) {
-                const count = this.tasks.filter(task =>
-                    task.project === this.currentProject && task.status === status
-                ).length;
-                counter.textContent = count;
-            }
-        });
-    }
-
+    /**
+     * Renderiza vista de lista
+     */
     renderListView() {
-        if (this.currentView !== "list") return;
-
-        const listContainer = document.getElementById("list-tasks");
+        const listContainer = this.elements['list-tasks'];
         if (!listContainer) return;
 
-        const tasksToShow = this.filteredTasks || this.tasks.filter(task => task.project === this.currentProject);
+        const tasksToShow = this.state.filteredTasks || 
+            this.state.tasks.filter(task => task.project === this.state.currentProject);
 
-        // Aplicar filtro de tareas completadas si está activo
-        const filteredTasks = this.hideCompletedTasks
-            ? tasksToShow.filter(task => task.status !== 'done')
-            : tasksToShow;
+        const filteredTasks = this.state.hideCompletedTasks ?
+            tasksToShow.filter(task => task.status !== 'done') :
+            tasksToShow;
 
         if (filteredTasks.length === 0) {
             listContainer.innerHTML = '<p class="no-tasks">No hay tareas para mostrar</p>';
@@ -672,23 +585,25 @@ class TaskManager {
         }
 
         let listHTML = '<div class="task-list-view">';
+        
         filteredTasks.forEach(task => {
-            const dueDate = task.dueDate ? new Date(task.dueDate).toLocaleDateString() : "Sin fecha";
+            const dueDate = task.dueDate ? 
+                new Date(task.dueDate).toLocaleDateString() : 
+                "Sin fecha";
 
             listHTML += `
                 <div class="list-task-item" data-task-id="${task.id}">
                     <div class="list-task-main">
                         <div class="list-task-header">
-                            <input type="checkbox" ${task.status === 'done' ? 'checked' : ''} 
-                                   onchange="window.taskManager.toggleTaskStatus('${task.id}')">
-                            <h3 class="list-task-title">${this.escapeHtml(task.title)}</h3>
+                            <input type="checkbox" ${task.status === 'done' ? 'checked' : ''}>
+                            <h3 class="list-task-title">${this.escapeHTML(task.title)}</h3>
                             <button class="btn-favorite">${task.favorite ? '⭐' : '☆'}</button>
                         </div>
-                        <p class="list-task-description">${this.escapeHtml(task.description || "Sin descripción")}</p>
-                        ${task.tags && task.tags.length > 0 ?
-                    `<div class="list-task-tags">${task.tags.map(tag =>
-                        `<span class="tag" data-tag="${this.escapeHtml(tag)}">${this.escapeHtml(tag)}</span>`
-                    ).join('')}</div>` : ''}
+                        <p class="list-task-description">${this.escapeHTML(task.description || "Sin descripción")}</p>
+                        ${task.tags && task.tags.length > 0 ? 
+                            `<div class="list-task-tags">${task.tags.map(tag => 
+                                `<span class="tag" data-tag="${this.escapeHTML(tag)}">${this.escapeHTML(tag)}</span>`
+                            ).join('')}</div>` : ''}
                     </div>
                     <div class="list-task-meta">
                         <span class="priority-badge priority-${task.priority.toLowerCase()}">${task.priority}</span>
@@ -706,93 +621,697 @@ class TaskManager {
         listContainer.innerHTML = listHTML;
     }
 
+    /**
+     * Renderiza vista de calendario
+     */
+    renderCalendarView() {
+        const calendar = this.elements['calendar'];
+        const currentMonthElement = this.elements['current-month'];
+
+        if (!calendar) return;
+
+        const firstDay = new Date(this.state.currentYear, this.state.currentMonth, 1);
+        const lastDay = new Date(this.state.currentYear, this.state.currentMonth + 1, 0);
+        const daysInMonth = lastDay.getDate();
+        const startingDay = firstDay.getDay();
+
+        if (currentMonthElement) {
+            currentMonthElement.textContent = firstDay.toLocaleDateString("es-ES", {
+                month: "long",
+                year: "numeric",
+            });
+        }
+
+        const tasksToShow = this.state.filteredTasks || 
+            this.state.tasks.filter(task => 
+                task.project === this.state.currentProject && task.dueDate
+            );
+
+        let calendarHTML = '<div class="calendar-grid">';
+        calendarHTML += '<div class="calendar-weekdays">';
+        
+        const weekdays = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
+        weekdays.forEach(day => {
+            calendarHTML += `<div class="weekday">${day}</div>`;
+        });
+        
+        calendarHTML += "</div>";
+        calendarHTML += '<div class="calendar-days">';
+
+        // Días vacíos al inicio
+        for (let i = 0; i < startingDay; i++) {
+            calendarHTML += '<div class="calendar-day empty"></div>';
+        }
+
+        // Días del mes
+        for (let day = 1; day <= daysInMonth; day++) {
+            const currentDate = new Date(this.state.currentYear, this.state.currentMonth, day);
+            const dateString = currentDate.toISOString().split("T")[0];
+            const dayTasks = tasksToShow.filter(task => task.dueDate === dateString);
+            const isToday = this.isToday(currentDate);
+
+            calendarHTML += `<div class="calendar-day ${isToday ? "today" : ""}" data-date="${dateString}">`;
+            calendarHTML += `<div class="day-number">${day}</div>`;
+            calendarHTML += '<div class="day-tasks">';
+
+            dayTasks.slice(0, 2).forEach(task => {
+                const priorityClass = task.priority ? `priority-${task.priority.toLowerCase()}` : "";
+                calendarHTML += `
+                    <div class="calendar-task ${priorityClass}" 
+                         data-task-id="${task.id}"
+                         title="${task.title}">
+                        ${task.title}
+                    </div>
+                `;
+            });
+
+            if (dayTasks.length > 2) {
+                calendarHTML += `<div class="more-tasks">+${dayTasks.length - 2} más</div>`;
+            }
+
+            calendarHTML += "</div></div>";
+        }
+
+        calendarHTML += "</div></div>";
+        calendar.innerHTML = calendarHTML;
+    }
+
+    /**
+     * Navegación del calendario
+     */
+    navigateCalendar(direction) {
+        this.state.currentMonth += direction;
+
+        if (this.state.currentMonth < 0) {
+            this.state.currentMonth = 11;
+            this.state.currentYear--;
+        } else if (this.state.currentMonth > 11) {
+            this.state.currentMonth = 0;
+            this.state.currentYear++;
+        }
+
+        this.renderCalendarView();
+    }
+
+    // =============================================
+    // MÉTODOS DE GESTIÓN DE TAREAS
+    // =============================================
+
+    /**
+     * Crea elemento DOM para tarea
+     */
+    createTaskElement(task) {
+        const taskElement = document.createElement("li");
+        taskElement.className = `task-card priority-${task.priority.toLowerCase()}`;
+        taskElement.draggable = true;
+        taskElement.dataset.taskId = task.id;
+
+        const dueDate = task.dueDate ? 
+            new Date(task.dueDate).toLocaleDateString() : 
+            "Sin fecha";
+            
+        const tagsHTML = task.tags && task.tags.length > 0 ?
+            `<div class="task-tags">${task.tags.map(tag => 
+                `<span class="tag" data-tag="${this.escapeHTML(tag)}">${this.escapeHTML(tag)}</span>`
+            ).join("")}</div>` : "";
+
+        const subtasksHTML = task.subtasks && task.subtasks.length > 0 ?
+            `<div class="task-subtasks">📋 ${task.subtasks.length} subtareas</div>` : "";
+
+        const favoriteIcon = task.favorite ? "⭐" : "☆";
+        const timerHTML = this.state.activeTimers[task.id] ?
+            `<span class="timer-active" data-timer-id="${task.id}">⏱️ 0s</span>` :
+            task.timeSpent ?
+            `<span class="time-spent">⏱️ ${this.formatTime(task.timeSpent)}</span>` : "";
+
+        taskElement.innerHTML = `
+            <div class="task-header">
+                <div class="task-title-group">
+                    <button class="btn-favorite" title="Marcar como favorita">${favoriteIcon}</button>
+                    <h3>${this.escapeHTML(task.title)}</h3>
+                </div>
+                <div class="task-actions">
+                    <button class="btn-timer" title="Iniciar/Detener temporizador">⏱️</button>
+                    <button class="btn-export" title="Exportar tarea">📤</button>
+                    <button class="btn-edit-task" title="Editar">✏️</button>
+                </div>
+            </div>
+            <p>${this.escapeHTML(task.description || "Sin descripción")}</p>
+            ${tagsHTML}
+            ${subtasksHTML}
+            ${timerHTML}
+            <div class="task-meta">
+                <span class="priority-badge priority-${task.priority.toLowerCase()}">${task.priority}</span>
+                <span class="due-date">📅 ${dueDate}</span>
+            </div>
+        `;
+
+        // Configurar eventos de drag and drop
+        taskElement.addEventListener("dragstart", (event) => {
+            event.dataTransfer.setData("text/plain", task.id);
+            taskElement.classList.add("dragging");
+        });
+
+        taskElement.addEventListener("dragend", () => {
+            taskElement.classList.remove("dragging");
+        });
+
+        taskElement.addEventListener("dblclick", () => {
+            this.openTaskForm(task);
+        });
+
+        return taskElement;
+    }
+
+    /**
+     * Maneja envío del formulario de tarea
+     */
+    handleTaskFormSubmit(event) {
+        event.preventDefault();
+
+        const formData = new FormData(event.target);
+        const title = formData.get("taskTitle")?.trim();
+
+        if (!title) {
+            this.showNotification("El título de la tarea es obligatorio.", "error");
+            return;
+        }
+
+        const taskData = {
+            id: this.elements['taskId'].value || "task-" + Date.now(),
+            title: title,
+            description: formData.get("taskDescription")?.trim() || "",
+            priority: formData.get("priority") || "Media",
+            dueDate: formData.get("dueDate") || "",
+            project: formData.get("taskProject") || this.state.currentProject,
+            status: "todo",
+            tags: Array.from(document.querySelectorAll('input[name="tags"]:checked')).map(cb => cb.value),
+            subtasks: formData.get("subtasks") ?
+                formData.get("subtasks").split(",").map(s => s.trim()).filter(s => s) : [],
+            timeEstimate: formData.get("time-estimate") || "",
+            createdAt: this.state.currentEditingTask ?
+                this.getTaskById(this.state.currentEditingTask)?.createdAt || new Date().toISOString() :
+                new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+        };
+
+        this.saveTask(taskData);
+        this.closeTaskForm();
+        this.renderApplication();
+        this.showNotification("Tarea guardada correctamente", "success");
+    }
+
+    /**
+     * Guarda tarea (crear o actualizar)
+     */
+    saveTask(taskData) {
+        const existingIndex = this.state.tasks.findIndex(t => t.id === taskData.id);
+        
+        if (existingIndex !== -1) {
+            // Actualizar tarea existente
+            const existingTask = this.state.tasks[existingIndex];
+            taskData.timeSpent = existingTask.timeSpent || 0;
+            taskData.comments = existingTask.comments || [];
+            taskData.favorite = existingTask.favorite || false;
+            this.state.tasks[existingIndex] = taskData;
+            this.addToHistory("Tarea actualizada: " + taskData.title);
+        } else {
+            // Crear nueva tarea
+            taskData.timeSpent = 0;
+            taskData.comments = [];
+            taskData.favorite = false;
+            this.state.tasks.push(taskData);
+            this.addToHistory("Tarea creada: " + taskData.title);
+        }
+
+        this.saveTasksToStorage();
+    }
+
+    /**
+     * Abre formulario de tarea
+     */
+    openTaskForm(task = null) {
+        this.state.currentEditingTask = task ? task.id : null;
+        const form = this.elements['task-form'];
+
+        if (!form) return;
+
+        if (task) {
+            // Modo edición
+            this.elements['taskId'].value = task.id;
+            this.elements['taskTitle'].value = task.title;
+            this.elements['taskDescription'].value = task.description || "";
+            
+            const priorityField = document.querySelector(`input[name="priority"][value="${task.priority}"]`);
+            if (priorityField) priorityField.checked = true;
+            
+            this.elements['dueDate'].value = task.dueDate || "";
+            this.elements['taskProject'].value = task.project;
+            this.elements['time-estimate'].value = task.timeEstimate || "";
+            this.elements['subtasks'].value = task.subtasks ? task.subtasks.join(", ") : "";
+
+            // Marcar etiquetas
+            document.querySelectorAll('input[name="tags"]').forEach(checkbox => {
+                checkbox.checked = task.tags ? task.tags.includes(checkbox.value) : false;
+            });
+
+            // Cargar comentarios
+            if (task.comments) {
+                this.renderTaskComments(task.comments);
+            }
+        } else {
+            // Modo creación
+            this.elements['formTask'].reset();
+            this.elements['taskId'].value = "";
+            this.elements['taskProject'].value = this.state.currentProject;
+            this.elements['comments-list'].innerHTML = '<div class="empty-state">No hay comentarios</div>';
+        }
+
+        form.classList.add("active");
+    }
+
+    /**
+     * Cierra formulario de tarea
+     */
+    closeTaskForm() {
+        if (this.elements['task-form']) {
+            this.elements['task-form'].classList.remove("active");
+        }
+        this.state.currentEditingTask = null;
+    }
+
+    /**
+     * Obtiene tarea por ID
+     */
+    getTaskById(id) {
+        return this.state.tasks.find(task => task.id === id);
+    }
+
+    /**
+     * Cambia estado de tarea
+     */
     toggleTaskStatus(taskId) {
         const task = this.getTaskById(taskId);
         if (task) {
             task.status = task.status === 'done' ? 'todo' : 'done';
             task.updatedAt = new Date().toISOString();
-            this.saveTasks();
-            this.renderAllViews();
-            this.updateStats();
+            this.saveTasksToStorage();
+            this.renderApplication();
             this.addToHistory(`Tarea marcada como ${task.status === 'done' ? 'completada' : 'pendiente'}: ${task.title}`);
         }
     }
 
-    toggleFavorite(taskId) {
+    /**
+     * Alternar favorito de tarea
+     */
+    toggleTaskFavorite(taskId) {
         const task = this.getTaskById(taskId);
         if (task) {
             task.favorite = !task.favorite;
             task.updatedAt = new Date().toISOString();
-            this.saveTasks();
-            this.renderAllViews();
+            this.saveTasksToStorage();
+            this.renderApplication();
             this.addToHistory(`Tarea ${task.favorite ? 'marcada como favorita' : 'quitada de favoritos'}: ${task.title}`);
         }
     }
 
-    setupDragAndDrop() {
-        const columns = document.querySelectorAll('.task-column');
-
-        columns.forEach(column => {
-            column.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                column.classList.add('drag-over');
-            });
-
-            column.addEventListener('dragleave', () => {
-                column.classList.remove('drag-over');
-            });
-
-            column.addEventListener('drop', (e) => {
-                e.preventDefault();
-                column.classList.remove('drag-over');
-
-                const taskId = e.dataTransfer.getData('text/plain');
-                const newStatus = column.id;
-                this.updateTaskStatus(taskId, newStatus);
-            });
-        });
-    }
-
+    /**
+     * Actualiza estado de tarea (drag and drop)
+     */
     updateTaskStatus(taskId, newStatus) {
         const task = this.getTaskById(taskId);
         if (task && task.status !== newStatus) {
             const oldStatus = task.status;
             task.status = newStatus;
             task.updatedAt = new Date().toISOString();
-            this.saveTasks();
-            this.renderAllViews();
-            this.updateStats();
+            this.saveTasksToStorage();
+            this.renderApplication();
             this.addToHistory(`Tarea movida de ${oldStatus} a ${newStatus}: ${task.title}`);
         }
     }
 
-    updateStats() {
-        const projectTasks = this.tasks.filter(task => task.project === this.currentProject);
+    // =============================================
+    // MÉTODOS DE GESTIÓN DE PROYECTOS
+    // =============================================
+
+    /**
+     * Cambia proyecto actual
+     */
+    switchToProject(project) {
+        this.state.currentProject = project;
+        this.state.filteredTasks = null;
+
+        // Actualizar botones activos
+        document.querySelectorAll('.project-btn').forEach(button => {
+            button.classList.remove('active');
+        });
+
+        const activeButton = document.querySelector(`[data-project="${project}"]`);
+        if (activeButton) {
+            activeButton.classList.add('active');
+        }
+
+        // Actualizar select de proyecto en formulario
+        if (this.elements['taskProject']) {
+            this.elements['taskProject'].value = project;
+        }
+
+        this.renderApplication();
+    }
+
+    /**
+     * Carga lista de proyectos
+     */
+    loadProjectsList() {
+        const projects = this.getStoredData(this.config.storageKeys.projects) || this.config.defaultProjects;
+        const projectList = this.elements['project-list'];
+
+        if (projectList) {
+            projectList.innerHTML = projects.map(project => {
+                const projectCount = this.state.tasks.filter(task => task.project === project.name).length;
+                return `
+                <li>
+                    <button class="project-btn ${this.state.currentProject === project.name ? 'active' : ''}" 
+                            data-project="${project.name}" type="button">
+                        <span class="project-icon">${project.icon}</span>
+                        <span class="project-name">${project.name.charAt(0).toUpperCase() + project.name.slice(1)}</span>
+                        <span class="project-count">${projectCount}</span>
+                    </button>
+                </li>
+            `}).join('');
+        }
+
+        // Actualizar select de proyecto en formulario
+        const projectSelect = this.elements['taskProject'];
+        if (projectSelect) {
+            projectSelect.innerHTML = projects.map(project =>
+                `<option value="${project.name}">${project.name.charAt(0).toUpperCase() + project.name.slice(1)}</option>`
+            ).join('');
+        }
+    }
+
+    /**
+     * Abre modal de nuevo proyecto
+     */
+    openProjectModal() {
+        if (this.elements['project-modal']) {
+            this.elements['project-modal'].classList.add('active');
+        }
+    }
+
+    /**
+     * Cierra modal de proyecto
+     */
+    closeProjectModal() {
+        if (this.elements['project-modal']) {
+            this.elements['project-modal'].classList.remove('active');
+        }
+    }
+
+    /**
+     * Crea proyecto desde modal
+     */
+    createProjectFromModal() {
+        const projectNameInput = document.getElementById('new-project-name');
+        const projectName = projectNameInput ? projectNameInput.value.trim() : '';
+
+        if (!projectName) {
+            this.showNotification("Por favor ingresa un nombre para el proyecto", "error");
+            return;
+        }
+
+        this.addProject({
+            name: projectName,
+            color: this.generateRandomColor(),
+            icon: '📁'
+        });
+        this.closeProjectModal();
+    }
+
+    /**
+     * Agrega nuevo proyecto
+     */
+    addProject(projectData = null) {
+        if (projectData) {
+            const projects = this.getStoredData(this.config.storageKeys.projects) || this.config.defaultProjects;
+
+            const newProject = {
+                name: projectData.name.toLowerCase(),
+                color: projectData.color || this.generateRandomColor(),
+                icon: projectData.icon || '📁'
+            };
+
+            // Verificar si el proyecto ya existe
+            if (projects.find(p => p.name === newProject.name)) {
+                this.showNotification('Ya existe un proyecto con ese nombre', 'warning');
+                return null;
+            }
+
+            projects.push(newProject);
+            this.setStoredData(this.config.storageKeys.projects, projects);
+
+            this.loadProjectsList();
+            this.switchToProject(newProject.name);
+
+            this.addToHistory(`Proyecto creado: ${newProject.name}`);
+            this.showNotification(`Proyecto "${projectData.name}" creado correctamente`, 'success');
+            return newProject;
+        } else {
+            this.openProjectModal();
+        }
+    }
+
+    /**
+     * Agrega nueva tarea
+     */
+    addTask(taskData = null) {
+        if (taskData) {
+            const newTask = {
+                id: 'task-' + Date.now(),
+                title: taskData.title || 'Nueva Tarea',
+                description: taskData.description || '',
+                priority: taskData.priority || 'Media',
+                dueDate: taskData.dueDate || '',
+                project: taskData.project || this.state.currentProject,
+                status: taskData.status || 'todo',
+                tags: taskData.tags || [],
+                subtasks: taskData.subtasks || [],
+                timeEstimate: taskData.timeEstimate || '',
+                timeSpent: 0,
+                comments: [],
+                favorite: false,
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString()
+            };
+
+            this.state.tasks.push(newTask);
+            this.saveTasksToStorage();
+            this.renderApplication();
+            this.addToHistory(`Tarea creada: ${newTask.title}`);
+            this.showNotification('Tarea agregada correctamente', 'success');
+            return newTask;
+        } else {
+            this.openTaskForm();
+        }
+    }
+
+    // =============================================
+    // MÉTODOS DE BÚSQUEDA Y FILTRADO
+    // =============================================
+
+    /**
+     * Busca tareas por texto
+     */
+    searchTasks(query) {
+        if (!query.trim()) {
+            this.state.filteredTasks = null;
+            this.renderApplication();
+            return;
+        }
+
+        const searchTerm = query.toLowerCase();
+        this.state.filteredTasks = this.state.tasks.filter(
+            task => task.project === this.state.currentProject &&
+                   (task.title.toLowerCase().includes(searchTerm) ||
+                    task.description.toLowerCase().includes(searchTerm) ||
+                    (task.tags && task.tags.some(tag => tag.toLowerCase().includes(searchTerm))))
+        );
+
+        this.renderApplication();
+    }
+
+    /**
+     * Ordena tareas por criterio
+     */
+    sortTasks(criteria) {
+        const tasksToSort = this.state.filteredTasks || 
+            this.state.tasks.filter(task => task.project === this.state.currentProject);
+
+        switch (criteria) {
+            case "fecha":
+                tasksToSort.sort((a, b) => {
+                    const dateA = a.dueDate ? new Date(a.dueDate) : new Date(0);
+                    const dateB = b.dueDate ? new Date(b.dueDate) : new Date(0);
+                    return dateA - dateB;
+                });
+                break;
+            case "prioridad":
+                tasksToSort.sort((a, b) => 
+                    this.config.priorityOrder[b.priority] - this.config.priorityOrder[a.priority]
+                );
+                break;
+            case "nombre":
+            case "titulo":
+                tasksToSort.sort((a, b) => a.title.localeCompare(b.title));
+                break;
+            case "reciente":
+                tasksToSort.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+                break;
+        }
+
+        this.state.filteredTasks = tasksToSort;
+        this.renderApplication();
+    }
+
+    /**
+     * Filtra tareas por criterio
+     */
+    filterTasksByCriteria(filter) {
+        const allProjectTasks = this.state.tasks.filter(
+            task => task.project === this.state.currentProject
+        );
+
+        switch (filter) {
+            case "Alta":
+                this.state.filteredTasks = allProjectTasks.filter(task => task.priority === "Alta");
+                break;
+            case "Media":
+                this.state.filteredTasks = allProjectTasks.filter(task => task.priority === "Media");
+                break;
+            case "Baja":
+                this.state.filteredTasks = allProjectTasks.filter(task => task.priority === "Baja");
+                break;
+            case "Urgente":
+                this.state.filteredTasks = allProjectTasks.filter(task => 
+                    task.tags && task.tags.includes("Urgente"));
+                break;
+            case "Importante":
+                this.state.filteredTasks = allProjectTasks.filter(task => 
+                    task.tags && task.tags.includes("Importante"));
+                break;
+            default:
+                this.state.filteredTasks = null;
+                break;
+        }
+
+        this.renderApplication();
+    }
+
+    /**
+     * Busca por etiqueta
+     */
+    searchByTag(tagName) {
+        if (this.elements['search-tasks-sidebar']) {
+            this.elements['search-tasks-sidebar'].value = tagName;
+            this.searchTasks(tagName);
+        }
+    }
+
+    // =============================================
+    // MÉTODOS DE TEMPORIZADOR
+    // =============================================
+
+    /**
+     * Alterna temporizador de tarea
+     */
+    toggleTaskTimer(taskId) {
+        const task = this.getTaskById(taskId);
+        if (!task) return;
+
+        if (this.state.activeTimers[taskId]) {
+            // Detener temporizador
+            const elapsed = Math.floor((Date.now() - this.state.activeTimers[taskId].startTime) / 1000);
+            task.timeSpent = (task.timeSpent || 0) + elapsed;
+            delete this.state.activeTimers[taskId];
+            this.saveTasksToStorage();
+            this.addToHistory(`Temporizador detenido para: ${task.title} (${this.formatTime(elapsed)})`);
+            this.showNotification(`Temporizador detenido: ${this.formatTime(elapsed)}`, "info");
+        } else {
+            // Iniciar temporizador
+            this.state.activeTimers[taskId] = {
+                startTime: Date.now(),
+                taskId: taskId
+            };
+            this.addToHistory(`Temporizador iniciado para: ${task.title}`);
+            this.showNotification("Temporizador iniciado", "success");
+        }
+
+        this.renderApplication();
+        this.updateActiveTimers();
+    }
+
+    /**
+     * Actualiza temporizadores activos
+     */
+    updateActiveTimers() {
+        Object.keys(this.state.activeTimers).forEach(taskId => {
+            const timerElement = document.querySelector(`[data-timer-id="${taskId}"]`);
+            if (timerElement) {
+                const elapsed = Math.floor((Date.now() - this.state.activeTimers[taskId].startTime) / 1000);
+                timerElement.textContent = `⏱️ ${this.formatTime(elapsed)}`;
+            }
+        });
+
+        if (Object.keys(this.state.activeTimers).length > 0) {
+            setTimeout(() => {
+                this.updateActiveTimers();
+            }, 1000);
+        }
+    }
+
+    // =============================================
+    // MÉTODOS DE ESTADÍSTICAS Y ACTUALIZACIÓN
+    // =============================================
+
+    /**
+     * Actualiza estadísticas
+     */
+    updateStatistics() {
+        const projectTasks = this.state.tasks.filter(
+            task => task.project === this.state.currentProject
+        );
+        
         const totalTasks = projectTasks.length;
         const completedTasks = projectTasks.filter(task => task.status === 'done').length;
         const pendingTasks = totalTasks - completedTasks;
 
-        const totalElement = document.getElementById('total-tasks');
-        const completedElement = document.getElementById('completed-tasks');
-        const pendingElement = document.getElementById('pending-tasks');
-
-        if (totalElement) totalElement.textContent = totalTasks;
-        if (completedElement) completedElement.textContent = completedTasks;
-        if (pendingElement) pendingElement.textContent = pendingTasks;
+        if (this.elements['total-tasks']) {
+            this.elements['total-tasks'].textContent = totalTasks;
+        }
+        if (this.elements['completed-tasks']) {
+            this.elements['completed-tasks'].textContent = completedTasks;
+        }
+        if (this.elements['pending-tasks']) {
+            this.elements['pending-tasks'].textContent = pendingTasks;
+        }
 
         this.updateDailyProgress();
         this.updateColumnCounters();
+        this.updateProjectCounters();
     }
 
+    /**
+     * Actualiza progreso diario
+     */
     updateDailyProgress() {
         const today = new Date().toDateString();
-        const todayTasks = this.tasks.filter(task => {
+        const todayTasks = this.state.tasks.filter(task => {
             const taskDate = new Date(task.updatedAt).toDateString();
             return taskDate === today && task.status === 'done';
         });
 
         const progress = todayTasks.length;
-        const goal = this.dailyGoal;
+        const goal = this.state.dailyGoal;
         const progressElement = document.getElementById('daily-progress');
 
         if (progressElement) {
@@ -806,331 +1325,53 @@ class TaskManager {
         }
     }
 
-    loadProjects() {
-        const projects = JSON.parse(localStorage.getItem("projects")) || [
-            { name: "personal", color: "#3b82f6" },
-            { name: "trabajo", color: "#ef4444" },
-            { name: "estudios", color: "#10b981" }
-        ];
-
-        const projectList = document.getElementById("project-list");
-        if (projectList) {
-            projectList.innerHTML = projects.map(project => `
-                <li><button class="project-btn ${this.currentProject === project.name ? 'active' : ''}" 
-                        data-project="${project.name}" type="button"
-                        style="--project-color: ${project.color}">
-                    ${project.name === 'personal' ? '🏠' : project.name === 'trabajo' ? '💼' : '📚'} 
-                    ${project.name.charAt(0).toUpperCase() + project.name.slice(1)}
-                </button></li>
-            `).join('');
-        }
-
-        const projectSelect = document.getElementById("taskProject");
-        if (projectSelect) {
-            projectSelect.innerHTML = projects.map(project =>
-                `<option value="${project.name}">${project.name.charAt(0).toUpperCase() + project.name.slice(1)}</option>`
-            ).join('');
-        }
-    }
-
-    applySavedTheme() {
-        const savedTheme = localStorage.getItem("theme") || "light";
-        document.documentElement.setAttribute("data-theme", savedTheme);
-    }
-
-    toggleTheme() {
-        const currentTheme = document.documentElement.getAttribute("data-theme");
-        const newTheme = currentTheme === "light" ? "dark" : "light";
-        document.documentElement.setAttribute("data-theme", newTheme);
-        localStorage.setItem("theme", newTheme);
-    }
-
-    showTutorial() {
-        const tutorialSteps = [
-            "¡Bienvenido al Gestor de Tareas!",
-            "1. Crea tareas usando el botón '+'",
-            "2. Organízalas en proyectos diferentes",
-            "3. Usa las vistas Kanban, Lista o Calendario",
-            "4. Arrastra tareas entre columnas",
-            "5. Establece metas diarias"
-        ];
-
-        let currentStep = 0;
-        const showStep = () => {
-            if (currentStep < tutorialSteps.length) {
-                this.showNotification(tutorialSteps[currentStep], 'info');
-                currentStep++;
-                setTimeout(showStep, 2000);
-            } else {
-                localStorage.setItem("tutorialShown", "true");
-                this.tutorialShown = true;
-            }
-        };
-        showStep();
-    }
-
-    escapeHtml(unsafe) {
-        if (!unsafe) return '';
-        return unsafe
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#039;");
-    }
-
-    formatTime(seconds) {
-        const hours = Math.floor(seconds / 3600);
-        const minutes = Math.floor((seconds % 3600) / 60);
-        const secs = seconds % 60;
-
-        if (hours > 0) {
-            return `${hours}h ${minutes}m ${secs}s`;
-        } else if (minutes > 0) {
-            return `${minutes}m ${secs}s`;
-        } else {
-            return `${secs}s`;
-        }
-    }
-
-    searchByTag(tagName) {
-        const searchInput = document.getElementById("search-tasks-sidebar");
-        if (searchInput) {
-            searchInput.value = tagName;
-            this.searchTasks(tagName);
-        }
-    }
-
-    addToHistory(action) {
-        this.actionHistory.unshift({
-            action: action,
-            timestamp: new Date().toISOString()
-        });
-
-        if (this.actionHistory.length > 50) {
-            this.actionHistory.pop();
-        }
-    }
-
-    undoLastAction() {
-        if (this.actionHistory.length === 0) {
-            this.showNotification("No hay acciones para deshacer", "warning");
-            return;
-        }
-
-        const lastAction = this.actionHistory.shift();
-        this.showNotification(`Deshaciendo: ${lastAction.action}`, "info");
-        this.renderAllViews();
-    }
-
-    openProjectModal() {
-        const modal = document.getElementById("project-modal");
-        if (modal) {
-            modal.classList.add("active");
-        }
-    }
-
-    closeProjectModal() {
-        const modal = document.getElementById("project-modal");
-        if (modal) {
-            modal.classList.remove("active");
-        }
-    }
-
-    createNewProjectFromModal() {
-        const projectNameInput = document.getElementById("new-project-name");
-        const projectName = projectNameInput ? projectNameInput.value.trim() : '';
-
-        if (!projectName) {
-            this.showNotification("Por favor ingresa un nombre para el proyecto", "error");
-            return;
-        }
-
-        this.createNewProject(projectName, "#7E57C2");
-        this.closeProjectModal();
-    }
-
-    createNewProject(name, color) {
-        const projects = JSON.parse(localStorage.getItem("projects")) || [];
-
-        // Verificar si el proyecto ya existe
-        if (projects.find(p => p.name === name.toLowerCase())) {
-            this.showNotification("Ya existe un proyecto con ese nombre", "warning");
-            return;
-        }
-
-        projects.push({ name: name.toLowerCase(), color: color });
-        localStorage.setItem("projects", JSON.stringify(projects));
-        this.loadProjects();
-        this.switchProject(name.toLowerCase());
-        this.showNotification(`Proyecto "${name}" creado correctamente`, "success");
-    }
-
-    toggleTimer(taskId) {
-        const task = this.getTaskById(taskId);
-        if (!task) return;
-
-        if (this.activeTimers[taskId]) {
-            // Detener temporizador
-            const elapsed = Math.floor((Date.now() - this.activeTimers[taskId].startTime) / 1000);
-            task.timeSpent = (task.timeSpent || 0) + elapsed;
-            delete this.activeTimers[taskId];
-            this.saveTasks();
-            this.addToHistory(`Temporizador detenido para: ${task.title} (${this.formatTime(elapsed)})`);
-            this.showNotification(`Temporizador detenido: ${this.formatTime(elapsed)}`, "info");
-        } else {
-            // Iniciar temporizador
-            this.activeTimers[taskId] = {
-                startTime: Date.now(),
-                taskId: taskId
-            };
-            this.addToHistory(`Temporizador iniciado para: ${task.title}`);
-            this.showNotification("Temporizador iniciado", "success");
-        }
-
-        this.renderAllViews();
-        this.updateActiveTimers();
-    }
-
-    updateActiveTimers() {
-        Object.keys(this.activeTimers).forEach(taskId => {
-            const timerElement = document.querySelector(`[data-timer-id="${taskId}"]`);
-            if (timerElement) {
-                const elapsed = Math.floor((Date.now() - this.activeTimers[taskId].startTime) / 1000);
-                timerElement.textContent = `⏱️ ${this.formatTime(elapsed)}`;
-            }
-        });
-
-        if (Object.keys(this.activeTimers).length > 0) {
-            setTimeout(() => this.updateActiveTimers(), 1000);
-        }
-    }
-
-    setupKeyboardShortcuts() {
-        document.addEventListener('keydown', (e) => {
-            if (e.ctrlKey || e.metaKey) {
-                switch (e.key) {
-                    case 'n':
-                        e.preventDefault();
-                        this.openTaskForm();
-                        break;
-                    case 'k':
-                        e.preventDefault();
-                        this.switchView('kanban');
-                        break;
-                    case 'l':
-                        e.preventDefault();
-                        this.switchView('list');
-                        break;
-                    case 'c':
-                        e.preventDefault();
-                        this.switchView('calendar');
-                        break;
-                }
-            }
-
-            // Atajos numéricos para vistas
-            if (e.key >= '1' && e.key <= '3') {
-                e.preventDefault();
-                const views = ['kanban', 'calendar', 'list'];
-                this.switchView(views[parseInt(e.key) - 1]);
+    /**
+     * Actualiza contadores de columnas
+     */
+    updateColumnCounters() {
+        const columns = ['todo', 'inprogress', 'done'];
+        
+        columns.forEach(status => {
+            const counter = document.querySelector(`#${status} .task-count`);
+            if (counter) {
+                const count = this.state.tasks.filter(
+                    task => task.project === this.state.currentProject && task.status === status
+                ).length;
+                counter.textContent = count;
             }
         });
     }
 
-    deleteCompletedTasks() {
-        const completedTasks = this.tasks.filter(task =>
-            task.project === this.currentProject && task.status === 'done'
-        );
+    /**
+     * Actualiza contadores de proyectos
+     */
+    updateProjectCounters() {
+        const projects = this.getStoredData(this.config.storageKeys.projects) || this.config.defaultProjects;
 
-        if (completedTasks.length === 0) {
-            this.showNotification("No hay tareas completadas para eliminar", "warning");
-            return;
-        }
-
-        this.showCustomModal('Eliminar Tareas Completadas', `
-            <div class="delete-confirm-warning">
-                <div class="warning-icon">⚠️</div>
-                <h3>¿Eliminar ${completedTasks.length} tareas completadas?</h3>
-                <p>Esta acción no se puede deshacer y eliminará permanentemente todas las tareas completadas del proyecto actual.</p>
-            </div>
-        `, [
-            {
-                text: 'Eliminar',
-                action: () => {
-                    const initialLength = this.tasks.length;
-                    this.tasks = this.tasks.filter(task =>
-                        !(task.project === this.currentProject && task.status === 'done')
-                    );
-
-                    if (this.tasks.length < initialLength) {
-                        this.saveTasks();
-                        this.renderAllViews();
-                        this.updateStats();
-                        this.addToHistory("Tareas completadas eliminadas");
-                        this.showNotification(`${completedTasks.length} tareas completadas eliminadas`, "success");
-                    }
-                },
-                type: 'danger'
-            },
-            { text: 'Cancelar', action: 'close', type: 'secondary' }
-        ]);
+        projects.forEach(project => {
+            const projectCount = this.state.tasks.filter(
+                task => task.project === project.name
+            ).length;
+            
+            const projectElement = document.querySelector(
+                `[data-project="${project.name}"] .project-count`
+            );
+            
+            if (projectElement) {
+                projectElement.textContent = projectCount;
+            }
+        });
     }
 
-    showDeleteModal(taskId) {
-        this.currentDeletingTask = taskId;
-        const modal = document.getElementById("delete-confirm");
-        if (modal) {
-            modal.classList.add("active");
-        }
-    }
+    // =============================================
+    // MÉTODOS DE COMENTARIOS
+    // =============================================
 
-    closeDeleteModal() {
-        const modal = document.getElementById("delete-confirm");
-        if (modal) {
-            modal.classList.remove("active");
-        }
-        this.currentDeletingTask = null;
-    }
-
-    confirmDeleteTask() {
-        if (this.currentDeletingTask) {
-            const task = this.getTaskById(this.currentDeletingTask);
-            this.tasks = this.tasks.filter(t => t.id !== this.currentDeletingTask);
-            this.saveTasks();
-            this.renderAllViews();
-            this.updateStats();
-            this.addToHistory(`Tarea eliminada: ${task.title}`);
-            this.showNotification("Tarea eliminada correctamente", "success");
-        }
-        this.closeDeleteModal();
-    }
-
-    // Sistema de notificaciones
-    toggleNotifications() {
-        const notificationList = document.getElementById('notification-list');
-        if (notificationList) {
-            notificationList.classList.toggle('active');
-        }
-    }
-
-    showHelp() {
-        const helpModal = document.getElementById('shortcut-help');
-        if (helpModal) {
-            helpModal.classList.add('active');
-        }
-    }
-
-    closeHelp() {
-        const helpModal = document.getElementById('shortcut-help');
-        if (helpModal) {
-            helpModal.classList.remove('active');
-        }
-    }
-
-    // Sistema de comentarios
-    addComment() {
-        const commentInput = document.getElementById('new-comment');
+    /**
+     * Agrega comentario a tarea
+     */
+    addCommentToTask() {
+        const commentInput = this.elements['new-comment'];
         const commentText = commentInput ? commentInput.value.trim() : '';
 
         if (!commentText) {
@@ -1138,12 +1379,12 @@ class TaskManager {
             return;
         }
 
-        if (!this.currentEditingTask) {
+        if (!this.state.currentEditingTask) {
             this.showNotification('No hay una tarea seleccionada para comentar', 'error');
             return;
         }
 
-        const task = this.getTaskById(this.currentEditingTask);
+        const task = this.getTaskById(this.state.currentEditingTask);
         if (!task) {
             this.showNotification('Tarea no encontrada', 'error');
             return;
@@ -1161,16 +1402,22 @@ class TaskManager {
         };
 
         task.comments.push(comment);
-        this.saveTasks();
-        this.renderComments(task.comments);
-        commentInput.value = '';
+        this.saveTasksToStorage();
+        this.renderTaskComments(task.comments);
+        
+        if (commentInput) {
+            commentInput.value = '';
+        }
 
         this.showNotification('Comentario agregado correctamente', 'success');
         this.addToHistory(`Comentario agregado a: ${task.title}`);
     }
 
-    renderComments(comments) {
-        const commentsList = document.getElementById('comments-list');
+    /**
+     * Renderiza comentarios de tarea
+     */
+    renderTaskComments(comments) {
+        const commentsList = this.elements['comments-list'];
         if (!commentsList) return;
 
         if (!comments || comments.length === 0) {
@@ -1178,69 +1425,534 @@ class TaskManager {
             return;
         }
 
-        const sortedComments = comments.sort((a, b) => new Date(b.date) - new Date(a.date));
+        const sortedComments = comments.sort((a, b) => 
+            new Date(b.date) - new Date(a.date)
+        );
 
         commentsList.innerHTML = sortedComments.map(comment => `
             <div class="comment" data-comment-id="${comment.id}">
                 <div class="comment-header">
                     <span class="comment-author">${comment.author}</span>
                     <span class="comment-date">${new Date(comment.date).toLocaleString()}</span>
-                    <button class="btn-icon btn-delete-comment" onclick="window.taskManager.deleteComment('${comment.id}', '${this.currentEditingTask}')">🗑️</button>
+                    <button class="btn-icon btn-delete-comment">
+                        <span class="material-symbols-outlined">delete</span>
+                    </button>
                 </div>
-                <div class="comment-text">${this.escapeHtml(comment.text)}</div>
+                <div class="comment-text">${this.escapeHTML(comment.text)}</div>
             </div>
         `).join('');
     }
 
-    deleteComment(commentId, taskId) {
+    /**
+     * Elimina comentario de tarea
+     */
+    deleteTaskComment(commentId, taskId) {
         const task = this.getTaskById(taskId);
         if (!task || !task.comments) return;
 
-        const commentIndex = task.comments.findIndex(comment => comment.id === commentId);
+        const commentIndex = task.comments.findIndex(
+            comment => comment.id === commentId
+        );
+        
         if (commentIndex !== -1) {
             task.comments.splice(commentIndex, 1);
-            this.saveTasks();
-            this.renderComments(task.comments);
+            this.saveTasksToStorage();
+            this.renderTaskComments(task.comments);
             this.showNotification('Comentario eliminado', 'success');
             this.addToHistory(`Comentario eliminado de: ${task.title}`);
         }
     }
 
-    toggleComments() {
+    /**
+     * Alterna visibilidad de comentarios
+     */
+    toggleCommentsVisibility() {
         const commentsSection = document.getElementById('task-comments');
-        const commentsButton = document.getElementById('btn-show-comments');
+        const commentsButton = this.elements['btn-show-comments'];
 
         if (commentsSection && commentsButton) {
             const isHidden = commentsSection.classList.toggle('hidden');
-            commentsButton.textContent = isHidden ? 'Mostrar Comentarios' : 'Ocultar Comentarios';
+            commentsButton.innerHTML = isHidden ? 
+                '<span class="material-symbols-outlined">visibility</span> Mostrar Comentarios' : 
+                '<span class="material-symbols-outlined">visibility_off</span> Ocultar Comentarios';
 
-            if (!isHidden && this.currentEditingTask) {
-                const task = this.getTaskById(this.currentEditingTask);
+            if (!isHidden && this.state.currentEditingTask) {
+                const task = this.getTaskById(this.state.currentEditingTask);
                 if (task) {
-                    this.renderComments(task.comments);
+                    this.renderTaskComments(task.comments);
                 }
             }
         }
     }
 
-    // Funcionalidades adicionales implementadas
+    // =============================================
+    // MÉTODOS DE ELIMINACIÓN
+    // =============================================
+
+    /**
+     * Elimina tareas completadas
+     */
+    deleteCompletedTasks() {
+        const completedTasks = this.state.tasks.filter(
+            task => task.project === this.state.currentProject && task.status === 'done'
+        );
+
+        if (completedTasks.length === 0) {
+            this.showNotification("No hay tareas completadas para eliminar", "warning");
+            return;
+        }
+
+        this.showConfirmationModal(
+            'Eliminar Tareas Completadas',
+            `¿Eliminar ${completedTasks.length} tareas completadas? Esta acción no se puede deshacer.`,
+            () => {
+                const initialLength = this.state.tasks.length;
+                this.state.tasks = this.state.tasks.filter(
+                    task => !(task.project === this.state.currentProject && task.status === 'done')
+                );
+
+                if (this.state.tasks.length < initialLength) {
+                    this.saveTasksToStorage();
+                    this.renderApplication();
+                    this.addToHistory("Tareas completadas eliminadas");
+                    this.showNotification(`${completedTasks.length} tareas completadas eliminadas`, "success");
+                }
+            }
+        );
+    }
+
+    /**
+     * Muestra confirmación de eliminación
+     */
+    showDeleteConfirmation(taskId) {
+        this.state.currentDeletingTask = taskId;
+        if (this.elements['delete-confirm']) {
+            this.elements['delete-confirm'].classList.add('active');
+        }
+    }
+
+    /**
+     * Cierra modal de eliminación
+     */
+    closeDeleteModal() {
+        if (this.elements['delete-confirm']) {
+            this.elements['delete-confirm'].classList.remove('active');
+        }
+        this.state.currentDeletingTask = null;
+    }
+
+    /**
+     * Confirma eliminación de tarea
+     */
+    confirmTaskDeletion() {
+        if (this.state.currentDeletingTask) {
+            const task = this.getTaskById(this.state.currentDeletingTask);
+            this.state.tasks = this.state.tasks.filter(
+                t => t.id !== this.state.currentDeletingTask
+            );
+            
+            // Detener temporizador si está activo
+            if (this.state.activeTimers[this.state.currentDeletingTask]) {
+                delete this.state.activeTimers[this.state.currentDeletingTask];
+            }
+
+            this.saveTasksToStorage();
+            this.renderApplication();
+            this.addToHistory(`Tarea eliminada: ${task.title}`);
+            this.showNotification("Tarea eliminada correctamente", "success");
+        }
+        this.closeDeleteModal();
+    }
+
+    /**
+     * Elimina proyecto actual
+     */
+    deleteCurrentProject() {
+        if (this.state.currentProject === "personal") {
+            this.showNotification('No se puede eliminar el proyecto personal por defecto', 'error');
+            return;
+        }
+
+        const projectTasks = this.state.tasks.filter(
+            task => task.project === this.state.currentProject
+        );
+
+        this.showConfirmationModal(
+            'Eliminar Proyecto',
+            `¿Eliminar proyecto "${this.state.currentProject}"? Se eliminarán ${projectTasks.length} tareas.`,
+            () => {
+                const projects = this.getStoredData(this.config.storageKeys.projects) || [];
+                const updatedProjects = projects.filter(
+                    p => p.name !== this.state.currentProject
+                );
+                
+                this.setStoredData(this.config.storageKeys.projects, updatedProjects);
+
+                // Eliminar tareas del proyecto
+                const tasksBefore = this.state.tasks.length;
+                this.state.tasks = this.state.tasks.filter(
+                    task => task.project !== this.state.currentProject
+                );
+                const tasksDeleted = tasksBefore - this.state.tasks.length;
+
+                this.saveTasksToStorage();
+                this.state.currentProject = "personal";
+                this.loadProjectsList();
+                this.renderApplication();
+
+                this.addToHistory(`Proyecto eliminado: ${this.state.currentProject}`);
+                this.showNotification(`Proyecto eliminado (${tasksDeleted} tareas eliminadas)`, 'success');
+            },
+            true
+        );
+    }
+
+    // =============================================
+    // MÉTODOS DE TEMA Y CONFIGURACIÓN
+    // =============================================
+
+    /**
+     * Alterna entre tema claro y oscuro
+     */
+    toggleTheme() {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+        
+        this.applyTheme(newTheme);
+        this.setStoredData(this.config.storageKeys.theme, newTheme);
+    }
+
+    /**
+     * Aplica tema
+     */
+    applyTheme(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        
+        // Actualizar icono del botón de tema
+        const themeButton = this.elements['theme-toggle'];
+        if (themeButton) {
+            const darkIcon = themeButton.querySelector('.dark-icon');
+            const lightIcon = themeButton.querySelector('.light-icon');
+
+            if (theme === 'dark') {
+                if (darkIcon) darkIcon.style.display = 'block';
+                if (lightIcon) lightIcon.style.display = 'none';
+            } else {
+                if (darkIcon) darkIcon.style.display = 'none';
+                if (lightIcon) lightIcon.style.display = 'block';
+            }
+        }
+    }
+
+    /**
+     * Notificaciones
+     */
+    showNotificationFallback(message, type = 'info', duration = 4000) {
+        const notification = document.createElement('div');
+        notification.className = `notification notification-${type}`;
+        
+        const icons = {
+            success: '✅',
+            error: '❌', 
+            warning: '⚠️',
+            info: 'ℹ️'
+        };
+
+        notification.innerHTML = `
+            <div class="notification-content">
+                <span class="notification-icon">${icons[type] || icons.info}</span>
+                <span class="notification-message">${message}</span>
+                <button class="notification-close">×</button>
+            </div>
+        `;
+
+        // Aplicar estilos básicos si no existen
+        if (!document.getElementById('notification-styles')) {
+            const basicStyles = `
+                .notification {
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: white;
+                    border: 1px solid #ddd;
+                    border-radius: 8px;
+                    padding: 12px 16px;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                    z-index: 10000;
+                    max-width: 300px;
+                    transform: translateX(400px);
+                    transition: transform 0.3s ease, opacity 0.3s ease;
+                    opacity: 0;
+                }
+                .notification.show {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+                .notification-content {
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                }
+                .notification-close {
+                    background: none;
+                    border: none;
+                    font-size: 1.2em;
+                    cursor: pointer;
+                }
+            `;
+            const style = document.createElement('style');
+            style.id = 'notification-styles';
+            style.textContent = basicStyles;
+            document.head.appendChild(style);
+        }
+
+        document.body.appendChild(notification);
+
+        // Animación de entrada
+        setTimeout(() => notification.classList.add('show'), 100);
+
+        // Cerrar al hacer click
+        notification.querySelector('.notification-close').addEventListener('click', () => {
+            notification.classList.remove('show');
+            setTimeout(() => notification.remove(), 300);
+        });
+
+        // Auto-eliminar
+        if (duration > 0) {
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.classList.remove('show');
+                    setTimeout(() => notification.remove(), 300);
+                }
+            }, duration);
+        }
+
+        return notification;
+    }
+
+    /**
+     * Alterna notificaciones
+     */
+    toggleNotifications() {
+        if (this.elements['notification-list']) {
+            this.elements['notification-list'].classList.toggle('active');
+        }
+    }
+
+    /**
+     * Muestra ayuda
+     */
+    showHelp() {
+        if (this.elements['shortcut-help']) {
+            this.elements['shortcut-help'].classList.add('active');
+        }
+    }
+
+    /**
+     * Cierra ayuda
+     */
+    closeHelp() {
+        if (this.elements['shortcut-help']) {
+            this.elements['shortcut-help'].classList.remove('active');
+        }
+    }
+
+    // =============================================
+    // MÉTODOS DE UTILIDAD
+    // =============================================
+
+    /**
+     * Escapa HTML para prevenir XSS
+     */
+    escapeHTML(text) {
+        if (!text) return '';
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    /**
+     * Formatea tiempo en segundos a formato legible
+     */
+    formatTime(seconds) {
+        const hours = Math.floor(seconds / 3600);
+        const minutes = Math.floor((seconds % 3600) / 60);
+        const secs = seconds % 60;
+
+        if (hours > 0) {
+            return `${hours}h ${minutes}m ${secs}s`;
+        } else if (minutes > 0) {
+            return `${minutes}m ${secs}s`;
+        } else {
+            return `${secs}s`;
+        }
+    }
+
+    /**
+     * Verifica si una fecha es hoy
+     */
+    isToday(date) {
+        const today = new Date();
+        return (
+            date.getDate() === today.getDate() &&
+            date.getMonth() === today.getMonth() &&
+            date.getFullYear() === today.getFullYear()
+        );
+    }
+
+    /**
+     * Genera color aleatorio
+     */
+    generateRandomColor() {
+        return this.config.colors[
+            Math.floor(Math.random() * this.config.colors.length)
+        ];
+    }
+
+    /**
+     * Aplica plantilla de tarea
+     */
+    applyTaskTemplate(templateName) {
+        const template = this.config.taskTemplates[templateName];
+        if (template) {
+            this.elements['taskTitle'].value = template.title;
+            this.elements['taskDescription'].value = template.description;
+            
+            const priorityField = document.querySelector(`input[name="priority"][value="${template.priority}"]`);
+            if (priorityField) priorityField.checked = true;
+            
+            this.elements['time-estimate'].value = template.timeEstimate;
+            this.elements['subtasks'].value = template.subtasks;
+
+            // Aplicar etiquetas
+            document.querySelectorAll('input[name="tags"]').forEach(checkbox => {
+                checkbox.checked = template.tags.includes(checkbox.value);
+            });
+
+            this.showNotification(`Plantilla "${templateName}" aplicada`, 'success');
+        }
+    }
+
+    /**
+     * Exporta tarea a JSON
+     */
+    exportTaskData(taskId) {
+        const task = this.getTaskById(taskId);
+        if (task) {
+            const taskData = JSON.stringify(task, null, 2);
+            const blob = new Blob([taskData], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `tarea-${task.title}-${task.id}.json`;
+            link.click();
+            URL.revokeObjectURL(url);
+            this.showNotification('Tarea exportada correctamente', 'success');
+        }
+    }
+
+    /**
+     * Agrega etiqueta personalizada
+     */
+    addCustomTag() {
+        const newTag = prompt("Agregar nueva etiqueta:");
+        if (newTag && !this.state.customTags.includes(newTag)) {
+            this.state.customTags.push(newTag);
+            this.setStoredData(this.config.storageKeys.customTags, this.state.customTags);
+            this.showNotification(`Etiqueta "${newTag}" agregada`, 'success');
+        }
+    }
+
+    /**
+     * Agrega acción al historial
+     */
+    addToHistory(action) {
+        this.state.actionHistory.unshift({
+            action: action,
+            timestamp: new Date().toISOString()
+        });
+
+        // Mantener solo las últimas 50 acciones
+        if (this.state.actionHistory.length > 50) {
+            this.state.actionHistory.pop();
+        }
+    }
+
+    /**
+     * Deshace última acción
+     */
+    undoLastAction() {
+        if (this.state.actionHistory.length === 0) {
+            this.showNotification("No hay acciones para deshacer", "warning");
+            return;
+        }
+
+        const lastAction = this.state.actionHistory.shift();
+        this.showNotification(`Deshaciendo: ${lastAction.action}`, "info");
+        this.renderApplication();
+    }
+
+    /**
+     * Muestra tutorial
+     */
+    showTutorial() {
+        const tutorialSteps = [
+            "¡Bienvenido a TaskFlow Pro!",
+            "1. Crea tareas usando el botón '+'",
+            "2. Organízalas en proyectos diferentes",
+            "3. Usa las vistas Kanban, Lista o Calendario",
+            "4. Arrastra tareas entre columnas",
+            "5. Establece metas diarias"
+        ];
+
+        let currentStep = 0;
+
+        const showStep = () => {
+            if (currentStep < tutorialSteps.length) {
+                this.showNotification(tutorialSteps[currentStep], 'info');
+                currentStep++;
+                setTimeout(showStep, 2000);
+            } else {
+                this.setStoredData(this.config.storageKeys.tutorialShown, "true");
+                this.state.tutorialShown = true;
+            }
+        };
+
+        showStep();
+    }
+
+    /**
+     * Muestra tutorial con retraso
+     */
+    showTutorialWithDelay() {
+        setTimeout(() => {
+            this.showTutorial();
+        }, 1000);
+    }
+
+    /**
+     * Muestra resumen diario
+     */
     showDailySummary() {
         const today = new Date().toDateString();
-        const todayTasks = this.tasks.filter(task => {
+        const todayTasks = this.state.tasks.filter(task => {
             const taskDate = new Date(task.updatedAt).toDateString();
             return taskDate === today && task.status === 'done';
         });
 
-        const totalTimeSpent = todayTasks.reduce((total, task) => total + (task.timeSpent || 0), 0);
+        const totalTimeSpent = todayTasks.reduce((total, task) => 
+            total + (task.timeSpent || 0), 0
+        );
+        
         const goalProgress = todayTasks.length;
-        const goalPercentage = Math.min((goalProgress / this.dailyGoal) * 100, 100);
+        const goalPercentage = Math.min((goalProgress / this.state.dailyGoal) * 100, 100);
 
         const summaryHTML = `
             <div class="daily-summary">
                 <h3>📊 Resumen Diario - ${new Date().toLocaleDateString()}</h3>
                 <div class="summary-stats">
                     <div class="stat-card">
-                        <span class="stat-number">${goalProgress}/${this.dailyGoal}</span>
+                        <span class="stat-number">${goalProgress}/${this.state.dailyGoal}</span>
                         <span class="stat-label">Tareas Completadas</span>
                         <div class="progress-container">
                             <div class="progress-bar" style="width: ${goalPercentage}%"></div>
@@ -1261,7 +1973,7 @@ class TaskManager {
                         <ul>
                             ${todayTasks.map(task => `
                                 <li>
-                                    <strong>${this.escapeHtml(task.title)}</strong>
+                                    <strong>${this.escapeHTML(task.title)}</strong>
                                     ${task.timeSpent ? ` - ${this.formatTime(task.timeSpent)}` : ''}
                                 </li>
                             `).join('')}
@@ -1277,15 +1989,18 @@ class TaskManager {
         ]);
     }
 
+    /**
+     * Establece meta diaria
+     */
     setDailyGoal() {
         this.showCustomModal('Establecer Meta Diaria', `
             <div class="goal-setting">
                 <p>¿Cuántas tareas quieres completar por día?</p>
-                <input type="number" id="new-goal-input" min="1" max="50" value="${this.dailyGoal}" class="form-input">
+                <input type="number" id="new-goal-input" min="1" max="50" value="${this.state.dailyGoal}" class="form-input">
                 <div class="goal-suggestions">
-                    <button type="button" onclick="window.taskManager.setSuggestedGoal(3)" class="btn-sm">3 (Fácil)</button>
-                    <button type="button" onclick="window.taskManager.setSuggestedGoal(5)" class="btn-sm">5 (Normal)</button>
-                    <button type="button" onclick="window.taskManager.setSuggestedGoal(8)" class="btn-sm">8 (Desafiante)</button>
+                    <button type="button" class="btn-sm" data-goal="3">3 (Fácil)</button>
+                    <button type="button" class="btn-sm" data-goal="5">5 (Normal)</button>
+                    <button type="button" class="btn-sm" data-goal="8">8 (Desafiante)</button>
                 </div>
             </div>
         `, [
@@ -1300,228 +2015,737 @@ class TaskManager {
             },
             { text: 'Cancelar', action: 'close', type: 'secondary' }
         ]);
+
+        // Configurar botones de sugerencia
+        setTimeout(() => {
+            document.querySelectorAll('[data-goal]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const goal = parseInt(btn.dataset.goal);
+                    document.getElementById('new-goal-input').value = goal;
+                });
+            });
+        }, 100);
     }
 
-    setSuggestedGoal(goal) {
-        const input = document.getElementById('new-goal-input');
-        if (input) {
-            input.value = goal;
-        }
-    }
-
+    /**
+     * Guarda meta diaria
+     */
     saveDailyGoal(newGoal) {
         if (!newGoal || isNaN(newGoal) || newGoal < 1) {
             this.showNotification('La meta debe ser un número mayor a 0', 'error');
             return;
         }
 
-        this.dailyGoal = newGoal;
-        localStorage.setItem("dailyGoal", newGoal.toString());
-        this.updateStats();
+        this.state.dailyGoal = newGoal;
+        this.setStoredData(this.config.storageKeys.dailyGoal, newGoal);
+        this.updateStatistics();
         this.showNotification(`Meta diaria establecida en: ${newGoal} tareas`, 'success');
         this.closeAllModals();
     }
 
-    addCustomTag() {
-        const newTag = prompt("Agregar nueva etiqueta:");
-        if (newTag && !this.customTags.includes(newTag)) {
-            this.customTags.push(newTag);
-            localStorage.setItem("customTags", JSON.stringify(this.customTags));
-            this.showNotification(`Etiqueta "${newTag}" agregada`, 'success');
-        }
-    }
+    // =============================================
+    // MÉTODOS DE UI Y NOTIFICACIONES
+    // =============================================
 
-    exportTask(taskId) {
-        const task = this.getTaskById(taskId);
-        if (task) {
-            const taskData = JSON.stringify(task, null, 2);
-            const blob = new Blob([taskData], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `tarea-${task.title}-${task.id}.json`;
-            a.click();
-            URL.revokeObjectURL(url);
-            this.showNotification('Tarea exportada correctamente', 'success');
-        }
-    }
-
-    applyTaskTemplate(templateName) {
-        const templates = {
-            reunion: {
-                title: 'Reunión Semanal',
-                description: 'Reunión de seguimiento y planificación semanal.',
-                priority: 'Media',
-                tags: ['Importante', 'Reunión'],
-                timeEstimate: '1.5',
-                subtasks: ['Preparar agenda, Enviar invitaciones, Tomar notas']
-            },
-            revision: {
-                title: 'Revisión de Código',
-                description: 'Revisar pull requests y asegurar la calidad del código.',
-                priority: 'Alta',
-                tags: ['Urgente', 'Técnico'],
-                timeEstimate: '2',
-                subtasks: ['Revisar cambios, Probar funcionalidad, Dar feedback']
-            },
-            estudio: {
-                title: 'Sesión de Estudio',
-                description: 'Tiempo dedicado al aprendizaje y estudio.',
-                priority: 'Media',
-                tags: ['Aprendizaje', 'Personal'],
-                timeEstimate: '3',
-                subtasks: ['Repasar temas, Hacer ejercicios, Tomar apuntes']
-            }
+    /**
+     * Muestra notificación
+     */
+    showNotification(message, type = 'info', duration = 4000) {
+        const notification = document.createElement('div');
+        notification.className = `notification notification-${type}`;
+        
+        const icons = {
+            success: '✅',
+            error: '❌', 
+            warning: '⚠️',
+            info: 'ℹ️'
         };
 
-        const template = templates[templateName];
-        if (template) {
-            document.getElementById('taskTitle').value = template.title;
-            document.getElementById('taskDescription').value = template.description;
-            document.getElementById('priority').value = template.priority;
-            document.getElementById('time-estimate').value = template.timeEstimate;
-            document.getElementById('subtasks').value = template.subtasks;
-
-            // Aplicar etiquetas
-            document.querySelectorAll('input[name="tags"]').forEach(checkbox => {
-                checkbox.checked = template.tags.includes(checkbox.value);
-            });
-
-            this.showNotification(`Plantilla "${templateName}" aplicada`, 'success');
-        }
-    }
-
-    deleteCurrentProject() {
-        if (this.currentProject === "personal") {
-            this.showNotification('No se puede eliminar el proyecto personal por defecto', 'error');
-            return;
-        }
-
-        const projectTasks = this.tasks.filter(task => task.project === this.currentProject);
-
-        this.showCustomModal('Eliminar Proyecto', `
-            <div class="delete-project-warning">
-                <div class="warning-icon">⚠️</div>
-                <h3>¿Eliminar proyecto "${this.currentProject}"?</h3>
-                <p>Esta acción eliminará permanentemente:</p>
-                <ul>
-                    <li>${projectTasks.length} tareas en total</li>
-                    <li>${projectTasks.filter(t => t.status === 'done').length} tareas completadas</li>
-                    <li>${projectTasks.filter(t => t.status !== 'done').length} tareas pendientes</li>
-                </ul>
-                <p><strong>Escribe el nombre del proyecto para confirmar:</strong></p>
-                <input type="text" id="confirm-project-name" placeholder="${this.currentProject}" class="form-input">
-            </div>
-        `, [
-            {
-                text: 'Eliminar Proyecto',
-                action: () => {
-                    const confirmInput = document.getElementById('confirm-project-name');
-                    if (confirmInput && confirmInput.value === this.currentProject) {
-                        this.confirmProjectDeletion();
-                    } else {
-                        this.showNotification('El nombre no coincide', 'error');
-                    }
-                },
-                type: 'danger'
-            },
-            { text: 'Cancelar', action: 'close', type: 'secondary' }
-        ]);
-    }
-
-    confirmProjectDeletion() {
-        const projects = JSON.parse(localStorage.getItem("projects")) || [];
-        const updatedProjects = projects.filter(p => p.name !== this.currentProject);
-        localStorage.setItem("projects", JSON.stringify(updatedProjects));
-
-        const tasksBefore = this.tasks.length;
-        this.tasks = this.tasks.filter(task => task.project !== this.currentProject);
-        const tasksDeleted = tasksBefore - this.tasks.length;
-
-        this.saveTasks();
-        this.currentProject = "personal";
-        this.loadProjects();
-        this.renderAllViews();
-        this.updateStats();
-
-        this.showNotification(`Proyecto eliminado (${tasksDeleted} tareas eliminadas)`, 'success');
-        this.closeAllModals();
-    }
-
-    // Funciones auxiliares
-    showNotification(message, type = 'info') {
-        // Implementación simple de notificación
-        console.log(`[${type.toUpperCase()}] ${message}`);
-        alert(`[${type.toUpperCase()}] ${message}`);
-    }
-
-    showCustomModal(title, content, buttons = []) {
-        // Implementación simple de modal personalizado
-        const modalContent = `
-            <h3>${title}</h3>
-            ${content}
-            <div class="modal-actions">
-                ${buttons.map(btn => `<button class="btn btn-${btn.type}">${btn.text}</button>`).join('')}
+        notification.innerHTML = `
+            <div class="notification-content">
+                <span class="notification-icon">${icons[type] || icons.info}</span>
+                <span class="notification-message">${message}</span>
+                <button class="notification-close">×</button>
             </div>
         `;
 
+        document.body.appendChild(notification);
+
+        // Animación de entrada
+        setTimeout(() => notification.classList.add('show'), 100);
+
+        // Cerrar al hacer click
+        notification.querySelector('.notification-close').addEventListener('click', () => {
+            this.removeNotification(notification);
+        });
+
+        // Auto-eliminar
+        if (duration > 0) {
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    this.removeNotification(notification);
+                }
+            }, duration);
+        }
+
+        return notification;
+    }
+
+    /**
+     * Elimina notificación
+     */
+    removeNotification(notification) {
+        notification.classList.remove('show');
+        setTimeout(() => {
+            if (notification.parentElement) {
+                notification.remove();
+            }
+        }, 300);
+    }
+
+    /**
+     * Muestra modal personalizado
+     */
+    showCustomModal(title, content, buttons = []) {
         const modal = document.createElement('div');
         modal.className = 'modal-overlay active';
+        
         modal.innerHTML = `
             <div class="modal">
                 <div class="modal-content">
-                    ${modalContent}
+                    <div class="modal-header">
+                        <h3>${title}</h3>
+                        <button class="btn-close">×</button>
+                    </div>
+                    <div class="modal-body">
+                        ${content}
+                    </div>
+                    <div class="modal-actions">
+                        ${buttons.map(btn => 
+                            `<button class="btn btn-${btn.type}">${btn.text}</button>`
+                        ).join('')}
+                    </div>
                 </div>
             </div>
         `;
 
         document.body.appendChild(modal);
 
-        // Cerrar modal al hacer clic en los botones
+        const closeModal = () => {
+            modal.classList.remove('active');
+            setTimeout(() => {
+                if (modal.parentElement) {
+                    modal.remove();
+                }
+            }, 300);
+        };
+
+        // Eventos de cierre
+        modal.querySelector('.btn-close').addEventListener('click', closeModal);
+        modal.addEventListener('click', (event) => {
+            if (event.target === modal) {
+                closeModal();
+            }
+        });
+
+        // Configurar botones de acción
         modal.querySelectorAll('.btn').forEach((button, index) => {
             button.addEventListener('click', () => {
-                if (buttons[index].action === 'close') {
-                    modal.remove();
-                } else if (typeof buttons[index].action === 'function') {
-                    buttons[index].action();
+                const buttonConfig = buttons[index];
+                if (buttonConfig.action === 'close') {
+                    closeModal();
+                } else if (typeof buttonConfig.action === 'function') {
+                    buttonConfig.action();
+                    closeModal();
                 }
             });
         });
 
-        // Cerrar modal al hacer clic fuera
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                modal.remove();
+        return modal;
+    }
+
+    /**
+     * Muestra modal de confirmación
+     */
+    showConfirmationModal(title, message, confirmAction, isDanger = false) {
+        this.showCustomModal(title, `
+            <div class="confirmation-content">
+                <div class="warning-icon">⚠️</div>
+                <p>${message}</p>
+            </div>
+        `, [
+            {
+                text: isDanger ? 'Eliminar' : 'Confirmar',
+                action: confirmAction,
+                type: isDanger ? 'danger' : 'primary'
+            },
+            {
+                text: 'Cancelar',
+                action: 'close',
+                type: 'secondary'
+            }
+        ]);
+    }
+
+    /**
+     * Cierra todos los modales
+     */
+    closeAllModals() {
+        document.querySelectorAll('.modal-overlay').forEach(modal => {
+            modal.classList.remove('active');
+            setTimeout(() => {
+                if (modal.parentElement) {
+                    modal.remove();
+                }
+            }, 300);
+        });
+    }
+
+    /**
+     * Guarda tareas en almacenamiento
+     */
+    saveTasksToStorage() {
+        this.setStoredData(this.config.storageKeys.tasks, this.state.tasks);
+    }
+}
+
+// =============================================
+// SISTEMA DE NOTIFICACIONES MEJORADO
+// =============================================
+
+class NotificationManager {
+    constructor(taskManager) {
+        this.taskManager = taskManager;
+        this.container = null;
+        this.notifications = new Map();
+        this.init();
+    }
+
+    /**
+     * Inicializa el sistema de notificaciones
+     */
+    init() {
+        this.createContainer();
+        this.setupStyles();
+    }
+
+    /**
+     * Crea el contenedor de notificaciones
+     */
+    createContainer() {
+        this.container = document.createElement('div');
+        this.container.id = 'notification-manager';
+        this.container.className = 'notification-manager';
+        document.body.appendChild(this.container);
+    }
+
+    /**
+     * Configura los estilos dinámicamente
+     */
+    setupStyles() {
+        if (!document.getElementById('notification-styles')) {
+            const styles = `
+                .notification-manager {
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    z-index: 10000;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 10px;
+                    max-width: 400px;
+                    pointer-events: none;
+                }
+
+                .notification {
+                    background: var(--card-bg);
+                    border: 1px solid var(--border-color);
+                    border-radius: 12px;
+                    padding: 16px;
+                    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+                    backdrop-filter: blur(10px);
+                    transform: translateX(400px);
+                    opacity: 0;
+                    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                    pointer-events: all;
+                    position: relative;
+                    overflow: hidden;
+                    border-left: 4px solid;
+                }
+
+                .notification.show {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+
+                .notification.hide {
+                    transform: translateX(400px);
+                    opacity: 0;
+                    max-height: 0;
+                    padding-top: 0;
+                    padding-bottom: 0;
+                    margin-bottom: -10px;
+                }
+
+                .notification-content {
+                    display: flex;
+                    align-items: flex-start;
+                    gap: 12px;
+                }
+
+                .notification-icon {
+                    font-size: 1.4em;
+                    flex-shrink: 0;
+                    margin-top: 2px;
+                }
+
+                .notification-message {
+                    flex: 1;
+                    color: var(--text-color);
+                    font-size: 0.95em;
+                    line-height: 1.4;
+                    margin: 0;
+                }
+
+                .notification-close {
+                    background: none;
+                    border: none;
+                    font-size: 1.2em;
+                    cursor: pointer;
+                    color: var(--text-muted);
+                    flex-shrink: 0;
+                    padding: 4px;
+                    border-radius: 4px;
+                    transition: all 0.2s ease;
+                    width: 24px;
+                    height: 24px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+
+                .notification-close:hover {
+                    background: rgba(0, 0, 0, 0.1);
+                    color: var(--text-color);
+                }
+
+                .notification-progress {
+                    position: absolute;
+                    bottom: 0;
+                    left: 0;
+                    height: 3px;
+                    background: currentColor;
+                    opacity: 0.3;
+                    transition: width linear;
+                }
+
+                /* Variantes de notificación */
+                .notification-success {
+                    border-left-color: #10b981;
+                    color: #10b981;
+                }
+
+                .notification-error {
+                    border-left-color: #ef4444;
+                    color: #ef4444;
+                }
+
+                .notification-warning {
+                    border-left-color: #f59e0b;
+                    color: #f59e0b;
+                }
+
+                .notification-info {
+                    border-left-color: #3b82f6;
+                    color: #3b82f6;
+                }
+
+                .notification-loading {
+                    border-left-color: #8b5cf6;
+                    color: #8b5cf6;
+                }
+
+                /* Efectos de hover */
+                .notification:hover {
+                    transform: translateX(0) scale(1.02);
+                    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+                }
+
+                .notification:hover .notification-progress {
+                    opacity: 0.5;
+                }
+
+                /* Agrupación de notificaciones */
+                .notification-group {
+                    background: var(--card-bg);
+                    border-radius: 12px;
+                    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+                    overflow: hidden;
+                }
+
+                .notification-group-header {
+                    padding: 12px 16px;
+                    background: var(--bg-secondary);
+                    border-bottom: 1px solid var(--border-color);
+                    font-weight: 600;
+                    font-size: 0.9em;
+                    display: flex;
+                    justify-content: between;
+                    align-items: center;
+                }
+
+                .notification-group-content {
+                    max-height: 300px;
+                    overflow-y: auto;
+                }
+
+                /* Responsive */
+                @media (max-width: 768px) {
+                    .notification-manager {
+                        top: 10px;
+                        right: 10px;
+                        left: 10px;
+                        max-width: none;
+                    }
+
+                    .notification {
+                        border-radius: 8px;
+                    }
+                }
+
+                /* Animaciones personalizadas */
+                @keyframes notificationSlideIn {
+                    from {
+                        transform: translateX(400px);
+                        opacity: 0;
+                    }
+                    to {
+                        transform: translateX(0);
+                        opacity: 1;
+                    }
+                }
+
+                @keyframes notificationSlideOut {
+                    from {
+                        transform: translateX(0);
+                        opacity: 1;
+                    }
+                    to {
+                        transform: translateX(400px);
+                        opacity: 0;
+                    }
+                }
+
+                @keyframes pulse {
+                    0%, 100% { opacity: 1; }
+                    50% { opacity: 0.7; }
+                }
+
+                .notification-pulse {
+                    animation: pulse 2s infinite;
+                }
+            `;
+
+            const styleSheet = document.createElement('style');
+            styleSheet.id = 'notification-styles';
+            styleSheet.textContent = styles;
+            document.head.appendChild(styleSheet);
+        }
+    }
+
+    /**
+     * Muestra una notificación mejorada
+     */
+    show(message, type = 'info', duration = 5000, options = {}) {
+        const id = 'notification-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+        
+        const notification = document.createElement('div');
+        notification.className = `notification notification-${type}`;
+        notification.id = id;
+
+        const icons = {
+            success: '✅',
+            error: '❌', 
+            warning: '⚠️',
+            info: 'ℹ️',
+            loading: '⏳'
+        };
+
+        const progressBar = duration > 0 ? 
+            `<div class="notification-progress" style="width: 100%"></div>` : '';
+
+        notification.innerHTML = `
+            <div class="notification-content">
+                <span class="notification-icon">${options.icon || icons[type] || icons.info}</span>
+                <p class="notification-message">${message}</p>
+                <button class="notification-close" title="Cerrar">×</button>
+            </div>
+            ${progressBar}
+        `;
+
+        this.container.appendChild(notification);
+
+        // Forzar reflow para que la animación funcione
+        notification.offsetHeight;
+
+        // Animación de entrada
+        notification.classList.add('show');
+
+        // Configurar auto-eliminación si hay duración
+        let progressInterval;
+        let timeLeft = duration;
+
+        if (duration > 0) {
+            const progressElement = notification.querySelector('.notification-progress');
+            
+            progressInterval = setInterval(() => {
+                timeLeft -= 100;
+                const percentage = (timeLeft / duration) * 100;
+                if (progressElement) {
+                    progressElement.style.width = percentage + '%';
+                }
+            }, 100);
+
+            const timeout = setTimeout(() => {
+                this.remove(id);
+            }, duration);
+
+            this.notifications.set(id, { element: notification, timeout, progressInterval });
+        } else {
+            this.notifications.set(id, { element: notification });
+        }
+
+        // Configurar evento de cierre
+        notification.querySelector('.notification-close').addEventListener('click', () => {
+            this.remove(id);
+        });
+
+        // Pausar progreso al hacer hover
+        notification.addEventListener('mouseenter', () => {
+            const notificationData = this.notifications.get(id);
+            if (notificationData && notificationData.timeout) {
+                clearTimeout(notificationData.timeout);
+                clearInterval(notificationData.progressInterval);
+            }
+        });
+
+        // Reanudar progreso al salir
+        notification.addEventListener('mouseleave', () => {
+            const notificationData = this.notifications.get(id);
+            if (notificationData && duration > 0) {
+                notificationData.timeout = setTimeout(() => {
+                    this.remove(id);
+                }, timeLeft);
+            }
+        });
+
+        // Efectos adicionales
+        if (options.pulse) {
+            notification.classList.add('notification-pulse');
+        }
+
+        if (options.action) {
+            this.addActionToNotification(notification, options.action);
+        }
+
+        // Limitar número máximo de notificaciones
+        this.limitNotifications();
+
+        return id;
+    }
+
+    /**
+     * Agrega acción a notificación
+     */
+    addActionToNotification(notification, action) {
+        const content = notification.querySelector('.notification-content');
+        const actionButton = document.createElement('button');
+        actionButton.className = 'notification-action';
+        actionButton.textContent = action.label;
+        actionButton.style.cssText = `
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            cursor: pointer;
+            margin-left: 8px;
+        `;
+        
+        actionButton.addEventListener('click', (e) => {
+            e.stopPropagation();
+            action.handler();
+            this.remove(notification.id);
+        });
+
+        content.appendChild(actionButton);
+    }
+
+    /**
+     * Limita el número máximo de notificaciones visibles
+     */
+    limitNotifications(max = 5) {
+        const notifications = Array.from(this.container.children);
+        if (notifications.length > max) {
+            const excess = notifications.slice(0, notifications.length - max);
+            excess.forEach(notification => {
+                this.remove(notification.id);
+            });
+        }
+    }
+
+    /**
+     * Elimina notificación con animación
+     */
+    remove(id) {
+        const notificationData = this.notifications.get(id);
+        if (!notificationData) return;
+
+        const { element, timeout, progressInterval } = notificationData;
+
+        if (timeout) clearTimeout(timeout);
+        if (progressInterval) clearInterval(progressInterval);
+
+        element.classList.remove('show');
+        element.classList.add('hide');
+
+        setTimeout(() => {
+            if (element.parentElement) {
+                element.remove();
+            }
+            this.notifications.delete(id);
+        }, 400);
+    }
+
+    /**
+     * Muestra notificación de éxito
+     */
+    success(message, duration = 3000, options = {}) {
+        return this.show(message, 'success', duration, options);
+    }
+
+    /**
+     * Muestra notificación de error
+     */
+    error(message, duration = 5000, options = {}) {
+        return this.show(message, 'error', duration, options);
+    }
+
+    /**
+     * Muestra notificación de advertencia
+     */
+    warning(message, duration = 4000, options = {}) {
+        return this.show(message, 'warning', duration, options);
+    }
+
+    /**
+     * Muestra notificación de información
+     */
+    info(message, duration = 4000, options = {}) {
+        return this.show(message, 'info', duration, options);
+    }
+
+    /**
+     * Muestra notificación de carga
+     */
+    loading(message, options = {}) {
+        return this.show(message, 'loading', 0, { ...options, icon: '⏳' });
+    }
+
+    /**
+     * Actualiza notificación existente
+     */
+    update(id, updates) {
+        const notificationData = this.notifications.get(id);
+        if (!notificationData) return;
+
+        const { element } = notificationData;
+
+        if (updates.message) {
+            const messageElement = element.querySelector('.notification-message');
+            if (messageElement) {
+                messageElement.textContent = updates.message;
+            }
+        }
+
+        if (updates.type) {
+            element.className = element.className.replace(/notification-\w+/, `notification-${updates.type}`);
+        }
+
+        if (updates.icon) {
+            const iconElement = element.querySelector('.notification-icon');
+            if (iconElement) {
+                iconElement.textContent = updates.icon;
+            }
+        }
+    }
+
+    /**
+     * Elimina todas las notificaciones
+     */
+    clearAll() {
+        this.notifications.forEach((_, id) => {
+            this.remove(id);
+        });
+    }
+
+    /**
+     * Muestra notificación de tarea completada
+     */
+    taskCompleted(taskTitle, timeSpent = 0) {
+        const timeText = timeSpent > 0 ? ` en ${this.taskManager.formatTime(timeSpent)}` : '';
+        return this.success(`✅ Tarea completada: "${taskTitle}"${timeText}`, 3000, {
+            action: {
+                label: 'Deshacer',
+                handler: () => this.taskManager.undoLastAction()
             }
         });
     }
 
-    closeAllModals() {
-        document.querySelectorAll('.modal-overlay').forEach(modal => modal.remove());
-    }
-
-    applySavedTheme() {
-        const savedTheme = localStorage.getItem("theme") || "light";
-        document.documentElement.setAttribute("data-theme", savedTheme);
-
-        // Aplicar el icono correcto
-        const themeButton = document.getElementById('theme-toggle');
-        if (themeButton) {
-            const moonIcon = themeButton.querySelector('.moon-icon');
-            const sunIcon = themeButton.querySelector('.sun-icon');
-
-            if (savedTheme === "dark") {
-                moonIcon.style.display = "none";
-                sunIcon.style.display = "block";
-            } else {
-                moonIcon.style.display = "block";
-                sunIcon.style.display = "none";
-            }
+    /**
+     * Muestra notificación de progreso
+     */
+    progress(message, current, total, id = null) {
+        const percentage = Math.round((current / total) * 100);
+        const progressMessage = `${message} (${current}/${total} - ${percentage}%)`;
+        
+        if (id && this.notifications.has(id)) {
+            this.update(id, { message: progressMessage });
+            return id;
+        } else {
+            return this.show(progressMessage, 'info', 0, { icon: '📊' });
         }
     }
 }
 
-// Inicializar la aplicación
-document.addEventListener('DOMContentLoaded', function () {
+
+// =============================================
+// INICIALIZACIÓN DE LA APLICACIÓN
+// =============================================
+
+/**
+ * Inicializa la aplicación cuando el DOM está listo
+ */
+function initializeApplication() {
+    // Verificar compatibilidad con localStorage
+    if (typeof Storage === 'undefined') {
+        alert('Tu navegador no soporta almacenamiento local. La aplicación no funcionará correctamente.');
+        return;
+    }
+
+    // Crear instancia del gestor de tareas
     window.taskManager = new TaskManager();
-});
+
+    // Manejar errores no capturados
+    window.addEventListener('error', (event) => {
+        console.error('Error no capturado:', event.error);
+    });
+}
+
+// Inicializar cuando el DOM esté listo
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeApplication);
+} else {
+    initializeApplication();
+}

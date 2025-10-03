@@ -97,6 +97,18 @@
             <h1>Task Mannager</h1>
             <div class="header-controls">
                 <div id="notifications">
+                    <button id="btn-quick-add-task" class="btn-primary" type="button">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                            <path d="M12 5v14m-7-7h14" stroke="currentColor" stroke-width="2" />
+                        </svg>
+                        Tarea Rápida
+                    </button>
+                    <button id="btn-quick-add-project" class="btn-secondary" type="button">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                            <path d="M12 5v14m-7-7h14" stroke="currentColor" stroke-width="2" />
+                        </svg>
+                        Proyecto
+                    </button>
                     <button id="btn-notifications" type="button">🔔 <span
                             class="material-symbols-outlined"></span></button>
                     <div id="notification-list" class="dropdown">
@@ -118,7 +130,13 @@
 
         <div id="board" class="view active">
             <section class="column" id="todo" data-status="todo">
-                <h2>To Do <span class="task-count">0</span></h2>
+                <div class="column-header">
+                    <h2>To Do <span class="task-count">0</span></h2>
+                    <button class="btn-quick-add" data-project="personal" data-status="todo"
+                        title="Agregar tarea rápida">
+                        +
+                    </button>
+                </div>
                 <ul class="task-list" data-status="todo"></ul>
             </section>
 
