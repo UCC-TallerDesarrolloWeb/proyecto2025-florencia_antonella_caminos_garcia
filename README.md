@@ -3,7 +3,7 @@ Estructura de Proyecto Taller de Desarrollo Web - 2025
 
 # Kliv Dashboard
 
-![Logo del Proyecto](Favicon/Favicon.png)  
+![Logo del Proyecto](../proyecto2025-florencia_antonella_caminos_garcia/PROYECTO-KLIV_2203528_Florencia_Caminos_Garcia/Favicon/Favicon.png)  
 **Kliv** es un dashboard personal completo y moderno, diseñado para gestionar proyectos, tareas, galería de imágenes y configuraciones de usuario. Desarrollado con tecnologías web frontend, ofrece una interfaz intuitiva con soporte para temas claro/oscuro, búsqueda avanzada y sistema de likes. Ideal para productividad personal y profesional.
 
 ## 📋 Índice
@@ -45,8 +45,7 @@ El enfoque principal es la **usabilidad y personalización**, permitiendo a los 
 | **Herramientas**| Canvas API, Drag & Drop API                          | Interactividad y renderizado. |
 | **Almacenamiento** | localStorage, IndexedDB (opcional)                | Persistencia de datos offline. |
 
-- Clona el repositorio:
-
+  **Clona el repositorio:**
 - Run
 - Copy code
 - git clone https://github.com/UCC-TallerDesarrolloWeb/proyecto2025-florencia_antonella_caminos_garcia.git
@@ -60,12 +59,14 @@ El enfoque principal es la **usabilidad y personalización**, permitiendo a los 
 
 - Navegador con soporte para ES6+ y Canvas API.
 - Conexión a internet para cargar fuentes e iconos (Font Awesome, Google Fonts).
-- Personalización:
+
+-**Personalización:**
 
 - Edita CSS/Index.css para temas personalizados.
   Agrega imágenes en /Imagenes/ para la galería.
 - Uso
-- Navegación:
+
+-**Navegación:**
 
 - Usa el sidebar izquierdo para cambiar entre secciones: Dashboard, Proyectos, Tareas, Galería, Configuración y Ayuda.
 - Atajos: Ctrl + N para nueva tarea, 1/2/3 para vistas (Kanban/Calendario/Lista).
@@ -89,34 +90,34 @@ El enfoque principal es la **usabilidad y personalización**, permitiendo a los 
 - Cambia tema.
 - Configura notificaciones y privacidad en Configuración > Preferencias/ Seguridad.
 
-- Secciones Principales
-- Dashboard Principal
-- __Vista inicial con estadísticas y galería de imágenes.
-- __Filtros: Todas, Populares, Me gustan.
-- __Botón para abrir el editor.
-- __Proyectos
-- __Agrega contenido a cards predefinidas (Recordatorios, Notificaciones, etc.).
-  __Drag & drop para reorganizar.
-  __Progreso general con barra de avance.
-- __Tareas
-- __Integración con Task Manager.
-- __Tabla editable con checkboxes y prioridades.
-- __Eliminación masiva de completadas.
+-**Secciones Principales**
+  **Dashboard Principal**
+- Vista inicial con estadísticas y galería de imágenes.
+- Filtros: Todas, Populares, Me gustan.
+- Botón para abrir el editor.
+- Proyectos
+- Agrega contenido a cards predefinidas (Recordatorios, Notificaciones, etc.).
+- Drag & drop para reorganizar.
+- Progreso general con barra de avance.
+- Tareas
+- Integración con Task Manager.
+- Tabla editable con checkboxes y prioridades.
+- Eliminación masiva de completadas.
 
-- Galería
-- __Subida múltiple con previsualización.
-- __Sistema de likes con partículas y animaciones.
-- __Estadísticas: Total fotos, espacio usado, favoritas.
-- __Configuración
-- __Perfil: Foto, nombre, email.
-- __Preferencias: Notificaciones, idioma, privacidad.
-- __Seguridad: Contraseña, pregunta de seguridad.
+-**Galería**
+- Subida múltiple con previsualización.
+- Sistema de likes con partículas y animaciones.
+- Estadísticas: Total fotos, espacio usado, favoritas.
+- Configuración
+- Perfil: Foto, nombre, email.
+- Preferencias: Notificaciones, idioma, privacidad.
+- Seguridad: Contraseña, pregunta de seguridad.
 
-- Ayuda
-- __FAQs expandibles con detalles de uso.
-- __Atajos de teclado y tutoriales.
+-**Ayuda**
+- FAQs expandibles con detalles de uso.
+- Atajos de teclado y tutoriales.
 
-- Contacto
+-**Contacto**
 - Desarrolladora: Florencia Caminos García
 - Email: florcaminosgarcia@gmail.com
 - GitHub: FlorenciaCaminosGarcia
