@@ -94,6 +94,16 @@ class TaskManager {
         };
     }
 
+    /**
+     * Inicializa proyectos por defecto si no existen
+     */
+    initializeDefaultProjects() {
+        if (!this.state.projects || this.state.projects.length === 0) {
+            this.state.projects = [...this.config.defaultProjects];
+            this.setStoredData(this.config.storageKeys.projects, this.state.projects);
+        }
+    }
+
     // =============================================
     // INICIALIZACIÓN PRINCIPAL
     // =============================================
@@ -103,6 +113,7 @@ class TaskManager {
      */
     initialize() {
         this.loadInitialData();
+        this.initializeDefaultProjects();
         this.cacheDOMElements();
         this.setupEventHandlers();
         this.applySavedSettings();
@@ -184,8 +195,8 @@ class TaskManager {
     // =============================================
 
     /**
-     * Cachea referencias DOM críticas para mejor performance
-     */
+ * Cachea referencias DOM críticas para mejor performance
+ */
     cacheDOMElements() {
         const criticalElements = [
             'sidebar', 'kanban', 'task-form', 'project-modal',
@@ -199,12 +210,18 @@ class TaskManager {
             'time-estimate', 'subtasks', 'task-template', 'new-comment',
             'comments-list', 'btn-new-task-sidebar', 'btn-new-project',
             'btn-delete-completed-tasks', 'btn-delete-project',
-            'theme-toggle', 'btn-notifications', 'btn-help'
+            'theme-toggle', 'btn-notifications', 'btn-help',
+            // Añadir elementos específicos del Kanban
+            'todo-tasks', 'inprogress-tasks', 'done-tasks', 'list-tasks'
         ];
 
         criticalElements.forEach(id => {
             this.elements[id] = document.getElementById(id);
+            if (!this.elements[id]) {
+                console.warn(`Elemento no encontrado: ${id}`);
+            }
         });
+
     }
 
     /**
@@ -247,6 +264,9 @@ class TaskManager {
     /**
      * Configura manejadores para botones principales
      */
+    /**
+     * Configura manejadores para botones principales
+     */
     setupButtonHandlers() {
         const buttonConfig = {
             'btn-cancel-task': () => this.closeTaskForm(),
@@ -279,6 +299,8 @@ class TaskManager {
             const element = document.getElementById(buttonId);
             if (element) {
                 element.addEventListener('click', buttonConfig[buttonId]);
+            } else {
+                console.warn(`Botón no encontrado: ${buttonId}`);
             }
         });
 
@@ -358,12 +380,22 @@ class TaskManager {
     }
 
     /**
-     * Maneja eventos de clicks en elementos dinámicos (delegación de eventos)
-     */
+ * Maneja eventos de clicks en elementos dinámicos (delegación de eventos)
+ */
     handleDynamicClick(event) {
         const target = event.target;
-        const taskCard = target.closest('[data-task-id]');
 
+        // Manejar clicks en botones de proyecto
+        if (target.closest('.project-btn')) {
+            const projectBtn = target.closest('.project-btn');
+            const project = projectBtn.dataset.project;
+            if (project) {
+                this.switchToProject(project);
+                return;
+            }
+        }
+
+        const taskCard = target.closest('[data-task-id]');
         if (!taskCard) return;
 
         const taskId = taskCard.dataset.taskId;
@@ -377,19 +409,14 @@ class TaskManager {
             'btn-export': () => this.exportTaskData(taskId),
             'btn-edit-task': () => this.openTaskForm(task),
             'btn-delete-task': () => this.showDeleteConfirmation(taskId),
-            'project-btn': (btn) => this.switchToProject(btn.dataset.project),
-            'tag': (tag) => { event.stopPropagation(); this.searchByTag(tag.dataset.tag); },
-            'btn-delete-comment': (comment) => this.deleteTaskComment(comment.closest('.comment').dataset.commentId, this.state.currentEditingTask),
-            'calendar-task': (taskEl) => {
-                const calendarTask = this.getTaskById(taskEl.dataset.taskId);
-                if (calendarTask) this.openTaskForm(calendarTask);
-            }
+            'tag': (tag) => { event.stopPropagation(); this.searchByTag(tag.dataset.tag); }
         };
 
         // Ejecutar acción correspondiente
         for (const [className, action] of Object.entries(actionMap)) {
             const element = target.classList.contains(className) ? target : target.closest(`.${className}`);
             if (element) {
+                event.preventDefault();
                 action(element);
                 break;
             }
@@ -458,8 +485,11 @@ class TaskManager {
     /**
      * Configura sistema de drag and drop
      */
+    /**
+ * Configura sistema de drag and drop
+ */
     setupDragAndDrop() {
-        const columns = document.querySelectorAll('.task-column');
+        const columns = document.querySelectorAll('.task-column, .column'); // Añadir .column como alternativa
 
         columns.forEach(column => {
             column.addEventListener('dragover', (event) => {
@@ -476,7 +506,8 @@ class TaskManager {
                 column.classList.remove('drag-over');
 
                 const taskId = event.dataTransfer.getData('text/plain');
-                const newStatus = column.id.replace('-tasks', '');
+                // Obtener el status del dataset o del ID
+                const newStatus = column.dataset.status || column.id.replace('-tasks', '');
                 this.updateTaskStatus(taskId, newStatus);
             });
         });
@@ -557,13 +588,14 @@ class TaskManager {
     }
 
     /**
-     * Renderiza vista Kanban con columnas y tareas
-     */
+ * Renderiza vista Kanban con columnas y tareas
+ */
     renderKanbanView() {
-        const columns = ['todo', 'inprogress', 'done'].reduce((acc, status) => {
-            acc[status] = document.getElementById(`${status}-tasks`);
-            return acc;
-        }, {});
+        const columns = {
+            'todo': document.getElementById('todo-tasks'),
+            'inprogress': document.getElementById('inprogress-tasks'),
+            'done': document.getElementById('done-tasks')
+        };
 
         // Limpiar y preparar columnas
         Object.values(columns).forEach(column => column && (column.innerHTML = ''));
@@ -571,7 +603,7 @@ class TaskManager {
         const tasksToShow = this.getCurrentProjectTasks();
         const filteredTasks = this.filterCompletedTasks(tasksToShow);
 
-        // Renderizar tareas en columnas correspondientes
+        // Mostrar mensaje cuando no hay tareas
         if (filteredTasks.length === 0) {
             Object.values(columns).forEach(column => {
                 if (column) {
@@ -1122,11 +1154,8 @@ class TaskManager {
     }
 
     /**
-     * Agrega nuevo proyecto
-     */
-    /**
-   * Agrega nuevo proyecto
-   */
+ * Agrega nuevo proyecto
+ */
     addProject(projectData = null) {
         if (projectData) {
             const projects = this.state.projects || this.config.defaultProjects;
@@ -1157,7 +1186,6 @@ class TaskManager {
             this.openProjectModal();
         }
     }
-
 
     /**
      * Agrega nueva tarea
@@ -1431,7 +1459,7 @@ class TaskManager {
         const columns = ['todo', 'inprogress', 'done'];
 
         columns.forEach(status => {
-            const counter = document.querySelector(`#${status} .task-count`);
+            const counter = document.querySelector(`#${status} .task-count, [data-status="${status}"] .task-count`);
             if (counter) {
                 const count = this.state.tasks.filter(
                     task => task.project === this.state.currentProject && task.status === status

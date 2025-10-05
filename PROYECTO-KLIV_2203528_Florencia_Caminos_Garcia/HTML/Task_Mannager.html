@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Task Manager Pro</title>
-    <link rel="icon" href="../Favicon/Favicon.png" type="image-icon">
+    <link rel="icon" href="../Favicon/Favicon.png" type="image/png">
     <link rel="stylesheet" href="../CSS/Task_Mannager.css">
     <script src="../JAVASCRIPT/Task_Mannager.js" defer></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -16,7 +16,6 @@
 
 <body>
     <aside id="sidebar">
-
         <h2>Productividad</h2>
 
         <div class="toolbar">
@@ -71,14 +70,14 @@
         </div>
 
         <div id="project-filters">
-            <label for="opciones">Selecciona una opción</label>
+            <label for="opciones">Filtrar por:</label>
             <select name="opciones" id="opciones">
-                <option value="" disable selected>Elige una opción</option>
-                <option name="filter" value="Alta">Prioridad Alta</option>
-                <option name="filter" value="Media">Prioridad Media</option>
-                <option name="filter" value="Baja">Prioridad Baja</option>
-                <option name="filter" value="Urgente">Urgente</option>
-                <option name="filter" value="Importante">Importante</option>
+                <option value="" disabled selected>Elige una opción</option>
+                <option value="Alta">Prioridad Alta</option>
+                <option value="Media">Prioridad Media</option>
+                <option value="Baja">Prioridad Baja</option>
+                <option value="Urgente">Urgente</option>
+                <option value="Importante">Importante</option>
             </select>
         </div>
 
@@ -94,7 +93,7 @@
 
     <main id="kanban">
         <header>
-            <h1>Task Mannager</h1>
+            <h1>Task Manager</h1> <!-- Corregido el nombre -->
             <div class="header-controls">
                 <div id="notifications">
                     <button id="btn-quick-add-task" class="btn-primary" type="button">
@@ -109,16 +108,13 @@
                         </svg>
                         Proyecto
                     </button>
-                    <button id="btn-notifications" type="button">🔔 <span
-                            class="material-symbols-outlined"></span></button>
+                    <button id="btn-notifications" type="button">🔔</button>
                     <div id="notification-list" class="dropdown">
                         <div class="notification-item">No hay notificaciones</div>
                     </div>
                 </div>
-                <button id="theme-toggle" type="button">🌙<span class="material-symbols-outlined">
-                    </span></button>
-                <button id="btn-help" type="button">?<span class="material-symbols-outlined">
-                    </span></button>
+                <button id="theme-toggle" type="button">🌙</button>
+                <button id="btn-help" type="button">?</button>
             </div>
         </header>
 
@@ -128,6 +124,7 @@
             <button id="btn-list-view" type="button">📝 Vista Lista</button>
         </div>
 
+        <!-- VISTAS PRINCIPALES -->
         <div id="board" class="view active">
             <section class="column" id="todo" data-status="todo">
                 <div class="column-header">
@@ -137,17 +134,22 @@
                         +
                     </button>
                 </div>
-                <ul class="task-list" data-status="todo"></ul>
+                <ul id="todo-tasks" class="task-list" data-status="todo"></ul> <!-- Añadido ID específico -->
             </section>
 
             <section class="column" id="inprogress" data-status="inprogress">
-                <h2>In Progress <span class="task-count">0</span></h2>
-                <ul class="task-list" data-status="inprogress"></ul>
+                <div class="column-header">
+                    <h2>In Progress <span class="task-count">0</span></h2>
+                </div>
+                <ul id="inprogress-tasks" class="task-list" data-status="inprogress"></ul>
+                <!-- Añadido ID específico -->
             </section>
 
             <section class="column" id="done" data-status="done">
-                <h2>Done <span class="task-count">0</span></h2>
-                <ul class="task-list" data-status="done"></ul>
+                <div class="column-header">
+                    <h2>Done <span class="task-count">0</span></h2>
+                </div>
+                <ul id="done-tasks" class="task-list" data-status="done"></ul> <!-- Añadido ID específico -->
             </section>
         </div>
 
@@ -161,25 +163,15 @@
             <div id="calendar"></div>
         </div>
 
-        <div id="list-view" class="view" ;">
+        <div id="list-view" class="view">
             <h2>Vista Lista</h2>
-            <table id="task-table">
-                <thead>
-                    <tr>
-                        <th>Título</th>
-                        <th>Prioridad</th>
-                        <th>Fecha</th>
-                        <th>Estado</th>
-                        <th>Proyecto</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
+            <div id="list-tasks"> <!-- Contenedor para la lista de tareas -->
+                <!-- Las tareas se renderizarán aquí dinámicamente -->
+            </div>
         </div>
 
-        <section id="task-form" class="modal" ;">
+        <!-- MODALES -->
+        <section id="task-form" class="modal">
             <div class="modal-content">
                 <h2>Crear / Editar Tarea</h2>
                 <form id="formTask">
@@ -206,6 +198,7 @@
                     <label for="taskDescription">Descripción:</label>
                     <textarea id="taskDescription" name="taskDescription" rows="3" placeholder="Escribe la descripción"
                         maxlength="200"></textarea>
+
                     <fieldset>
                         <legend>Prioridad:</legend>
                         <input type="radio" id="high" name="priority" value="Alta">
@@ -235,9 +228,6 @@
                     <label for="time-estimate">Tiempo estimado (horas):</label>
                     <input type="number" id="time-estimate" name="time-estimate" min="0" step="0.5">
 
-                    <label for="attachments">Adjuntar archivos:</label>
-                    <input type="file" id="attachments" name="attachments" multiple>
-
                     <div id="task-comments">
                         <h3>Comentarios</h3>
                         <div id="comments-list"></div>
@@ -256,7 +246,7 @@
         </section>
     </main>
 
-    <div id="project-modal" class="modal" ;">
+    <div id="project-modal" class="modal">
         <div class="modal-content">
             <h3>Nuevo Proyecto</h3>
             <input type="text" id="new-project-name" placeholder="Nombre del proyecto">
@@ -267,7 +257,7 @@
         </div>
     </div>
 
-    <div id="shortcut-help" class="modal" ;">
+    <div id="shortcut-help" class="modal">
         <div class="modal-content">
             <h3>Atajos de teclado</h3>
             <ul>
@@ -282,15 +272,15 @@
         </div>
     </div>
 
-    <div id="delete-confirm" class="modal"">
-        <div class=" modal-content">
-        <h3>¿Eliminar tarea?</h3>
-        <p>¿Estás seguro de que quieres eliminar esta tarea? Esta acción no se puede deshacer.</p>
-        <div class="modal-actions">
-            <button id="confirm-delete" type="button">Sí, eliminar</button>
-            <button id="cancel-delete" type="button">Cancelar</button>
+    <div id="delete-confirm" class="modal">
+        <div class="modal-content">
+            <h3>¿Eliminar tarea?</h3>
+            <p>¿Estás seguro de que quieres eliminar esta tarea? Esta acción no se puede deshacer.</p>
+            <div class="modal-actions">
+                <button id="confirm-delete" type="button">Sí, eliminar</button>
+                <button id="cancel-delete" type="button">Cancelar</button>
+            </div>
         </div>
-    </div>
     </div>
 
     <button class="float-btn" id="btn-new-task" type="button">+</button>
