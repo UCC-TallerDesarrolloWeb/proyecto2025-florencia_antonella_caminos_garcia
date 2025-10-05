@@ -77,6 +77,7 @@ class TaskManager {
         const now = new Date();
         return {
             tasks: [],
+            projects: [],
             currentProject: "personal",
             currentView: "kanban",
             currentEditingTask: null,
@@ -124,6 +125,8 @@ class TaskManager {
         this.state.dailyGoal = parseInt(this.getStoredData(storage.dailyGoal)) || 5;
         this.state.customTags = this.getStoredData(storage.customTags) || [];
         this.state.tutorialShown = this.getStoredData(storage.tutorialShown) === "true";
+
+        this.state.projects = this.getStoredData(storage.projects) || this.config.defaultProjects;
 
         this.applyTheme(this.getStoredData(storage.theme) || "light");
     }
@@ -569,6 +572,17 @@ class TaskManager {
         const filteredTasks = this.filterCompletedTasks(tasksToShow);
 
         // Renderizar tareas en columnas correspondientes
+        if (filteredTasks.length === 0) {
+            Object.values(columns).forEach(column => {
+                if (column) {
+                    column.innerHTML = '<div class="no-tasks-message">No hay tareas en este proyecto</div>';
+                }
+            });
+            this.updateColumnCounters();
+            return;
+        }
+
+        // Renderizar tareas en columnas correspondientes
         filteredTasks.forEach(task => {
             const column = columns[task.status];
             if (column) {
@@ -583,6 +597,10 @@ class TaskManager {
      * Obtiene tareas del proyecto actual, con soporte para filtros
      */
     getCurrentProjectTasks() {
+        if (!this.state.currentProject) {
+            this.state.currentProject = "personal";
+        }
+
         return this.state.filteredTasks ||
             this.state.tasks.filter(task => task.project === this.state.currentProject);
     }
@@ -619,29 +637,29 @@ class TaskManager {
                 "Sin fecha";
 
             listHTML += `
-            <div class="list-task-item" data-task-id="${task.id}">
-            <div class="list-task-main">
-                <div class="list-task-header">
-                <input type="checkbox" ${task.status === 'done' ? 'checked' : ''}>
-                <h3 class="list-task-title">${this.escapeHTML(task.title)}</h3>
-                <button class="btn-favorite">${task.favorite ? '⭐' : '☆'}</button>
-                </div>
-                <p class="list-task-description">${this.escapeHTML(task.description || "Sin descripción")}</p>
-                ${task.tags && task.tags.length > 0 ?
-                        `<div class="list-task-tags">${task.tags.map(tag =>
-                            `<span class="tag" data-tag="${this.escapeHTML(tag)}">${this.escapeHTML(tag)}</span>`
-                        ).join('')}</div>` : ''}
+        <div class="list-task-item" data-task-id="${task.id}">
+          <div class="list-task-main">
+            <div class="list-task-header">
+              <input type="checkbox" ${task.status === 'done' ? 'checked' : ''}>
+              <h3 class="list-task-title">${this.escapeHTML(task.title)}</h3>
+              <button class="btn-favorite">${task.favorite ? '⭐' : '☆'}</button>
             </div>
-            <div class="list-task-meta">
-                <span class="priority-badge priority-${task.priority.toLowerCase()}">${task.priority}</span>
-                <span class="due-date">📅 ${dueDate}</span>
-                <div class="list-task-actions">
-                <button class="btn-edit-task">✏️</button>
-                <button class="btn-delete-task">🗑️</button>
-                </div>
+            <p class="list-task-description">${this.escapeHTML(task.description || "Sin descripción")}</p>
+            ${task.tags && task.tags.length > 0 ?
+                    `<div class="list-task-tags">${task.tags.map(tag =>
+                        `<span class="tag" data-tag="${this.escapeHTML(tag)}">${this.escapeHTML(tag)}</span>`
+                    ).join('')}</div>` : ''}
+          </div>
+          <div class="list-task-meta">
+            <span class="priority-badge priority-${task.priority.toLowerCase()}">${task.priority}</span>
+            <span class="due-date">📅 ${dueDate}</span>
+            <div class="list-task-actions">
+              <button class="btn-edit-task">✏️</button>
+              <button class="btn-delete-task">🗑️</button>
             </div>
-            </div>
-        `;
+          </div>
+        </div>
+      `;
         });
 
         listHTML += '</div>';
@@ -704,11 +722,11 @@ class TaskManager {
             dayTasks.slice(0, 2).forEach(task => {
                 const priorityClass = task.priority ? `priority-${task.priority.toLowerCase()}` : "";
                 calendarHTML += `
-            <div class="calendar-task ${priorityClass}" 
-                data-task-id="${task.id}"
-                title="${task.title}">
-                ${task.title}
-            </div>
+          <div class="calendar-task ${priorityClass}" 
+               data-task-id="${task.id}"
+               title="${task.title}">
+            ${task.title}
+          </div>
         `;
             });
 
@@ -862,25 +880,25 @@ class TaskManager {
                 `<span class="time-spent">⏱️ ${this.formatTime(task.timeSpent)}</span>` : "";
 
         taskElement.innerHTML = `
-        <div class="task-header">
-            <div class="task-title-group">
-            <button class="btn-favorite" title="Marcar como favorita">${favoriteIcon}</button>
-            <h3>${this.escapeHTML(task.title)}</h3>
-            </div>
-            <div class="task-actions">
-            <button class="btn-timer" title="Iniciar/Detener temporizador">⏱️</button>
-            <button class="btn-export" title="Exportar tarea">📤</button>
-            <button class="btn-edit-task" title="Editar">✏️</button>
-            </div>
+      <div class="task-header">
+        <div class="task-title-group">
+          <button class="btn-favorite" title="Marcar como favorita">${favoriteIcon}</button>
+          <h3>${this.escapeHTML(task.title)}</h3>
         </div>
-        <p>${this.escapeHTML(task.description || "Sin descripción")}</p>
-        ${tagsHTML}
-        ${subtasksHTML}
-        ${timerHTML}
-        <div class="task-meta">
-            <span class="priority-badge priority-${task.priority.toLowerCase()}">${task.priority}</span>
-            <span class="due-date">📅 ${dueDate}</span>
+        <div class="task-actions">
+          <button class="btn-timer" title="Iniciar/Detener temporizador">⏱️</button>
+          <button class="btn-export" title="Exportar tarea">📤</button>
+          <button class="btn-edit-task" title="Editar">✏️</button>
         </div>
+      </div>
+      <p>${this.escapeHTML(task.description || "Sin descripción")}</p>
+      ${tagsHTML}
+      ${subtasksHTML}
+      ${timerHTML}
+      <div class="task-meta">
+        <span class="priority-badge priority-${task.priority.toLowerCase()}">${task.priority}</span>
+        <span class="due-date">📅 ${dueDate}</span>
+      </div>
     `;
 
         // Configurar eventos de drag and drop
@@ -957,6 +975,7 @@ class TaskManager {
      * Obtiene tarea por ID
      */
     getTaskById(id) {
+        if (!id) return null;
         return this.state.tasks.find(task => task.id === id);
     }
 
@@ -1036,22 +1055,22 @@ class TaskManager {
      * Carga lista de proyectos
      */
     loadProjectsList() {
-        const projects = this.getStoredData(this.config.storageKeys.projects) || this.config.defaultProjects;
+        const projects = this.state.projects || this.config.defaultProjects;
         const projectList = this.elements['project-list'];
 
         if (projectList) {
             projectList.innerHTML = projects.map(project => {
                 const projectCount = this.state.tasks.filter(task => task.project === project.name).length;
                 return `
-            <li>
-                <button class="project-btn ${this.state.currentProject === project.name ? 'active' : ''}" 
-                        data-project="${project.name}" type="button">
-                <span class="project-icon">${project.icon}</span>
-                <span class="project-name">${project.name.charAt(0).toUpperCase() + project.name.slice(1)}</span>
-                <span class="project-count">${projectCount}</span>
-                </button>
-            </li>
-        `;
+                <li>
+                    <button class="project-btn ${this.state.currentProject === project.name ? 'active' : ''}" 
+                            data-project="${project.name}" type="button">
+                        <span class="project-icon">${project.icon}</span>
+                        <span class="project-name">${project.name.charAt(0).toUpperCase() + project.name.slice(1)}</span>
+                        <span class="project-count">${projectCount}</span>
+                    </button>
+                </li>
+            `;
             }).join('');
         }
 
@@ -1105,9 +1124,12 @@ class TaskManager {
     /**
      * Agrega nuevo proyecto
      */
+    /**
+   * Agrega nuevo proyecto
+   */
     addProject(projectData = null) {
         if (projectData) {
-            const projects = this.getStoredData(this.config.storageKeys.projects) || this.config.defaultProjects;
+            const projects = this.state.projects || this.config.defaultProjects;
 
             const newProject = {
                 name: projectData.name.toLowerCase(),
@@ -1122,6 +1144,7 @@ class TaskManager {
             }
 
             projects.push(newProject);
+            this.state.projects = projects;
             this.setStoredData(this.config.storageKeys.projects, projects);
 
             this.loadProjectsList();
@@ -1134,6 +1157,7 @@ class TaskManager {
             this.openProjectModal();
         }
     }
+
 
     /**
      * Agrega nueva tarea
@@ -1421,7 +1445,7 @@ class TaskManager {
      * Actualiza contadores de proyectos
      */
     updateProjectCounters() {
-        const projects = this.getStoredData(this.config.storageKeys.projects) || this.config.defaultProjects;
+        const projects = this.state.projects || this.config.defaultProjects;
 
         projects.forEach(project => {
             const projectCount = this.state.tasks.filter(
@@ -1505,16 +1529,16 @@ class TaskManager {
         );
 
         commentsList.innerHTML = sortedComments.map(comment => `
-        <div class="comment" data-comment-id="${comment.id}">
-            <div class="comment-header">
-            <span class="comment-author">${comment.author}</span>
-            <span class="comment-date">${new Date(comment.date).toLocaleString()}</span>
-            <button class="btn-icon btn-delete-comment">
-                <span class="material-symbols-outlined">delete</span>
-            </button>
-            </div>
-            <div class="comment-text">${this.escapeHTML(comment.text)}</div>
+      <div class="comment" data-comment-id="${comment.id}">
+        <div class="comment-header">
+          <span class="comment-author">${comment.author}</span>
+          <span class="comment-date">${new Date(comment.date).toLocaleString()}</span>
+          <button class="btn-icon btn-delete-comment">
+            <span class="material-symbols-outlined">delete</span>
+          </button>
         </div>
+        <div class="comment-text">${this.escapeHTML(comment.text)}</div>
+      </div>
     `).join('');
     }
 
@@ -1656,11 +1680,12 @@ class TaskManager {
             'Eliminar Proyecto',
             `¿Eliminar proyecto "${this.state.currentProject}"? Se eliminarán ${projectTasks.length} tareas.`,
             () => {
-                const projects = this.getStoredData(this.config.storageKeys.projects) || [];
+                const projects = this.state.projects || [];
                 const updatedProjects = projects.filter(
                     p => p.name !== this.state.currentProject
                 );
 
+                this.state.projects = updatedProjects;
                 this.setStoredData(this.config.storageKeys.projects, updatedProjects);
 
                 // Eliminar tareas del proyecto
@@ -1923,22 +1948,22 @@ class TaskManager {
         modal.className = 'modal-overlay active';
 
         modal.innerHTML = `
-        <div class="modal">
-            <div class="modal-content">
-            <div class="modal-header">
-                <h3>${title}</h3>
-                <button class="btn-close">×</button>
-            </div>
-            <div class="modal-body">
-                ${content}
-            </div>
-            <div class="modal-actions">
-                ${buttons.map(btn =>
-                `<button class="btn btn-${btn.type}">${btn.text}</button>`
-            ).join('')}
-            </div>
-            </div>
+      <div class="modal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3>${title}</h3>
+            <button class="btn-close">×</button>
+          </div>
+          <div class="modal-body">
+            ${content}
+          </div>
+          <div class="modal-actions">
+            ${buttons.map(btn =>
+            `<button class="btn btn-${btn.type}">${btn.text}</button>`
+        ).join('')}
+          </div>
         </div>
+      </div>
     `;
 
         document.body.appendChild(modal);
@@ -2010,61 +2035,61 @@ class TaskManager {
         const goalPercentage = Math.min((goalProgress / this.state.dailyGoal) * 100, 100);
 
         const summaryHTML = `
-        <div class="daily-summary">
-            <h3>📊 Resumen Diario - ${new Date().toLocaleDateString()}</h3>
-            <div class="summary-stats">
-            <div class="stat-card">
-                <span class="stat-number">${goalProgress}/${this.state.dailyGoal}</span>
-                <span class="stat-label">Tareas Completadas</span>
-                <div class="progress-container">
-                <div class="progress-bar" style="width: ${goalPercentage}%"></div>
-                </div>
+      <div class="daily-summary">
+        <h3>📊 Resumen Diario - ${new Date().toLocaleDateString()}</h3>
+        <div class="summary-stats">
+          <div class="stat-card">
+            <span class="stat-number">${goalProgress}/${this.state.dailyGoal}</span>
+            <span class="stat-label">Tareas Completadas</span>
+            <div class="progress-container">
+              <div class="progress-bar" style="width: ${goalPercentage}%"></div>
             </div>
-            <div class="stat-card">
-                <span class="stat-number">${this.formatTime(totalTimeSpent)}</span>
-                <span class="stat-label">Tiempo Total Dedicado</span>
-            </div>
-            <div class="stat-card">
-                <span class="stat-number">${todayTasks.length}</span>
-                <span class="stat-label">Total de Tareas</span>
-            </div>
-            </div>
-            ${todayTasks.length > 0 ? `
-            <div class="completed-tasks-list">
-                <h4>Tareas Completadas Hoy:</h4>
-                <ul>
-                ${todayTasks.map(task => `
-                    <li>
-                    <strong>${this.escapeHTML(task.title)}</strong>
-                    ${task.timeSpent ? ` - ${this.formatTime(task.timeSpent)}` : ''}
-                    </li>
-                `).join('')}
-                </ul>
-            </div>
-            ` : '<p class="empty-state">No completaste tareas hoy</p>'}
+          </div>
+          <div class="stat-card">
+            <span class="stat-number">${this.formatTime(totalTimeSpent)}</span>
+            <span class="stat-label">Tiempo Total Dedicado</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-number">${todayTasks.length}</span>
+            <span class="stat-label">Total de Tareas</span>
+          </div>
         </div>
-        `;
+        ${todayTasks.length > 0 ? `
+          <div class="completed-tasks-list">
+            <h4>Tareas Completadas Hoy:</h4>
+            <ul>
+              ${todayTasks.map(task => `
+                <li>
+                  <strong>${this.escapeHTML(task.title)}</strong>
+                  ${task.timeSpent ? ` - ${this.formatTime(task.timeSpent)}` : ''}
+                </li>
+              `).join('')}
+            </ul>
+          </div>
+        ` : '<p class="empty-state">No completaste tareas hoy</p>'}
+      </div>
+    `;
 
-            this.showCustomModal('Resumen Diario', summaryHTML, [
-                { text: 'Cerrar', action: 'close', type: 'primary' },
-                { text: 'Establecer Nueva Meta', action: () => this.setDailyGoal(), type: 'secondary' }
-            ]);
-        }
+        this.showCustomModal('Resumen Diario', summaryHTML, [
+            { text: 'Cerrar', action: 'close', type: 'primary' },
+            { text: 'Establecer Nueva Meta', action: () => this.setDailyGoal(), type: 'secondary' }
+        ]);
+    }
 
-        /**
-         * Establece meta diaria
-         */
-        setDailyGoal() {
-            this.showCustomModal('Establecer Meta Diaria', `
-        <div class="goal-setting">
-            <p>¿Cuántas tareas quieres completar por día?</p>
-            <input type="number" id="new-goal-input" min="1" max="50" value="${this.state.dailyGoal}" class="form-input">
-            <div class="goal-suggestions">
-            <button type="button" class="btn-sm" data-goal="3">3 (Fácil)</button>
-            <button type="button" class="btn-sm" data-goal="5">5 (Normal)</button>
-            <button type="button" class="btn-sm" data-goal="8">8 (Desafiante)</button>
-            </div>
+    /**
+     * Establece meta diaria
+     */
+    setDailyGoal() {
+        this.showCustomModal('Establecer Meta Diaria', `
+      <div class="goal-setting">
+        <p>¿Cuántas tareas quieres completar por día?</p>
+        <input type="number" id="new-goal-input" min="1" max="50" value="${this.state.dailyGoal}" class="form-input">
+        <div class="goal-suggestions">
+          <button type="button" class="btn-sm" data-goal="3">3 (Fácil)</button>
+          <button type="button" class="btn-sm" data-goal="5">5 (Normal)</button>
+          <button type="button" class="btn-sm" data-goal="8">8 (Desafiante)</button>
         </div>
+      </div>
     `, [
             {
                 text: 'Guardar Meta',
@@ -2159,128 +2184,128 @@ class NotificationManager {
     injectStyles() {
         if (document.getElementById('notification-styles')) return;
 
-            const styles = `
+        const styles = `
+      .notification-manager {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 10000;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        max-width: 400px;
+        pointer-events: none;
+      }
+
+      .notification {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 16px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+        backdrop-filter: blur(10px);
+        transform: translateX(400px);
+        opacity: 0;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        pointer-events: all;
+        position: relative;
+        overflow: hidden;
+        border-left: 4px solid;
+      }
+
+      .notification.show {
+        transform: translateX(0);
+        opacity: 1;
+      }
+
+      .notification.hide {
+        transform: translateX(400px);
+        opacity: 0;
+        max-height: 0;
+        padding-top: 0;
+        padding-bottom: 0;
+        margin-bottom: -10px;
+      }
+
+      .notification-content {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+      }
+
+      .notification-icon {
+        font-size: 1.4em;
+        flex-shrink: 0;
+        margin-top: 2px;
+      }
+
+      .notification-message {
+        flex: 1;
+        color: var(--text-color);
+        font-size: 0.95em;
+        line-height: 1.4;
+        margin: 0;
+      }
+
+      .notification-close {
+        background: none;
+        border: none;
+        font-size: 1.2em;
+        cursor: pointer;
+        color: var(--text-muted);
+        flex-shrink: 0;
+        padding: 4px;
+        border-radius: 4px;
+        transition: all 0.2s ease;
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .notification-close:hover {
+        background: rgba(0, 0, 0, 0.1);
+        color: var(--text-color);
+      }
+
+      .notification-progress {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        height: 3px;
+        background: currentColor;
+        opacity: 0.3;
+        transition: width linear;
+      }
+
+      /* Variantes de notificación */
+      .notification-success { border-left-color: #10b981; color: #10b981; }
+      .notification-error { border-left-color: #ef4444; color: #ef4444; }
+      .notification-warning { border-left-color: #f59e0b; color: #f59e0b; }
+      .notification-info { border-left-color: #3b82f6; color: #3b82f6; }
+      .notification-loading { border-left-color: #8b5cf6; color: #8b5cf6; }
+
+      /* Efectos de hover */
+      .notification:hover {
+        transform: translateX(0) scale(1.02);
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+      }
+
+      .notification:hover .notification-progress {
+        opacity: 0.5;
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
         .notification-manager {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 10000;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            max-width: 400px;
-            pointer-events: none;
+          top: 10px;
+          right: 10px;
+          left: 10px;
+          max-width: none;
         }
-
-        .notification {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 16px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-            backdrop-filter: blur(10px);
-            transform: translateX(400px);
-            opacity: 0;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            pointer-events: all;
-            position: relative;
-            overflow: hidden;
-            border-left: 4px solid;
-        }
-
-        .notification.show {
-            transform: translateX(0);
-            opacity: 1;
-        }
-
-        .notification.hide {
-            transform: translateX(400px);
-            opacity: 0;
-            max-height: 0;
-            padding-top: 0;
-            padding-bottom: 0;
-            margin-bottom: -10px;
-        }
-
-        .notification-content {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-        }
-
-        .notification-icon {
-            font-size: 1.4em;
-            flex-shrink: 0;
-            margin-top: 2px;
-        }
-
-        .notification-message {
-            flex: 1;
-            color: var(--text-color);
-            font-size: 0.95em;
-            line-height: 1.4;
-            margin: 0;
-        }
-
-        .notification-close {
-            background: none;
-            border: none;
-            font-size: 1.2em;
-            cursor: pointer;
-            color: var(--text-muted);
-            flex-shrink: 0;
-            padding: 4px;
-            border-radius: 4px;
-            transition: all 0.2s ease;
-            width: 24px;
-            height: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .notification-close:hover {
-            background: rgba(0, 0, 0, 0.1);
-            color: var(--text-color);
-        }
-
-        .notification-progress {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            height: 3px;
-            background: currentColor;
-            opacity: 0.3;
-            transition: width linear;
-        }
-
-        /* Variantes de notificación */
-        .notification-success { border-left-color: #10b981; color: #10b981; }
-        .notification-error { border-left-color: #ef4444; color: #ef4444; }
-        .notification-warning { border-left-color: #f59e0b; color: #f59e0b; }
-        .notification-info { border-left-color: #3b82f6; color: #3b82f6; }
-        .notification-loading { border-left-color: #8b5cf6; color: #8b5cf6; }
-
-        /* Efectos de hover */
-        .notification:hover {
-            transform: translateX(0) scale(1.02);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
-        }
-
-        .notification:hover .notification-progress {
-            opacity: 0.5;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .notification-manager {
-            top: 10px;
-            right: 10px;
-            left: 10px;
-            max-width: none;
-            }
-            .notification { border-radius: 8px; }
-        }
+        .notification { border-radius: 8px; }
+      }
     `;
 
         const styleSheet = document.createElement('style');
@@ -2331,12 +2356,12 @@ class NotificationManager {
             `<div class="notification-progress" style="width: 100%"></div>` : '';
 
         notification.innerHTML = `
-        <div class="notification-content">
-            <span class="notification-icon">${options.icon || icons[type] || icons.info}</span>
-            <p class="notification-message">${message}</p>
-            <button class="notification-close" title="Cerrar">×</button>
-        </div>
-        ${progressBar}
+      <div class="notification-content">
+        <span class="notification-icon">${options.icon || icons[type] || icons.info}</span>
+        <p class="notification-message">${message}</p>
+        <button class="notification-close" title="Cerrar">×</button>
+      </div>
+      ${progressBar}
     `;
 
         return notification;
@@ -2436,14 +2461,14 @@ class NotificationManager {
         actionButton.className = 'notification-action';
         actionButton.textContent = action.label;
         actionButton.style.cssText = `
-        background: var(--primary-color);
-        color: white;
-        border: none;
-        padding: 4px 8px;
-        border-radius: 4px;
-        font-size: 0.8em;
-        cursor: pointer;
-        margin-left: 8px;
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 0.8em;
+      cursor: pointer;
+      margin-left: 8px;
     `;
 
         actionButton.addEventListener('click', (e) => {
