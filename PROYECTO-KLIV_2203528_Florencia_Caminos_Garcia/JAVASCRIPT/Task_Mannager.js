@@ -1,11 +1,7 @@
 // =============================================
-// TASK MANAGER - JavaScript Puro Optimizado
+// TASK MANAGER 
 // =============================================
 
-/**
- * Sistema completo de gestión de tareas con múltiples vistas
- * Características: Kanban, Calendario, Lista, Temporizadores, Estadísticas
- */
 class TaskManager {
     constructor() {
         this.config = this.initializeConfig();
@@ -104,10 +100,6 @@ class TaskManager {
         }
     }
 
-    // =============================================
-    // INICIALIZACIÓN PRINCIPAL
-    // =============================================
-
     /**
      * Punto de entrada principal - Configura toda la aplicación
      */
@@ -154,10 +146,6 @@ class TaskManager {
         };
     }
 
-    // =============================================
-    // GESTIÓN DE DATOS PERSISTENTES
-    // =============================================
-
     /**
      * Obtiene datos del localStorage de forma segura
      */
@@ -190,13 +178,9 @@ class TaskManager {
         this.setStoredData(this.config.storageKeys.tasks, this.state.tasks);
     }
 
-    // =============================================
-    // CONFIGURACIÓN DE INTERFAZ Y EVENTOS
-    // =============================================
-
     /**
- * Cachea referencias DOM críticas para mejor performance
- */
+     * Cachea referencias DOM críticas para mejor performance
+     */
     cacheDOMElements() {
         const criticalElements = [
             'sidebar', 'kanban', 'task-form', 'project-modal',
@@ -211,154 +195,26 @@ class TaskManager {
             'comments-list', 'btn-new-task-sidebar', 'btn-new-project',
             'btn-delete-completed-tasks', 'btn-delete-project',
             'theme-toggle', 'btn-notifications', 'btn-help',
-            // Añadir elementos específicos del Kanban
-            'todo-tasks', 'inprogress-tasks', 'done-tasks', 'list-tasks'
+            'todo-tasks', 'inprogress-tasks', 'done-tasks', 'list-tasks',
+            'btn-quick-add-task', 'btn-quick-add-project', 'btn-new-task-float',
+            'btn-new-task', 'save-project', 'cancel-project', 'add-comment',
+            'btn-show-comments', 'confirm-delete', 'cancel-delete', 'close-help',
+            'btn-daily-summary', 'btn-set-goal', 'btn-add-tag', 'btn-undo', 'btn-tutorial'
         ];
 
         criticalElements.forEach(id => {
             this.elements[id] = document.getElementById(id);
-            if (!this.elements[id]) {
-                console.warn(`Elemento no encontrado: ${id}`);
-            }
         });
-
     }
 
     /**
      * Configuración centralizada de todos los manejadores de eventos
      */
     setupEventHandlers() {
-        this.setupViewHandlers();
-        this.setupButtonHandlers();
-        this.setupFormHandlers();
+        // SOLO eventos que NO están en los atributos HTML
         this.setupDynamicEventHandlers();
         this.setupKeyboardHandlers();
         this.setupDragAndDrop();
-    }
-
-    /**
-     * Configura manejadores para cambio de vistas
-     */
-    setupViewHandlers() {
-        const viewButtons = ['btn-kanban-view', 'btn-calendar-view', 'btn-list-view'];
-
-        viewButtons.forEach(buttonId => {
-            const button = this.elements[buttonId];
-            if (button) {
-                button.addEventListener('click', () => {
-                    const view = buttonId.replace('btn-', '').replace('-view', '');
-                    this.switchToView(view);
-                });
-            }
-        });
-
-        // Navegación del calendario
-        if (this.elements['prev-month']) {
-            this.elements['prev-month'].addEventListener('click', () => this.navigateCalendar(-1));
-        }
-        if (this.elements['next-month']) {
-            this.elements['next-month'].addEventListener('click', () => this.navigateCalendar(1));
-        }
-    }
-
-    /**
-     * Configura manejadores para botones principales
-     */
-    /**
-     * Configura manejadores para botones principales
-     */
-    setupButtonHandlers() {
-        const buttonConfig = {
-            'btn-cancel-task': () => this.closeTaskForm(),
-            'theme-toggle': () => this.toggleTheme(),
-            'btn-notifications': () => this.toggleNotifications(),
-            'btn-help': () => this.showHelp(),
-            'close-help': () => this.closeHelp(),
-            'btn-new-task-sidebar': () => this.openTaskForm(),
-            'btn-new-task': () => this.openTaskForm(),
-            'btn-new-task-float': () => this.openTaskForm(),
-            'btn-new-project': () => this.openProjectModal(),
-            'btn-delete-completed-tasks': () => this.deleteCompletedTasks(),
-            'btn-delete-project': () => this.deleteCurrentProject(),
-            'save-project': () => this.createProjectFromModal(),
-            'cancel-project': () => this.closeProjectModal(),
-            'add-comment': () => this.addCommentToTask(),
-            'btn-show-comments': () => this.toggleCommentsVisibility(),
-            'confirm-delete': () => this.confirmTaskDeletion(),
-            'cancel-delete': () => this.closeDeleteModal(),
-            'btn-daily-summary': () => this.showDailySummary(),
-            'btn-set-goal': () => this.setDailyGoal(),
-            'btn-add-tag': () => this.addCustomTag(),
-            'btn-undo': () => this.undoLastAction(),
-            'btn-tutorial': () => this.showTutorial(),
-            'btn-quick-add-task': () => this.addTask(),
-            'btn-quick-add-project': () => this.addProject()
-        };
-
-        Object.keys(buttonConfig).forEach(buttonId => {
-            const element = document.getElementById(buttonId);
-            if (element) {
-                element.addEventListener('click', buttonConfig[buttonId]);
-            } else {
-                console.warn(`Botón no encontrado: ${buttonId}`);
-            }
-        });
-
-        // Botones de acción rápida en columnas
-        document.querySelectorAll('.btn-quick-add').forEach(button => {
-            button.addEventListener('click', (event) => {
-                const project = event.currentTarget.dataset.project || this.state.currentProject;
-                const status = event.currentTarget.dataset.status || 'todo';
-                this.addTask({
-                    title: 'Nueva Tarea',
-                    project: project,
-                    status: status
-                });
-            });
-        });
-    }
-
-    /**
-     * Configura manejadores para formularios
-     */
-    setupFormHandlers() {
-        // Formulario principal de tareas
-        if (this.elements['formTask']) {
-            this.elements['formTask'].addEventListener('submit', (event) => {
-                this.handleTaskFormSubmit(event);
-            });
-        }
-
-        // Búsqueda y filtros
-        if (this.elements['search-tasks-sidebar']) {
-            this.elements['search-tasks-sidebar'].addEventListener('input', (event) => {
-                this.searchTasks(event.target.value);
-            });
-        }
-
-        // Ordenamiento
-        ['sort-tasks-sidebar', 'sort-tasks-main'].forEach(selectId => {
-            const element = document.getElementById(selectId);
-            if (element) {
-                element.addEventListener('change', (event) => {
-                    this.sortTasks(event.target.value);
-                });
-            }
-        });
-
-        // Filtros
-        if (this.elements['opciones']) {
-            this.elements['opciones'].addEventListener('change', (event) => {
-                this.filterTasksByCriteria(event.target.value);
-            });
-        }
-
-        // Plantillas de tareas
-        if (this.elements['task-template']) {
-            this.elements['task-template'].addEventListener('change', (event) => {
-                this.applyTaskTemplate(event.target.value);
-            });
-        }
     }
 
     /**
@@ -380,8 +236,8 @@ class TaskManager {
     }
 
     /**
- * Maneja eventos de clicks en elementos dinámicos (delegación de eventos)
- */
+     * Maneja eventos de clicks en elementos dinámicos (delegación de eventos)
+     */
     handleDynamicClick(event) {
         const target = event.target;
 
@@ -485,11 +341,8 @@ class TaskManager {
     /**
      * Configura sistema de drag and drop
      */
-    /**
- * Configura sistema de drag and drop
- */
     setupDragAndDrop() {
-        const columns = document.querySelectorAll('.task-column, .column'); // Añadir .column como alternativa
+        const columns = document.querySelectorAll('.task-column, .column');
 
         columns.forEach(column => {
             column.addEventListener('dragover', (event) => {
@@ -506,7 +359,6 @@ class TaskManager {
                 column.classList.remove('drag-over');
 
                 const taskId = event.dataTransfer.getData('text/plain');
-                // Obtener el status del dataset o del ID
                 const newStatus = column.dataset.status || column.id.replace('-tasks', '');
                 this.updateTaskStatus(taskId, newStatus);
             });
@@ -521,7 +373,7 @@ class TaskManager {
     }
 
     // =============================================
-    // GESTIÓN DE VISTAS Y RENDERIZADO
+    // MÉTODOS DE GESTIÓN DE VISTAS Y RENDERIZADO
     // =============================================
 
     /**
@@ -588,8 +440,8 @@ class TaskManager {
     }
 
     /**
- * Renderiza vista Kanban con columnas y tareas
- */
+     * Renderiza vista Kanban con columnas y tareas
+     */
     renderKanbanView() {
         const columns = {
             'todo': document.getElementById('todo-tasks'),
@@ -669,29 +521,29 @@ class TaskManager {
                 "Sin fecha";
 
             listHTML += `
-        <div class="list-task-item" data-task-id="${task.id}">
-          <div class="list-task-main">
-            <div class="list-task-header">
-              <input type="checkbox" ${task.status === 'done' ? 'checked' : ''}>
-              <h3 class="list-task-title">${this.escapeHTML(task.title)}</h3>
-              <button class="btn-favorite">${task.favorite ? '⭐' : '☆'}</button>
-            </div>
-            <p class="list-task-description">${this.escapeHTML(task.description || "Sin descripción")}</p>
-            ${task.tags && task.tags.length > 0 ?
+                <div class="list-task-item" data-task-id="${task.id}">
+                    <div class="list-task-main">
+                        <div class="list-task-header">
+                            <input type="checkbox" ${task.status === 'done' ? 'checked' : ''}>
+                            <h3 class="list-task-title">${this.escapeHTML(task.title)}</h3>
+                            <button class="btn-favorite">${task.favorite ? '⭐' : '☆'}</button>
+                        </div>
+                        <p class="list-task-description">${this.escapeHTML(task.description || "Sin descripción")}</p>
+                        ${task.tags && task.tags.length > 0 ?
                     `<div class="list-task-tags">${task.tags.map(tag =>
                         `<span class="tag" data-tag="${this.escapeHTML(tag)}">${this.escapeHTML(tag)}</span>`
                     ).join('')}</div>` : ''}
-          </div>
-          <div class="list-task-meta">
-            <span class="priority-badge priority-${task.priority.toLowerCase()}">${task.priority}</span>
-            <span class="due-date">📅 ${dueDate}</span>
-            <div class="list-task-actions">
-              <button class="btn-edit-task">✏️</button>
-              <button class="btn-delete-task">🗑️</button>
-            </div>
-          </div>
-        </div>
-      `;
+                    </div>
+                    <div class="list-task-meta">
+                        <span class="priority-badge priority-${task.priority.toLowerCase()}">${task.priority}</span>
+                        <span class="due-date">📅 ${dueDate}</span>
+                        <div class="list-task-actions">
+                            <button class="btn-edit-task">✏️</button>
+                            <button class="btn-delete-task">🗑️</button>
+                        </div>
+                    </div>
+                </div>
+            `;
         });
 
         listHTML += '</div>';
@@ -754,12 +606,12 @@ class TaskManager {
             dayTasks.slice(0, 2).forEach(task => {
                 const priorityClass = task.priority ? `priority-${task.priority.toLowerCase()}` : "";
                 calendarHTML += `
-          <div class="calendar-task ${priorityClass}" 
-               data-task-id="${task.id}"
-               title="${task.title}">
-            ${task.title}
-          </div>
-        `;
+                    <div class="calendar-task ${priorityClass}" 
+                         data-task-id="${task.id}"
+                         title="${task.title}">
+                        ${task.title}
+                    </div>
+                `;
             });
 
             if (dayTasks.length > 2) {
@@ -791,7 +643,7 @@ class TaskManager {
     }
 
     // =============================================
-    // GESTIÓN DE TAREAS - CRUD
+    // MÉTODOS DE GESTIÓN DE TAREAS - CRUD
     // =============================================
 
     /**
@@ -912,26 +764,26 @@ class TaskManager {
                 `<span class="time-spent">⏱️ ${this.formatTime(task.timeSpent)}</span>` : "";
 
         taskElement.innerHTML = `
-      <div class="task-header">
-        <div class="task-title-group">
-          <button class="btn-favorite" title="Marcar como favorita">${favoriteIcon}</button>
-          <h3>${this.escapeHTML(task.title)}</h3>
-        </div>
-        <div class="task-actions">
-          <button class="btn-timer" title="Iniciar/Detener temporizador">⏱️</button>
-          <button class="btn-export" title="Exportar tarea">📤</button>
-          <button class="btn-edit-task" title="Editar">✏️</button>
-        </div>
-      </div>
-      <p>${this.escapeHTML(task.description || "Sin descripción")}</p>
-      ${tagsHTML}
-      ${subtasksHTML}
-      ${timerHTML}
-      <div class="task-meta">
-        <span class="priority-badge priority-${task.priority.toLowerCase()}">${task.priority}</span>
-        <span class="due-date">📅 ${dueDate}</span>
-      </div>
-    `;
+            <div class="task-header">
+                <div class="task-title-group">
+                    <button class="btn-favorite" title="Marcar como favorita">${favoriteIcon}</button>
+                    <h3>${this.escapeHTML(task.title)}</h3>
+                </div>
+                <div class="task-actions">
+                    <button class="btn-timer" title="Iniciar/Detener temporizador">⏱️</button>
+                    <button class="btn-export" title="Exportar tarea">📤</button>
+                    <button class="btn-edit-task" title="Editar">✏️</button>
+                </div>
+            </div>
+            <p>${this.escapeHTML(task.description || "Sin descripción")}</p>
+            ${tagsHTML}
+            ${subtasksHTML}
+            ${timerHTML}
+            <div class="task-meta">
+                <span class="priority-badge priority-${task.priority.toLowerCase()}">${task.priority}</span>
+                <span class="due-date">📅 ${dueDate}</span>
+            </div>
+        `;
 
         // Configurar eventos de drag and drop
         taskElement.addEventListener("dragstart", (event) => {
@@ -1094,15 +946,15 @@ class TaskManager {
             projectList.innerHTML = projects.map(project => {
                 const projectCount = this.state.tasks.filter(task => task.project === project.name).length;
                 return `
-                <li>
-                    <button class="project-btn ${this.state.currentProject === project.name ? 'active' : ''}" 
-                            data-project="${project.name}" type="button">
-                        <span class="project-icon">${project.icon}</span>
-                        <span class="project-name">${project.name.charAt(0).toUpperCase() + project.name.slice(1)}</span>
-                        <span class="project-count">${projectCount}</span>
-                    </button>
-                </li>
-            `;
+                    <li>
+                        <button class="project-btn ${this.state.currentProject === project.name ? 'active' : ''}" 
+                                data-project="${project.name}" type="button">
+                            <span class="project-icon">${project.icon}</span>
+                            <span class="project-name">${project.name.charAt(0).toUpperCase() + project.name.slice(1)}</span>
+                            <span class="project-count">${projectCount}</span>
+                        </button>
+                    </li>
+                `;
             }).join('');
         }
 
@@ -1154,8 +1006,8 @@ class TaskManager {
     }
 
     /**
- * Agrega nuevo proyecto
- */
+     * Agrega nuevo proyecto
+     */
     addProject(projectData = null) {
         if (projectData) {
             const projects = this.state.projects || this.config.defaultProjects;
@@ -1557,17 +1409,17 @@ class TaskManager {
         );
 
         commentsList.innerHTML = sortedComments.map(comment => `
-      <div class="comment" data-comment-id="${comment.id}">
-        <div class="comment-header">
-          <span class="comment-author">${comment.author}</span>
-          <span class="comment-date">${new Date(comment.date).toLocaleString()}</span>
-          <button class="btn-icon btn-delete-comment">
-            <span class="material-symbols-outlined">delete</span>
-          </button>
-        </div>
-        <div class="comment-text">${this.escapeHTML(comment.text)}</div>
-      </div>
-    `).join('');
+            <div class="comment" data-comment-id="${comment.id}">
+                <div class="comment-header">
+                    <span class="comment-author">${comment.author}</span>
+                    <span class="comment-date">${new Date(comment.date).toLocaleString()}</span>
+                    <button class="btn-icon btn-delete-comment">
+                        <span class="material-symbols-outlined">delete</span>
+                    </button>
+                </div>
+                <div class="comment-text">${this.escapeHTML(comment.text)}</div>
+            </div>
+        `).join('');
     }
 
     /**
@@ -1976,23 +1828,23 @@ class TaskManager {
         modal.className = 'modal-overlay active';
 
         modal.innerHTML = `
-      <div class="modal">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h3>${title}</h3>
-            <button class="btn-close">×</button>
-          </div>
-          <div class="modal-body">
-            ${content}
-          </div>
-          <div class="modal-actions">
-            ${buttons.map(btn =>
+            <div class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>${title}</h3>
+                        <button class="btn-close">×</button>
+                    </div>
+                    <div class="modal-body">
+                        ${content}
+                    </div>
+                    <div class="modal-actions">
+                        ${buttons.map(btn =>
             `<button class="btn btn-${btn.type}">${btn.text}</button>`
         ).join('')}
-          </div>
-        </div>
-      </div>
-    `;
+                    </div>
+                </div>
+            </div>
+        `;
 
         document.body.appendChild(modal);
         this.setupModalEvents(modal, buttons);
@@ -2031,11 +1883,11 @@ class TaskManager {
      */
     showConfirmationModal(title, message, confirmAction, isDanger = false) {
         this.showCustomModal(title, `
-      <div class="confirmation-content">
-        <div class="warning-icon">⚠️</div>
-        <p>${message}</p>
-      </div>
-    `, [
+            <div class="confirmation-content">
+                <div class="warning-icon">⚠️</div>
+                <p>${message}</p>
+            </div>
+        `, [
             {
                 text: isDanger ? 'Eliminar' : 'Confirmar',
                 action: confirmAction,
@@ -2063,40 +1915,40 @@ class TaskManager {
         const goalPercentage = Math.min((goalProgress / this.state.dailyGoal) * 100, 100);
 
         const summaryHTML = `
-      <div class="daily-summary">
-        <h3>📊 Resumen Diario - ${new Date().toLocaleDateString()}</h3>
-        <div class="summary-stats">
-          <div class="stat-card">
-            <span class="stat-number">${goalProgress}/${this.state.dailyGoal}</span>
-            <span class="stat-label">Tareas Completadas</span>
-            <div class="progress-container">
-              <div class="progress-bar" style="width: ${goalPercentage}%"></div>
+            <div class="daily-summary">
+                <h3>📊 Resumen Diario - ${new Date().toLocaleDateString()}</h3>
+                <div class="summary-stats">
+                    <div class="stat-card">
+                        <span class="stat-number">${goalProgress}/${this.state.dailyGoal}</span>
+                        <span class="stat-label">Tareas Completadas</span>
+                        <div class="progress-container">
+                            <div class="progress-bar" style="width: ${goalPercentage}%"></div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number">${this.formatTime(totalTimeSpent)}</span>
+                        <span class="stat-label">Tiempo Total Dedicado</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number">${todayTasks.length}</span>
+                        <span class="stat-label">Total de Tareas</span>
+                    </div>
+                </div>
+                ${todayTasks.length > 0 ? `
+                    <div class="completed-tasks-list">
+                        <h4>Tareas Completadas Hoy:</h4>
+                        <ul>
+                            ${todayTasks.map(task => `
+                                <li>
+                                    <strong>${this.escapeHTML(task.title)}</strong>
+                                    ${task.timeSpent ? ` - ${this.formatTime(task.timeSpent)}` : ''}
+                                </li>
+                            `).join('')}
+                        </ul>
+                    </div>
+                ` : '<p class="empty-state">No completaste tareas hoy</p>'}
             </div>
-          </div>
-          <div class="stat-card">
-            <span class="stat-number">${this.formatTime(totalTimeSpent)}</span>
-            <span class="stat-label">Tiempo Total Dedicado</span>
-          </div>
-          <div class="stat-card">
-            <span class="stat-number">${todayTasks.length}</span>
-            <span class="stat-label">Total de Tareas</span>
-          </div>
-        </div>
-        ${todayTasks.length > 0 ? `
-          <div class="completed-tasks-list">
-            <h4>Tareas Completadas Hoy:</h4>
-            <ul>
-              ${todayTasks.map(task => `
-                <li>
-                  <strong>${this.escapeHTML(task.title)}</strong>
-                  ${task.timeSpent ? ` - ${this.formatTime(task.timeSpent)}` : ''}
-                </li>
-              `).join('')}
-            </ul>
-          </div>
-        ` : '<p class="empty-state">No completaste tareas hoy</p>'}
-      </div>
-    `;
+        `;
 
         this.showCustomModal('Resumen Diario', summaryHTML, [
             { text: 'Cerrar', action: 'close', type: 'primary' },
@@ -2109,16 +1961,16 @@ class TaskManager {
      */
     setDailyGoal() {
         this.showCustomModal('Establecer Meta Diaria', `
-      <div class="goal-setting">
-        <p>¿Cuántas tareas quieres completar por día?</p>
-        <input type="number" id="new-goal-input" min="1" max="50" value="${this.state.dailyGoal}" class="form-input">
-        <div class="goal-suggestions">
-          <button type="button" class="btn-sm" data-goal="3">3 (Fácil)</button>
-          <button type="button" class="btn-sm" data-goal="5">5 (Normal)</button>
-          <button type="button" class="btn-sm" data-goal="8">8 (Desafiante)</button>
-        </div>
-      </div>
-    `, [
+            <div class="goal-setting">
+                <p>¿Cuántas tareas quieres completar por día?</p>
+                <input type="number" id="new-goal-input" min="1" max="50" value="${this.state.dailyGoal}" class="form-input">
+                <div class="goal-suggestions">
+                    <button type="button" class="btn-sm" data-goal="3">3 (Fácil)</button>
+                    <button type="button" class="btn-sm" data-goal="5">5 (Normal)</button>
+                    <button type="button" class="btn-sm" data-goal="8">8 (Desafiante)</button>
+                </div>
+            </div>
+        `, [
             {
                 text: 'Guardar Meta',
                 action: () => {

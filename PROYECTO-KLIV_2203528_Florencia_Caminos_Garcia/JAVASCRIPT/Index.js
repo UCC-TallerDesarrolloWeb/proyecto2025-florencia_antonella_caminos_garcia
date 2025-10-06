@@ -25,7 +25,9 @@ const SELECTORS = {
     sections: 'main section',
     sidebarItems: '.sidebar-item',
     taskCheckboxes: '.task-checkbox',
-    forms: 'form'
+    forms: 'form',
+    searchBox: '#searchBox',
+    dashboardGrid: '#dashboard-grid'
 };
 
 /**
@@ -1669,7 +1671,7 @@ class DashboardApp {
         // Botón añadir tarea
         if (addTaskBtn) {
             addTaskBtn.addEventListener('click', () => {
-                window.location.href = '../HTML/Task_Mannager.html'; 
+                window.location.href = '../HTML/Task_Mannager.html';
             });
         }
 
@@ -2005,12 +2007,131 @@ class DashboardApp {
 }
 
 // =============================================
-// INICIALIZACIÓN DE LA APLICACIÓN
+// FUNCIONES GLOBALES PARA HTML
 // =============================================
 
 /**
- * Inicializa la aplicación cuando el DOM está listo
+ * Funciones globales para ser llamadas desde HTML
+ * Estas funcionan como puente entre los eventos del HTML y las clases
  */
+
+// Navegación
+function navigateTo(sectionId) {
+    if (window.dashboardApp && window.dashboardApp.navigationManager) {
+        window.dashboardApp.navigationManager.activateSection(sectionId);
+    }
+}
+
+// Búsqueda
+function handleSearchInput(event) {
+    if (event.key === 'Enter') {
+        handleSearch();
+    }
+}
+
+function handleSearch() {
+    if (window.dashboardApp && window.dashboardApp.searchManager) {
+        window.dashboardApp.searchManager.handleSearch();
+    }
+}
+
+// Tareas
+function handleTaskChange(checkbox) {
+    if (window.dashboardApp && window.dashboardApp.taskManager) {
+        // El event listener ya maneja el cambio, pero podemos forzar la actualización
+        window.dashboardApp.taskManager.updateStatistics();
+    }
+}
+
+function removeCompletedTasks() {
+    if (window.dashboardApp && window.dashboardApp.taskManager) {
+        window.dashboardApp.taskManager.removeCompletedTasks();
+    }
+}
+
+// Proyectos
+function handleProjectSubmit(event) {
+    event.preventDefault();
+    if (window.dashboardApp) {
+        window.dashboardApp.handleProjectSubmit(event);
+    }
+}
+
+function clearProjectForm() {
+    if (window.dashboardApp) {
+        window.dashboardApp.clearProjectForm();
+    }
+}
+
+function previewProject() {
+    if (window.dashboardApp) {
+        window.dashboardApp.previewProject();
+    }
+}
+
+// Configuración
+function handleSettingsSubmit(event) {
+    event.preventDefault();
+    if (window.dashboardApp) {
+        window.dashboardApp.handleSettingsSubmit(event);
+    }
+}
+
+function validatePassword() {
+    if (window.dashboardApp) {
+        window.dashboardApp.setupPasswordValidation();
+    }
+}
+
+// Galería - Funciones puente
+function triggerFileUpload() {
+    const fileUpload = document.getElementById('file-upload');
+    if (fileUpload) {
+        fileUpload.click();
+    }
+}
+
+function handleFileSelect(event) {
+    if (window.dashboardApp && window.dashboardApp.galleryManager) {
+        window.dashboardApp.galleryManager.handleFileSelect(event);
+    }
+}
+
+// Sistema de Likes - Funciones puente
+function handleLikeFilterClick(button) {
+    if (window.dashboardApp && window.dashboardApp.likeSystem) {
+        window.dashboardApp.likeSystem.handleFilterClick(button);
+    }
+}
+
+function handleGalleryFilterClick(button) {
+    if (window.dashboardApp && window.dashboardApp.galleryManager) {
+        window.dashboardApp.galleryManager.handleFilterClick(button);
+    }
+}
+
+function toggleFavorite(photoId) {
+    if (window.dashboardApp && window.dashboardApp.galleryManager) {
+        window.dashboardApp.galleryManager.toggleFavorite(photoId);
+    }
+}
+
+function deletePhoto(photoId) {
+    if (window.dashboardApp && window.dashboardApp.galleryManager) {
+        window.dashboardApp.galleryManager.deletePhoto(photoId);
+    }
+}
+
+function clearGallery() {
+    if (window.dashboardApp && window.dashboardApp.galleryManager) {
+        window.dashboardApp.galleryManager.clearGallery();
+    }
+}
+
+// =============================================
+// INICIALIZACIÓN DE LA APLICACIÓN
+// =============================================
+
 document.addEventListener('DOMContentLoaded', () => {
     window.dashboardApp = new DashboardApp();
 });

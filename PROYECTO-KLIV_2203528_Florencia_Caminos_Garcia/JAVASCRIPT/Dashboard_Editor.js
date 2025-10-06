@@ -94,18 +94,18 @@ class DashboardEditor {
         }
 
         this.resizeCanvas();
-        
+
         // Mejorar calidad de renderizado
         this.ctx.imageSmoothingEnabled = true;
         this.ctx.imageSmoothingQuality = 'high';
 
         // Redimensionar canvas cuando cambia el tamaño de la ventana
         var self = this;
-        window.addEventListener('resize', function() {
+        window.addEventListener('resize', function () {
             if (self.resizeTimeout) {
                 clearTimeout(self.resizeTimeout);
             }
-            self.resizeTimeout = setTimeout(function() {
+            self.resizeTimeout = setTimeout(function () {
                 self.resizeCanvas();
                 self.renderCanvas();
             }, 250);
@@ -117,7 +117,7 @@ class DashboardEditor {
      */
     resizeCanvas() {
         if (!this.canvas || !this.ctx) return;
-        
+
         var container = this.canvas.parentElement;
         if (!container) return;
 
@@ -125,7 +125,7 @@ class DashboardEditor {
         var rect = container.getBoundingClientRect();
         this.canvas.width = Math.floor(rect.width);
         this.canvas.height = Math.floor(rect.height);
-        
+
         // Guardar dimensiones para uso posterior
         this.canvasBounds = {
             width: rect.width,
@@ -147,7 +147,7 @@ class DashboardEditor {
         this.sidebarDelete = document.querySelector(this.selectors.sidebarDelete);
         this.managementSelect = document.querySelector(this.selectors.managementSelect);
         this.projects = document.querySelectorAll(this.selectors.projects);
-        
+
         // Almacenar elementos de filtro
         this.filters = {
             priority: document.querySelector(this.selectors.filters.priority),
@@ -188,53 +188,12 @@ class DashboardEditor {
     setupEventListeners() {
         var self = this;
 
-        // Event listener para agregar elementos desde el sidebar
-        if (this.sidebarAdd) {
-            this.sidebarAdd.addEventListener('change', function(e) {
-                self.addItem(e.target.value);
-            });
-        }
-
-        // Event listener para eliminar elementos desde el sidebar
-        if (this.sidebarDelete) {
-            this.sidebarDelete.addEventListener('change', function(e) {
-                self.deleteItem(e.target.value);
-            });
-        }
-
-        // Event listener para acciones de gestión
-        if (this.managementSelect) {
-            this.managementSelect.addEventListener('change', function(e) {
-                self.handleManagement(e.target.value);
-            });
-        }
-        
-        // Event listeners para botones de proyectos
-        if (this.projects) {
-            this.projects.forEach(function(btn) {
-                btn.addEventListener('click', function(e) {
-                    self.switchProject(e.target.dataset.project);
-                });
-            });
-        }
-
-        // Event listeners para filtros
-        for (var key in this.filters) {
-            var filter = this.filters[key];
-            if (filter) {
-                filter.addEventListener('change', function() {
-                    self.renderDashboard();
-                    self.renderCanvas();
-                });
-            }
-        }
-
         // Configurar event listeners específicos del canvas
         this.setupCanvasEventListeners();
-        
+
         // Event listener para acciones en tarjetas de vista previa
         if (this.previewGrid) {
-            this.previewGrid.addEventListener('click', function(e) {
+            this.previewGrid.addEventListener('click', function (e) {
                 var cardBtn = e.target.closest('.card-btn');
                 if (!cardBtn) return;
 
@@ -261,30 +220,30 @@ class DashboardEditor {
         var self = this;
 
         // Eventos de mouse para el canvas
-        this.canvas.addEventListener('mousedown', function(e) {
+        this.canvas.addEventListener('mousedown', function (e) {
             self.handleCanvasMouseDown(e);
         });
-        this.canvas.addEventListener('mousemove', function(e) {
+        this.canvas.addEventListener('mousemove', function (e) {
             self.handleCanvasMouseMove(e);
         });
-        this.canvas.addEventListener('mouseup', function(e) {
+        this.canvas.addEventListener('mouseup', function (e) {
             self.handleCanvasMouseUp(e);
         });
-        this.canvas.addEventListener('wheel', function(e) {
+        this.canvas.addEventListener('wheel', function (e) {
             self.handleCanvasWheel(e);
         });
-        this.canvas.addEventListener('dblclick', function(e) {
+        this.canvas.addEventListener('dblclick', function (e) {
             self.handleCanvasDoubleClick(e);
         });
-        
+
         // Eventos táctiles para el canvas
-        this.canvas.addEventListener('touchstart', function(e) {
+        this.canvas.addEventListener('touchstart', function (e) {
             self.handleCanvasTouchStart(e);
         });
-        this.canvas.addEventListener('touchmove', function(e) {
+        this.canvas.addEventListener('touchmove', function (e) {
             self.handleCanvasTouchMove(e);
         });
-        this.canvas.addEventListener('touchend', function(e) {
+        this.canvas.addEventListener('touchend', function (e) {
             self.handleCanvasTouchEnd(e);
         });
     }
@@ -296,7 +255,7 @@ class DashboardEditor {
      */
     getCanvasMousePos(e) {
         if (!this.canvas) return { x: 0, y: 0 };
-        
+
         var rect = this.canvas.getBoundingClientRect();
         return {
             x: (e.clientX - rect.left) / this.state.canvasZoom,
@@ -311,7 +270,7 @@ class DashboardEditor {
     handleCanvasMouseDown(e) {
         var pos = this.getCanvasMousePos(e);
         var item = this.getItemAtPosition(pos.x, pos.y);
-        
+
         if (item) {
             // Iniciar arrastre de elemento
             this.draggingItem = item;
@@ -322,7 +281,7 @@ class DashboardEditor {
             this.state.isDragging = true;
             this.state.dragStart = { x: pos.x, y: pos.y };
         }
-        
+
         e.preventDefault();
     }
 
@@ -332,7 +291,7 @@ class DashboardEditor {
      */
     handleCanvasMouseMove(e) {
         var pos = this.getCanvasMousePos(e);
-        
+
         if (this.draggingItem) {
             // Mover elemento arrastrado
             this.draggingItem.canvasX = pos.x - this.draggingItem.width / 2;
@@ -367,16 +326,16 @@ class DashboardEditor {
      */
     handleCanvasWheel(e) {
         e.preventDefault();
-        
+
         var zoomIntensity = 0.1;
         var mousePos = this.getCanvasMousePos(e);
-        
+
         var wheel = e.deltaY < 0 ? 1 : -1;
         var zoomFactor = wheel > 0 ? (1 + zoomIntensity) : (1 - zoomIntensity);
-        
+
         this.state.canvasZoom *= zoomFactor;
         this.state.canvasZoom = Math.max(0.1, Math.min(3, this.state.canvasZoom));
-        
+
         this.renderCanvas();
     }
 
@@ -387,7 +346,7 @@ class DashboardEditor {
     handleCanvasDoubleClick(e) {
         var pos = this.getCanvasMousePos(e);
         var item = this.getItemAtPosition(pos.x, pos.y);
-        
+
         if (item) {
             // Editar elemento existente
             this.editItem(item.id);
@@ -510,12 +469,12 @@ class DashboardEditor {
         this.renderDashboard();
         this.renderCanvas();
         this.saveState();
-        
+
         // Resetear selector de agregar
         if (this.sidebarAdd) {
             this.sidebarAdd.value = '';
         }
-        
+
         this.showNotification('Elemento ' + type + ' agregado correctamente');
     }
 
@@ -563,13 +522,13 @@ class DashboardEditor {
 
         // Limpiar canvas
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        
+
         // Aplicar transformaciones (zoom)
         this.ctx.save();
         this.ctx.scale(this.state.canvasZoom, this.state.canvasZoom);
 
         this.drawGrid();        // Dibujar cuadrícula de fondo
-        
+
         // Dibujar todos los elementos
         var items = Array.from(this.canvasItems.values());
         for (var i = 0; i < items.length; i++) {
@@ -656,8 +615,8 @@ class DashboardEditor {
         this.ctx.font = 'bold 14px Arial';
         this.ctx.fillStyle = '#333';
         this.ctx.fillText(
-            type.charAt(0).toUpperCase() + type.slice(1), 
-            canvasX + 45, 
+            type.charAt(0).toUpperCase() + type.slice(1),
+            canvasX + 45,
             canvasY + 30
         );
 
@@ -723,7 +682,7 @@ class DashboardEditor {
         // Dibujar fondo de la etiqueta
         this.ctx.fillStyle = priorityColors[item.priority] || '#666';
         this.ctx.fillRect(x, y, badgeWidth, badgeHeight);
-        
+
         // Dibujar texto de la etiqueta
         this.ctx.font = '10px Arial';
         this.ctx.fillStyle = 'white';
@@ -746,7 +705,7 @@ class DashboardEditor {
             var connection = this.connections[i];
             var fromItem = this.canvasItems.get(connection.from);
             var toItem = this.canvasItems.get(connection.to);
-            
+
             if (fromItem && toItem) {
                 var fromX = fromItem.canvasX + fromItem.width / 2;
                 var fromY = fromItem.canvasY + fromItem.height;
@@ -772,17 +731,45 @@ class DashboardEditor {
 
         this.ctx.save();
         this.ctx.setTransform(1, 0, 0, 1, 0, 0); // Restaurar transformación
-        
+
         // Dibujar fondo del indicador de zoom
         this.ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
         this.ctx.fillRect(10, 10, 80, 25);
-        
+
         // Dibujar texto del zoom
         this.ctx.font = '12px Arial';
         this.ctx.fillStyle = 'white';
         this.ctx.fillText('Zoom: ' + Math.round(this.state.canvasZoom * 100) + '%', 20, 25);
-        
+
         this.ctx.restore();
+    }
+
+    // Agregar estos métodos a tu clase DashboardEditor
+
+    /**
+     * Aumenta el zoom del canvas
+     */
+    zoomIn() {
+        this.state.canvasZoom *= 1.1;
+        this.state.canvasZoom = Math.min(3, this.state.canvasZoom);
+        this.renderCanvas();
+    }
+
+    /**
+     * Disminuye el zoom del canvas
+     */
+    zoomOut() {
+        this.state.canvasZoom /= 1.1;
+        this.state.canvasZoom = Math.max(0.1, this.state.canvasZoom);
+        this.renderCanvas();
+    }
+
+    /**
+     * Restablece el zoom del canvas al valor por defecto
+     */
+    resetZoom() {
+        this.state.canvasZoom = 1.0;
+        this.renderCanvas();
     }
 
     /**
@@ -820,10 +807,10 @@ class DashboardEditor {
         if (!this.previewGrid) return;
 
         // Filtrar elementos según filtros aplicados
-        var filteredItems = this.state.dashboardItems.filter(function(item) {
+        var filteredItems = this.state.dashboardItems.filter(function (item) {
             return this.applyFilters(item);
         }.bind(this));
-        
+
         // Mostrar estado vacío si no hay elementos
         if (filteredItems.length === 0) {
             this.previewGrid.innerHTML = '<div class="empty-state"><p>No hay elementos para mostrar</p><p>Usa el panel de agregar para incluir nuevos elementos</p></div>';
@@ -836,7 +823,7 @@ class DashboardEditor {
             var item = filteredItems[i];
             var typeFormatted = item.type.charAt(0).toUpperCase() + item.type.slice(1);
             var dateFormatted = new Date(item.createdAt).toLocaleDateString();
-            
+
             html += '<div class="preview-card" data-id="' + item.id + '">' +
                 '<div class="card-header">' +
                 '<span class="card-icon">' + this.icons[item.type] + '</span>' +
@@ -872,7 +859,7 @@ class DashboardEditor {
         if (deviceFilter !== 'all' && item.device !== deviceFilter) return false;
         if (regionFilter !== 'all' && item.region !== regionFilter) return false;
         if (newUsersFilter && !item.newUsers) return false;
-        
+
         return true;
     }
 
@@ -893,10 +880,10 @@ class DashboardEditor {
 
         var initialLength = this.state.dashboardItems.length;
         // Filtrar elementos manteniendo solo los que NO son del tipo especificado
-        this.state.dashboardItems = this.state.dashboardItems.filter(function(item) {
+        this.state.dashboardItems = this.state.dashboardItems.filter(function (item) {
             return item.type !== type;
         });
-        
+
         // Verificar si se eliminaron elementos
         if (initialLength === this.state.dashboardItems.length) {
             this.showNotification('No se encontraron elementos de tipo ' + type, 'warning');
@@ -907,7 +894,7 @@ class DashboardEditor {
             this.saveState();
             this.showNotification('Elementos de tipo ' + type + ' eliminados correctamente');
         }
-        
+
         // Resetear selector de eliminación
         if (this.sidebarDelete) {
             this.sidebarDelete.value = '';
@@ -920,20 +907,20 @@ class DashboardEditor {
      */
     handleManagement(action) {
         var actions = {
-            saveDashboard: function() {
+            saveDashboard: function () {
                 this.saveState();
                 this.showNotification('Dashboard guardado correctamente');
             }.bind(this),
-            loadDashboard: function() {
+            loadDashboard: function () {
                 this.loadState();
                 this.renderDashboard();
                 this.renderCanvas();
                 this.showNotification('Dashboard cargado correctamente');
             }.bind(this),
-            previewMode: function() {
+            previewMode: function () {
                 this.togglePreview();
             }.bind(this),
-            exportData: function() {
+            exportData: function () {
                 this.exportData();
             }.bind(this)
         };
@@ -957,14 +944,14 @@ class DashboardEditor {
      */
     switchProject(projectId) {
         this.state.currentProject = projectId;
-        
+
         // Actualizar estado visual de los botones de proyecto
         if (this.projects) {
-            this.projects.forEach(function(btn) {
+            this.projects.forEach(function (btn) {
                 btn.classList.toggle('active', btn.dataset.project === projectId);
             });
         }
-        
+
         // Cargar y renderizar el nuevo proyecto
         this.loadState();
         this.renderDashboard();
@@ -977,7 +964,7 @@ class DashboardEditor {
      * @param {number} id - ID del elemento a editar
      */
     editItem(id) {
-        var item = this.state.dashboardItems.find(function(i) {
+        var item = this.state.dashboardItems.find(function (i) {
             return i.id === id;
         });
         if (!item) {
@@ -1002,7 +989,7 @@ class DashboardEditor {
      * @param {number} id - ID del elemento a eliminar
      */
     removeItem(id) {
-        var item = this.state.dashboardItems.find(function(i) {
+        var item = this.state.dashboardItems.find(function (i) {
             return i.id === id;
         });
         if (!item) {
@@ -1014,7 +1001,7 @@ class DashboardEditor {
         if (!confirm('¿Estás seguro de que quieres eliminar este elemento ' + item.type + '?')) return;
 
         // Filtrar elemento eliminado
-        this.state.dashboardItems = this.state.dashboardItems.filter(function(i) {
+        this.state.dashboardItems = this.state.dashboardItems.filter(function (i) {
             return i.id !== id;
         });
         this.updateCanvasItems();
@@ -1032,7 +1019,7 @@ class DashboardEditor {
         if (this.workspace) {
             this.workspace.classList.toggle('preview-mode', this.state.isPreviewMode);
         }
-        
+
         this.showNotification(
             this.state.isPreviewMode ? 'Modo vista previa activado' : 'Modo vista previa desactivado'
         );
@@ -1048,7 +1035,7 @@ class DashboardEditor {
                 exportDate: new Date().toISOString(),
                 items: this.state.dashboardItems
             };
-            
+
             // Crear y descargar archivo
             var blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
             var url = URL.createObjectURL(blob);
@@ -1059,7 +1046,7 @@ class DashboardEditor {
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
-            
+
             this.showNotification('Datos exportados correctamente');
         } catch (error) {
             console.error('Error exporting data:', error);
@@ -1074,7 +1061,7 @@ class DashboardEditor {
      */
     showNotification(message, type) {
         if (type === undefined) type = 'success';
-        
+
         // Crear elemento de notificación
         var notification = document.createElement('div');
         notification.className = 'notification ' + type;
@@ -1084,7 +1071,7 @@ class DashboardEditor {
         document.body.appendChild(notification);
 
         // Eliminar notificación después de 3 segundos
-        setTimeout(function() {
+        setTimeout(function () {
             if (notification.parentNode) {
                 notification.parentNode.removeChild(notification);
             }
@@ -1120,7 +1107,7 @@ class DashboardEditor {
  * Inicializa el DashboardEditor cuando el DOM está listo
  */
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         try {
             window.dashboardEditor = new DashboardEditor();
         } catch (error) {

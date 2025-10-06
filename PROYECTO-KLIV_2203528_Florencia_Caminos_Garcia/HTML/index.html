@@ -25,8 +25,9 @@
         </div>
 
         <div id="search-Section">
-            <input type="text" id="searchBox" placeholder="Buscar en el dashboard...">
-            <button id="searchButton">Buscar</button>
+            <input type="text" id="searchBox" placeholder="Buscar en el dashboard..."
+                onkeypress="handleSearchInput(event)">
+            <button id="searchButton" onclick="handleSearch()">Buscar</button>
             <div id="search-suggestions" class="search-suggestions"></div>
 
             <div id="short-Term-Error">
@@ -43,26 +44,31 @@
     </header>
 
     <aside id="sidebar">
-        <h3>Inicio</h2>
+        <h3>Inicio</h3>
         <nav>
             <ul id="sidebar-menu">
                 <li id="menu-dashboard" class="sidebar-item active">
-                    <a href="#Dashboard"><i class="fas fa-home"></i><span>Dashboard</span></a>
+                    <a href="#Dashboard" onclick="navigateTo('Dashboard')"><i
+                            class="fas fa-home"></i><span>Dashboard</span></a>
                 </li>
                 <li id="menu-projects" class="sidebar-item">
-                    <a href="#Projects"><i class="fas fa-folder"></i><span>Proyectos</span></a>
+                    <a href="#Projects" onclick="navigateTo('Projects')"><i
+                            class="fas fa-folder"></i><span>Proyectos</span></a>
                 </li>
                 <li id="menu-tasks" class="sidebar-item">
-                    <a href="#Tasks"><i class="fas fa-tasks"></i><span>Tareas</span></a>
+                    <a href="#Tasks" onclick="navigateTo('Tasks')"><i class="fas fa-tasks"></i><span>Tareas</span></a>
                 </li>
                 <li id="menu-gallery" class="sidebar-item">
-                    <a href="#Gallery"><i class="fas fa-images"></i><span>Galería</span></a>
+                    <a href="#Gallery" onclick="navigateTo('Gallery')"><i
+                            class="fas fa-images"></i><span>Galería</span></a>
                 </li>
                 <li id="menu-settings" class="sidebar-item">
-                    <a href="#Settings"><i class="fas fa-cog"></i><span>Configuración</span></a>
+                    <a href="#Settings" onclick="navigateTo('Settings')"><i
+                            class="fas fa-cog"></i><span>Configuración</span></a>
                 </li>
                 <li id="menu-help" class="sidebar-item">
-                    <a href="#Help"><i class="fas fa-question-circle"></i><span>Ayuda</span></a>
+                    <a href="#Help" onclick="navigateTo('Help')"><i
+                            class="fas fa-question-circle"></i><span>Ayuda</span></a>
                 </li>
             </ul>
         </nav>
@@ -74,9 +80,12 @@
 
             <div class="gallery-controls">
                 <div class="filter-buttons">
-                    <button class="filter-btn active" data-filter="all">Todas</button>
-                    <button class="filter-btn" data-filter="popular">Populares</button>
-                    <button class="filter-btn" data-filter="liked">Me gustan</button>
+                    <button class="filter-btn active" onclick="EnhancedLikeSystem.handleFilterClick(this)"
+                        data-filter="all">Todas</button>
+                    <button class="filter-btn" onclick="EnhancedLikeSystem.handleFilterClick(this)"
+                        data-filter="popular">Populares</button>
+                    <button class="filter-btn" onclick="EnhancedLikeSystem.handleFilterClick(this)"
+                        data-filter="liked">Me gustan</button>
                 </div>
                 <div class="stats-display" id="gallery-stats">
                     <strong>10</strong> imágenes •
@@ -89,18 +98,19 @@
             </div>
 
             <div class="file-upload">
-                <button id="open-editor" class="btn-primary">Ir al Dashboard Editor</button>
+                <button id="open-editor" class="btn-primary"
+                    onclick="window.location.href='../HTML/Dashboard_Editor.html'">Ir al Dashboard Editor</button>
                 <div id="editor-error">
                     <p role="alert" class="error-msg">⚠️ No se pudo abrir el editor, revise la conexión.</p>
                 </div>
             </div>
         </section>
 
-
         <section id="Projects">
             <h2>Proyectos</h2>
 
-            <form id="add-project-content" aria-label="Agregar contenido a proyecto">
+            <form id="add-project-content" aria-label="Agregar contenido a proyecto"
+                onsubmit="handleProjectSubmit(event)">
                 <fieldset>
                     <legend>Agregar contenido a proyecto</legend>
                     <div class="form-group">
@@ -133,8 +143,8 @@
                     </div>
                     <div class="button-group">
                         <button type="submit" class="btn-primary">Agregar</button>
-                        <button type="button" class="btn-secondary" id="clear-form">Limpiar</button>
-                        <button type="button" class="btn-tertiary" id="preview-content">Vista previa</button>
+                        <button type="button" class="btn-secondary" onclick="clearProjectForm()">Limpiar</button>
+                        <button type="button" class="btn-tertiary" onclick="previewProject()">Vista previa</button>
                     </div>
                 </fieldset>
             </form>
@@ -228,8 +238,8 @@
             <h2>Tareas</h2>
 
             <div class="task-stats">
-            <p>Progreso general: <progress value="0" max="100">0%</progress></p>
-            <p>Tareas completadas: <span class="task-counter">0</span>/<span id="total-tasks">20</span></p>
+                <p>Progreso general: <progress value="0" max="100">0%</progress></p>
+                <p>Tareas completadas: <span class="task-counter">0</span>/<span id="total-tasks">20</span></p>
             </div>
 
             <table id="tasks-table">
@@ -246,7 +256,7 @@
                     <tr>
                         <td>
                             <label>
-                                <input type="checkbox" class="task-checkbox">
+                                <input type="checkbox" class="task-checkbox" onchange="handleTaskChange(this)">
                                 Completada
                             </label>
                         </td>
@@ -258,7 +268,7 @@
                     <tr>
                         <td>
                             <label>
-                                <input type="checkbox" class="task-checkbox">
+                                <input type="checkbox" class="task-checkbox" onchange="handleTaskChange(this)">
                                 Completada
                             </label>
                         </td>
@@ -270,7 +280,7 @@
                     <tr>
                         <td>
                             <label>
-                                <input type="checkbox" class="task-checkbox">
+                                <input type="checkbox" class="task-checkbox" onchange="handleTaskChange(this)">
                                 Completada
                             </label>
                         </td>
@@ -282,7 +292,7 @@
                     <tr>
                         <td>
                             <label>
-                                <input type="checkbox" class="task-checkbox">
+                                <input type="checkbox" class="task-checkbox" onchange="handleTaskChange(this)">
                                 Completada
                             </label>
                         </td>
@@ -294,7 +304,7 @@
                     <tr>
                         <td>
                             <label>
-                                <input type="checkbox" class="task-checkbox">
+                                <input type="checkbox" class="task-checkbox" onchange="handleTaskChange(this)">
                                 Completada
                             </label>
                         </td>
@@ -307,8 +317,9 @@
             </table>
 
             <div class="task-actions">
-                <button class="btn-primary">➕ Añadir tarea</button>
-                <button class="btn-danger">❌ Quitar tareas completadas</button>
+                <button class="btn-primary" onclick="window.location.href='../HTML/Task_Mannager.html'">➕ Añadir
+                    tarea</button>
+                <button class="btn-danger" onclick="removeCompletedTasks()">❌ Quitar tareas completadas</button>
             </div>
         </section>
 
@@ -317,16 +328,20 @@
 
             <div class="gallery-controls">
                 <div class="filter-buttons">
-                    <button class="filter-btn active" data-filter="all">Todas</button>
-                    <button class="filter-btn" data-filter="recent">Recientes</button>
-                    <button class="filter-btn" data-filter="favorites">Favoritas</button>
+                    <button class="filter-btn active" onclick="handleGalleryFilterClick(this)"
+                        data-filter="all">Todas</button>
+                    <button class="filter-btn" onclick="handleGalleryFilterClick(this)"
+                        data-filter="recent">Recientes</button>
+                    <button class="filter-btn" onclick="handleGalleryFilterClick(this)"
+                        data-filter="favorites">Favoritas</button>
                 </div>
                 <div class="upload-controls">
-                    <input type="file" id="file-upload" accept="image/*">
-                    <button class="btn-primary" id="upload-trigger">
+                    <input type="file" id="file-upload" accept="image/*" onchange="handleFileSelect(event)"
+                        style="display: none;">
+                    <button class="btn-primary" id="upload-trigger" onclick="triggerFileUpload()">
                         <i class="fas fa-cloud-upload-alt"></i> Subir Fotos
                     </button>
-                    <button class="btn-secondary" id="clear-gallery">
+                    <button class="btn-secondary" id="clear-gallery" onclick="clearGallery()">
                         <i class="fas fa-trash"></i> Limpiar Galería
                     </button>
                 </div>
@@ -369,12 +384,10 @@
                             <img src="../Imagenes/1_Ropa.jpeg" alt="Prenda de ropa" loading="lazy">
                             <div class="photo-overlay">
                                 <div class="photo-actions">
-                                    <button class="photo-action-btn favorite" data-photo-id="1">
-                                        <i class="fas fa-heart"></i>
-                                    </button>
-                                    <button class="photo-action-btn delete" data-photo-id="1">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
+                                    <button class="photo-action-btn favorite" onclick="toggleFavorite(1)"
+                                        data-photo-id="1">
+                                        <button class="photo-action-btn delete" onclick="deletePhoto(1)"
+                                            data-photo-id="1">
                                 </div>
                             </div>
                         </div>
@@ -392,10 +405,12 @@
                             <img src="../Imagenes/2_Codigo.jpeg" alt="Ejemplo de código" loading="lazy">
                             <div class="photo-overlay">
                                 <div class="photo-actions">
-                                    <button class="photo-action-btn favorite" data-photo-id="2">
+                                    <button class="photo-action-btn favorite" onclick="GalleryManager.toggleFavorite(2)"
+                                        data-photo-id="2">
                                         <i class="fas fa-heart"></i>
                                     </button>
-                                    <button class="photo-action-btn delete" data-photo-id="2">
+                                    <button class="photo-action-btn delete" onclick="GalleryManager.deletePhoto(2)"
+                                        data-photo-id="2">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </div>
@@ -415,10 +430,12 @@
                             <img src="../Imagenes/3_Naturaleza.jpeg" alt="Naturaleza" loading="lazy">
                             <div class="photo-overlay">
                                 <div class="photo-actions">
-                                    <button class="photo-action-btn favorite" data-photo-id="3">
+                                    <button class="photo-action-btn favorite" onclick="GalleryManager.toggleFavorite(3)"
+                                        data-photo-id="3">
                                         <i class="fas fa-heart"></i>
                                     </button>
-                                    <button class="photo-action-btn delete" data-photo-id="3">
+                                    <button class="photo-action-btn delete" onclick="GalleryManager.deletePhoto(3)"
+                                        data-photo-id="3">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </div>
@@ -438,10 +455,12 @@
                             <img src="../Imagenes/4_Libros.jpeg" alt="Libro Recomendado" loading="lazy">
                             <div class="photo-overlay">
                                 <div class="photo-actions">
-                                    <button class="photo-action-btn favorite" data-photo-id="4">
+                                    <button class="photo-action-btn favorite" onclick="GalleryManager.toggleFavorite(4)"
+                                        data-photo-id="4">
                                         <i class="fas fa-heart"></i>
                                     </button>
-                                    <button class="photo-action-btn delete" data-photo-id="4">
+                                    <button class="photo-action-btn delete" onclick="GalleryManager.deletePhoto(4)"
+                                        data-photo-id="4">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </div>
@@ -461,10 +480,12 @@
                             <img src="../Imagenes/5_Comida.jpeg" alt="Recetas" loading="lazy">
                             <div class="photo-overlay">
                                 <div class="photo-actions">
-                                    <button class="photo-action-btn favorite" data-photo-id="5">
+                                    <button class="photo-action-btn favorite" onclick="GalleryManager.toggleFavorite(5)"
+                                        data-photo-id="5">
                                         <i class="fas fa-heart"></i>
                                     </button>
-                                    <button class="photo-action-btn delete" data-photo-id="5">
+                                    <button class="photo-action-btn delete" onclick="GalleryManager.deletePhoto(5)"
+                                        data-photo-id="5">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </div>
@@ -484,10 +505,12 @@
                             <img src="../Imagenes/6_Decoracion.jpeg" alt="Ideas de decoración interior" loading="lazy">
                             <div class="photo-overlay">
                                 <div class="photo-actions">
-                                    <button class="photo-action-btn favorite" data-photo-id="6">
+                                    <button class="photo-action-btn favorite" onclick="GalleryManager.toggleFavorite(6)"
+                                        data-photo-id="6">
                                         <i class="fas fa-heart"></i>
                                     </button>
-                                    <button class="photo-action-btn delete" data-photo-id="6">
+                                    <button class="photo-action-btn delete" onclick="GalleryManager.deletePhoto(6)"
+                                        data-photo-id="6">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </div>
@@ -509,122 +532,124 @@
             <h2>⚙️ Configuración</h2>
 
             <div class="settings-grid">
-            <div class="card">
-                <h3>Perfil</h3>
-                <form id="profile-form" aria-label="Configuración de perfil">
-                    <fieldset>
-                        <legend>Datos personales</legend>
+                <div class="card">
+                    <h3>Perfil</h3>
+                    <form id="profile-form" aria-label="Configuración de perfil" onsubmit="handleSettingsSubmit(event)">
+                        <fieldset>
+                            <legend>Datos personales</legend>
 
-                        <div class="form-group">
-                            <label for="user-photo">Foto de perfil:</label>
-                            <input id="user-photo" name="user-photo" type="file" accept="image/*">
-                            <small role="alert" class="error-msg">Debe subir una imagen de perfil.</small>
-                        </div>
+                            <div class="form-group">
+                                <label for="user-photo">Foto de perfil:</label>
+                                <input id="user-photo" name="user-photo" type="file" accept="image/*">
+                                <small role="alert" class="error-msg">Debe subir una imagen de perfil.</small>
+                            </div>
 
-                        <div class="form-group">
-                            <label for="settings-user-name">Nombre:</label>
-                            <input id="settings-user-name" name="user-name" type="text" value="Flor"
-                                placeholder="Ingrese su nombre" maxlength="50">
-                            <small role="alert" class="error-msg">Solo letras y espacios (3 a 50
-                                caracteres).</small>
-                            <span class="char-counter"></span>
-                        </div>
+                            <div class="form-group">
+                                <label for="settings-user-name">Nombre:</label>
+                                <input id="settings-user-name" name="user-name" type="text" value="Flor"
+                                    placeholder="Ingrese su nombre" maxlength="50">
+                                <small role="alert" class="error-msg">Solo letras y espacios (3 a 50
+                                    caracteres).</small>
+                                <span class="char-counter"></span>
+                            </div>
 
-                        <div class="form-group">
-                            <label for="user-email">Email:</label>
-                            <input id="user-email" name="user-email" type="email" value="flor@ejemplo.com"
-                                placeholder="Ingrese su email">
-                            <small role="alert" class="error-msg">Ingrese un correo válido
-                                (ejemplo@mail.com).</small>
-                        </div>
-                    </fieldset>
-                    <button type="submit">Guardar Perfil</button>
-                </form>
-            </div>
+                            <div class="form-group">
+                                <label for="user-email">Email:</label>
+                                <input id="user-email" name="user-email" type="email" value="flor@ejemplo.com"
+                                    placeholder="Ingrese su email">
+                                <small role="alert" class="error-msg">Ingrese un correo válido
+                                    (ejemplo@mail.com).</small>
+                            </div>
+                        </fieldset>
+                        <button type="submit">Guardar Perfil</button>
+                    </form>
+                </div>
 
-            <div class="card">
-                <h3>Preferencias</h3>
-                <form id="preferences-form" aria-label="Configuración de preferencias">
-                    <fieldset>
-                        <legend>Opciones de usuario</legend>
+                <div class="card">
+                    <h3>Preferencias</h3>
+                    <form id="preferences-form" aria-label="Configuración de preferencias"
+                        onsubmit="handleSettingsSubmit(event)">
+                        <fieldset>
+                            <legend>Opciones de usuario</legend>
 
-                        <div class="form-group">
-                            <label for="notif">Notificaciones:</label>
-                            <select id="notif" name="notif">
-                                <option value="on" selected>Activadas</option>
-                                <option value="off">Desactivadas</option>
-                            </select>
-                            <small role="alert" class="error-msg">Debe seleccionar una opción.</small>
-                        </div>
+                            <div class="form-group">
+                                <label for="notif">Notificaciones:</label>
+                                <select id="notif" name="notif">
+                                    <option value="on" selected>Activadas</option>
+                                    <option value="off">Desactivadas</option>
+                                </select>
+                                <small role="alert" class="error-msg">Debe seleccionar una opción.</small>
+                            </div>
 
-                        <div class="form-group">
-                            <label for="lang">Idioma:</label>
-                            <select id="lang" name="lang">
-                                <option value="es" selected>Español</option>
-                                <option value="en">Inglés</option>
-                                <option value="pt">Portugués</option>
-                            </select>
-                            <small role="alert" class="error-msg">Seleccione un idioma válido.</small>
-                        </div>
+                            <div class="form-group">
+                                <label for="lang">Idioma:</label>
+                                <select id="lang" name="lang">
+                                    <option value="es" selected>Español</option>
+                                    <option value="en">Inglés</option>
+                                    <option value="pt">Portugués</option>
+                                </select>
+                                <small role="alert" class="error-msg">Seleccione un idioma válido.</small>
+                            </div>
 
-                        <div class="form-group">
-                            <label for="privacy">Privacidad:</label>
-                            <select id="privacy" name="privacy">
-                                <option value="public" selected>Pública</option>
-                                <option value="private">Privada</option>
-                                <option value="team">Solo equipo</option>
-                            </select>
-                            <small role="alert" class="error-msg">Elija un nivel de privacidad.</small>
-                        </div>
-                    </fieldset>
-                    <button type="submit">Guardar Preferencias</button>
-                </form>
-            </div>
+                            <div class="form-group">
+                                <label for="privacy">Privacidad:</label>
+                                <select id="privacy" name="privacy">
+                                    <option value="public" selected>Pública</option>
+                                    <option value="private">Privada</option>
+                                    <option value="team">Solo equipo</option>
+                                </select>
+                                <small role="alert" class="error-msg">Elija un nivel de privacidad.</small>
+                            </div>
+                        </fieldset>
+                        <button type="submit">Guardar Preferencias</button>
+                    </form>
+                </div>
 
-            <div class="card">
-                <h3>Seguridad</h3>
-                <form id="security-form" aria-label="Configuración de seguridad">
-                    <fieldset>
-                        <legend>Credenciales</legend>
+                <div class="card">
+                    <h3>Seguridad</h3>
+                    <form id="security-form" aria-label="Configuración de seguridad"
+                        onsubmit="handleSettingsSubmit(event)">
+                        <fieldset>
+                            <legend>Credenciales</legend>
 
-                        <div class="form-group">
-                            <label for="user-password">Nueva contraseña:</label>
-                            <input id="user-password" name="user-password" type="password"
-                                placeholder="Ingrese nueva contraseña" maxlength="20">
-                            <small role="alert" class="error-msg">Entre 6 y 20 caracteres.</small>
-                            <span class="char-counter"></span>
-                        </div>
+                            <div class="form-group">
+                                <label for="user-password">Nueva contraseña:</label>
+                                <input id="user-password" name="user-password" type="password"
+                                    placeholder="Ingrese nueva contraseña" maxlength="20">
+                                <small role="alert" class="error-msg">Entre 6 y 20 caracteres.</small>
+                                <span class="char-counter"></span>
+                            </div>
 
-                        <div class="form-group">
-                            <label for="confirm-password">Confirmar contraseña:</label>
-                            <input id="confirm-password" name="confirm-password" type="password"
-                                placeholder="Confirme la contraseña" maxlength="20">
-                            <small role="alert" class="error-msg">Repita la contraseña para confirmación.</small>
-                            <span class="char-counter"></span>
-                        </div>
+                            <div class="form-group">
+                                <label for="confirm-password">Confirmar contraseña:</label>
+                                <input id="confirm-password" name="confirm-password" type="password"
+                                    placeholder="Confirme la contraseña" maxlength="20" onblur="validatePassword()">
+                                <small role="alert" class="error-msg">Repita la contraseña para confirmación.</small>
+                                <span class="char-counter"></span>
+                            </div>
 
-                        <div class="form-group">
-                            <label for="security-question">Pregunta de seguridad:</label>
-                            <select id="security-question" name="security-question">
-                                <option value="" disabled selected>Seleccionar...</option>
-                                <option value="pet">¿Nombre de tu primera mascota?</option>
-                                <option value="school">¿Nombre de tu escuela primaria?</option>
-                                <option value="city">¿Ciudad donde naciste?</option>
-                            </select>
-                            <small role="alert" class="error-msg">Seleccione una pregunta de seguridad.</small>
-                        </div>
+                            <div class="form-group">
+                                <label for="security-question">Pregunta de seguridad:</label>
+                                <select id="security-question" name="security-question">
+                                    <option value="" disabled selected>Seleccionar...</option>
+                                    <option value="pet">¿Nombre de tu primera mascota?</option>
+                                    <option value="school">¿Nombre de tu escuela primaria?</option>
+                                    <option value="city">¿Ciudad donde naciste?</option>
+                                </select>
+                                <small role="alert" class="error-msg">Seleccione una pregunta de seguridad.</small>
+                            </div>
 
-                        <div class="form-group">
-                            <label for="security-answer">Respuesta:</label>
-                            <input id="security-answer" name="security-answer" type="text"
-                                placeholder="Ingrese su respuesta" maxlength="50">
-                            <small role="alert" class="error-msg">La respuesta es obligatoria.</small>
-                            <span class="char-counter"></span>
-                        </div>
-                    </fieldset>
-                    <button type="submit">Guardar Seguridad</button>
-                </form>
-            </div>
+                            <div class="form-group">
+                                <label for="security-answer">Respuesta:</label>
+                                <input id="security-answer" name="security-answer" type="text"
+                                    placeholder="Ingrese su respuesta" maxlength="50">
+                                <small role="alert" class="error-msg">La respuesta es obligatoria.</small>
+                                <span class="char-counter"></span>
+                            </div>
+                        </fieldset>
+                        <button type="submit">Guardar Seguridad</button>
+                    </form>
+                </div>
             </div>
         </section>
 
