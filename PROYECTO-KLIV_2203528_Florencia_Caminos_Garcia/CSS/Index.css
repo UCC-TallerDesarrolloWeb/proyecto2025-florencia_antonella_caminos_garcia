@@ -141,7 +141,7 @@ body {
     color: rgba(255, 255, 255, 0.9);
     font-size: 1rem;
     font-weight: 500;
-    letter-spacing: 0.5px;
+    letter-spacing: 1px;
 }
 
 #search-Section {
@@ -216,12 +216,6 @@ body {
 .suggestion-item:hover {
     background: linear-gradient(135deg, var(--color-primario), var(--color-secundario));
     color: white;
-}
-
-.search-highlight {
-    background: linear-gradient(135deg, #ffeaa7, #fab1a0);
-    border-radius: 4px;
-    padding: 2px 4px;
 }
 
 #user-info {
@@ -373,20 +367,6 @@ section h2 {
     margin: 2rem 0;
 }
 
-.image-card {
-    background: white;
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-    overflow: hidden;
-    position: relative;
-    transition: var(--transition);
-}
-
-.image-card:hover {
-    box-shadow: var(--shadow-hover);
-    transform: translateY(-8px);
-}
-
 .image-container {
     position: relative;
     overflow: hidden;
@@ -443,11 +423,6 @@ section h2 {
     background: white;
     box-shadow: var(--shadow-hover);
     transform: scale(1.1);
-}
-
-.like-btn.liked {
-    background: #ff6b6b;
-    animation: likePulse 0.6s ease;
 }
 
 .like-icon {
@@ -757,20 +732,6 @@ select:focus {
     width: 100%;
 }
 
-.photo-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, rgba(92, 167, 219, 0.85), rgba(86, 36, 224, 0.85));
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    transition: var(--transition);
-}
-
 .personal-photo:hover .photo-overlay {
     opacity: 1;
 }
@@ -826,12 +787,6 @@ select:focus {
     transform: scale(1.15);
 }
 
-.photo-action-btn.favorite.liked {
-    background: #ff6b6b;
-    color: white;
-    animation: likePulse 0.6s ease;
-}
-
 .photo-action-btn.delete:hover {
     background: #ff6b6b;
     color: white;
@@ -874,12 +829,6 @@ select:focus {
     background: rgba(92, 167, 219, 0.05);
 }
 
-.upload-area.drag-over {
-    border-color: var(--color-primario);
-    background: rgba(92, 167, 219, 0.1);
-    transform: scale(1.02);
-}
-
 .upload-placeholder i {
     font-size: 3rem;
     color: var(--color-primario);
@@ -917,14 +866,6 @@ select:focus {
     gap: 1rem;
     grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
     margin-bottom: 1.5rem;
-}
-
-.preview-item {
-    position: relative;
-    border-radius: var(--radius-sm);
-    overflow: hidden;
-    padding-bottom: 100%;
-    /* Cuadrados */
 }
 
 .preview-item img {
@@ -994,33 +935,8 @@ select:focus {
     font-weight: 600;
 }
 
-.personal-photo.favorite {
-    border: 2px solid #ff6b6b;
-}
-
 .personal-photo.favorite .photo-name {
     color: #ff6b6b;
-}
-
-.photo-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.9);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 10000;
-    opacity: 0;
-    visibility: hidden;
-    transition: var(--transition);
-}
-
-.photo-modal.active {
-    opacity: 1;
-    visibility: visible;
 }
 
 .modal-content {
@@ -1034,30 +950,6 @@ select:focus {
     max-height: 100%;
     border-radius: var(--radius);
     box-shadow: var(--shadow-lg);
-}
-
-.modal-close {
-    position: absolute;
-    top: -40px;
-    right: 0;
-    background: rgba(255, 255, 255, 0.2);
-    border: none;
-    border-radius: 50%;
-    color: white;
-    cursor: pointer;
-    font-size: 1.5rem;
-    height: 40px;
-    width: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: var(--transition);
-    backdrop-filter: blur(10px);
-}
-
-.modal-close:hover {
-    background: rgba(255, 255, 255, 0.3);
-    transform: rotate(90deg);
 }
 
 .projects-grid {
@@ -1125,11 +1017,6 @@ select:focus {
     transform: scale(1.2);
 }
 
-.task-completed {
-    opacity: 0.6;
-    text-decoration: line-through;
-}
-
 .task-actions {
     display: flex;
     gap: 1rem;
@@ -1143,57 +1030,12 @@ select:focus {
     border: none;
 }
 
-.toast {
-    border-radius: var(--radius);
-    box-shadow: var(--shadow-lg);
-    color: white;
-    padding: 1rem 1.5rem;
-    position: fixed;
-    right: 2rem;
-    top: 2rem;
-    z-index: 10000;
-    animation: slideInRight 0.5s ease;
-}
-
-.toast-success {
-    background: linear-gradient(135deg, var(--color-exito), #27ae60);
-}
-
-.toast-error {
-    background: linear-gradient(135deg, var(--color-error), #c0392b);
-}
-
-.save-indicator {
-    background: linear-gradient(135deg, var(--color-exito), #27ae60);
-    border-radius: var(--radius);
-    bottom: 2rem;
-    box-shadow: var(--shadow);
-    color: white;
-    padding: 1rem 1.5rem;
-    position: fixed;
-    right: 2rem;
-    z-index: 1000;
-}
-
 .error-msg {
     color: var(--color-error);
     display: block;
     font-size: 0.85rem;
     font-weight: 600;
     margin-top: 0.5rem;
-}
-
-.dark-mode {
-    background: linear-gradient(135deg, #1a1a1a 0%, #2d3748 100%);
-    color: #e2e8f0;
-}
-
-.dark-mode section,
-.dark-mode .card,
-.dark-mode .image-card,
-.dark-mode .projects-grid article {
-    background: #2d3748;
-    color: #e2e8f0;
 }
 
 .dark-mode input,
@@ -1219,9 +1061,6 @@ select:focus {
         transition: transform 0.3s ease;
     }
 
-    #sidebar.mobile-open {
-        transform: translateX(0);
-    }
 }
 
 @media (max-width: 768px) {
@@ -1283,42 +1122,6 @@ select:focus {
     }
 }
 
-.text-center {
-    text-align: center;
-}
-
-.text-left {
-    text-align: left;
-}
-
-.text-right {
-    text-align: right;
-}
-
-.mb-1 {
-    margin-bottom: 1rem;
-}
-
-.mb-2 {
-    margin-bottom: 2rem;
-}
-
-.mt-1 {
-    margin-top: 1rem;
-}
-
-.mt-2 {
-    margin-top: 2rem;
-}
-
-.p-1 {
-    padding: 1rem;
-}
-
-.p-2 {
-    padding: 2rem;
-}
-
 article,
 figure,
 .card,
@@ -1329,16 +1132,6 @@ figure,
 #security-form fieldset {
     animation: fadeInUp 0.6s ease-out forwards;
     border: none;
-}
-
-.particle {
-    background: linear-gradient(135deg, #ff6b6b, #ee5a24);
-    border-radius: 50%;
-    height: 8px;
-    opacity: 0;
-    position: absolute;
-    width: 8px;
-    z-index: 20;
 }
 
 .particles-container {

@@ -162,7 +162,7 @@
                     <button class="btn-quick-add" data-project="personal" data-status="inprogress"
                         onclick="window.taskManager.addTask({title: 'Nueva Tarea', project: 'personal', status: 'inprogress'})">+</button>
                 </div>
-                <ul id="inprogress-tasks" class="task-list" data-status="inprogress"></ul>
+                <ul id="inprogress_tasks" class="task-list" data-status="inprogress"></ul>
             </section>
 
             <section class="column" id="done" data-status="done">
@@ -193,7 +193,7 @@
         <section id="task-form" class="modal">
             <div class="modal-content">
                 <h2>Crear / Editar Tarea</h2>
-                <form id="formTask" onsubmit="window.taskManager.handleTaskFormSubmit(event)">
+                <form id="formTask" onsubmit="window.taskManager.handleTaskFormSubmit()">
                     <input type="hidden" id="taskId" name="taskId">
 
                     <label for="taskProject">Proyecto:</label>
@@ -246,7 +246,7 @@
                     <div id="task-comments">
                         <h3>Comentarios</h3>
                         <div id="comments-list"></div>
-                        <textarea id="new-comment" placeholder="Escribe un comentario..." maxlength="200"></textarea>
+                        <label for="new-comment"></label><textarea id="new-comment" placeholder="Escribe un comentario..." maxlength="200"></textarea>
                         <button type="button" id="add-comment" onclick="window.taskManager.addCommentToTask()">Agregar
                             comentario</button>
                     </div>
@@ -268,7 +268,7 @@
     <div id="project-modal" class="modal">
         <div class="modal-content">
             <h3>Nuevo Proyecto</h3>
-            <input type="text" id="new-project-name" placeholder="Nombre del proyecto">
+            <label for="new-project-name"></label><input type="text" id="new-project-name" placeholder="Nombre del proyecto">
             <div class="modal-actions">
                 <button id="save-project" onclick="window.taskManager.createProjectFromModal()">Guardar</button>
                 <button id="cancel-project" onclick="window.taskManager.closeProjectModal()">Cancelar</button>

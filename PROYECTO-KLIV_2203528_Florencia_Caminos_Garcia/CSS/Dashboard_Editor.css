@@ -65,22 +65,6 @@ body {
   position: relative;
 }
 
-#sidebar-edit {
-  width: var(--sidebar-width);
-  background: var(--gradient-tarjeta);
-  padding: var(--gap);
-  display: flex;
-  flex-direction: column;
-  gap: var(--gap);
-  box-shadow: var(--shadow-medium);
-  border-right: 1px solid var(--color-border);
-  position: sticky;
-  top: 0;
-  height: 100vh;
-  overflow-y: auto;
-  z-index: 100;
-}
-
 .sidebar-header {
   text-align: center;
   padding-bottom: 20px;
@@ -170,8 +154,7 @@ body {
 .project-btn {
   padding: 12px 16px;
   border-radius: var(--radius);
-  border: none;
-  cursor: pointer;
+    cursor: pointer;
   background: var(--gradient-tarjeta);
   color: var(--color-texto);
   font-size: 0.95rem;
@@ -198,42 +181,6 @@ body {
   box-shadow: var(--shadow-heavy);
 }
 
-.tool-select,
-#sidebar-add-options,
-#sidebar-delete-options,
-#management {
-  width: 100%;
-  padding: 12px 16px;
-  border-radius: var(--radius);
-  border: 1px solid var(--color-border);
-  background: var(--gradient-tarjeta);
-  font-family: inherit;
-  font-size: 0.95rem;
-  transition: all var(--transition);
-  box-shadow: var(--shadow-inset);
-}
-
-.tool-select:focus,
-#sidebar-add-options:focus,
-#sidebar-delete-options:focus,
-#management:focus {
-  outline: none;
-  border-color: var(--color-primario);
-  box-shadow: 0 0 0 3px rgba(138, 43, 226, 0.2), var(--shadow-inset);
-}
-
-.filter-form {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.filter-group {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
 .filter-checkbox {
   display: flex;
   align-items: center;
@@ -253,18 +200,6 @@ body {
   flex-direction: column;
   padding: 0;
   overflow: hidden;
-}
-
-.header {
-  background: var(--gradient-tarjeta);
-  padding: 20px var(--gap);
-  box-shadow: var(--shadow-light);
-  border-bottom: 1px solid var(--color-border);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  z-index: 10;
-  width: 100%;
 }
 
 .header-controls {
@@ -309,21 +244,6 @@ body {
   flex-direction: column;
   gap: var(--gap);
   overflow: auto;
-}
-
-.canvas-panel,
-.preview-panel {
-  background: var(--gradient-tarjeta);
-  padding: 24px;
-  border-radius: var(--radius);
-  box-shadow: var(--shadow-light);
-  border: 1px solid var(--color-border);
-  transition: transform var(--transition), box-shadow var(--transition);
-}
-
-.canvas-panel:hover,
-.preview-panel:hover {
-  box-shadow: var(--shadow-medium);
 }
 
 .canvas-panel h2,
@@ -442,21 +362,6 @@ body {
   text-transform: uppercase;
 }
 
-.card-badge.alta {
-  background: var(--color-peligro);
-  color: white;
-}
-
-.card-badge.media {
-  background: var(--color-advertencia);
-  color: white;
-}
-
-.card-badge.baja {
-  background: var(--color-exito);
-  color: white;
-}
-
 .card-content {
   flex: 1;
   margin-bottom: 16px;
@@ -521,34 +426,6 @@ body {
   font-weight: 500;
 }
 
-.notification {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  padding: 16px 24px;
-  border-radius: var(--radius);
-  color: white;
-  z-index: 1000;
-  animation: slideIn 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  max-width: 320px;
-  word-wrap: break-word;
-  box-shadow: var(--shadow-heavy);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.notification.success {
-  background: rgba(16, 185, 129, 0.9);
-}
-
-.notification.warning {
-  background: rgba(245, 158, 11, 0.9);
-}
-
-.notification.error {
-  background: rgba(239, 68, 68, 0.9);
-}
-
 @keyframes slideIn {
   from {
     transform: translateX(100%);
@@ -566,16 +443,7 @@ body {
     flex-direction: column;
   }
 
-  #sidebar-edit {
-    width: 100%;
-    height: auto;
-    flex-direction: row;
-    overflow-x: auto;
-    padding: 16px;
-    position: relative;
-  }
-
-  .sidebar-section {
+    .sidebar-section {
     min-width: 250px;
     margin-bottom: 0;
     margin-right: 16px;
@@ -585,13 +453,7 @@ body {
     flex-direction: row;
   }
 
-  .header {
-    flex-direction: column;
-    gap: 16px;
-    align-items: flex-start;
-  }
-
-  .header-controls {
+    .header-controls {
     width: 100%;
     justify-content: space-between;
   }
@@ -636,16 +498,6 @@ body {
     flex-direction: column;
   }
 
-  .canvas-panel,
-  .preview-panel {
-    padding: 16px;
-  }
-
-  .notification {
-    max-width: calc(100vw - 40px);
-    right: 10px;
-    left: 10px;
-  }
 }
 
 ::-webkit-scrollbar {

@@ -138,7 +138,7 @@ class TaskManager {
      * Sistema unificado de notificaciones
      */
     setupNotificationSystem() {
-        this.notifications = new NotificationManager(this);
+        this.notifications = new NotificationManager();
 
         // Reemplazar método legacy por el nuevo sistema
         this.showNotification = (message, type = 'info', duration = 4000) => {
@@ -1313,10 +1313,9 @@ class TaskManager {
         columns.forEach(status => {
             const counter = document.querySelector(`#${status} .task-count, [data-status="${status}"] .task-count`);
             if (counter) {
-                const count = this.state.tasks.filter(
+                counter.textContent = this.state.tasks.filter(
                     task => task.project === this.state.currentProject && task.status === status
                 ).length;
-                counter.textContent = count;
             }
         });
     }
@@ -1421,27 +1420,6 @@ class TaskManager {
             </div>
         `).join('');
     }
-
-    /**
-     * Elimina comentario de tarea
-     */
-    deleteTaskComment(commentId, taskId) {
-        const task = this.getTaskById(taskId);
-        if (!task || !task.comments) return;
-
-        const commentIndex = task.comments.findIndex(
-            comment => comment.id === commentId
-        );
-
-        if (commentIndex !== -1) {
-            task.comments.splice(commentIndex, 1);
-            this.saveTasksToStorage();
-            this.renderTaskComments(task.comments);
-            this.showNotification('Comentario eliminado', 'success');
-            this.addToHistory(`Comentario eliminado de: ${task.title}`);
-        }
-    }
-
     /**
      * Alterna visibilidad de comentarios
      */
@@ -1987,8 +1965,7 @@ class TaskManager {
         setTimeout(() => {
             document.querySelectorAll('[data-goal]').forEach(btn => {
                 btn.addEventListener('click', () => {
-                    const goal = parseInt(btn.dataset.goal);
-                    document.getElementById('new-goal-input').value = goal;
+                    document.getElementById('new-goal-input').value = parseInt(btn.dataset.goal);
                 });
             });
         }, 100);
@@ -2033,8 +2010,7 @@ class TaskManager {
  * Gestor avanzado de notificaciones con animaciones y personalización
  */
 class NotificationManager {
-    constructor(taskManager) {
-        this.taskManager = taskManager;
+    constructor() {
         this.container = null;
         this.notifications = new Map();
         this.init();
@@ -2213,7 +2189,7 @@ class NotificationManager {
      * Genera un ID único para la notificación
      */
     generateNotificationId() {
-        return 'notification-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+        return 'notification-' + Date.now() + '-' + Math.random().toString(36).substring(2, 9);
     }
 
     /**
@@ -2260,7 +2236,6 @@ class NotificationManager {
      * Configura el ciclo de vida de la notificación
      */
     setupNotificationLifecycle(id, notification, duration, options) {
-        let progressInterval;
         let timeLeft = duration;
 
         if (duration > 0) {
@@ -2276,7 +2251,7 @@ class NotificationManager {
             this.addActionButton(notification, options.action);
         }
 
-        if (options.pulse) {
+        if (options.options) {
             notification.classList.add('notification-pulse');
         }
     }
@@ -2351,6 +2326,9 @@ class NotificationManager {
       margin-left: 8px;
     `;
 
+        action.handler = function () {
+
+        };
         actionButton.addEventListener('click', (e) => {
             e.stopPropagation();
             action.handler();
@@ -2429,71 +2407,6 @@ class NotificationManager {
      */
     loading(message, options = {}) {
         return this.show(message, 'loading', 0, { ...options, icon: '⏳' });
-    }
-
-    /**
-     * Actualiza notificación existente
-     */
-    update(id, updates) {
-        const notificationData = this.notifications.get(id);
-        if (!notificationData) return;
-
-        const { element } = notificationData;
-
-        if (updates.message) {
-            const messageElement = element.querySelector('.notification-message');
-            if (messageElement) {
-                messageElement.textContent = updates.message;
-            }
-        }
-
-        if (updates.type) {
-            element.className = element.className.replace(/notification-\w+/, `notification-${updates.type}`);
-        }
-
-        if (updates.icon) {
-            const iconElement = element.querySelector('.notification-icon');
-            if (iconElement) {
-                iconElement.textContent = updates.icon;
-            }
-        }
-    }
-
-    /**
-     * Elimina todas las notificaciones
-     */
-    clearAll() {
-        this.notifications.forEach((_, id) => {
-            this.remove(id);
-        });
-    }
-
-    /**
-     * Muestra notificación de tarea completada
-     */
-    taskCompleted(taskTitle, timeSpent = 0) {
-        const timeText = timeSpent > 0 ? ` en ${this.taskManager.formatTime(timeSpent)}` : '';
-        return this.success(`✅ Tarea completada: "${taskTitle}"${timeText}`, 3000, {
-            action: {
-                label: 'Deshacer',
-                handler: () => this.taskManager.undoLastAction()
-            }
-        });
-    }
-
-    /**
-     * Muestra notificación de progreso
-     */
-    progress(message, current, total, id = null) {
-        const percentage = Math.round((current / total) * 100);
-        const progressMessage = `${message} (${current}/${total} - ${percentage}%)`;
-
-        if (id && this.notifications.has(id)) {
-            this.update(id, { message: progressMessage });
-            return id;
-        } else {
-            return this.show(progressMessage, 'info', 0, { icon: '📊' });
-        }
     }
 }
 

@@ -177,12 +177,7 @@ class NotificationManager {
 // =============================================
 
 class NavigationManager {
-    /**
-     * @param {DashboardApp} dashboardApp - Instancia de la app principal
-     */
-    constructor(dashboardApp) {
-        this.app = dashboardApp;
-        this.currentSection = CONFIG.DEFAULT_SECTION;
+    constructor() {
     }
 
     /**
@@ -203,9 +198,7 @@ class NavigationManager {
         }
 
         this._updateSidebar(sectionId);
-        this.currentSection = sectionId;
-
-        // Disparar evento personalizado para notificar el cambio de sección
+// Disparar evento personalizado para notificar el cambio de sección
         window.dispatchEvent(new CustomEvent('sectionChanged', {
             detail: { sectionId }
         }));
@@ -247,11 +240,7 @@ class NavigationManager {
 // =============================================
 
 class SearchManager {
-    /**
-     * @param {NotificationManager} notificationManager - Gestor de notificaciones
-     */
-    constructor(notificationManager) {
-        this.notifications = notificationManager;
+    constructor() {
         this.setupAdvancedSearch();
     }
 
@@ -449,8 +438,7 @@ class TaskManager {
 // =============================================
 
 class EnhancedLikeSystem {
-    constructor(dashboardApp) {
-        this.dashboardApp = dashboardApp;
+    constructor() {
         this.storageKey = 'enhanced-kliv-likes';
         this.likesData = this.loadLikesData();
         this.currentFilter = 'all';
@@ -798,23 +786,6 @@ class EnhancedLikeSystem {
     }
 
     // Obtiene estadísticas detalladas
-    getStats() {
-        const totalLikes = Object.values(this.likesData)
-            .reduce((sum, data) => sum + (data.likes || 0), 0);
-
-        const likedImages = Object.values(this.likesData)
-            .filter(data => data.liked).length;
-
-        const popularImages = Object.values(this.likesData)
-            .filter(data => data.likes >= 100).length;
-
-        return {
-            totalImages: GALLERYDATA.length,
-            totalLikes,
-            likedImages,
-            popularImages
-        };
-    }
 }
 
 // =============================================
@@ -822,11 +793,7 @@ class EnhancedLikeSystem {
 // =============================================
 
 class GalleryManager {
-    /**
-     * @param {DashboardApp} dashboardApp - Instancia de la app principal
-     */
-    constructor(dashboardApp) {
-        this.dashboardApp = dashboardApp;
+    constructor() {
         this.storageKey = 'personal-gallery-data';
         this.galleryData = this.loadGalleryData();
         this.currentFilter = 'all';
@@ -1440,36 +1407,6 @@ class GalleryManager {
 
         return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
     }
-
-    /**
-     * OBTENCIÓN DE ESTADÍSTICAS - Retorna estadísticas detalladas de la galería
-     * @returns {Object} Estadísticas de la galería
-     */
-    getStats() {
-        const totalSize = this.galleryData.reduce((sum, photo) => sum + photo.size, 0);
-        const favoriteCount = this.galleryData.filter(photo => photo.favorite).length;
-        const recentCount = this.galleryData.filter(photo => {
-            const oneWeekAgo = Date.now() - (7 * 24 * 60 * 60 * 1000);
-            return photo.uploadDate > oneWeekAgo;
-        }).length;
-
-        return {
-            totalPhotos: this.galleryData.length,
-            totalSize: totalSize,
-            favoriteCount: favoriteCount,
-            recentCount: recentCount,
-            formattedSize: this.formatFileSize(totalSize)
-        };
-    }
-
-    /**
-     * EXPORTACIÓN DE DATOS - Exporta los datos de la galería para backup
-     * @returns {string} Datos en formato JSON
-     */
-    exportData() {
-        return JSON.stringify(this.galleryData, null, 2);
-    }
-
     /**
      * IMPORTACIÓN DE DATOS - Importa datos de galería desde JSON
      * @param {string} jsonData - Datos en formato JSON
@@ -1505,11 +1442,11 @@ class GalleryManager {
 class DashboardApp {
     constructor() {
         this.sections = CONFIG.SECTIONS;
-        this.navigationManager = new NavigationManager(this);
-        this.searchManager = new SearchManager(NotificationManager);
+        this.navigationManager = new NavigationManager();
+        this.searchManager = new SearchManager();
         this.taskManager = new TaskManager();
-        this.likeSystem = new EnhancedLikeSystem(this);
-        this.galleryManager = new GalleryManager(this); // Corregido: minúscula
+        this.likeSystem = new EnhancedLikeSystem();
+        this.galleryManager = new GalleryManager(); // Corregido: minúscula
         this.eventHandlers = new Map();
 
         this.init();
@@ -2036,7 +1973,7 @@ function handleSearch() {
 }
 
 // Tareas
-function handleTaskChange(checkbox) {
+function handleTaskChange() {
     if (window.dashboardApp && window.dashboardApp.taskManager) {
         // El event listener ya maneja el cambio, pero podemos forzar la actualización
         window.dashboardApp.taskManager.updateStatistics();

@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!--suppress ALL -->
 <html lang="es">
 
 <head>
@@ -25,8 +26,8 @@
         </div>
 
         <div id="search-Section">
-            <input type="text" id="searchBox" placeholder="Buscar en el dashboard..."
-                onkeypress="handleSearchInput(event)">
+            <label for="searchBox"></label><input type="text" id="searchBox" placeholder="Buscar en el dashboard..."
+                                                  onkeypress="handleSearchInput(event)">
             <button id="searchButton" onclick="handleSearch()">Buscar</button>
             <div id="search-suggestions" class="search-suggestions"></div>
 
@@ -256,7 +257,7 @@
                     <tr>
                         <td>
                             <label>
-                                <input type="checkbox" class="task-checkbox" onchange="handleTaskChange(this)">
+                                <input type="checkbox" class="task-checkbox" onchange="handleTaskChange()">
                                 Completada
                             </label>
                         </td>
@@ -268,7 +269,7 @@
                     <tr>
                         <td>
                             <label>
-                                <input type="checkbox" class="task-checkbox" onchange="handleTaskChange(this)">
+                                <input type="checkbox" class="task-checkbox" onchange="handleTaskChange()">
                                 Completada
                             </label>
                         </td>
@@ -280,7 +281,7 @@
                     <tr>
                         <td>
                             <label>
-                                <input type="checkbox" class="task-checkbox" onchange="handleTaskChange(this)">
+                                <input type="checkbox" class="task-checkbox" onchange="handleTaskChange()">
                                 Completada
                             </label>
                         </td>
@@ -292,7 +293,7 @@
                     <tr>
                         <td>
                             <label>
-                                <input type="checkbox" class="task-checkbox" onchange="handleTaskChange(this)">
+                                <input type="checkbox" class="task-checkbox" onchange="handleTaskChange()">
                                 Completada
                             </label>
                         </td>
@@ -304,7 +305,7 @@
                     <tr>
                         <td>
                             <label>
-                                <input type="checkbox" class="task-checkbox" onchange="handleTaskChange(this)">
+                                <input type="checkbox" class="task-checkbox" onchange="handleTaskChange()">
                                 Completada
                             </label>
                         </td>
@@ -384,10 +385,8 @@
                             <img src="../Imagenes/1_Ropa.jpeg" alt="Prenda de ropa" loading="lazy">
                             <div class="photo-overlay">
                                 <div class="photo-actions">
-                                    <button class="photo-action-btn favorite" onclick="toggleFavorite(1)"
-                                        data-photo-id="1">
-                                        <button class="photo-action-btn delete" onclick="deletePhoto(1)"
-                                            data-photo-id="1">
+                                    <button class="photo-action-btn favorite" onclick="toggleFavorite(1)" data-photo-id="1"></button>
+                                        <button class="photo-action-btn delete" onclick="deletePhoto(1)" data-photo-id="1"></button>
                                 </div>
                             </div>
                         </div>

@@ -1,8 +1,12 @@
+// noinspection JSObjectNullOrUndefined
+
 /**
  * Clase principal para el editor de dashboard
  * Gestiona la creación, edición y visualización de elementos del dashboard
  */
 class DashboardEditor {
+    y;
+    x;
     /**
      * Constructor de la clase DashboardEditor
      * Inicializa selectores, estado y variables de la instancia
@@ -75,7 +79,7 @@ class DashboardEditor {
             this.renderCanvas();         // Renderiza el canvas
         } catch (error) {
             console.error('Error initializing DashboardEditor:', error);
-            this.showNotification('Error al inicializar el editor', 'error');
+            this.showNotification('Error al inicializar el editor');
         }
     }
 
@@ -100,7 +104,7 @@ class DashboardEditor {
         this.ctx.imageSmoothingQuality = 'high';
 
         // Redimensionar canvas cuando cambia el tamaño de la ventana
-        var self = this;
+        const self = this;
         window.addEventListener('resize', function () {
             if (self.resizeTimeout) {
                 clearTimeout(self.resizeTimeout);
@@ -118,11 +122,11 @@ class DashboardEditor {
     resizeCanvas() {
         if (!this.canvas || !this.ctx) return;
 
-        var container = this.canvas.parentElement;
+        const container = this.canvas.parentElement;
         if (!container) return;
 
         // Obtener dimensiones del contenedor
-        var rect = container.getBoundingClientRect();
+        const rect = container.getBoundingClientRect();
         this.canvas.width = Math.floor(rect.width);
         this.canvas.height = Math.floor(rect.height);
 
@@ -142,7 +146,6 @@ class DashboardEditor {
         this.canvas = document.querySelector(this.selectors.canvas);
         this.workspace = document.querySelector(this.selectors.workspace);
         this.previewGrid = document.querySelector(this.selectors.previewGrid);
-        this.fileList = document.querySelector(this.selectors.fileList);
         this.sidebarAdd = document.querySelector(this.selectors.sidebarAdd);
         this.sidebarDelete = document.querySelector(this.selectors.sidebarDelete);
         this.managementSelect = document.querySelector(this.selectors.managementSelect);
@@ -164,14 +167,14 @@ class DashboardEditor {
      * @throws {Error} Si faltan elementos requeridos
      */
     validateElements() {
-        var requiredElements = {
+        const requiredElements = {
             canvas: this.canvas,
             workspace: this.workspace,
             previewGrid: this.previewGrid
         };
 
-        var missingElements = [];
-        for (var name in requiredElements) {
+        const missingElements = [];
+        for (const name in requiredElements) {
             if (!requiredElements[name]) {
                 missingElements.push(name);
             }
@@ -186,7 +189,7 @@ class DashboardEditor {
      * Configura todos los event listeners de la aplicación
      */
     setupEventListeners() {
-        var self = this;
+        let self = this;
 
         // Configurar event listeners específicos del canvas
         this.setupCanvasEventListeners();
@@ -194,11 +197,11 @@ class DashboardEditor {
         // Event listener para acciones en tarjetas de vista previa
         if (this.previewGrid) {
             this.previewGrid.addEventListener('click', function (e) {
-                var cardBtn = e.target.closest('.card-btn');
+                const cardBtn = e.target.closest('.card-btn');
                 if (!cardBtn) return;
 
-                var card = cardBtn.closest('.preview-card');
-                var id = parseInt(card.dataset.id);
+                let card = cardBtn.closest('.preview-card');
+                const id = parseInt(card.dataset.id);
                 if (isNaN(id)) return;
 
                 // Manejar acciones de edición o eliminación
@@ -217,7 +220,7 @@ class DashboardEditor {
     setupCanvasEventListeners() {
         if (!this.canvas) return;
 
-        var self = this;
+        const self = this;
 
         // Eventos de mouse para el canvas
         this.canvas.addEventListener('mousedown', function (e) {
@@ -226,8 +229,8 @@ class DashboardEditor {
         this.canvas.addEventListener('mousemove', function (e) {
             self.handleCanvasMouseMove(e);
         });
-        this.canvas.addEventListener('mouseup', function (e) {
-            self.handleCanvasMouseUp(e);
+        this.canvas.addEventListener('mouseup', function () {
+            self.handleCanvasMouseUp();
         });
         this.canvas.addEventListener('wheel', function (e) {
             self.handleCanvasWheel(e);
@@ -250,26 +253,32 @@ class DashboardEditor {
 
     /**
      * Calcula la posición del mouse en el canvas considerando el zoom
-     * @param {MouseEvent} e - Evento del mouse
+     * @param {Event} e - Evento del mouse
      * @returns {Object} Coordenadas x, y en el espacio del canvas
      */
     getCanvasMousePos(e) {
+        e.clientY = undefined;
+        e.clientY = undefined;
+        e.clientY = undefined;
+        e.clientY = undefined;
+        e.clientX = undefined;
+        e.clientY = undefined;
         if (!this.canvas) return { x: 0, y: 0 };
 
-        var rect = this.canvas.getBoundingClientRect();
+        const rect = this.canvas.getBoundingClientRect();
         return {
-            x: (e.clientX - rect.left) / this.state.canvasZoom,
+            x: (e.clientY - rect.left) / this.state.canvasZoom,
             y: (e.clientY - rect.top) / this.state.canvasZoom
         };
     }
 
     /**
      * Maneja el evento de presionar mouse en el canvas
-     * @param {MouseEvent} e - Evento del mouse
+     * @param {Event} e - Evento del mouse
      */
     handleCanvasMouseDown(e) {
-        var pos = this.getCanvasMousePos(e);
-        var item = this.getItemAtPosition(pos.x, pos.y);
+        const pos = this.getCanvasMousePos(e);
+        const item = this.getItemAtPosition(pos.x, pos.y);
 
         if (item) {
             // Iniciar arrastre de elemento
@@ -287,10 +296,10 @@ class DashboardEditor {
 
     /**
      * Maneja el evento de mover mouse en el canvas
-     * @param {MouseEvent} e - Evento del mouse
+     * @param {Event} e - Evento del mouse
      */
     handleCanvasMouseMove(e) {
-        var pos = this.getCanvasMousePos(e);
+        const pos = this.getCanvasMousePos(e);
 
         if (this.draggingItem) {
             // Mover elemento arrastrado
@@ -302,16 +311,15 @@ class DashboardEditor {
             // Canvas panning can be implemented here
         } else {
             // Cambiar cursor según si hay elemento bajo el mouse
-            var item = this.getItemAtPosition(pos.x, pos.y);
+            const item = this.getItemAtPosition(pos.x, pos.y);
             this.canvas.style.cursor = item ? 'grab' : 'default';
         }
     }
 
     /**
      * Maneja el evento de soltar mouse en el canvas
-     * @param {MouseEvent} e - Evento del mouse
      */
-    handleCanvasMouseUp(e) {
+    handleCanvasMouseUp() {
         if (this.draggingItem) {
             this.saveState();
             this.draggingItem = null;
@@ -322,16 +330,18 @@ class DashboardEditor {
 
     /**
      * Maneja el evento de rueda del mouse para zoom
-     * @param {WheelEvent} e - Evento de rueda del mouse
+     * @param {Event} e - Evento de rueda del mouse
      */
     handleCanvasWheel(e) {
+        e.deltaY = undefined;
+        e.deltaY = undefined;
+        e.deltaY = undefined;
         e.preventDefault();
 
-        var zoomIntensity = 0.1;
-        var mousePos = this.getCanvasMousePos(e);
-
-        var wheel = e.deltaY < 0 ? 1 : -1;
-        var zoomFactor = wheel > 0 ? (1 + zoomIntensity) : (1 - zoomIntensity);
+        const zoomIntensity = 0.1;
+        this.getCanvasMousePos(e);
+        const wheel = e.deltaY < 0 ? 1 : -1;
+        const zoomFactor = wheel > 0 ? (1 + zoomIntensity) : (1 - zoomIntensity);
 
         this.state.canvasZoom *= zoomFactor;
         this.state.canvasZoom = Math.max(0.1, Math.min(3, this.state.canvasZoom));
@@ -341,29 +351,29 @@ class DashboardEditor {
 
     /**
      * Maneja el evento de doble click en el canvas
-     * @param {MouseEvent} e - Evento del mouse
+     * @param {Event} e - Evento del mouse
      */
     handleCanvasDoubleClick(e) {
-        var pos = this.getCanvasMousePos(e);
-        var item = this.getItemAtPosition(pos.x, pos.y);
+        const pos = this.getCanvasMousePos(e);
+        const item = this.getItemAtPosition(pos.x, pos.y);
 
         if (item) {
             // Editar elemento existente
             this.editItem(item.id);
         } else {
             // Agregar nuevo elemento en la posición del click
-            this.promptAddItemAtPosition(pos.x, pos.y);
+            this.promptAddItemAtPosition();
         }
     }
 
     /**
      * Maneja el evento de toque inicial en canvas táctil
-     * @param {TouchEvent} e - Evento táctil
+     * @param {Event} e - Evento táctil
      */
     handleCanvasTouchStart(e) {
         if (e.touches.length === 1) {
-            var touch = e.touches[0];
-            var mouseEvent = new MouseEvent('mousedown', {
+            const touch = e.mouseEvent[0];
+            const mouseEvent = new MouseEvent('mousedown', {
                 clientX: touch.clientX,
                 clientY: touch.clientY,
                 bubbles: true
@@ -375,12 +385,16 @@ class DashboardEditor {
 
     /**
      * Maneja el evento de movimiento táctil en canvas
-     * @param {TouchEvent} e - Evento táctil
+     * @param {Event} e - Evento táctil
      */
     handleCanvasTouchMove(e) {
-        if (e.touches.length === 1) {
-            var touch = e.touches[0];
-            var mouseEvent = new MouseEvent('mousemove', {
+        e["touches"] = undefined;
+        e["touches"] = undefined;
+        e["touches"] = undefined;
+        e["touches"] = undefined;
+        if (e["touches"].length === 1) {
+            const touch = e["touches"][0];
+            const mouseEvent = new MouseEvent('mousemove', {
                 clientX: touch.clientX,
                 clientY: touch.clientY,
                 bubbles: true
@@ -392,11 +406,11 @@ class DashboardEditor {
 
     /**
      * Maneja el evento de fin de toque en canvas
-     * @param {TouchEvent} e - Evento táctil
+     * @param {Event} e - Evento táctil
      */
     handleCanvasTouchEnd(e) {
-        var mouseEvent = new MouseEvent('mouseup', { bubbles: true });
-        this.handleCanvasMouseUp(mouseEvent);
+        new MouseEvent('mouseup', { bubbles: true });
+        this.handleCanvasMouseUp();
         e.preventDefault();
     }
 
@@ -407,9 +421,9 @@ class DashboardEditor {
      * @returns {Object|null} Elemento encontrado o null
      */
     getItemAtPosition(x, y) {
-        var items = Array.from(this.canvasItems.values());
-        for (var i = 0; i < items.length; i++) {
-            var item = items[i];
+        const items = Array.from(this.canvasItems.values());
+        for (let i = 0; i < items.length; i++) {
+            const item = items[i];
             if (x >= item.canvasX && x <= item.canvasX + item.width &&
                 y >= item.canvasY && y <= item.canvasY + item.height) {
                 return item;
@@ -420,34 +434,30 @@ class DashboardEditor {
 
     /**
      * Solicita al usuario agregar un elemento en una posición específica
-     * @param {number} x - Coordenada x
-     * @param {number} y - Coordenada y
      */
-    promptAddItemAtPosition(x, y) {
-        var type = prompt('¿Qué tipo de elemento quieres agregar? (chart, table, text, color, filter, pdf)');
+    promptAddItemAtPosition() {
+        const type = prompt('¿Qué tipo de elemento quieres agregar? (chart, table, text, color, filter, pdf)');
         if (type && this.icons[type]) {
-            this.addItem(type, x, y);
+            this.addItem(type);
         }
     }
 
     /**
      * Agrega un nuevo elemento al dashboard
      * @param {string} type - Tipo de elemento a agregar
-     * @param {number} x - Posición x en el canvas
-     * @param {number} y - Posición y en el canvas
      */
-    addItem(type, x, y) {
+    addItem(type) {
         if (!type || !this.icons[type]) {
-            this.showNotification('Tipo de elemento no válido', 'error');
+            this.showNotification('Tipo de elemento no válido');
             return;
         }
 
         // Calcular posición por defecto si no se especifica
-        var defaultX = x !== null && x !== undefined ? x : 50 + Math.random() * (this.canvasBounds.width - 200);
-        var defaultY = y !== null && y !== undefined ? y : 50 + Math.random() * (this.canvasBounds.height - 150);
+        const defaultX = this.x !== null && this.x !== undefined ? this.x : 50 + Math.random() * (this.canvasBounds.width - 200);
+        const defaultY = this.y !== null && this.y !== undefined ? this.y : 50 + Math.random() * (this.canvasBounds.height - 150);
 
         // Crear nuevo elemento
-        var item = {
+        const item = {
             id: Date.now() + Math.random(),
             type: type,
             content: this.icons[type] + ' Nuevo ' + type,
@@ -484,7 +494,7 @@ class DashboardEditor {
      * @returns {string} Color hexadecimal
      */
     getItemColor(type) {
-        var colors = {
+        const colors = {
             chart: '#4CAF50',
             table: '#2196F3',
             text: '#FF9800',
@@ -500,8 +510,8 @@ class DashboardEditor {
      */
     updateCanvasItems() {
         this.canvasItems.clear();
-        for (var i = 0; i < this.state.dashboardItems.length; i++) {
-            var item = this.state.dashboardItems[i];
+        for (let i = 0; i < this.state.dashboardItems.length; i++) {
+            const item = this.state.dashboardItems[i];
             // Asignar valores por defecto si no existen
             if (item.canvasX === undefined || item.canvasY === undefined) {
                 item.canvasX = 50 + Math.random() * (this.canvasBounds.width - 200);
@@ -530,8 +540,8 @@ class DashboardEditor {
         this.drawGrid();        // Dibujar cuadrícula de fondo
 
         // Dibujar todos los elementos
-        var items = Array.from(this.canvasItems.values());
-        for (var i = 0; i < items.length; i++) {
+        const items = Array.from(this.canvasItems.values());
+        for (let i = 0; i < items.length; i++) {
             this.drawCanvasItem(items[i]);
         }
 
@@ -548,15 +558,15 @@ class DashboardEditor {
     drawGrid() {
         if (!this.ctx || !this.canvasBounds) return;
 
-        var gridSize = 20;
-        var width = this.canvasBounds.width;
-        var height = this.canvasBounds.height;
+        const gridSize = 20;
+        const width = this.canvasBounds.width;
+        const height = this.canvasBounds.height;
 
         this.ctx.strokeStyle = '#f0f0f0';
         this.ctx.lineWidth = 0.5;
 
         // Dibujar líneas verticales
-        for (var x = 0; x <= width; x += gridSize) {
+        for (let x = 0; x <= width; x += gridSize) {
             this.ctx.beginPath();
             this.ctx.moveTo(x, 0);
             this.ctx.lineTo(x, height);
@@ -564,7 +574,7 @@ class DashboardEditor {
         }
 
         // Dibujar líneas horizontales
-        for (var y = 0; y <= height; y += gridSize) {
+        for (let y = 0; y <= height; y += gridSize) {
             this.ctx.beginPath();
             this.ctx.moveTo(0, y);
             this.ctx.lineTo(width, y);
@@ -579,13 +589,13 @@ class DashboardEditor {
     drawCanvasItem(item) {
         if (!this.ctx) return;
 
-        var canvasX = item.canvasX;
-        var canvasY = item.canvasY;
-        var width = item.width;
-        var height = item.height;
-        var color = item.color;
-        var type = item.type;
-        var content = item.content;
+        const canvasX = item.canvasX;
+        const canvasY = item.canvasY;
+        const width = item.width;
+        const height = item.height;
+        const color = item.color;
+        const type = item.type;
+        const content = item.content;
 
         // Aplicar sombra
         this.ctx.shadowColor = 'rgba(0, 0, 0, 0.2)';
@@ -623,8 +633,8 @@ class DashboardEditor {
         // Dibujar contenido (texto envuelto)
         this.ctx.font = '12px Arial';
         this.ctx.fillStyle = '#666';
-        var lines = this.wrapText(content, canvasX + 10, canvasY + 50, width - 20, 12);
-        for (var i = 0; i < lines.length; i++) {
+        const lines = this.wrapText(content, canvasX + 10, canvasY + 50, width - 20);
+        for (let i = 0; i < lines.length; i++) {
             this.ctx.fillText(lines[i], canvasX + 10, canvasY + 50 + (i * 14));
         }
 
@@ -637,19 +647,18 @@ class DashboardEditor {
      * @param {number} x - Posición x inicial
      * @param {number} y - Posición y inicial
      * @param {number} maxWidth - Ancho máximo disponible
-     * @param {number} lineHeight - Altura de línea
      * @returns {string[]} Array de líneas de texto
      */
-    wrapText(text, x, y, maxWidth, lineHeight) {
+    wrapText(text, x, y, maxWidth) {
         if (!this.ctx) return [text];
 
-        var words = text.split(' ');
-        var lines = [];
-        var currentLine = words[0];
+        const words = text.split(' ');
+        const lines = [];
+        let currentLine = words[0];
 
-        for (var i = 1; i < words.length; i++) {
-            var word = words[i];
-            var width = this.ctx.measureText(currentLine + " " + word).width;
+        for (let i = 1; i < words.length; i++) {
+            const word = words[i];
+            const width = this.ctx.measureText(currentLine + " " + word).width;
             if (width < maxWidth) {
                 currentLine += " " + word;
             } else {
@@ -668,16 +677,16 @@ class DashboardEditor {
     drawPriorityBadge(item) {
         if (!this.ctx) return;
 
-        var priorityColors = {
+        const priorityColors = {
             Alta: '#f44336',
             Media: '#ff9800',
             Baja: '#4caf50'
         };
 
-        var badgeWidth = 40;
-        var badgeHeight = 16;
-        var x = item.canvasX + item.width - badgeWidth - 5;
-        var y = item.canvasY + 5;
+        const badgeWidth = 40;
+        const badgeHeight = 16;
+        const x = item.canvasX + item.width - badgeWidth - 5;
+        const y = item.canvasY + 5;
 
         // Dibujar fondo de la etiqueta
         this.ctx.fillStyle = priorityColors[item.priority] || '#666';
@@ -701,16 +710,16 @@ class DashboardEditor {
         this.ctx.lineWidth = 1;
         this.ctx.setLineDash([5, 3]); // Línea punteada
 
-        for (var i = 0; i < this.connections.length; i++) {
-            var connection = this.connections[i];
-            var fromItem = this.canvasItems.get(connection.from);
-            var toItem = this.canvasItems.get(connection.to);
+        for (let i = 0; i < this.connections.length; i++) {
+            const connection = this.connections[i];
+            const fromItem = this.canvasItems.get(connection.from);
+            const toItem = this.canvasItems.get(connection.to);
 
             if (fromItem && toItem) {
-                var fromX = fromItem.canvasX + fromItem.width / 2;
-                var fromY = fromItem.canvasY + fromItem.height;
-                var toX = toItem.canvasX + toItem.width / 2;
-                var toY = toItem.canvasY;
+                const fromX = fromItem.canvasX + fromItem.width / 2;
+                const fromY = fromItem.canvasY + fromItem.height;
+                const toX = toItem.canvasX + toItem.width / 2;
+                const toY = toItem.canvasY;
 
                 // Dibujar línea de conexión
                 this.ctx.beginPath();
@@ -745,6 +754,9 @@ class DashboardEditor {
     }
 
     // Agregar estos métodos a tu clase DashboardEditor
+    action;
+    projectId;
+    type;
 
     /**
      * Aumenta el zoom del canvas
@@ -777,12 +789,12 @@ class DashboardEditor {
      */
     saveState() {
         try {
-            var data = JSON.parse(localStorage.getItem('dashboardData')) || {};
+            const data = JSON.parse(localStorage.getItem('dashboardData')) || {};
             data[this.state.currentProject] = this.state.dashboardItems;
             localStorage.setItem('dashboardData', JSON.stringify(data));
         } catch (error) {
             console.error('Error saving state:', error);
-            this.showNotification('Error al guardar el dashboard', 'error');
+            this.showNotification('Error al guardar el dashboard');
         }
     }
 
@@ -791,7 +803,7 @@ class DashboardEditor {
      */
     loadState() {
         try {
-            var data = JSON.parse(localStorage.getItem('dashboardData')) || {};
+            const data = JSON.parse(localStorage.getItem('dashboardData')) || {};
             this.state.dashboardItems = data[this.state.currentProject] || [];
             this.updateCanvasItems();
         } catch (error) {
@@ -807,7 +819,7 @@ class DashboardEditor {
         if (!this.previewGrid) return;
 
         // Filtrar elementos según filtros aplicados
-        var filteredItems = this.state.dashboardItems.filter(function (item) {
+        const filteredItems = this.state.dashboardItems.filter(function (item) {
             return this.applyFilters(item);
         }.bind(this));
 
@@ -818,11 +830,11 @@ class DashboardEditor {
         }
 
         // Generar HTML para las tarjetas de vista previa
-        var html = '';
-        for (var i = 0; i < filteredItems.length; i++) {
-            var item = filteredItems[i];
-            var typeFormatted = item.type.charAt(0).toUpperCase() + item.type.slice(1);
-            var dateFormatted = new Date(item.createdAt).toLocaleDateString();
+        let html = '';
+        for (let i = 0; i < filteredItems.length; i++) {
+            const item = filteredItems[i];
+            const typeFormatted = item.type.charAt(0).toUpperCase() + item.type.slice(1);
+            const dateFormatted = new Date(item.createdAt).toLocaleDateString();
 
             html += '<div class="preview-card" data-id="' + item.id + '">' +
                 '<div class="card-header">' +
@@ -849,18 +861,18 @@ class DashboardEditor {
      * @returns {boolean} True si el elemento pasa los filtros
      */
     applyFilters(item) {
-        var priorityFilter = this.filters.priority ? this.filters.priority.value : 'all';
-        var deviceFilter = this.filters.device ? this.filters.device.value : 'all';
-        var regionFilter = this.filters.region ? this.filters.region.value : 'all';
-        var newUsersFilter = this.filters.newUsers ? this.filters.newUsers.checked : false;
+        const priorityFilter = this.filters.priority ? this.filters.priority.value : 'all';
+        const deviceFilter = this.filters.device ? this.filters.device.value : 'all';
+        const regionFilter = this.filters.region ? this.filters.region.value : 'all';
+        const newUsersFilter = this.filters.newUsers ? this.filters.newUsers.checked : false;
 
         // Verificar cada filtro
         if (priorityFilter !== 'all' && item.priority !== priorityFilter) return false;
         if (deviceFilter !== 'all' && item.device !== deviceFilter) return false;
         if (regionFilter !== 'all' && item.region !== regionFilter) return false;
-        if (newUsersFilter && !item.newUsers) return false;
+        return !(newUsersFilter && !item.newUsers);
 
-        return true;
+
     }
 
     /**
@@ -878,7 +890,7 @@ class DashboardEditor {
             return;
         }
 
-        var initialLength = this.state.dashboardItems.length;
+        const initialLength = this.state.dashboardItems.length;
         // Filtrar elementos manteniendo solo los que NO son del tipo especificado
         this.state.dashboardItems = this.state.dashboardItems.filter(function (item) {
             return item.type !== type;
@@ -886,7 +898,7 @@ class DashboardEditor {
 
         // Verificar si se eliminaron elementos
         if (initialLength === this.state.dashboardItems.length) {
-            this.showNotification('No se encontraron elementos de tipo ' + type, 'warning');
+            this.showNotification('No se encontraron elementos de tipo ' + type);
         } else {
             this.updateCanvasItems();
             this.renderDashboard();
@@ -903,10 +915,9 @@ class DashboardEditor {
 
     /**
      * Maneja las acciones de gestión del dashboard
-     * @param {string} action - Acción a ejecutar
      */
-    handleManagement(action) {
-        var actions = {
+    handleManagement() {
+        const actions = {
             saveDashboard: function () {
                 this.saveState();
                 this.showNotification('Dashboard guardado correctamente');
@@ -925,11 +936,11 @@ class DashboardEditor {
             }.bind(this)
         };
 
-        if (actions[action]) {
-            actions[action]();
+        if (actions[this.action]) {
+            actions[this.action]();
         } else {
-            console.warn('Unknown action: ' + action);
-            this.showNotification('Acción desconocida: ' + action, 'error');
+            console.warn('Unknown action: ' + this.action);
+            this.showNotification('Acción desconocida: ' + this.action);
         }
 
         // Resetear selector de gestión
@@ -940,15 +951,14 @@ class DashboardEditor {
 
     /**
      * Cambia al proyecto especificado
-     * @param {string} projectId - ID del proyecto a activar
      */
-    switchProject(projectId) {
-        this.state.currentProject = projectId;
+    switchProject() {
+        this.state.currentProject = this.projectId;
 
         // Actualizar estado visual de los botones de proyecto
         if (this.projects) {
             this.projects.forEach(function (btn) {
-                btn.classList.toggle('active', btn.dataset.project === projectId);
+                btn.classList.toggle('active', btn.dataset.project === this.projectId);
             });
         }
 
@@ -956,6 +966,7 @@ class DashboardEditor {
         this.loadState();
         this.renderDashboard();
         this.renderCanvas();
+        let projectId;
         this.showNotification('Proyecto ' + projectId + ' cargado');
     }
 
@@ -964,16 +975,16 @@ class DashboardEditor {
      * @param {number} id - ID del elemento a editar
      */
     editItem(id) {
-        var item = this.state.dashboardItems.find(function (i) {
+        const item = this.state.dashboardItems.find(function (i) {
             return i.id === id;
         });
         if (!item) {
-            this.showNotification('Elemento no encontrado', 'error');
+            this.showNotification('Elemento no encontrado');
             return;
         }
 
         // Solicitar nuevo contenido al usuario
-        var newContent = prompt('Editar contenido:', item.content);
+        const newContent = prompt('Editar contenido:', item.content);
         if (newContent && newContent.trim()) {
             item.content = newContent.trim();
             item.updatedAt = new Date().toISOString();
@@ -989,11 +1000,11 @@ class DashboardEditor {
      * @param {number} id - ID del elemento a eliminar
      */
     removeItem(id) {
-        var item = this.state.dashboardItems.find(function (i) {
+        const item = this.state.dashboardItems.find(function (i) {
             return i.id === id;
         });
         if (!item) {
-            this.showNotification('Elemento no encontrado', 'error');
+            this.showNotification('Elemento no encontrado');
             return;
         }
 
@@ -1020,9 +1031,7 @@ class DashboardEditor {
             this.workspace.classList.toggle('preview-mode', this.state.isPreviewMode);
         }
 
-        this.showNotification(
-            this.state.isPreviewMode ? 'Modo vista previa activado' : 'Modo vista previa desactivado'
-        );
+        this.showNotification(this.state.isPreviewMode ? 'Modo vista previa activado' : 'Modo vista previa desactivado');
     }
 
     /**
@@ -1030,16 +1039,16 @@ class DashboardEditor {
      */
     exportData() {
         try {
-            var data = {
+            const data = {
                 project: this.state.currentProject,
                 exportDate: new Date().toISOString(),
                 items: this.state.dashboardItems
             };
 
             // Crear y descargar archivo
-            var blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-            var url = URL.createObjectURL(blob);
-            var a = document.createElement('a');
+            const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
             a.href = url;
             a.download = 'dashboard-' + this.state.currentProject + '-' + Date.now() + '.json';
             document.body.appendChild(a);
@@ -1050,23 +1059,22 @@ class DashboardEditor {
             this.showNotification('Datos exportados correctamente');
         } catch (error) {
             console.error('Error exporting data:', error);
-            this.showNotification('Error al exportar datos', 'error');
+            this.showNotification('Error al exportar datos');
         }
     }
 
     /**
      * Muestra una notificación al usuario
      * @param {string} message - Mensaje a mostrar
-     * @param {string} type - Tipo de notificación (success, error, warning)
      */
-    showNotification(message, type) {
-        if (type === undefined) type = 'success';
+    showNotification(message) {
+        if (this.type === undefined) this.type = 'success';
 
         // Crear elemento de notificación
-        var notification = document.createElement('div');
-        notification.className = 'notification ' + type;
+        const notification = document.createElement('div');
+        notification.className = 'notification ' + this.type;
         notification.textContent = message;
-        notification.style.cssText = 'position: fixed; top: 20px; right: 20px; padding: 12px 20px; background: ' + (type === 'error' ? '#f44336' : type === 'warning' ? '#ff9800' : '#4CAF50') + '; color: white; border-radius: 4px; z-index: 1000; animation: slideIn 0.3s ease; max-width: 300px; word-wrap: break-word;';
+        notification.style.cssText = 'position: fixed; top: 20px; right: 20px; padding: 12px 20px; background: ' + (this.type === 'error' ? '#f44336' : this.type === 'warning' ? '#ff9800' : '#4CAF50') + '; color: white; border-radius: 4px; z-index: 1000; animation: slideIn 0.3s ease; max-width: 300px; word-wrap: break-word;';
 
         document.body.appendChild(notification);
 
@@ -1076,30 +1084,6 @@ class DashboardEditor {
                 notification.parentNode.removeChild(notification);
             }
         }, 3000);
-    }
-
-    /**
-     * Limpia recursos y destruye la instancia
-     */
-    destroy() {
-        // Limpiar timeout de redimensionamiento
-        if (this.resizeTimeout) {
-            clearTimeout(this.resizeTimeout);
-        }
-
-        // Reemplazar canvas para eliminar event listeners
-        if (this.canvas) {
-            var newCanvas = this.canvas.cloneNode(true);
-            if (this.canvas.parentNode) {
-                this.canvas.parentNode.replaceChild(newCanvas, this.canvas);
-            }
-        }
-
-        // Limpiar referencias
-        this.resizeTimeout = null;
-        this.draggingItem = null;
-        this.canvasItems.clear();
-        this.connections = [];
     }
 }
 
