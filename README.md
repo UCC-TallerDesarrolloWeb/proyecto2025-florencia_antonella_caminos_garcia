@@ -5,6 +5,10 @@ Estructura de Proyecto Taller de Desarrollo Web - 2025
 
 **Kliv** es un dashboard personal completo y moderno, diseñado para gestionar proyectos, tareas, galería de imágenes y configuraciones de usuario. Desarrollado con tecnologías web frontend, ofrece una interfaz intuitiva con soporte para temas claro/oscuro, búsqueda avanzada y sistema de likes. Ideal para productividad personal y profesional.
 
+**Link de la página**
+[text](https://ucc-tallerdesarrolloweb.github.io/proyecto2025-florencia_antonella_caminos_garcia/PROYECTO-KLIV_2203528_Florencia_Caminos_Garcia/HTML/index.html)
+
+
 ## 📋 Índice
 
 - [Descripción](#descripción)
