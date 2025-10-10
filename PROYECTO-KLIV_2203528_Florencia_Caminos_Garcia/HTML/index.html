@@ -1,12 +1,10 @@
 <!DOCTYPE html>
-<!--suppress ALL -->
 <html lang="es">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kliv Dashboard</title>
-    <link rel="icon" href="../Favicon/Favicon.png" type="image-icon">
+    <title>Kliv</title>
     <link rel="stylesheet" href="../CSS/Index.css">
     <script src="../JAVASCRIPT/Index.js" defer></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,7 +12,6 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&family=SUSE+Mono:ital,wght@0,100..800;1,100..800&family=Source+Code+Pro:ital,wght@1,700&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body id="site-body" class="light-mode">
@@ -26,13 +23,11 @@
         </div>
 
         <div id="search-Section">
-            <label for="searchBox"></label><input type="text" id="searchBox" placeholder="Buscar en el dashboard..."
-                                                  onkeypress="handleSearchInput(event)">
-            <button id="searchButton" onclick="handleSearch()">Buscar</button>
-            <div id="search-suggestions" class="search-suggestions"></div>
+            <input type="text" id="searchBox" placeholder="Buscar en el dashboard...">
+            <button id="searchButton">Buscar</button>
 
             <div id="short-Term-Error">
-                <p role="alert" class="error-msg" id="errorMessage">⚠️ Su búsqueda no ha arrojado resultados</p>
+                <p role=" alert" class="error-msg">⚠️ Su busqueda no ha arrujado resultados</p>
             </div>
         </div>
 
@@ -42,66 +37,94 @@
             </div>
             <span id="user-name">Flor</span>
         </div>
+
+
     </header>
 
     <aside id="sidebar">
-        <h3>Inicio</h3>
+        <h4>Inicio</h4>
         <nav>
             <ul id="sidebar-menu">
-                <li id="menu-dashboard" class="sidebar-item active">
-                    <a href="#Dashboard" onclick="navigateTo('Dashboard')"><i
-                            class="fas fa-home"></i><span>Dashboard</span></a>
-                </li>
-                <li id="menu-projects" class="sidebar-item">
-                    <a href="#Projects" onclick="navigateTo('Projects')"><i
-                            class="fas fa-folder"></i><span>Proyectos</span></a>
-                </li>
-                <li id="menu-tasks" class="sidebar-item">
-                    <a href="#Tasks" onclick="navigateTo('Tasks')"><i class="fas fa-tasks"></i><span>Tareas</span></a>
-                </li>
-                <li id="menu-gallery" class="sidebar-item">
-                    <a href="#Gallery" onclick="navigateTo('Gallery')"><i
-                            class="fas fa-images"></i><span>Galería</span></a>
-                </li>
-                <li id="menu-settings" class="sidebar-item">
-                    <a href="#Settings" onclick="navigateTo('Settings')"><i
-                            class="fas fa-cog"></i><span>Configuración</span></a>
-                </li>
-                <li id="menu-help" class="sidebar-item">
-                    <a href="#Help" onclick="navigateTo('Help')"><i
-                            class="fas fa-question-circle"></i><span>Ayuda</span></a>
-                </li>
+                <li id="menu-dashboard" class="sidebar-item"><a href="#Dashboard"><i id="dashboard"></i><span>Dashboard</span></a></li>
+                <li id="menu-projects" class="sidebar-item"><a href="#Projects"><i id="projects"></i><span>Proyectos</span></a></li>
+                <li id="menu-gallery" class="sidebar-item"><a href="#Gallery"><i id="gallery"></i><span>Galería</span></a></li>
+                <li id="menu-tasks" class="sidebar-item"><a href="#Tasks"><i id="tasks"></i><span>Tareas</span></a></li>
+                <li id="menu-settings" class="sidebar-item"><a href="#Settings"><i id="settings"></i><span>Configuración</span></a></li>
+                <li id="menu-help" class="sidebar-item"><a href="#Help"><i class="fas fa-question-circle"></i><span>Ayuda</span></a></li>
             </ul>
         </nav>
     </aside>
 
     <main id="site-main">
-        <section id="Dashboard" class="active-section">
+
+        <section id="Dashboard">
             <h2>Dashboard</h2>
-
-            <div class="gallery-controls">
-                <div class="filter-buttons">
-                    <button class="filter-btn active" onclick="EnhancedLikeSystem.handleFilterClick(this)"
-                        data-filter="all">Todas</button>
-                    <button class="filter-btn" onclick="EnhancedLikeSystem.handleFilterClick(this)"
-                        data-filter="popular">Populares</button>
-                    <button class="filter-btn" onclick="EnhancedLikeSystem.handleFilterClick(this)"
-                        data-filter="liked">Me gustan</button>
-                </div>
-                <div class="stats-display" id="gallery-stats">
-                    <strong>10</strong> imágenes •
-                    <strong>0</strong> me gusta •
-                    <strong>0</strong> te gustan
-                </div>
-            </div>
-
             <div id="dashboard-grid">
+                <article><img src="https://picsum.photos/200/300" alt="Pin 1">
+                    <footer>❤️ 120 &nbsp; 💬 45</footer>
+                </article>
+                <article><img src="https://picsum.photos/200/180" alt="Pin 2">
+                    <footer>❤️ 89 &nbsp; 💬 12</footer>
+                </article>
+                <article><img src="https://picsum.photos/200/250" alt="Pin 3">
+                    <footer>❤️ 340 &nbsp; 💬 78</footer>
+                </article>
+                <article><img src="https://picsum.photos/200/220" alt="Pin 4">
+                    <footer>❤️ 56 &nbsp; 💬 9</footer>
+                </article>
+                <article><img src="https://picsum.photos/200/270" alt="Pin 5">
+                    <footer>❤️ 210 &nbsp; 💬 34</footer>
+                </article>
+                <article><img src="https://picsum.photos/200/320" alt="Pin 6">
+                    <footer>❤️ 150 &nbsp; 💬 22</footer>
+                </article>
+                <article><img src="https://picsum.photos/200/200" alt="Pin 7">
+                    <footer>❤️ 72 &nbsp; 💬 14</footer>
+                </article>
+                <article><img src="https://picsum.photos/200/350" alt="Pin 8">
+                    <footer>❤️ 415 &nbsp; 💬 102</footer>
+                </article>
+                <article><img src="https://picsum.photos/200/260" alt="Pin 9">
+                    <footer>❤️ 98 &nbsp; 💬 17</footer>
+                </article>
+                <article><img src="https://picsum.photos/200/280" alt="Pin 10">
+                    <footer>❤️ 187 &nbsp; 💬 41</footer>
+                </article>
+                <article><img src="https://picsum.photos/200/310" alt="Pin 11">
+                    <footer>❤️ 63 &nbsp; 💬 8</footer>
+                </article>
+                <article><img src="https://picsum.photos/200/240" alt="Pin 12">
+                    <footer>❤️ 224 &nbsp; 💬 59</footer>
+                </article>
+                <article><img src="https://picsum.photos/200/190" alt="Pin 13">
+                    <footer>❤️ 77 &nbsp; 💬 15</footer>
+                </article>
+                <article><img src="https://picsum.photos/200/330" alt="Pin 14">
+                    <footer>❤️ 300 &nbsp; 💬 90</footer>
+                </article>
+                <article><img src="https://picsum.photos/200/210" alt="Pin 15">
+                    <footer>❤️ 142 &nbsp; 💬 23</footer>
+                </article>
+                <article><img src="https://picsum.photos/200/290" alt="Pin 16">
+                    <footer>❤️ 58 &nbsp; 💬 11</footer>
+                </article>
+                <article><img src="https://picsum.photos/200/360" alt="Pin 17">
+                    <footer>❤️ 420 &nbsp; 💬 110</footer>
+                </article>
+                <article><img src="https://picsum.photos/200/230" alt="Pin 18">
+                    <footer>❤️ 134 &nbsp; 💬 27</footer>
+                </article>
+                <article><img src="https://picsum.photos/200/340" alt="Pin 19">
+                    <footer>❤️ 289 &nbsp; 💬 64</footer>
+                </article>
+                <article><img src="https://picsum.photos/200/260" alt="Pin 20">
+                    <footer>❤️ 99 &nbsp; 💬 18</footer>
+                </article>
             </div>
-
             <div class="file-upload">
-                <button id="open-editor" class="btn-primary"
-                    onclick="window.location.href='../HTML/Dashboard_Editor.html'">Ir al Dashboard Editor</button>
-                <div id="editor-error">
+                <button id="open-editor">Ir al Dashboard Editor</button>
+
+                <div id="short-Term-Error">
                     <p role="alert" class="error-msg">⚠️ No se pudo abrir el editor, revise la conexión.</p>
                 </div>
             </div>
@@ -110,8 +133,7 @@
         <section id="Projects">
             <h2>Proyectos</h2>
 
-            <form id="add-project-content" aria-label="Agregar contenido a proyecto"
-                onsubmit="handleProjectSubmit(event)">
+            <form id="add-project-content" aria-label="Agregar contenido a proyecto">
                 <fieldset>
                     <legend>Agregar contenido a proyecto</legend>
                     <div class="form-group">
@@ -128,7 +150,7 @@
                             <option value="avances">🚀 Avances</option>
                         </select>
 
-                        <div>
+                        <div id="short-Term-Error">
                             <span class="error-msg" role="alert">⚠️ Debe elegir una tarjeta antes de continuar.</span>
                         </div>
 
@@ -136,7 +158,6 @@
                         <input id="project-content-text" name="project-content-text" type="text"
                             placeholder="Texto para agregar" required minlength="5" maxlength="100"
                             pattern="[A-Za-z0-9 áéíóúÁÉÍÓÚñÑ,.-]+" title="Solo letras, números y signos básicos." />
-                        <span class="char-counter"></span>
 
                         <div>
                             <span class="error-msg" role="alert">⚠️ Entre 5 y 100 caracteres, sin símbolos raros.</span>
@@ -144,14 +165,14 @@
                     </div>
                     <div class="button-group">
                         <button type="submit" class="btn-primary">Agregar</button>
-                        <button type="button" class="btn-secondary" onclick="clearProjectForm()">Limpiar</button>
-                        <button type="button" class="btn-tertiary" onclick="previewProject()">Vista previa</button>
+                        <button type="button" class="btn-secondary" id="clear-form">Limpiar</button>
+                        <button type="button" class="btn-tertiary" id="preview-content">Vista previa</button>
                     </div>
                 </fieldset>
             </form>
 
             <div class="projects-grid">
-                <article data-type="recordatorios" draggable="true">
+                <article data-type="recordatorios">
                     <h3>📌 Recordatorios</h3>
                     <ul class="card-list">
                         <li>Reunión mañana 9:00 AM</li>
@@ -160,7 +181,7 @@
                     </ul>
                 </article>
 
-                <article data-type="notificaciones" draggable="true">
+                <article data-type="notificaciones">
                     <h3>🔔 Notificaciones</h3>
                     <ul class="card-list">
                         <li>3 nuevas tareas asignadas en "Alpha"</li>
@@ -168,7 +189,7 @@
                     </ul>
                 </article>
 
-                <article data-type="estadisticas" draggable="true">
+                <article data-type="estadisticas">
                     <h3>📊 Estadísticas</h3>
                     <ul class="card-list">
                         <li>Progreso proyecto Beta: 65%</li>
@@ -177,7 +198,7 @@
                     </ul>
                 </article>
 
-                <article data-type="notas" draggable="true">
+                <article data-type="notas">
                     <h3>📝 Notas</h3>
                     <ul class="card-list">
                         <li>Integrar redes sociales</li>
@@ -186,7 +207,7 @@
                     </ul>
                 </article>
 
-                <article data-type="planes" draggable="true">
+                <article data-type="planes">
                     <h3>📅 Planes</h3>
                     <ol class="card-list">
                         <li>Semana 1: Investigación</li>
@@ -196,7 +217,7 @@
                     </ol>
                 </article>
 
-                <article data-type="tareas" draggable="true">
+                <article data-type="tareas">
                     <h3>✅ Tareas rápidas</h3>
                     <ul class="card-list">
                         <li>
@@ -211,7 +232,7 @@
                     </ul>
                 </article>
 
-                <article data-type="documentos" draggable="true">
+                <article data-type="documentos">
                     <h3>📂 Documentos</h3>
                     <ul class="card-list">
                         <li>Reporte_final.pdf</li>
@@ -220,7 +241,7 @@
                     </ul>
                 </article>
 
-                <article data-type="avances" draggable="true">
+                <article data-type="avances">
                     <h3>🚀 Avances</h3>
                     <ul class="card-list">
                         <li>Prototipo inicial aprobado</li>
@@ -232,17 +253,45 @@
             <h2>Avance General</h2>
             <p>Progreso de proyecto Beta:</p>
             <progress value="65" max="100">65%</progress>
-            <span class="task-counter">0</span>/8 proyectos activos
+        </section>
+
+        <section id="Gallery">
+            <h2>Galería de Contenidos</h2>
+            <div id="photo-section">
+                <div id="photo-section">
+                    <h3>Ver Foto</h3>
+                    <div id="photo-options">
+                        <label><input type="radio" name="photo-option" value="no-show" required> No Mostrar</label>
+                        <label><input type="radio" name="photo-option" value="save"> Guardar</label>
+                        <label><input type="radio" name="photo-option" value="react"> Reaccionar</label>
+                    </div>
+                    <p role="alert">⚠️ Debe seleccionar una imagen antes de continuar.</p>
+                </div>
+            </div>
+            <div id="gallery-grid">
+                <figure><img src="../Imagenes/1_Ropa.jpeg" alt="Prenda de ropa">
+                    <figcaption>Prenda destacada</figcaption>
+                </figure>
+                <figure><img src="../Imagenes/2_Codigo.jpeg" alt="Ejemplo de código">
+                    <figcaption>Ideas de código</figcaption>
+                </figure>
+                <figure><img src="../Imagenes/3_Naturaleza.jpeg" alt="Naturaleza">
+                    <figcaption>Naturaleza</figcaption>
+                </figure>
+                <figure><img src="../Imagenes/4_Libros.jpeg" alt="Libro Recomendado">
+                    <figcaption>Recomendaciones de Libros</figcaption>
+                </figure>
+                <figure><img src="../Imagenes/5_Comida.jpeg" alt="Recetas">
+                    <figcaption>Inspiracion de Recetas</figcaption>
+                </figure>
+                <figure><img src="../Imagenes/6_Decoracion.jpeg" alt="Ideas de decoración interior">
+                    <figcaption>Ideas de Decoración</figcaption>
+                </figure>
+            </div>
         </section>
 
         <section id="Tasks">
             <h2>Tareas</h2>
-
-            <div class="task-stats">
-                <p>Progreso general: <progress value="0" max="100">0%</progress></p>
-                <p>Tareas completadas: <span class="task-counter">0</span>/<span id="total-tasks">20</span></p>
-            </div>
-
             <table id="tasks-table">
                 <thead>
                     <tr>
@@ -257,7 +306,7 @@
                     <tr>
                         <td>
                             <label>
-                                <input type="checkbox" class="task-checkbox" onchange="handleTaskChange()">
+                                <input type="checkbox" class="task-checkbox">
                                 Completada
                             </label>
                         </td>
@@ -269,7 +318,7 @@
                     <tr>
                         <td>
                             <label>
-                                <input type="checkbox" class="task-checkbox" onchange="handleTaskChange()">
+                                <input type="checkbox" class="task-checkbox">
                                 Completada
                             </label>
                         </td>
@@ -281,7 +330,7 @@
                     <tr>
                         <td>
                             <label>
-                                <input type="checkbox" class="task-checkbox" onchange="handleTaskChange()">
+                                <input type="checkbox" class="task-checkbox">
                                 Completada
                             </label>
                         </td>
@@ -293,7 +342,7 @@
                     <tr>
                         <td>
                             <label>
-                                <input type="checkbox" class="task-checkbox" onchange="handleTaskChange()">
+                                <input type="checkbox" class="task-checkbox">
                                 Completada
                             </label>
                         </td>
@@ -305,7 +354,7 @@
                     <tr>
                         <td>
                             <label>
-                                <input type="checkbox" class="task-checkbox" onchange="handleTaskChange()">
+                                <input type="checkbox" class="task-checkbox">
                                 Completada
                             </label>
                         </td>
@@ -314,216 +363,194 @@
                         <td>Media</td>
                         <td>28/09/2025</td>
                     </tr>
+                    <tr>
+                        <td>
+                            <label>
+                                <input type="checkbox" class="task-checkbox">
+                                Completada
+                            </label>
+                        </td>
+                        <td>Actualizar base de datos</td>
+                        <td>Diego</td>
+                        <td>Alta</td>
+                        <td>29/09/2025</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>
+                                <input type="checkbox" class="task-checkbox">
+                                Completada
+                            </label>
+                        </td>
+                        <td>Organizar reunión de equipo</td>
+                        <td>Ana</td>
+                        <td>Baja</td>
+                        <td>30/09/2025</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>
+                                <input type="checkbox" class="task-checkbox">
+                                Completada
+                            </label>
+                        </td>
+                        <td>Redactar resumen semanal</td>
+                        <td>Marcos</td>
+                        <td>Media</td>
+                        <td>26/09/2025</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>
+                                <input type="checkbox" class="task-checkbox">
+                                Completada
+                            </label>
+                        </td>
+                        <td>Revisar facturas pendientes</td>
+                        <td>Lucía</td>
+                        <td>Alta</td>
+                        <td>28/09/2025</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>
+                                <input type="checkbox" class="task-checkbox">
+                                Completada
+                            </label>
+                        </td>
+                        <td>Preparar informe de ventas</td>
+                        <td>Carlos</td>
+                        <td>Media</td>
+                        <td>29/09/2025</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>
+                                <input type="checkbox" class="task-checkbox">
+                                Completada
+                            </label>
+                        </td>
+                        <td>Enviar correos a clientes</td>
+                        <td>Sofía</td>
+                        <td>Baja</td>
+                        <td>27/09/2025</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>
+                                <input type="checkbox" class="task-checkbox">
+                                Completada
+                            </label>
+                        </td>
+                        <td>Actualizar sitio web</td>
+                        <td>Diego</td>
+                        <td>Alta</td>
+                        <td>01/10/2025</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>
+                                <input type="checkbox" class="task-checkbox">
+                                Completada
+                            </label>
+                        </td>
+                        <td>Diseñar presentación para junta</td>
+                        <td>Ana</td>
+                        <td>Media</td>
+                        <td>30/09/2025</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>
+                                <input type="checkbox" class="task-checkbox">
+                                Completada
+                            </label>
+                        </td>
+                        <td>Revisión de reportes trimestrales</td>
+                        <td>Marcos</td>
+                        <td>Alta</td>
+                        <td>02/10/2025</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>
+                                <input type="checkbox" class="task-checkbox">
+                                Completada
+                            </label>
+                        </td>
+                        <td>Enviar feedback a equipo</td>
+                        <td>Sofía</td>
+                        <td>Media</td>
+                        <td>26/09/2025</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>
+                                <input type="checkbox" class="task-checkbox">
+                                Completada
+                            </label>
+                        </td>
+                        <td>Planificar nueva campaña</td>
+                        <td>Carlos</td>
+                        <td>Alta</td>
+                        <td>03/10/2025</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>
+                                <input type="checkbox" class="task-checkbox">
+                                Completada
+                            </label>
+                        </td>
+                        <td>Actualizar base de clientes</td>
+                        <td>Lucía</td>
+                        <td>Media</td>
+                        <td>28/09/2025</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>
+                                <input type="checkbox" class="task-checkbox">
+                                Completada
+                            </label>
+                        </td>
+                        <td>Reunión de cierre de proyecto</td>
+                        <td>Diego</td>
+                        <td>Alta</td>
+                        <td>04/10/2025</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>
+                                <input type="checkbox" class="task-checkbox">
+                                Completada
+                            </label>
+                        </td>
+                        <td>Redactar acta de reunión</td>
+                        <td>Ana</td>
+                        <td>Media</td>
+                        <td>29/09/2025</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>
+                                <input type="checkbox" class="task-checkbox">
+                                Completada
+                            </label>
+                        </td>
+                        <td>Preparar presupuesto anual</td>
+                        <td>Marcos</td>
+                        <td>Alta</td>
+                        <td>05/10/2025</td>
+                    </tr>
                 </tbody>
             </table>
 
             <div class="task-actions">
-                <button class="btn-primary" onclick="window.location.href='../HTML/Task_Mannager.html'">➕ Añadir
-                    tarea</button>
-                <button class="btn-danger" onclick="removeCompletedTasks()">❌ Quitar tareas completadas</button>
-            </div>
-        </section>
-
-        <section id="Gallery">
-            <h2>Galería Personal</h2>
-
-            <div class="gallery-controls">
-                <div class="filter-buttons">
-                    <button class="filter-btn active" onclick="handleGalleryFilterClick(this)"
-                        data-filter="all">Todas</button>
-                    <button class="filter-btn" onclick="handleGalleryFilterClick(this)"
-                        data-filter="recent">Recientes</button>
-                    <button class="filter-btn" onclick="handleGalleryFilterClick(this)"
-                        data-filter="favorites">Favoritas</button>
-                </div>
-                <div class="upload-controls">
-                    <input type="file" id="file-upload" accept="image/*" onchange="handleFileSelect(event)"
-                        style="display: none;">
-                    <button class="btn-primary" id="upload-trigger" onclick="triggerFileUpload()">
-                        <i class="fas fa-cloud-upload-alt"></i> Subir Fotos
-                    </button>
-                    <button class="btn-secondary" id="clear-gallery" onclick="clearGallery()">
-                        <i class="fas fa-trash"></i> Limpiar Galería
-                    </button>
-                </div>
-            </div>
-
-            <div class="upload-area" id="upload-area">
-                <div class="upload-placeholder">
-                    <i class="fas fa-cloud-upload-alt"></i>
-                    <h3>Arrastra tus fotos aquí</h3>
-                    <p>o haz clic para seleccionar archivos</p>
-                    <small>Formatos soportados: JPG, PNG, GIF, WEBP (Máx. 5MB por imagen)</small>
-                </div>
-                <div class="upload-preview" id="upload-preview" style="display: none;">
-                    <h4>Vista Previa:</h4>
-                    <div class="preview-grid" id="preview-grid"></div>
-                    <button class="btn-primary" id="confirm-upload">Confirmar Subida</button>
-                    <button class="btn-tertiary" id="cancel-upload">Cancelar</button>
-                </div>
-            </div>
-
-            <div class="gallery-stats">
-                <div class="stat-item">
-                    <span class="stat-number" id="total-photos">6</span>
-                    <span class="stat-label">Fotos</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-number" id="total-size">2.3 MB</span>
-                    <span class="stat-label">Espacio usado</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-number" id="favorite-count">0</span>
-                    <span class="stat-label">Favoritas</span>
-                </div>
-            </div>
-
-            <div id="personal-gallery" class="personal-gallery">
-                <div class="personal-grid">
-                    <div class="personal-photo" data-photo-id="1">
-                        <div class="photo-container">
-                            <img src="../Imagenes/1_Ropa.jpeg" alt="Prenda de ropa" loading="lazy">
-                            <div class="photo-overlay">
-                                <div class="photo-actions">
-                                    <button class="photo-action-btn favorite" onclick="toggleFavorite(1)" data-photo-id="1"></button>
-                                        <button class="photo-action-btn delete" onclick="deletePhoto(1)" data-photo-id="1"></button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="photo-info">
-                            <div class="photo-name">Prenda de Ropa</div>
-                            <div class="photo-meta">
-                                <span class="photo-size">450 KB</span>
-                                <span class="photo-date">15/01/2024</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="personal-photo" data-photo-id="2">
-                        <div class="photo-container">
-                            <img src="../Imagenes/2_Codigo.jpeg" alt="Ejemplo de código" loading="lazy">
-                            <div class="photo-overlay">
-                                <div class="photo-actions">
-                                    <button class="photo-action-btn favorite" onclick="GalleryManager.toggleFavorite(2)"
-                                        data-photo-id="2">
-                                        <i class="fas fa-heart"></i>
-                                    </button>
-                                    <button class="photo-action-btn delete" onclick="GalleryManager.deletePhoto(2)"
-                                        data-photo-id="2">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="photo-info">
-                            <div class="photo-name">Ejemplo de Código</div>
-                            <div class="photo-meta">
-                                <span class="photo-size">380 KB</span>
-                                <span class="photo-date">15/01/2024</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="personal-photo" data-photo-id="3">
-                        <div class="photo-container">
-                            <img src="../Imagenes/3_Naturaleza.jpeg" alt="Naturaleza" loading="lazy">
-                            <div class="photo-overlay">
-                                <div class="photo-actions">
-                                    <button class="photo-action-btn favorite" onclick="GalleryManager.toggleFavorite(3)"
-                                        data-photo-id="3">
-                                        <i class="fas fa-heart"></i>
-                                    </button>
-                                    <button class="photo-action-btn delete" onclick="GalleryManager.deletePhoto(3)"
-                                        data-photo-id="3">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="photo-info">
-                            <div class="photo-name">Paisaje Natural</div>
-                            <div class="photo-meta">
-                                <span class="photo-size">520 KB</span>
-                                <span class="photo-date">15/01/2024</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="personal-photo" data-photo-id="4">
-                        <div class="photo-container">
-                            <img src="../Imagenes/4_Libros.jpeg" alt="Libro Recomendado" loading="lazy">
-                            <div class="photo-overlay">
-                                <div class="photo-actions">
-                                    <button class="photo-action-btn favorite" onclick="GalleryManager.toggleFavorite(4)"
-                                        data-photo-id="4">
-                                        <i class="fas fa-heart"></i>
-                                    </button>
-                                    <button class="photo-action-btn delete" onclick="GalleryManager.deletePhoto(4)"
-                                        data-photo-id="4">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="photo-info">
-                            <div class="photo-name">Libro Recomendado</div>
-                            <div class="photo-meta">
-                                <span class="photo-size">410 KB</span>
-                                <span class="photo-date">15/01/2024</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="personal-photo" data-photo-id="5">
-                        <div class="photo-container">
-                            <img src="../Imagenes/5_Comida.jpeg" alt="Recetas" loading="lazy">
-                            <div class="photo-overlay">
-                                <div class="photo-actions">
-                                    <button class="photo-action-btn favorite" onclick="GalleryManager.toggleFavorite(5)"
-                                        data-photo-id="5">
-                                        <i class="fas fa-heart"></i>
-                                    </button>
-                                    <button class="photo-action-btn delete" onclick="GalleryManager.deletePhoto(5)"
-                                        data-photo-id="5">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="photo-info">
-                            <div class="photo-name">Recetas</div>
-                            <div class="photo-meta">
-                                <span class="photo-size">490 KB</span>
-                                <span class="photo-date">15/01/2024</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="personal-photo" data-photo-id="6">
-                        <div class="photo-container">
-                            <img src="../Imagenes/6_Decoracion.jpeg" alt="Ideas de decoración interior" loading="lazy">
-                            <div class="photo-overlay">
-                                <div class="photo-actions">
-                                    <button class="photo-action-btn favorite" onclick="GalleryManager.toggleFavorite(6)"
-                                        data-photo-id="6">
-                                        <i class="fas fa-heart"></i>
-                                    </button>
-                                    <button class="photo-action-btn delete" onclick="GalleryManager.deletePhoto(6)"
-                                        data-photo-id="6">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="photo-info">
-                            <div class="photo-name">Ideas de Decoración</div>
-                            <div class="photo-meta">
-                                <span class="photo-size">470 KB</span>
-                                <span class="photo-date">15/01/2024</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <a href="../HTML/Task_Mannager.html" class="btn-link">
+                    <button class="btn-primary">➕ Añadir tarea</button>
+                </a>
+                <button class="btn-danger">❌ Quitar tarea</button>
             </div>
         </section>
 
@@ -533,31 +560,28 @@
             <div class="settings-grid">
                 <div class="card">
                     <h3>Perfil</h3>
-                    <form id="profile-form" aria-label="Configuración de perfil" onsubmit="handleSettingsSubmit(event)">
+                    <form aria-label="Configuración de perfil">
                         <fieldset>
                             <legend>Datos personales</legend>
 
                             <div class="form-group">
                                 <label for="user-photo">Foto de perfil:</label>
                                 <input id="user-photo" name="user-photo" type="file" accept="image/*">
-                                <small role="alert" class="error-msg">Debe subir una imagen de perfil.</small>
+                                <small role="alert">Debe subir una imagen de perfil.</small>
                             </div>
 
                             <div class="form-group">
-                                <label for="settings-user-name">Nombre:</label>
-                                <input id="settings-user-name" name="user-name" type="text" value="Flor"
-                                    placeholder="Ingrese su nombre" maxlength="50">
-                                <small role="alert" class="error-msg">Solo letras y espacios (3 a 50
-                                    caracteres).</small>
-                                <span class="char-counter"></span>
+                                <label for="user-name">Nombre:</label>
+                                <input id="user-name" name="user-name" type="text" value="Juan Pérez"
+                                    placeholder="Ingrese su nombre">
+                                <small role="alert">Solo letras y espacios (3 a 50 caracteres).</small>
                             </div>
 
                             <div class="form-group">
                                 <label for="user-email">Email:</label>
-                                <input id="user-email" name="user-email" type="email" value="flor@ejemplo.com"
+                                <input id="user-email" name="user-email" type="email" value="juan@mail.com"
                                     placeholder="Ingrese su email">
-                                <small role="alert" class="error-msg">Ingrese un correo válido
-                                    (ejemplo@mail.com).</small>
+                                <small role="alert">Ingrese un correo válido (ejemplo@mail.com).</small>
                             </div>
                         </fieldset>
                         <button type="submit">Guardar Perfil</button>
@@ -566,8 +590,7 @@
 
                 <div class="card">
                     <h3>Preferencias</h3>
-                    <form id="preferences-form" aria-label="Configuración de preferencias"
-                        onsubmit="handleSettingsSubmit(event)">
+                    <form aria-label="Configuración de preferencias">
                         <fieldset>
                             <legend>Opciones de usuario</legend>
 
@@ -577,7 +600,7 @@
                                     <option value="on" selected>Activadas</option>
                                     <option value="off">Desactivadas</option>
                                 </select>
-                                <small role="alert" class="error-msg">Debe seleccionar una opción.</small>
+                                <small role="alert">Debe seleccionar una opción.</small>
                             </div>
 
                             <div class="form-group">
@@ -587,7 +610,7 @@
                                     <option value="en">Inglés</option>
                                     <option value="pt">Portugués</option>
                                 </select>
-                                <small role="alert" class="error-msg">Seleccione un idioma válido.</small>
+                                <small role="alert">Seleccione un idioma válido.</small>
                             </div>
 
                             <div class="form-group">
@@ -597,7 +620,7 @@
                                     <option value="private">Privada</option>
                                     <option value="team">Solo equipo</option>
                                 </select>
-                                <small role="alert" class="error-msg">Elija un nivel de privacidad.</small>
+                                <small role="alert">Elija un nivel de privacidad.</small>
                             </div>
                         </fieldset>
                         <button type="submit">Guardar Preferencias</button>
@@ -606,25 +629,22 @@
 
                 <div class="card">
                     <h3>Seguridad</h3>
-                    <form id="security-form" aria-label="Configuración de seguridad"
-                        onsubmit="handleSettingsSubmit(event)">
+                    <form aria-label="Configuración de seguridad">
                         <fieldset>
                             <legend>Credenciales</legend>
 
                             <div class="form-group">
                                 <label for="user-password">Nueva contraseña:</label>
                                 <input id="user-password" name="user-password" type="password"
-                                    placeholder="Ingrese nueva contraseña" maxlength="20">
-                                <small role="alert" class="error-msg">Entre 6 y 20 caracteres.</small>
-                                <span class="char-counter"></span>
+                                    placeholder="Ingrese nueva contraseña">
+                                <small role="alert">Entre 6 y 20 caracteres.</small>
                             </div>
 
                             <div class="form-group">
                                 <label for="confirm-password">Confirmar contraseña:</label>
                                 <input id="confirm-password" name="confirm-password" type="password"
-                                    placeholder="Confirme la contraseña" maxlength="20" onblur="validatePassword()">
-                                <small role="alert" class="error-msg">Repita la contraseña para confirmación.</small>
-                                <span class="char-counter"></span>
+                                    placeholder="Confirme la contraseña">
+                                <small role="alert">Repita la contraseña para confirmación.</small>
                             </div>
 
                             <div class="form-group">
@@ -635,15 +655,14 @@
                                     <option value="school">¿Nombre de tu escuela primaria?</option>
                                     <option value="city">¿Ciudad donde naciste?</option>
                                 </select>
-                                <small role="alert" class="error-msg">Seleccione una pregunta de seguridad.</small>
+                                <small role="alert">Seleccione una pregunta de seguridad.</small>
                             </div>
 
                             <div class="form-group">
                                 <label for="security-answer">Respuesta:</label>
                                 <input id="security-answer" name="security-answer" type="text"
-                                    placeholder="Ingrese su respuesta" maxlength="50">
-                                <small role="alert" class="error-msg">La respuesta es obligatoria.</small>
-                                <span class="char-counter"></span>
+                                    placeholder="Ingrese su respuesta">
+                                <small role="alert">La respuesta es obligatoria.</small>
                             </div>
                         </fieldset>
                         <button type="submit">Guardar Seguridad</button>
@@ -657,29 +676,21 @@
 
             <details>
                 <summary>¿Cómo restablecer mi contraseña?</summary>
-                <p>Dirígete a Configuración → Seguridad → Cambiar contraseña.</p>
+                <p>Dirígete a Configuración → Perfil → Cambiar contraseña.</p>
             </details>
 
             <details>
                 <summary>¿Cómo crear un proyecto?</summary>
-                <p>En el apartado " Proyectos", selecciona ➕ Agregar contenido.</p>
+                <p>En el apartado "Proyectos", selecciona ➕ Añadir proyecto.</p>
             </details>
 
             <details>
                 <summary>¿Cómo invitar a otros usuarios?</summary>
-                <p>En Configuración → Preferencias, elige "Compartir dashboard".</p>
-            </details>
-
-            <details>
-                <summary>¿Cómo usar el sistema de búsqueda?</summary>
-                <p>Escribe en la barra de búsqueda del header y presiona Enter o el botón Buscar.</p>
-            </details>
-
-            <details>
-                <summary>¿Cómo dar me gusta a las imágenes?</summary>
-                <p>Haz clic en el corazón o da doble clic en cualquier imagen del Dashboard.</p>
+                <p>En Configuración → Comunidad, elige "Invitar usuarios".</p>
             </details>
         </section>
+
+
     </main>
 </body>
 
