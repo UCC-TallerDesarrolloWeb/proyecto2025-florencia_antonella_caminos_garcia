@@ -3,7 +3,7 @@
 > **Tu espacio digital para la productividad, organización y creatividad**  
 > *Taller de Desarrollo Web – Universidad Católica de Córdoba (2025)*
 
-![Kliv Banner](https://i.imgur.com/ElEgZ4T.png)
+![Kliv Banner](../Favicon/Favicon.png)
 
 ## 📋 Índice
 
