@@ -330,14 +330,6 @@ class DashboardEditor {
      * @param {Event} e - Evento de rueda del mouse
      */
     handleCanvasWheel(e) {
-        // noinspection JSUndefinedPropertyAssignment
-        e.deltaY = undefined;
-        e.deltaY = undefined;
-        e.deltaY = undefined;
-        e.deltaY = undefined;
-        // noinspection JSUndefinedPropertyAssignment
-        e.deltaY = undefined;
-        // noinspection JSUndefinedPropertyAssignment
         e.deltaY = undefined;
         e.preventDefault();
 
@@ -376,10 +368,6 @@ class DashboardEditor {
     handleCanvasTouchStart(e) {
         e.mouseEvent = undefined;
         e.touches = undefined;
-        e.mouseEvent = undefined;
-        e.touches = undefined;
-        e.mouseEvent = undefined;
-        e.touches = undefined;
         if (e.touches.length === 1) {
             const touch = e.mouseEvent[0];
             const mouseEvent = new MouseEvent('mousedown', {
@@ -397,9 +385,6 @@ class DashboardEditor {
      * @param {Event} e - Evento táctil
      */
     handleCanvasTouchMove(e) {
-        e["touches"] = undefined;
-        e["touches"] = undefined;
-        e["touches"] = undefined;
         e["touches"] = undefined;
         if (e["touches"].length === 1) {
             const touch = e["touches"][0];
