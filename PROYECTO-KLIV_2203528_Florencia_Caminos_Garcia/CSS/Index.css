@@ -367,12 +367,6 @@ section h2 {
     margin: 2rem 0;
 }
 
-.image-container {
-    position: relative;
-    overflow: hidden;
-    padding-bottom: 75%;
-}
-
 .image-container img {
     height: 100%;
     left: 0;
@@ -387,153 +381,9 @@ section h2 {
     transform: scale(1.1);
 }
 
-.image-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, rgba(92, 167, 219, 0.8), rgba(86, 36, 224, 0.8));
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    transition: var(--transition);
-}
-
-.image-card:hover .image-overlay {
-    opacity: 1;
-}
-
-.like-btn {
-    align-items: center;
-    background: rgba(255, 255, 255, 0.95);
-    border: none;
-    border-radius: 50%;
-    box-shadow: var(--shadow);
-    cursor: pointer;
-    display: flex;
-    height: 60px;
-    justify-content: center;
-    transition: var(--transition);
-    width: 60px;
-}
-
-.like-btn:hover {
-    background: white;
-    box-shadow: var(--shadow-hover);
-    transform: scale(1.1);
-}
-
-.like-icon {
-    font-size: 24px;
-    transition: var(--transition);
-}
-
-.like-btn.liked .like-icon {
-    color: white;
-}
-
-.image-stats {
-    align-items: center;
-    background: #f8f9fa;
-    display: flex;
-    justify-content: space-between;
-    padding: 1.25rem;
-}
-
-.like-count,
-.comment-count {
-    align-items: center;
-    display: flex;
-    font-size: 0.9rem;
-    font-weight: 600;
-    gap: 6px;
-}
-
-.like-count {
-    color: var(--color-secundario);
-}
-
-.comment-count {
-    color: var(--color-texto-secundario);
-}
-
-.popular-badge {
-    background: linear-gradient(135deg, #ff6b6b, #ee5a24);
-    border-radius: 20px;
-    box-shadow: var(--shadow);
-    color: white;
-    font-size: 0.75rem;
-    font-weight: 700;
-    left: 1rem;
-    padding: 6px 12px;
-    position: absolute;
-    top: 1rem;
-    z-index: 10;
-}
-
-.double-click-hint {
-    background: rgba(0, 0, 0, 0.8);
-    border-radius: 20px;
-    bottom: 1rem;
-    color: white;
-    font-size: 0.75rem;
-    left: 50%;
-    opacity: 0;
-    padding: 6px 12px;
-    position: absolute;
-    transform: translateX(-50%);
-    transition: var(--transition);
-    z-index: 10;
-}
-
-.image-card:hover .double-click-hint {
-    opacity: 1;
-}
-
-.gallery-controls {
-    align-items: center;
-    background: white;
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 2rem;
-    padding: 1.5rem 2rem;
-}
-
 .filter-buttons {
     display: flex;
     gap: 12px;
-}
-
-.filter-btn {
-    border: 2px solid var(--color-borde);
-    border-radius: 25px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    font-weight: 600;
-    padding: 10px 20px;
-    transition: var(--transition);
-}
-
-.filter-btn:hover {
-    border-color: var(--color-primario);
-    color: var(--color-primario);
-    transform: translateY(-2px);
-}
-
-.filter-btn.active {
-    background: linear-gradient(135deg, var(--color-primario), var(--color-secundario));
-    border-color: transparent;
-    color: white;
-}
-
-.stats-display {
-    color: var(--color-texto-secundario);
-    font-size: 0.95rem;
-    font-weight: 600;
 }
 
 .stats-display strong {
@@ -644,13 +494,6 @@ select:focus {
     transform: translateY(-2px);
 }
 
-.char-counter {
-    color: var(--color-texto-secundario);
-    font-size: 0.85rem;
-    margin-top: 0.5rem;
-    text-align: right;
-}
-
 .card {
     background: white;
     border-radius: var(--radius);
@@ -691,37 +534,6 @@ select:focus {
     border-bottom: none;
 }
 
-#personal-gallery {
-    margin-top: 2rem;
-}
-
-.personal-grid {
-    display: grid;
-    gap: 1.5rem;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-}
-
-.personal-photo {
-    background: white;
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-    overflow: hidden;
-    position: relative;
-    transition: var(--transition);
-    animation: fadeInUp 0.6s ease-out;
-}
-
-.personal-photo:hover {
-    box-shadow: var(--shadow-hover);
-    transform: translateY(-8px);
-}
-
-.photo-container {
-    position: relative;
-    overflow: hidden;
-    padding-bottom: 75%;
-}
-
 .photo-container img {
     height: 100%;
     left: 0;
@@ -732,102 +544,19 @@ select:focus {
     width: 100%;
 }
 
-.personal-photo:hover .photo-overlay {
-    opacity: 1;
-}
-
 .personal-photo:hover .photo-container img {
     transform: scale(1.08);
 }
 
 /* Overlay con acciones */
-.photo-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, rgba(92, 167, 219, 0.85), rgba(86, 36, 224, 0.85));
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    transition: var(--transition);
-}
-
-.personal-photo:hover .photo-overlay {
-    opacity: 1;
-}
 
 /* Contenedor de botones de acción */
-.photo-actions {
-    display: flex;
-    gap: 1rem;
-}
 
 /* Botones de acción individuales */
-.photo-action-btn {
-    align-items: center;
-    background: rgba(255, 255, 255, 0.95);
-    border: none;
-    border-radius: 50%;
-    box-shadow: var(--shadow);
-    color: var(--color-secundario);
-    cursor: pointer;
-    display: flex;
-    height: 50px;
-    justify-content: center;
-    transition: var(--transition);
-    width: 50px;
-}
-
-.photo-action-btn:hover {
-    background: white;
-    box-shadow: var(--shadow-hover);
-    transform: scale(1.15);
-}
-
-.photo-action-btn.delete:hover {
-    background: #ff6b6b;
-    color: white;
-}
 
 /* Información de la foto */
-.photo-info {
-    padding: 1.25rem;
-    background: #f8f9fa;
-}
-
-.photo-name {
-    color: var(--color-texto);
-    font-size: 1.1rem;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-}
-
-.photo-meta {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.85rem;
-    color: var(--color-texto-secundario);
-}
 
 /* Área de subida de archivos */
-.upload-area {
-    background: white;
-    border: 2px dashed var(--color-borde);
-    border-radius: var(--radius);
-    margin: 1.5rem 0;
-    padding: 3rem 2rem;
-    text-align: center;
-    transition: var(--transition);
-    position: relative;
-}
-
-.upload-area:hover {
-    border-color: var(--color-primario);
-    background: rgba(92, 167, 219, 0.05);
-}
 
 .upload-placeholder i {
     font-size: 3rem;
@@ -851,21 +580,11 @@ select:focus {
 }
 
 /* Previsualización de subida */
-.upload-preview {
-    margin-top: 1.5rem;
-}
 
 .upload-preview h4 {
     color: var(--color-secundario);
     margin-bottom: 1rem;
     text-align: center;
-}
-
-.preview-grid {
-    display: grid;
-    gap: 1rem;
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-    margin-bottom: 1.5rem;
 }
 
 .preview-item img {
@@ -875,50 +594,6 @@ select:focus {
     width: 100%;
     height: 100%;
     object-fit: cover;
-}
-
-.preview-remove {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    background: rgba(255, 255, 255, 0.9);
-    border: none;
-    border-radius: 50%;
-    color: var(--color-error);
-    cursor: pointer;
-    height: 24px;
-    width: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: var(--transition-fast);
-}
-
-.preview-remove:hover {
-    background: white;
-    transform: scale(1.1);
-}
-
-.upload-controls {
-    display: flex;
-    gap: 1rem;
-    align-items: center;
-}
-
-.gallery-stats {
-    display: flex;
-    justify-content: center;
-    gap: 2rem;
-    margin: 2rem 0;
-    padding: 1.5rem;
-    background: white;
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-}
-
-.stat-item {
-    text-align: center;
-    padding: 0 1rem;
 }
 
 .stat-number {
@@ -933,10 +608,6 @@ select:focus {
     font-size: 0.9rem;
     color: var(--color-texto-secundario);
     font-weight: 600;
-}
-
-.personal-photo.favorite .photo-name {
-    color: #ff6b6b;
 }
 
 .modal-content {
@@ -1075,18 +746,6 @@ select:focus {
         width: 100%;
     }
 
-    .gallery-controls {
-        background: white;
-        border-radius: var(--radius);
-        box-shadow: var(--shadow);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 1.5rem 2rem;
-        margin-bottom: 2rem;
-        animation: fadeInUp 0.6s ease-out;
-    }
-
     .settings-grid {
         grid-template-columns: 1fr;
     }
@@ -1134,12 +793,8 @@ figure,
     border: none;
 }
 
-.particles-container {
-    height: 100%;
-    left: 0;
-    pointer-events: none;
-    position: absolute;
-    top: 0;
-    width: 100%;
-    z-index: 15;
+#short-Term-Error {
+    border: 2px solid #e53935;
+    background-color: #fff8f8;
+    animation: pulseBorder 1s infinite;
 }

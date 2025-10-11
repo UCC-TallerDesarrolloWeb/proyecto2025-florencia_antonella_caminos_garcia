@@ -2,7 +2,8 @@
 // TASK MANAGER 
 // =============================================
 
-class TaskManager {
+// noinspection JSValidateTypes
+class TaskMannager {
     constructor() {
         this.config = this.initializeConfig();
         this.state = this.initializeState();
@@ -236,12 +237,12 @@ class TaskManager {
     }
 
     /**
-     * Maneja eventos de clicks en elementos dinámicos (delegación de eventos)
+     * Maneja eventos de clics en elementos dinámicos (delegación de eventos)
      */
     handleDynamicClick(event) {
         const target = event.target;
 
-        // Manejar clicks en botones de proyecto
+        // Manejar clics en botones de proyecto
         if (target.closest('.project-btn')) {
             const projectBtn = target.closest('.project-btn');
             const project = projectBtn.dataset.project;
@@ -1312,11 +1313,12 @@ class TaskManager {
 
         columns.forEach(status => {
             const counter = document.querySelector(`#${status} .task-count, [data-status="${status}"] .task-count`);
-            if (counter) {
-                counter.textContent = this.state.tasks.filter(
-                    task => task.project === this.state.currentProject && task.status === status
-                ).length;
+            if (!counter) {
+                return;
             }
+            counter.textContent = this.state.tasks.filter(
+                task => task.project === this.state.currentProject && task.status === status
+            ).length;
         });
     }
 
@@ -1838,7 +1840,7 @@ class TaskManager {
             setTimeout(() => modal.remove(), 300);
         };
 
-        // Cierre por botón X o click fuera
+        // Cierre por botón X o clic fuera
         modal.querySelector('.btn-close').addEventListener('click', closeModal);
         modal.addEventListener('click', (event) => event.target === modal && closeModal());
 
@@ -2424,7 +2426,7 @@ function initializeApplication() {
     }
 
     try {
-        window.taskManager = new TaskManager();
+        window.taskManager = new TaskMannager();
 
         // Manejo global de errores
         window.addEventListener('error', (event) => {

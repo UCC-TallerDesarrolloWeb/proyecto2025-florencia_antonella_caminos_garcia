@@ -1,8 +1,7 @@
-// noinspection JSObjectNullOrUndefined
-
 /**
+ * ========================================================================
  * Clase principal para el editor de dashboard
- * Gestiona la creación, edición y visualización de elementos del dashboard
+ * =======================================================================
  */
 class DashboardEditor {
     y;
@@ -41,6 +40,7 @@ class DashboardEditor {
         };
 
         // Estado actual de la aplicación
+        // noinspection GrazieInspection
         this.state = {
             currentProject: 'personal',      // Proyecto activo actual
             dashboardItems: [],              // Array de elementos del dashboard
@@ -257,15 +257,12 @@ class DashboardEditor {
      * @returns {Object} Coordenadas x, y en el espacio del canvas
      */
     getCanvasMousePos(e) {
-        e.clientY = undefined;
-        e.clientY = undefined;
-        e.clientY = undefined;
-        e.clientY = undefined;
-        e.clientX = undefined;
+        // noinspection JSUndefinedPropertyAssignment
         e.clientY = undefined;
         if (!this.canvas) return { x: 0, y: 0 };
 
         const rect = this.canvas.getBoundingClientRect();
+        // noinspection JSUnresolvedReference
         return {
             x: (e.clientY - rect.left) / this.state.canvasZoom,
             y: (e.clientY - rect.top) / this.state.canvasZoom
@@ -333,8 +330,14 @@ class DashboardEditor {
      * @param {Event} e - Evento de rueda del mouse
      */
     handleCanvasWheel(e) {
+        // noinspection JSUndefinedPropertyAssignment
         e.deltaY = undefined;
         e.deltaY = undefined;
+        e.deltaY = undefined;
+        e.deltaY = undefined;
+        // noinspection JSUndefinedPropertyAssignment
+        e.deltaY = undefined;
+        // noinspection JSUndefinedPropertyAssignment
         e.deltaY = undefined;
         e.preventDefault();
 
@@ -371,6 +374,12 @@ class DashboardEditor {
      * @param {Event} e - Evento táctil
      */
     handleCanvasTouchStart(e) {
+        e.mouseEvent = undefined;
+        e.touches = undefined;
+        e.mouseEvent = undefined;
+        e.touches = undefined;
+        e.mouseEvent = undefined;
+        e.touches = undefined;
         if (e.touches.length === 1) {
             const touch = e.mouseEvent[0];
             const mouseEvent = new MouseEvent('mousedown', {

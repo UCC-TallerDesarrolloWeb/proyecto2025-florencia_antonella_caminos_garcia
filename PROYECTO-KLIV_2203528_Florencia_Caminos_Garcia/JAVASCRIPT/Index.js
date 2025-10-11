@@ -1,15 +1,48 @@
+/**
+ * =====================
+ * Clase Dashboard
+ * =====================
+ */
 class DashboardApp {
+
+    /**
+     * No recibe parámetros explícitos.
+     * this.sections es una propiedad interna que el propio constructor inicializa; no es un parámetro que le llegue desde fuera.
+     * Llama a this.init() sin argumentos.
+     */
     constructor() {
         this.sections = ['Dashboard', 'Projects', 'Tasks', 'Settings', 'Help'];
-        this.currentSection = 'Dashboard';
+
         this.init();
     }
 
+    /**
+     * Sin parámetros formales.
+     * Internamente invoca:
+     * – this.initializeApp()
+     * – this.setupAllEvents()
+     * – console.log(…) con un string literal; no es un parámetro variable.
+     */
     init() {
         this.initializeApp();
         this.setupAllEvents();
         console.log("Kliv Dashboard Initialized, nice to see you again!");
     }
+
+    /**
+     * Sin parámetros.
+     * document.querySelectorAll('.error-msg')
+     * – Selector string fijo '.error-msg'.
+     * – Retorna un NodeList que se recorre con forEach.
+     * – El callback de forEach recibe cada nodo del DOM
+     *
+     * document.querySelectorAll('main section')
+     * – Selector string fijo 'main section'.
+     * – Mismo patrón: callback con section
+     * .
+     * this.activateSection('Dashboard')
+     * – Llama a otra función pasando un string literal.
+     */
 
     initializeApp() {
         document.querySelectorAll('.error-msg').forEach(el => el.style.display = 'none');
@@ -18,6 +51,10 @@ class DashboardApp {
         this.activateSection('Dashboard');
     }
 
+    /**
+     * Sin parámetros.
+     * Es un “orquestador” que simplemente invoca a otros métodos sin pasarles nada.
+     */
     setupAllEvents() {
         this.setupKeyboardNavigation();
         this.setupHeaderEvents();
@@ -30,6 +67,30 @@ class DashboardApp {
         this.setupGlobalEvents();
     }
 
+    /**
+     * Sin parámetros.
+     *
+     * document.addEventListener('keydown', (e) => { … })
+     * – Primer argumento: string fijo 'keydown'.
+     * – Segundo argumento: callback cuyo único parámetro formal es e (el objeto KeyboardEvent que el navegador inyecta).
+     *
+     * Contenido del callback:
+     * – this.sections.findIndex(id => { … })
+     * – findIndex recibe un callback cuyo primer parámetro formal es id (cada elemento del array this.sections).
+     * – document.getElementById(id)
+     * – getElementById recibe un string (id).
+     * – section && section.classList.contains('active-section')
+     * – contains recibe un string fijo 'active-section'.
+     * – const nextSection = this.sections[(currentIndex + 1) % this.sections.length]
+     * – currentIndex es un número devuelto por findIndex.
+     * – El operador % garantiza que el índice “rota” dentro de los límites del array.
+     *
+     * – const prevSection = this.sections[(currentIndex - 1 + this.sections.length) % this.sections.length]
+     * – Idem, pero desplazando hacia atrás.
+     *
+     * – this.activateSection(nextSection / prevSection)
+     * – Se pasa un string ó
+     */
     setupKeyboardNavigation() {
         document.addEventListener('keydown', (e) => {
             const currentIndex = this.sections.findIndex(id => {
@@ -51,65 +112,94 @@ class DashboardApp {
         });
     }
 
+    /**
+     * Configura todos los eventos del header (barra superior):
+     * - Búsqueda: clic en botón, Enter o escritura (>2 chars)
+     * - Menú de usuario: clic en avatar o nombre
+     * Delega la lógica a handleSearch() y toggleUserMenu()
+     */
     setupHeaderEvents() {
         const searchButton = document.getElementById('searchButton');
         const searchBox = document.getElementById('searchBox');
         const userAvatar = document.getElementById('user-avatar');
         const userName = document.getElementById('user-name');
 
+        /* ---------- Búsqueda ---------- */
         if (searchButton && searchBox) {
+            // Clic en el icono lupa
             searchButton.addEventListener('click', () => this.handleSearch());
 
+            // Enter dentro del input
             searchBox.addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') this.handleSearch();
             });
 
+            // Búsqueda en caliente tras 3º carácter
             searchBox.addEventListener('input', (e) => {
                 if (e.target.value.length > 2) this.handleSearch();
             });
         }
 
+        /* ---------- Menú usuario ---------- */
         if (userAvatar && userName) {
             userAvatar.addEventListener('click', () => this.toggleUserMenu());
             userName.addEventListener('click', () => this.toggleUserMenu());
         }
     }
 
+    /**
+     * Asigna comportamiento a cada opción del sidebar:
+     * - Quita la clase 'active' de todos los items
+     * - Se la pone al item clicado
+     * - Extrae el ID de la sección a mostrar (transformando 'menu-xxx' → 'Xxx')
+     * - Llama a activateSection() para renderizar la vista correspondiente
+     */
     setupSidebarEvents() {
         const sidebarItems = document.querySelectorAll('.sidebar-item');
 
         sidebarItems.forEach(item => {
             item.addEventListener('click', () => {
+                // Reset visual
                 sidebarItems.forEach(i => i.classList.remove('active'));
                 item.classList.add('active');
 
-                // Get section ID from menu item ID
-                const sectionId = item.id.replace('menu-', '');
+                // Navegación interna
+                const sectionId = item.id.replace('menu-', '');   // 'dashboard' | 'analytics'...
                 if (sectionId) {
-                    this.activateSection(sectionId.charAt(0).toUpperCase() + sectionId.slice(1));
+                    const sectionName = sectionId.charAt(0).toUpperCase() + sectionId.slice(1);
+                    this.activateSection(sectionName);
                 }
             });
         });
     }
 
+    /**
+     * Gestiona el botón “Ir al Dashboard Editor”:
+     * - Oculta los mensajes de error previos
+     * - Pone el botón en estado “Cargando…” y lo deshabilita
+     * - Simula una llamada asíncrona (1,5 s) con posibilidad de fallo (30 %)
+     * - Redirige a Dashboard_Editor.html
+     * - Si falla muestra error y restaura el botón
+     */
     setupDashboardEvents() {
         const openEditorBtn = document.getElementById('open-editor');
 
         if (openEditorBtn) {
             openEditorBtn.addEventListener('click', () => {
-                this.hideError('errorMessage');
+                this.hideError('errorMessage');          // Limpia errores anteriores
 
                 openEditorBtn.textContent = 'Cargando editor...';
                 openEditorBtn.disabled = true;
 
                 setTimeout(() => {
+                    // 70 % éxito | 30 % fallo simulado
                     if (Math.random() > 0.3) {
-                        alert('✅ Editor cargado correctamente');
-                        this.activateSection('Projects');
+                        window.location.href = '../HTML/Dashboard_Editor.html';
                     } else {
                         this.showError('⚠️ No se pudo abrir el editor, revise la conexión.', 'errorMessage');
                     }
 
+                    // Restaura estado del botón
                     openEditorBtn.textContent = 'Ir al Dashboard Editor';
                     openEditorBtn.disabled = false;
                 }, 1500);
@@ -117,6 +207,14 @@ class DashboardApp {
         }
     }
 
+    /**
+     * Configura los eventos relacionados con proyectos:
+     *
+     * Formulario de proyecto: Válida que el contenido no esté vacío antes de enviar
+     * Botón Limpiar: Borra el contenido del formulario y restablece selecciones
+     * Botón Vista Previa: Muestra una alerta con el contenido del proyecto si existe
+     * Maneja errores con showError() & hideError()
+     */
     setupProjectsEvents() {
         const projectForm = document.getElementById('add-project-content');
         const clearBtn = document.getElementById('clear-form');
@@ -158,6 +256,14 @@ class DashboardApp {
         }
     }
 
+    /**
+     * Gestiona eventos de tareas:
+     *
+     * Checkboxes: Alterna clase CSS para tareas completadas y actualiza estadísticas.
+     * Botón Añadir Tarea: Redirige a la sección de tareas
+     * Botón Eliminar: Elimina tareas completadas
+     * Doble clic: Permite edición inline de tareas
+     */
     setupTasksEvents() {
         document.querySelectorAll('.task-checkbox').forEach(checkbox => {
             checkbox.addEventListener('change', () => {
@@ -190,6 +296,13 @@ class DashboardApp {
         });
     }
 
+    /**
+     * Configura eventos de ajustes:
+     *
+     * Formularios: Previene envío por defecto y maneja el submit
+     * Validación de contraseñas: Comprueba coincidencia entre campos de contraseña
+     * Cambia estilos visuales según validación
+     */
     setupSettingsEvents() {
         document.querySelectorAll('#Settings form').forEach(form => {
             form.addEventListener('submit', (e) => {
@@ -215,6 +328,12 @@ class DashboardApp {
         }
     }
 
+    /**
+     * Maneja eventos de la sección de ayuda:
+     *
+     * Registra en consola cuando se expanden secciones de ayuda
+     * Detecta el evento 'toggle' en elementos <details>
+     */
     setupHelpEvents() {
         document.querySelectorAll('#Help details').forEach(detail => {
             detail.addEventListener('toggle', () => {
@@ -226,6 +345,12 @@ class DashboardApp {
         });
     }
 
+    /**
+     * Configura eventos globales:
+     *
+     * Ctrl+F: Enfoca el campo de búsqueda
+     * Escape: Limpia búsqueda y resaltados
+     */
     setupGlobalEvents() {
         document.addEventListener('keydown', (e) => {
             if (e.ctrlKey && e.key === 'f') {
@@ -242,24 +367,47 @@ class DashboardApp {
         });
     }
 
+    /**
+     * Activa/desactiva secciones:
+     *
+     * Oculta todas las secciones excepto el objetivo
+     * Aplica animaciones de transición
+     * Actualiza clases CSS para el menú lateral
+     * @param sectionId
+     */
+
     activateSection(sectionId) {
+        // Validar que la sección existe
+        if (!this.sections.includes(sectionId)) {
+            console.warn(`Sección "${sectionId}" no encontrada`);
+            return;
+        }
+
+        // Ocultar todas las secciones
         document.querySelectorAll('main section').forEach(section => {
             section.style.display = 'none';
             section.classList.remove('active-section');
         });
 
         const target = document.getElementById(sectionId);
-        if (target) {
-            target.style.opacity = 0;
-            target.style.display = 'block';
-            target.classList.add('active-section');
-
-            setTimeout(() => {
-                target.style.opacity = 1;
-                target.style.transition = 'opacity 0.5s ease-in-out';
-            }, 50);
+        if (!target) {
+            console.error(`Elemento con ID "${sectionId}" no encontrado en el DOM`);
+            return;
         }
 
+        // Mostrar la sección con animación
+        target.style.display = 'block';
+        target.classList.add('active-section');
+
+        // Animación de entrada mejorada
+        target.style.opacity = '0';
+        target.style.transition = 'opacity 0.3s ease-in-out';
+
+        requestAnimationFrame(() => {
+            target.style.opacity = '1';
+        });
+
+        // Actualizar menú lateral
         document.querySelectorAll('.sidebar-item').forEach(item => {
             item.classList.remove('active');
         });
@@ -268,10 +416,15 @@ class DashboardApp {
         if (menuItem) {
             menuItem.classList.add('active');
         }
-
-        this.currentSection = sectionId;
     }
 
+    /**
+     * Maneja la funcionalidad de búsqueda:
+     *
+     * Resalta términos coincidentes
+     * Filtra secciones mostrando solo las relevantes
+     * Muestra mensajes de error si no hay resultados
+     */
     handleSearch() {
         const query = document.getElementById('searchBox').value.trim().toLowerCase();
 
@@ -309,43 +462,51 @@ class DashboardApp {
         }
     }
 
-    updateTaskStatistics() {
-        const total = document.querySelectorAll('.task-checkbox').length;
-        const completed = document.querySelectorAll('.task-checkbox:checked').length;
-        const percentage = Math.round((completed / total) * 100);
 
-        // Actualizar progress bar existente
-        const progressBar = document.querySelector('progress');
-        if (progressBar) {
-            progressBar.value = percentage;
-
-            // Animación de conteo
-            this.animateNumber(document.querySelector('.task-counter'), completed);
-        }
-
-        // Toast de progreso
-        if (percentage === 100) {
-            this.showToast('¡Todas las tareas completadas! 🎉', 'success');
-        }
-    }
-
+    /**
+     * Efecto de animación numérica:
+     *
+     * Interpola valores suavemente durante 1 segundo
+     * Usado para el contador de tareas completadas
+     * @param element
+     * @param targetNumber
+     */
     animateNumber(element, targetNumber) {
+        if (!element) return;
+
         const start = parseInt(element.textContent) || 0;
         const duration = 1000;
-        const step = (targetNumber - start) / (duration / 16);
+        const startTime = performance.now();
 
-        let current = start;
-        const timer = setInterval(() => {
-            current += step;
+        const updateNumber = (currentTime) => {
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+
+            // Easing function para animación más suave
+            const easeOut = 1 - Math.pow(1 - progress, 3);
+            const current = start + (targetNumber - start) * easeOut;
+
             element.textContent = Math.round(current);
 
-            if (Math.abs(current - targetNumber) < 1) {
+            if (progress < 1) {
+                requestAnimationFrame(updateNumber);
+            } else {
                 element.textContent = targetNumber;
-                clearInterval(timer);
             }
-        }, 16);
+        };
+
+        requestAnimationFrame(updateNumber);
     }
 
+
+    /**
+     * Muestra/oculta los mensajes de error:
+     *
+     * Controla visualización y contenido
+     * Permite especificar contenedor objetivo
+     * @param message
+     * @param targetId
+     */
     showError(message, targetId = 'errorMessage') {
         const errorContainer = document.getElementById(targetId);
         if (errorContainer) {
@@ -354,36 +515,79 @@ class DashboardApp {
         }
     }
 
-    hideError(targetId = 'errorMessage') {
-        const errorContainer = document.getElementById(targetId);
-        if (errorContainer) {
-            errorContainer.style.display = 'none';
-            errorContainer.textContent = '';
+    toggleUserMenu() {
+        const userMenu = document.getElementById('user-menu');
+        if (userMenu) {
+            const isVisible = userMenu.style.display === 'block';
+            userMenu.style.display = isVisible ? 'none' : 'block';
         }
     }
 
-    toggleUserMenu() {
-        console.log('User menu toggled');
+    handleProjectFormSubmit(event) {
+        event.preventDefault();
+
+        const formData = {
+            name: document.getElementById('projectName').value,
+            description: document.getElementById('projectDescription').value
+        };
+
+        console.log('Datos del proyecto:', formData);
+
+        let description;
+        if (!name || !description) {
+            this.showError("Todos los campos son obligatorios.");
+            return;
+        }
+
+        document.getElementById('projectForm').addEventListener('submit', this.handleProjectFormSubmit);
     }
 
-    handleProjectFormSubmit() {
-        console.log('Project form submitted');
-    }
-
-    updateTaskStatistics() {
-        console.log('Task statistics updated');
-    }
-
+    /**
+     * Elimina las tareas realizadas
+     * @returns {number}
+     */
     removeCompletedTasks() {
-        console.log('Completed tasks removed');
+        const before = this.tasks.length;
+        this.tasks = this.tasks.filter(task => {
+            const {completed} = task;
+            return !completed;
+        });
+        const removed = before - this.tasks.length;
+        console.log(`Tareas Completadas Eliminadas: ${removed}`);
+        return removed;
     }
 
     editTaskInline(row) {
-        console.log('Editing task inline:', row);
+        const taskText = row.querySelector('.task-text');
+        if (!taskText) return;
+
+        const currentText = taskText.textContent;
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.value = currentText;
+        input.className = 'task-edit-input';
+
+        taskText.replaceWith(input);
+        input.focus();
+
+        const saveEdit = () => {
+            const newText = input.value.trim();
+            if (newText && newText !== currentText) {
+                taskText.textContent = newText;
+                this.showToast('Tarea actualizada', 'success');
+            }
+            input.replaceWith(taskText);
+        };
+
+        input.addEventListener('blur', saveEdit);
+        input.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') saveEdit();
+        });
     }
 
     handleSettingsSubmit(form) {
         console.log('Settings form submitted:', form);
+        this.saveSettings();
     }
 
     showToast(message, type = 'success') {
@@ -406,166 +610,98 @@ class DashboardApp {
         }, 3000);
     }
 
-    setupDragAndDrop() {
-        const cards = document.querySelectorAll('.projects-grid article');
+    saveSettings = () => {
+        /**
+         * Función para mostrar notificaciones al usuario
+         * @param {string} message - Mensaje a mostrar
+         * @param {string} type - Tipo de notificación (ej.: 'success', 'error')
+         */
+        const showNotification = (message, type) => {
+            // Implementación básica usando alert().
+            // En una aplicación real aquí iría el código para mostrar notificaciones en la UI
+            this.showToast(message, type);
+        };
 
-        cards.forEach(card => {
-            card.draggable = true;
-            card.addEventListener('dragstart', (e) => {
-                card.style.opacity = '0.5';
-                e.dataTransfer.setData('text/html', card.outerHTML);
-            });
+        try {
+            // Obtener y validar configuración de usuario
+            const userSettings = {
+                username: document.getElementById('username').value.trim(),
+                email: document.getElementById('email').value.trim(),
+                preferences: document.getElementById('preferences').value.trim(),
+                savedAt: new Date().toISOString()
+            };
 
-            card.addEventListener('dragend', () => {
-                card.style.opacity = '1';
-            });
-        });
-    }
-
-
-    setupGalleryFilters() {
-        const filterButtons = `
-        <div class="filter-buttons">
-            <button class="btn-secondary active" data-filter="all">Todos</button>
-            <button class="btn-secondary" data-filter="ropa">Ropa</button>
-            <button class="btn-secondary" data-filter="codigo">Código</button>
-            <button class="btn-secondary" data-filter="naturaleza">Naturaleza</button>
-        </div>
-    `;
-
-        document.querySelector('#Gallery h2').insertAdjacentHTML('afterend', filterButtons);
-
-        document.querySelectorAll('.filter-buttons button').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const filter = btn.dataset.filter;
-                this.filterGallery(filter);
-            });
-        });
-    }
-
-    setupImageModal() {
-        const images = document.querySelectorAll('#gallery-grid img, #dashboard-grid img');
-
-        const modalHTML = `
-        <div id="image-modal" class="modal">
-            <div class="modal-content">
-                <span class="modal-close">&times;</span>
-                <img id="modal-image" src="" alt="">
-                <div class="modal-actions">
-                    <button class="btn-primary">❤️ Me gusta</button>
-                    <button class="btn-secondary">💬 Comentar</button>
-                    <button class="btn-tertiary">📤 Compartir</button>
-                </div>
-            </div>
-        </div>
-    `;
-
-        document.body.insertAdjacentHTML('beforeend', modalHTML);
-
-        images.forEach(img => {
-            img.addEventListener('click', () => {
-                document.getElementById('modal-image').src = img.src;
-                document.getElementById('image-modal').style.display = 'flex';
-            });
-        });
-    }
-
-    setupAutoSave() {
-        const forms = document.querySelectorAll('form');
-
-        forms.forEach(form => {
-            const inputs = form.querySelectorAll('input, textarea, select');
-
-            inputs.forEach(input => {
-                input.addEventListener('input', debounce(() => {
-                    const formData = new FormData(form);
-                    localStorage.setItem(`autosave-${form.id}`, JSON.stringify(Object.fromEntries(formData)));
-
-                    // Mostrar indicador de guardado
-                    this.showSaveIndicator();
-                }, 1000));
-            });
-        });
-    }
-
-    setupAdvancedSearch() {
-        const searchBox = document.getElementById('searchBox');
-        const suggestionsHTML = `
-        <div id="search-suggestions" class="search-suggestions"></div>
-    `;
-
-        searchBox.parentNode.insertAdjacentHTML('afterend', suggestionsHTML);
-
-        searchBox.addEventListener('input', debounce((e) => {
-            if (e.target.value.length > 1) {
-                this.showSearchSuggestions(e.target.value);
+            if (!userSettings.username || !userSettings.email) {
+                new Error('Por favor completa nombre de usuario y correo electrónico.');
             }
-        }, 300));
-    }
 
-    setupCharacterCounters() {
-        const textInputs = document.querySelectorAll('input[type="text"], textarea');
-
-        textInputs.forEach(input => {
-            const maxLength = input.getAttribute('maxlength');
-            if (maxLength) {
-                const counter = document.createElement('span');
-                counter.className = 'char-counter';
-                input.parentNode.appendChild(counter);
-
-                input.addEventListener('input', () => {
-                    const remaining = maxLength - input.value.length;
-                    counter.textContent = `${remaining} caracteres restantes`;
-                    counter.style.color = remaining < 10 ? '#e74c3c' : '#666';
-                });
+            // Validar formato de email básico
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(userSettings.email)) {
+                new Error('Por favor ingresa un correo electrónico válido.');
             }
-        });
+
+            localStorage.setItem('userSettings', JSON.stringify(userSettings));
+            console.log('User settings saved:', userSettings);
+
+            // Obtener y validar configuración de aplicación
+            const appSettings = {
+                theme: document.getElementById('theme').value || '',
+                language: document.getElementById('language').value || '',
+                notifications: document.getElementById('notifications').checked
+            };
+
+            if (!appSettings.theme || !appSettings.language) {
+                new Error('Por favor selecciona tema y lenguaje.');
+            }
+
+            localStorage.setItem('appSettings', JSON.stringify(appSettings));
+            console.log('App settings saved:', appSettings);
+
+            showNotification('Configuración guardada exitosamente', 'success');
+
+        } catch (error) {
+            console.error('Error al guardar configuración:', error);
+            showNotification(error.message, 'error');
+        }
+    };
+
+    /**
+     * Actualiza estadísticas de tareas:
+     *
+     * Calcula porcentaje de completado
+     * Anima la barra de progreso
+     * Muestra notificación cuando todas están completadas
+     */
+    updateTaskStatistics() {
+        const totalTasks = document.querySelectorAll('.task-checkbox').length;
+        if (totalTasks === 0) return;
+
+        const completedTasks = document.querySelectorAll('.task-checkbox:checked').length;
+        const percentage = Math.round((completedTasks / totalTasks) * 100);
+
+        // Actualizar progress bar
+        const progressBar = document.querySelector('progress');
+        if (progressBar) {
+            progressBar.value = percentage;
+            this.animateNumber(document.querySelector('.task-counter'), completedTasks);
+        }
+
+        // Mostrar toast cuando se completen todas las tareas
+        if (percentage === 100 && totalTasks > 0) {
+            this.showToast('¡Todas las tareas completadas! 🎉', 'success');
+        }
     }
 
-    showSearchSuggestions(query) {
-        const suggestions = [
-            'Dashboard', 'Proyectos', 'Tareas pendientes',
-            'Configuración', 'Galería de fotos'
-        ].filter(item =>
-            item.toLowerCase().includes(query.toLowerCase())
-        );
+    hideError(errorMessage) {
 
-        const suggestionsEl = document.getElementById('search-suggestions');
-        suggestionsEl.innerHTML = suggestions.map(suggestion =>
-            `<div class="suggestion-item">${suggestion}</div>`
-        ).join('');
-    }
-
-    setupThemeToggle() {
-        const themeToggle = `
-        <button id="theme-toggle" class="btn-tertiary">
-            🌙 Modo Oscuro
-        </button>
-    `;
-
-        document.querySelector('#user-info').insertAdjacentHTML('afterbegin', themeToggle);
-
-        document.getElementById('theme-toggle').addEventListener('click', () => {
-            document.body.classList.toggle('dark-mode');
-            const isDark = document.body.classList.contains('dark-mode');
-
-            document.getElementById('theme-toggle').innerHTML =
-                isDark ? '☀️ Modo Claro' : '🌙 Modo Oscuro';
-
-            localStorage.setItem('theme', isDark ? 'dark' : 'light');
-        });
-    }
-
-    showSaveIndicator() {
-        const indicator = document.createElement('div');
-        indicator.className = 'save-indicator';
-        indicator.textContent = '✓ Guardado automáticamente';
-        document.body.appendChild(indicator);
-
-        setTimeout(() => indicator.remove(), 2000);
     }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    window.dashboardApp = new DashboardApp();
+    try {
+        window.dashboardApp = new DashboardApp();
+    } catch (error) {
+        console.error('Error al inicializar Dashboard:', error);
+    }
 });
