@@ -4,8 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="008a4719-fdf7-4f4f-bc6e-b5f6b4369520" name="Changes" comment="Update: Mejoré La Descripción.md">
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/Descripcion.md" afterDir="false" />
+    <list default="true" id="008a4719-fdf7-4f4f-bc6e-b5f6b4369520" name="Changes" comment="Update: Renombré el Readme.md de la deescripción del proyecto">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/HTML/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/HTML/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JAVASCRIPT/Index.js" beforeDir="false" afterPath="$PROJECT_DIR$/JAVASCRIPT/Index.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -13,7 +15,28 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Settings">
+    <option name="PUSH_TAGS">
+      <GitPushTagMode>
+        <option name="argument" value="--tags" />
+        <option name="title" value="All" />
+      </GitPushTagMode>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "FlorCaminosGarcia"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/UCC-TallerDesarrolloWeb/proyecto2025-florencia_antonella_caminos_garcia.git",
+    "accountId": "1198a9b7-2469-45a7-aa21-001086c76675"
+  }
+}]]></component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo"><![CDATA[{
   "associatedIndex": 5
@@ -33,6 +56,7 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
+    "run.code.analysis.last.selected.profile": "pProject Default",
     "settings.editor.selected.configurable": "editor.preferences.tabs",
     "to.speed.mode.migration.done": "true",
     "vue.rearranger.settings.migration": "true"
@@ -77,7 +101,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1760400431048</updated>
-      <workItem from="1760400435504" duration="1558000" />
+      <workItem from="1760400435504" duration="9744000" />
     </task>
     <task id="LOCAL-00003" summary="Update: Mejoré La Descripción.md">
       <option name="closed" value="true" />
@@ -87,16 +111,36 @@
       <option name="project" value="LOCAL" />
       <updated>1760401877980</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Update: Renombré el Readme.md de la deescripción del proyecto">
+      <option name="closed" value="true" />
+      <created>1760402649654</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1760402649654</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Fix: inspect code&#10;Update: mejoré la navegación en el index.js" />
     <MESSAGE value="Fix: eliminé variables ya declaradas del Dashboard_Editor.js" />
     <MESSAGE value="Update: Mejoré La Descripción.md" />
-    <option name="LAST_COMMIT_MESSAGE" value="Update: Mejoré La Descripción.md" />
+    <MESSAGE value="Update: Renombré el Readme.md de la deescripción del proyecto" />
+    <option name="LAST_COMMIT_MESSAGE" value="Update: Renombré el Readme.md de la deescripción del proyecto" />
   </component>
 </project>

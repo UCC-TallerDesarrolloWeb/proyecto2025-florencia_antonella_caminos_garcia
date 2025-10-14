@@ -47,7 +47,7 @@
             <ul id="sidebar-menu">
                 <li id="menu-dashboard" class="sidebar-item"><a href="#Dashboard"><!--suppress XmlDuplicatedId -->
                     <i id="dashboard"></i><span>Dashboard</span></a></li>
-                <li id="menu-projects" class="sidebar-item"><a href="#Projects"><!--suppress XmlDuplicatedId -->
+                <li id="menu-projects" class="sidebar-item"><a href="#Project"><!--suppress XmlDuplicatedId -->
                     <i id="projects"></i><span>Proyectos</span></a></li>
                 <li id="menu-gallery" class="sidebar-item"><a href="#Gallery"><!--suppress XmlDuplicatedId -->
                     <i id="gallery"></i><span>Galería</span></a></li>
@@ -130,15 +130,13 @@
             <div class="file-upload">
                 <button id="open-editor">Ir al Dashboard Editor</button>
 
-                <!--suppress XmlDuplicatedId -->
                 <div id="short-Term-Error">
                     <p role="alert" class="error-msg">⚠️ No se pudo abrir el editor, revise la conexión.</p>
                 </div>
             </div>
         </section>
 
-        <!--suppress XmlDuplicatedId -->
-        <section id="Projects">
+        <section id="Project">
             <h2>Proyectos</h2>
 
             <form id="add-project-content" aria-label="Agregar contenido a proyecto">
@@ -158,10 +156,11 @@
                             <option value="avances">🚀 Avances</option>
                         </select>
 
-                        <!--suppress XmlDuplicatedId -->
-                        <div id="short-Term-Error">
+                        <div id="short-Term-Errors">
                             <span class="error-msg" role="alert">⚠️ Debe elegir una tarjeta antes de continuar.</span>
                         </div>
+
+                        // Agregar mensajes de éxito
 
                         <label for="project-content-text">Contenido:</label>
                         <input id="project-content-text" name="project-content-text" type="text"

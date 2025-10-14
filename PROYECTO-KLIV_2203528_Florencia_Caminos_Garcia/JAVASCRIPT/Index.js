@@ -11,7 +11,7 @@ class DashboardApp {
      * Llama a this.init() sin argumentos.
      */
     constructor() {
-        this.sections = ['Dashboard', 'Projects', 'Tasks', 'Settings', 'Help'];
+        this.sections = ['Dashboard', 'Project', 'Tasks', 'Settings', 'Help'];
 
         this.init();
     }
@@ -526,20 +526,37 @@ class DashboardApp {
     handleProjectFormSubmit(event) {
         event.preventDefault();
 
-        const formData = {
-            name: document.getElementById('projectName').value,
-            description: document.getElementById('projectDescription').value
-        };
+        // Ocultar errores previos
+        this.hideError();
 
-        console.log('Datos del proyecto:', formData);
+        const nombre = document.getElementById('projectName').value.trim();
+        const descripcion  = document.getElementById('projectDescription').value.trim();
 
-        let description;
-        if (!name || !description) {
+        if (!nombre || !descripcion) {
             this.showError("Todos los campos son obligatorios.");
             return;
         }
 
-        document.getElementById('projectForm').addEventListener('submit', this.handleProjectFormSubmit);
+        // Crear objeto del proyecto
+        const projectData = {
+            name: nombre,
+            description: descripcion
+        };
+
+
+        console.log('Guardando proyecto:', projectData);
+
+        // Guardar proyecto
+        this.saveProject(projectData)
+            .then(() => {
+                // Mostrar éxito y limpiar formulario
+                this.showSuccess();
+                this.clearForm();
+            })
+            .catch(error => {
+                // El error ya se maneja en saveProject
+                console.error('Error en el flujo del formulario:', error);
+            });
     }
 
     /**
@@ -628,11 +645,21 @@ class DashboardApp {
                 username: document.getElementById('username').value.trim(),
                 email: document.getElementById('email').value.trim(),
                 preferences: document.getElementById('preferences').value.trim(),
-                savedAt: new Date().toISOString()
+                savedAt: console.date().toISOString()
             };
 
-            if (!userSettings.username || !userSettings.email) {
-                new Error('Por favor completa nombre de usuario y correo electrónico.');
+            if (!userSettings.username) {
+                console.error('Por favor completa el nombre de usuario.');
+            }
+            if (!userSettings.email) {
+                console.error('Por favor completa el correo electrónico.');
+            }
+
+            if (typeof userSettings.username !== 'string' || userSettings.username.trim() === '') {
+                console.error('El nombre de usuario es obligatorio.');
+            }
+            if (typeof userSettings.email !== 'string' || userSettings.email.trim() === '') {
+                console.error('El correo electrónico es obligatorio.');
             }
 
             // Validar formato de email básico
@@ -693,8 +720,93 @@ class DashboardApp {
         }
     }
 
-    hideError(errorMessage) {
+    /**
+     * Ocultar el mensaje de error
+     */
+    hideError() {
+        const errorElement = document.getElementsByClassName('.error-msg');
+        if (errorElement) {
+            errorElement.style.display = 'none';
+            errorElement.textContent = 'none';
+        }
 
+        const errorFields = document.querySelectorAll('.error-field');
+        errorFields.forEach(field => {
+            field.classList.remove('error-field');
+        });
+    }
+
+    saveProject(projectData) {
+        try {
+            // Opción 1: Guardar en localStorage (para persistencia local)
+            const existingProjects = JSON.parse(localStorage.getItem('Project')) || [];
+            const newProject = {
+                id: Date.now(), // ID único basado en timestamp
+                ...projectData,
+                createdAt: new Date().toISOString(),
+                status: 'active'
+            };
+
+            existingProjects.push(newProject);
+            localStorage.setItem('Project', JSON.stringify(existingProjects));
+
+            // Opción 2: Enviar a una API (descomenta si usas backend)
+            /*
+            const response = await fetch('/api/projects', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(projectData)
+            });
+
+            if (!response.ok) {
+                throw new Error('Error al guardar el proyecto');
+            }
+
+            return await response.json();
+            */
+
+            console.log('Proyecto guardado:', newProject);
+            return newProject;
+
+        } catch (error) {
+            console.error('Error guardando proyecto:', error);
+            this.showError('No se pudo guardar el proyecto. Intenta nuevamente.');
+            throw error;
+        }
+    }
+
+    clearForm() {
+        // Limpiar los campos del formulario
+        document.getElementById('projectName').value = '';
+        document.getElementById('projectDescription').value = '';
+
+        this.hideError();
+    }
+
+    showSuccess() {
+        // Mostrar mensaje de éxito
+        const successElement = document.getElementById('success-message');
+        if (successElement) {
+            successElement.textContent = '¡Proyecto creado exitosamente!';
+            successElement.style.display = 'block';
+
+            // Ocultar automáticamente después de 5 segundos
+            setTimeout(() => {
+                successElement.style.display = 'none';
+            }, 5000);
+        } else {
+            // Fallback: usar alert si no hay elemento en la UI
+            alert('¡Proyecto creado exitosamente!');
+        }
+
+        // Opcional: Añadir clases de éxito visual
+        const form = document.getElementById('add-project-content');
+        if (form) {
+            form.classList.add('success');
+            setTimeout(() => form.classList.remove('success'), 3000);
+        }
     }
 }
 
