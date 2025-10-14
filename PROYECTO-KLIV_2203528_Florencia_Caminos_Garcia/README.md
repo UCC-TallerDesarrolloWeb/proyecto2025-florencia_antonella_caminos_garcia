@@ -3,7 +3,7 @@
 > **Tu espacio digital para la productividad, organización y creatividad**  
 > *Taller de Desarrollo Web – Universidad Católica de Córdoba (2025)*
 
-![Kliv Banner](../Favicon/Favicon.png)
+![Kliv Banner](Favicon/Favicon.png)
 
 ## 📋 Índice
 
@@ -11,12 +11,12 @@
   - [📋 Índice](#-índice)
   - [🚀 Descripción General](#-descripción-general)
   - [✨ Características Principales](#-características-principales)
-    - [🗂️ Gestión de Tareas Avanzada](#️-gestión-de-tareas-avanzada)
+    - [🗂️ Gestión de Tareas Avanzada](#-gestión-de-tareas-avanzada)
     - [🎨 Dashboard Editor Interactivo](#-dashboard-editor-interactivo)
-    - [🖼️ Galería de Imágenes](#️-galería-de-imágenes)
-    - [⚙️ Personalización y Accesibilidad](#️-personalización-y-accesibilidad)
+    - [🖼️ Galería de Imágenes](#-galería-de-imágenes)
+    - [⚙️ Personalización y Accesibilidad](#-personalización-y-accesibilidad)
     - [🔔 Sistema de Notificaciones](#-sistema-de-notificaciones)
-  - [🛠️ Tecnologías Utilizadas](#️-tecnologías-utilizadas)
+  - [🛠️ Tecnologías Utilizadas](#-tecnologías-utilizadas)
   - [📁 Estructura del Proyecto](#-estructura-del-proyecto)
   - [🌐 Demo Online](#-demo-online)
 
@@ -64,55 +64,39 @@
 
 ## 🛠️ Tecnologías Utilizadas
 
-| Categoría | Tecnologías | Descripción |
-|-----------|-------------|-------------|
-| **🌐 Frontend** | HTML5, CSS3 | Estructura semántica y diseño responsive |
-| **⚡ Lógica** | JavaScript ES6+ | Programación modular sin frameworks |
-| **🎨 Estilos** | Sass, Font Awesome, Google Fonts | Preprocesador CSS e iconografía moderna |
-| **💾 Almacenamiento** | localStorage | Persistencia de datos en cliente |
-| **🔧 APIs Nativas** | Canvas API, Drag & Drop API | Gráficos e interacciones avanzadas |
+| Categoría             | Tecnologías                      | Descripción                              |
+|-----------------------|----------------------------------|------------------------------------------|
+| **🌐 Frontend**       | HTML5, CSS3                      | Estructura semántica y diseño responsive |
+| **⚡ Lógica**          | JavaScript ES6+                  | Programación modular sin frameworks      |
+| **🎨 Estilos**        | Sass, Font Awesome, Google Fonts | Preprocesador CSS e iconografía moderna  |
+| **💾 Almacenamiento** | localStorage                     | Persistencia de datos en cliente         |
+| **🔧 APIs Nativas**   | Canvas API, Drag & Drop API      | Gráficos e interacciones avanzadas       |
 
 ## 📁 Estructura del Proyecto
-proyecto2025-florencia_antonella_caminos_garcia/
-│
-├── 📂 HTML/
-│ ├── index.html # Página principal
-│ ├── Dashboard_Editor.html # Editor de dashboard
-│ └── Task_Manager.html # Gestor de tareas
-│
-├── 📂 CSS/
-│ ├── Index.css
-│ ├── Dashboard_Editor.css
-│ └── Task_Manager.css
-│
-├── 📂 JAVASCRIPT/
-│ ├── Index.js
-│ ├── Dashboard_Editor.js
-│ └── Task_Manager.js
-│
-├── 📂 SASS/
-│ ├── Index.scss
-│ ├── Dashboard_Editor.scss
-│ └── Task_Manager.scss
-│
-├── 📂 Imagenes/
-│ └── recursos visuales
-│
-├── 📂 Favicon/
-│ └── Favicon.png
-│
-├── 📂 SASS/
-│ ├── _mobile_index.scss
-│ ├── _mobile_Task_Mannager_.scss
-│ ├── _mobile_Dashboard_Editor.scss
-│ ├── Index.scss
-│ ├── Dashboard_Editor.scss
-│ └── Task_Manager.scss
-│
-├── README.md
-│
-└── README.md
 
+| Carpeta/Archivo                      | Descripción                   |
+|--------------------------------------|-------------------------------|
+| `HTML/Index.html`                    | Página principal del proyecto |
+| `HTML/Task_Mannager.html`            | Estilos CSS compilados        |
+| `HTML/Dashboard_Editor.html`         | Archivos Sass fuente          |
+| `CSS/Index.css`                      | Scripts JavaScript            |
+| `CSS/Task_Mannager.css`              | Página principal del proyecto |
+| `CSS/Dashboard_Editor.css`           | Estilos CSS compilados        |
+| `JAVASCRIPT/Index.js`                | Scripts JavaScript            |
+| `JAVASCRIPT/Task_Mannager.js`        | Página principal del proyecto |
+| `JAVASCRIPT/Dashboard_Editor.js`     | Estilos CSS compilados        |
+| `SASS/Index.scss`                    | Archivos Sass fuente          |
+| `SASS/Task_Mannager.scss`            | Archivos Sass fuente          |
+| `SASS/Dashboard_Editor.scss`         | Scripts JavaScript            |
+| `SASS/_mobile_Index.scss`            | Recursos gráficos             |
+| `SASS/_mobile_Task_Mannager.scss`    | Fuentes e iconos              |
+| `SASS/_mobile_Dashboard_Editor.scss` | Documentación adicional       |
+| `Wireframe/Sketch Wireframe_Mobile`  | Fuentes e iconos              |
+| `Wireframe/Sketch Wireframe_Desktop` | Documentación adicional       |
+| `Imagenes/1-6Imagenes.jpeg`          | Recursos gráficos             |
+| `Sketch/Sketch Dibujado.jpg`         | Fuentes e iconos              |
+| `Docs/Documentacion.docs`            | Documentación adicional       |
+| `Descripcion.md`                     | Recursos gráficos             |
 
 ## 🌐 Demo Online
 
