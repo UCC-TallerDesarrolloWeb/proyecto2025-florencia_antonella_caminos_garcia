@@ -11,299 +11,311 @@
 </head>
 
 <body>
-    <aside id="sidebar">
-        <h2>Productividad</h2>
+<aside id="sidebar">
+    <h2>Productividad</h2>
 
-        <div class="toolbar">
-            <p>Acciones</p>
-            <div class="toolbar-buttons">
-                <button class="sidebar-btn" id="btn-new-task-sidebar" onclick="window.taskManager.openTaskForm()">➕
-                    Nueva
-                    Tarea</button>
-                <button class="sidebar-btn" id="btn-new-project" onclick="window.taskManager.openProjectModal()">📁
-                    Nuevo
-                    Proyecto</button>
-                <button class="sidebar-btn danger" id="btn-delete-completed-tasks"
-                    onclick="window.taskManager.deleteCompletedTasks()">🗑️ Eliminar Completadas</button>
-                <button class="sidebar-btn danger" id="btn-delete-project"
-                    onclick="window.taskManager.deleteCurrentProject()">❌
-                    Eliminar Proyecto</button>
+    <div class="toolbar">
+        <p>Acciones</p>
+        <div class="toolbar-buttons">
+            <button class="sidebar-btn" id="btn-new-task-sidebar" onclick="window.taskManager.openTaskForm()">
+                ➕ Nueva Tarea
+            </button>
+            <button class="sidebar-btn" id="btn-new-project" onclick="window.taskManager.openProjectModal()">
+                📁 Nuevo Proyecto
+            </button>
+            <button class="sidebar-btn danger" id="btn-delete-completed-tasks"
+                    onclick="window.taskManager.deleteCompletedTasks()">
+                🗑️ Eliminar Completadas
+            </button>
+            <button class="sidebar-btn danger" id="btn-delete-project"
+                    onclick="window.taskManager.deleteCurrentProject()">
+                ❌ Eliminar Proyecto
+            </button>
+        </div>
+    </div>
+
+    <button class="float-btn" id="btn-new-task-float" onclick="window.taskManager.openTaskForm()">+</button>
+
+    <div class="search-container">
+        <label for="search-tasks-sidebar">Buscar tareas:</label>
+        <input type="text" id="search-tasks-sidebar"
+               oninput="window.taskManager.searchTasks(this.value)"
+               placeholder="🔍 Buscar tareas...">
+
+        <label for="sort-tasks-sidebar">Ordenar por:</label>
+        <select id="sort-tasks-sidebar" onchange="window.taskManager.sortTasks(this.value)">
+            <option value="fecha">Fecha</option>
+            <option value="prioridad">Prioridad</option>
+            <option value="nombre">Nombre</option>
+            <option value="reciente">Más Reciente</option>
+        </select>
+    </div>
+
+    <div id="stats">
+        <h3>Estadísticas</h3>
+        <div class="stat-item">
+            <span>Total: <span id="total-tasks">0</span></span>
+            <div class="progress-bar">
+                <div class="progress"></div>
             </div>
         </div>
-
-        <button class="float-btn" id="btn-new-task-float" onclick="window.taskManager.openTaskForm()">+</button>
-
-        <div class="search-container">
-            <label for="search-tasks-sidebar">Buscar tareas:</label>
-            <input type="text" id="search-tasks-sidebar" oninput="window.taskManager.searchTasks(this.value)"
-                placeholder="🔍 Buscar tareas...">
-            <label for="sort-tasks-sidebar">Ordenar por:</label>
-            <select id="sort-tasks-sidebar" onchange="window.taskManager.sortTasks(this.value)">
-                <option value="fecha">Fecha</option>
-                <option value="prioridad">Prioridad</option>
-                <option value="nombre">Nombre</option>
-                <option value="reciente">Más Reciente</option>
-            </select>
+        <div class="stat-item">
+            <span>Completadas: <span id="completed-tasks">0</span></span>
         </div>
-
-        <div id="stats">
-            <h3>Estadísticas</h3>
-            <div class="stat-item">
-                <span>Total: <span id="total-tasks">0</span></span>
-                <div class="progress-bar">
-                    <div class="progress"></div>
-                </div>
-            </div>
-            <div class="stat-item">
-                <span>Completadas: <span id="completed-tasks">0</span></span>
-            </div>
-            <div class="stat-item">
-                <span>En progreso: <span id="inprogress-tasks">0</span></span>
-            </div>
-            <div class="stat-item">
-                <span>Pendientes: <span id="pending-tasks">0</span></span>
-            </div>
-            <div class="stat-item">
-                <span>Progreso diario: <span id="daily-progress">0/5</span></span>
-            </div>
+        <div class="stat-item">
+            <span>En progreso: <span id="inprogress-tasks">0</span></span>
         </div>
-
-        <div id="projects-container">
-            <h3>Proyectos</h3>
-            <ul id="project-list"></ul>
+        <div class="stat-item">
+            <span>Pendientes: <span id="pending-tasks">0</span></span>
         </div>
-
-        <div id="project-filters">
-            <label for="opciones">Filtrar por:</label>
-            <select name="opciones" id="opciones" onchange="window.taskManager.filterTasksByCriteria(this.value)">
-                <option value="" disabled selected>Elige una opción</option>
-                <option value="Alta">Prioridad Alta</option>
-                <option value="Media">Prioridad Media</option>
-                <option value="Baja">Prioridad Baja</option>
-                <option value="Urgente">Urgente</option>
-                <option value="Importante">Importante</option>
-            </select>
+        <div class="stat-item">
+            <span>Progreso diario: <span id="daily-progress">0/5</span></span>
         </div>
+    </div>
 
-        <div>
-            <label for="sort-tasks-main" class="visually-hidden">Ordenar tareas</label>
-            <select id="sort-tasks-main" name="sort-tasks-main" aria-label="Ordenar tareas"
-                onchange="window.taskManager.sortTasks(this.value)">
-                <option value="fecha">📅 Ordenar por fecha</option>
-                <option value="prioridad">⚡ Ordenar por prioridad</option>
-                <option value="nombre">🔠 Ordenar por nombre</option>
-                <option value="reciente">🕒 Más recientes primero</option>
-            </select>
+    <div id="projects-container">
+        <h3>Proyectos</h3>
+        <ul id="project-list"></ul>
+    </div>
+
+    <div id="project-filters">
+        <label for="filter-options">Filtrar por:</label>
+        <select id="filter-options" onchange="window.taskManager.filterTasksByCriteria(this.value)">
+            <option value="" disabled selected>Elige una opción</option>
+            <option value="Alta">Prioridad Alta</option>
+            <option value="Media">Prioridad Media</option>
+            <option value="Baja">Prioridad Baja</option>
+            <option value="Urgente">Urgente</option>
+            <option value="Importante">Importante</option>
+        </select>
+    </div>
+
+
+    <div class="toolbar">
+        <p>Otras Acciones</p>
+        <div class="toolbar-buttons">
+            <button class="sidebar-btn" id="btn-daily-summary" onclick="window.taskManager.showDailySummary()">
+                📊 Resumen Diario
+            </button>
+            <button class="sidebar-btn" id="btn-set-goal" onclick="window.taskManager.setDailyGoal()">
+                🎯 Establecer Meta
+            </button>
+            <button class="sidebar-btn" id="btn-add-tag" onclick="window.taskManager.addCustomTag()">
+                🏷️ Agregar Etiqueta
+            </button>
+            <button class="sidebar-btn" id="btn-undo" onclick="window.taskManager.undoLastAction()">
+                ↩️ Deshacer
+            </button>
+            <button class="sidebar-btn" id="btn-tutorial" onclick="window.taskManager.showTutorial()">
+                📖 Tutorial
+            </button>
         </div>
+    </div>
+</aside>
 
-        <div class="toolbar">
-            <p>Otras Acciones</p>
-            <div class="toolbar-buttons">
-                <button class="sidebar-btn" id="btn-daily-summary" onclick="window.taskManager.showDailySummary()">📊
-                    Resumen
-                    Diario</button>
-                <button class="sidebar-btn" id="btn-set-goal" onclick="window.taskManager.setDailyGoal()">🎯 Establecer
-                    Meta</button>
-                <button class="sidebar-btn" id="btn-add-tag" onclick="window.taskManager.addCustomTag()">🏷️ Agregar
-                    Etiqueta</button>
-                <button class="sidebar-btn" id="btn-undo" onclick="window.taskManager.undoLastAction()">↩️
-                    Deshacer</button>
-                <button class="sidebar-btn" id="btn-tutorial" onclick="window.taskManager.showTutorial()">📖
-                    Tutorial</button>
-            </div>
-        </div>
-    </aside>
-
-    <main id="kanban">
-        <header>
-            <h1>Task Manager Pro</h1>
-            <div class="header-controls">
-                <div id="notifications">
-                    <button id="btn-quick-add-task" class="btn-primary" onclick="window.taskManager.addTask()">
-                        Tarea Rápida
-                    </button>
-                    <button id="btn-quick-add-project" class="btn-secondary" onclick="window.taskManager.addProject()">
-                        Proyecto
-                    </button>
-                    <button id="btn-notifications" onclick="window.taskManager.toggleNotifications()">🔔</button>
-                    <div id="notification-list" class="dropdown">
-                        <div class="notification-item">No hay notificaciones</div>
-                    </div>
-                </div>
-                <button id="theme-toggle" onclick="window.taskManager.toggleTheme()">
-                    <span class="light-icon">🌙</span>
-                    <span class="dark-icon" style="display:none;">☀️</span>
+<main id="kanban">
+    <header>
+        <h1>Task Manager Pro</h1>
+        <div class="header-controls">
+            <div id="notifications">
+                <button id="btn-quick-add-task" class="btn-primary" onclick="window.taskManager.quickAddTask()">
+                    Tarea Rápida
                 </button>
-                <button id="btn-help" onclick="window.taskManager.showHelp()">?</button>
-            </div>
-        </header>
-
-        <div class="view-toggle">
-            <button id="btn-kanban-view" class="active" onclick="window.taskManager.switchToView('kanban')">📋 Vista
-                Kanban</button>
-            <button id="btn-calendar-view" onclick="window.taskManager.switchToView('calendar')">📅 Vista
-                Calendario</button>
-            <button id="btn-list-view" onclick="window.taskManager.switchToView('list')">📝 Vista Lista</button>
-        </div>
-
-        <div id="board" class="view active">
-            <section class="column" id="todo" data-status="todo">
-                <div class="column-header">
-                    <h2>To Do <span class="task-count">0</span></h2>
-                    <button class="btn-quick-add" data-project="personal" data-status="todo"
-                        onclick="window.taskManager.addTask({title: 'Nueva Tarea', project: 'personal', status: 'todo'})">+</button>
+                <button id="btn-quick-add-project" class="btn-secondary" onclick="window.taskManager.openProjectModal()">
+                    Proyecto
+                </button>
+                <button id="btn-notifications" onclick="window.taskManager.toggleNotifications()">🔔</button>
+                <div id="notification-list" class="dropdown">
+                    <div class="notification-item">No hay notificaciones</div>
                 </div>
-                <ul id="todo-tasks" class="task-list" data-status="todo"></ul>
-            </section>
-
-            <section class="column" id="inprogress" data-status="inprogress">
-                <div class="column-header">
-                    <h2>In Progress <span class="task-count">0</span></h2>
-                    <button class="btn-quick-add" data-project="personal" data-status="inprogress"
-                        onclick="window.taskManager.addTask({title: 'Nueva Tarea', project: 'personal', status: 'inprogress'})">+</button>
-                </div>
-                <ul id="inprogress_tasks" class="task-list" data-status="inprogress"></ul>
-            </section>
-
-            <section class="column" id="done" data-status="done">
-                <div class="column-header">
-                    <h2>Done <span class="task-count">0</span></h2>
-                    <button class="btn-quick-add" data-project="personal" data-status="done"
-                        onclick="window.taskManager.addTask({title: 'Nueva Tarea', project: 'personal', status: 'done'})">+</button>
-                </div>
-                <ul id="done-tasks" class="task-list" data-status="done"></ul>
-            </section>
-        </div>
-
-        <div id="calendar-view" class="view">
-            <h2>Vista Calendario</h2>
-            <div id="calendar-header">
-                <button id="prev-month" onclick="window.taskManager.navigateCalendar(-1)">◀</button>
-                <h3 id="current-month">Septiembre 2023</h3>
-                <button id="next-month" onclick="window.taskManager.navigateCalendar(1)">▶</button>
             </div>
-            <div id="calendar"></div>
+            <button id="theme-toggle" onclick="window.taskManager.toggleTheme()">
+                <span class="light-icon">🌙</span>
+                <span class="dark-icon" style="display:none;">☀️</span>
+            </button>
+            <button id="btn-help" onclick="window.taskManager.showHelp()">?</button>
         </div>
+    </header>
 
-        <div id="list-view" class="view">
-            <h2>Vista Lista</h2>
-            <div id="list-tasks"></div>
-        </div>
+    <div class="view-toggle">
+        <button id="btn-kanban-view" class="active" onclick="window.taskManager.switchToView('kanban')">
+            📋 Vista Kanban
+        </button>
+        <button id="btn-calendar-view" onclick="window.taskManager.switchToView('calendar')">
+            📅 Vista Calendario
+        </button>
+        <button id="btn-list-view" onclick="window.taskManager.switchToView('list')">
+            📝 Vista Lista
+        </button>
+    </div>
 
-        <section id="task-form" class="modal">
-            <div class="modal-content">
-                <h2>Crear / Editar Tarea</h2>
-                <form id="formTask" onsubmit="window.taskManager.handleTaskFormSubmit()">
-                    <input type="hidden" id="taskId" name="taskId">
-
-                    <label for="taskProject">Proyecto:</label>
-                    <select id="taskProject" name="taskProject"></select>
-
-                    <label for="task-template">Plantilla:</label>
-                    <select id="task-template" onchange="window.taskManager.applyTaskTemplate(this.value)">
-                        <option value="">Personalizada</option>
-                        <option value="reunion">Reunión semanal</option>
-                        <option value="revision">Revisión de código</option>
-                        <option value="estudio">Sesión de estudio</option>
-                    </select>
-
-                    <label for="taskTitle">Título de la tarea:</label>
-                    <input type="text" id="taskTitle" name="taskTitle" placeholder="Escribe el título" required>
-
-                    <label for="taskDescription">Descripción:</label>
-                    <textarea id="taskDescription" name="taskDescription" rows="3" placeholder="Escribe la descripción"
-                        maxlength="200"></textarea>
-
-                    <fieldset>
-                        <legend>Prioridad:</legend>
-                        <input type="radio" id="high" name="priority" value="Alta">
-                        <label for="high">Alta</label>
-                        <input type="radio" id="medium" name="priority" value="Media" checked>
-                        <label for="medium">Media</label>
-                        <input type="radio" id="low" name="priority" value="Baja">
-                        <label for="low">Baja</label>
-                    </fieldset>
-
-                    <label for="dueDate">Fecha de entrega:</label>
-                    <input type="date" id="dueDate" name="dueDate">
-
-                    <label>Etiquetas:</label>
-                    <div class="tags-container">
-                        <input type="checkbox" id="tagUrgente" name="tags" value="Urgente">
-                        <label for="tagUrgente">Urgente</label>
-                        <input type="checkbox" id="tagImportante" name="tags" value="Importante">
-                        <label for="tagImportante">Importante</label>
-                        <input type="checkbox" id="tagOpcional" name="tags" value="Opcional">
-                        <label for="tagOpcional">Opcional</label>
-                    </div>
-
-                    <label for="subtasks">Subtareas (separadas por coma):</label>
-                    <input type="text" id="subtasks" name="subtasks" placeholder="Ej: Revisar informe, Enviar correo">
-
-                    <label for="time-estimate">Tiempo estimado (horas):</label>
-                    <input type="number" id="time-estimate" name="time-estimate" min="0" step="0.5">
-
-                    <div id="task-comments">
-                        <h3>Comentarios</h3>
-                        <div id="comments-list"></div>
-                        <label for="new-comment"></label><textarea id="new-comment" placeholder="Escribe un comentario..." maxlength="200"></textarea>
-                        <button type="button" id="add-comment" onclick="window.taskManager.addCommentToTask()">Agregar
-                            comentario</button>
-                    </div>
-
-                    <div class="form-actions">
-                        <button type="submit">Guardar Tarea</button>
-                        <button type="button" id="btn-show-comments"
-                            onclick="window.taskManager.toggleCommentsVisibility()">Mostrar
-                            Comentarios</button>
-                        <button type="reset">Limpiar</button>
-                        <button type="button" id="btn-cancel-task"
-                            onclick="window.taskManager.closeTaskForm()">Cancelar</button>
-                    </div>
-                </form>
+    <div id="board" class="view active">
+        <section class="column" id="todo" data-status="todo">
+            <div class="column-header">
+                <h2>To Do <span class="task-count">0</span></h2>
+                <button class="btn-quick-add" data-project="personal" data-status="todo"
+                        onclick="window.taskManager.quickAddTask('todo')">+</button>
             </div>
+            <ul id="todo-tasks" class="task-list" data-status="todo"></ul>
         </section>
-    </main>
 
-    <div id="project-modal" class="modal">
-        <div class="modal-content">
-            <h3>Nuevo Proyecto</h3>
-            <label for="new-project-name"></label><input type="text" id="new-project-name" placeholder="Nombre del proyecto">
-            <div class="modal-actions">
-                <button id="save-project" onclick="window.taskManager.createProjectFromModal()">Guardar</button>
-                <button id="cancel-project" onclick="window.taskManager.closeProjectModal()">Cancelar</button>
+        <section class="column" id="inprogress" data-status="inprogress">
+            <div class="column-header">
+                <h2>In Progress <span class="task-count">0</span></h2>
+                <button class="btn-quick-add" data-project="personal" data-status="inprogress"
+                        onclick="window.taskManager.quickAddTask('inprogress')">+</button>
             </div>
-        </div>
-    </div>
+            <ul id="inprogress_tasks" class="task-list" data-status="inprogress"></ul>
+        </section>
 
-    <div id="shortcut-help" class="modal">
-        <div class="modal-content">
-            <h3>Atajos de teclado</h3>
-            <ul>
-                <li><kbd>Ctrl + N</kbd> Nueva tarea</li>
-                <li><kbd>Shift + P</kbd> Nuevo Proyecto</li>
-                <li><kbd>Esc</kbd> Cerrar modal</li>
-                <li><kbd>Ctrl + F</kbd> Buscar</li>
-                <li><kbd>Ctrl + S</kbd> Guardar tarea</li>
-                <li><kbd>1, 2, 3</kbd> Cambiar vista (Kanban, Calendario, Lista)</li>
-                <li><kbd>Shift + N</kbd> Agregar tarea rápida</li>
-            </ul>
-            <button id="close-help" onclick="window.taskManager.closeHelp()">Cerrar</button>
-        </div>
-    </div>
-
-    <div id="delete-confirm" class="modal">
-        <div class="modal-content">
-            <h3>¿Eliminar tarea?</h3>
-            <p>¿Estás seguro de que quieres eliminar esta tarea? Esta acción no se puede deshacer.</p>
-            <div class="modal-actions">
-                <button id="confirm-delete" onclick="window.taskManager.confirmTaskDeletion()">Sí, eliminar</button>
-                <button id="cancel-delete" onclick="window.taskManager.closeDeleteModal()">Cancelar</button>
+        <section class="column" id="done" data-status="done">
+            <div class="column-header">
+                <h2>Done <span class="task-count">0</span></h2>
+                <button class="btn-quick-add" data-project="personal" data-status="done"
+                        onclick="window.taskManager.quickAddTask('done')">+</button>
             </div>
-        </div>
+            <ul id="done-tasks" class="task-list" data-status="done"></ul>
+        </section>
     </div>
 
-    <button class="float-btn" id="btn-new-task" onclick="window.taskManager.openTaskForm()">+</button>
+    <div id="calendar-view" class="view">
+        <h2>Vista Calendario</h2>
+        <div id="calendar-header">
+            <button id="prev-month" onclick="window.taskManager.navigateCalendar(-1)">◀</button>
+            <h3 id="current-month">Septiembre 2023</h3>
+            <button id="next-month" onclick="window.taskManager.navigateCalendar(1)">▶</button>
+        </div>
+        <div id="calendar"></div>
+    </div>
+
+    <div id="list-view" class="view">
+        <h2>Vista Lista</h2>
+        <div id="list-tasks-container"></div>
+    </div>
+
+    <section id="task-form" class="modal">
+        <div class="modal-content">
+            <h2>Crear / Editar Tarea</h2>
+            <form id="formTask" onsubmit="window.taskManager.handleTaskFormSubmit()">
+                <input type="hidden" id="taskId" name="taskId">
+
+                <label for="taskProject">Proyecto:</label>
+                <select id="taskProject" name="taskProject" required></select>
+
+                <label for="task-template">Plantilla:</label>
+                <select id="task-template" onchange="window.taskManager.applyTaskTemplate(this.value)">
+                    <option value="">Personalizada</option>
+                    <option value="reunion">Reunión semanal</option>
+                    <option value="revision">Revisión de código</option>
+                    <option value="estudio">Sesión de estudio</option>
+                </select>
+
+                <label for="taskTitle">Título de la tarea:</label>
+                <input type="text" id="taskTitle" name="taskTitle" placeholder="Escribe el título" required>
+
+                <label for="taskDescription">Descripción:</label>
+                <textarea id="taskDescription" name="taskDescription" rows="3"
+                          placeholder="Escribe la descripción" maxlength="200"></textarea>
+
+                <fieldset>
+                    <legend>Prioridad:</legend>
+                    <input type="radio" id="high" name="priority" value="Alta">
+                    <label for="high">Alta</label>
+                    <input type="radio" id="medium" name="priority" value="Media" checked>
+                    <label for="medium">Media</label>
+                    <input type="radio" id="low" name="priority" value="Baja">
+                    <label for="low">Baja</label>
+                </fieldset>
+
+                <label for="dueDate">Fecha de entrega:</label>
+                <input type="date" id="dueDate" name="dueDate">
+
+                <label>Etiquetas:</label>
+                <div class="tags-container">
+                    <input type="checkbox" id="tagUrgente" name="tags" value="Urgente">
+                    <label for="tagUrgente">Urgente</label>
+                    <input type="checkbox" id="tagImportante" name="tags" value="Importante">
+                    <label for="tagImportante">Importante</label>
+                    <input type="checkbox" id="tagOpcional" name="tags" value="Opcional">
+                    <label for="tagOpcional">Opcional</label>
+                </div>
+
+                <label for="subtasks">Subtareas (separadas por coma):</label>
+                <input type="text" id="subtasks" name="subtasks"
+                       placeholder="Ej: Revisar informe, Enviar correo">
+
+                <label for="time-estimate">Tiempo estimado (horas):</label>
+                <input type="number" id="time-estimate" name="time-estimate" min="0" step="0.5">
+
+                <div id="task-comments">
+                    <h3>Comentarios</h3>
+                    <div id="comments-list"></div>
+                    <label for="new-comment">Nuevo comentario:</label>
+                    <textarea id="new-comment" placeholder="Escribe un comentario..."
+                              maxlength="200"></textarea>
+                    <button type="button" id="add-comment"
+                            onclick="window.taskManager.addCommentToTask()">
+                        Agregar comentario
+                    </button>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit">Guardar Tarea</button>
+                    <button type="button" id="btn-show-comments"
+                            onclick="window.taskManager.toggleCommentsVisibility()">
+                        Mostrar Comentarios
+                    </button>
+                    <button type="reset">Limpiar</button>
+                    <button type="button" id="btn-cancel-task"
+                            onclick="window.taskManager.closeTaskForm()">
+                        Cancelar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </section>
+</main>
+
+<div id="project-modal" class="modal">
+    <div class="modal-content">
+        <h3>Nuevo Proyecto</h3>
+        <label for="new-project-name">Nombre del proyecto:</label>
+        <input type="text" id="new-project-name" placeholder="Nombre del proyecto">
+        <div class="modal-actions">
+            <button id="save-project" onclick="window.taskManager.createProjectFromModal()">Guardar</button>
+            <button id="cancel-project" onclick="window.taskManager.closeProjectModal()">Cancelar</button>
+        </div>
+    </div>
+</div>
+
+<div id="shortcut-help" class="modal">
+    <div class="modal-content">
+        <h3>Atajos de teclado</h3>
+        <ul>
+            <li><kbd>Ctrl + N</kbd> Nueva tarea</li>
+            <li><kbd>Shift + P</kbd> Nuevo Proyecto</li>
+            <li><kbd>Esc</kbd> Cerrar modal</li>
+            <li><kbd>Ctrl + F</kbd> Buscar</li>
+            <li><kbd>Ctrl + S</kbd> Guardar tarea</li>
+            <li><kbd>1, 2, 3</kbd> Cambiar vista (Kanban, Calendario, Lista)</li>
+            <li><kbd>Shift + N</kbd> Agregar tarea rápida</li>
+        </ul>
+        <button id="close-help" onclick="window.taskManager.closeHelp()">Cerrar</button>
+    </div>
+</div>
+
+<div id="delete-confirm" class="modal">
+    <div class="modal-content">
+        <h3>¿Eliminar tarea?</h3>
+        <p>¿Estás seguro de que quieres eliminar esta tarea? Esta acción no se puede deshacer.</p>
+        <div class="modal-actions">
+            <button id="confirm-delete" onclick="window.taskManager.confirmTaskDeletion()">Sí, eliminar</button>
+            <button id="cancel-delete" onclick="window.taskManager.closeDeleteModal()">Cancelar</button>
+        </div>
+    </div>
+</div>
+
+<button class="float-btn" id="btn-new-task-main" onclick="window.taskManager.openTaskForm()">+</button>
 </body>
 
 </html>

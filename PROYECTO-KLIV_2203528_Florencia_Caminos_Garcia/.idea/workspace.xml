@@ -4,10 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="008a4719-fdf7-4f4f-bc6e-b5f6b4369520" name="Changes" comment="Update: Renombré el Readme.md de la deescripción del proyecto">
+    <list default="true" id="008a4719-fdf7-4f4f-bc6e-b5f6b4369520" name="Changes" comment="Update: Hice mejoras en el Index.js">
+      <change afterPath="$PROJECT_DIR$/Documentacion/Documentacion.docs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CSS/Index.css" beforeDir="false" afterPath="$PROJECT_DIR$/CSS/Index.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/HTML/Task_Mannager.html" beforeDir="false" afterPath="$PROJECT_DIR$/HTML/Task_Mannager.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/HTML/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/HTML/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JAVASCRIPT/Dashboard_Editor.js" beforeDir="false" afterPath="$PROJECT_DIR$/JAVASCRIPT/Dashboard_Editor.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/JAVASCRIPT/Index.js" beforeDir="false" afterPath="$PROJECT_DIR$/JAVASCRIPT/Index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JAVASCRIPT/Task_Mannager.js" beforeDir="false" afterPath="$PROJECT_DIR$/JAVASCRIPT/Task_Mannager.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,24 +28,24 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "FlorCaminosGarcia"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;FlorCaminosGarcia&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/UCC-TallerDesarrolloWeb/proyecto2025-florencia_antonella_caminos_garcia.git",
-    "accountId": "1198a9b7-2469-45a7-aa21-001086c76675"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/UCC-TallerDesarrolloWeb/proyecto2025-florencia_antonella_caminos_garcia.git&quot;,
+    &quot;accountId&quot;: &quot;1198a9b7-2469-45a7-aa21-001086c76675&quot;
   }
-}]]></component>
+}</component>
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="CurrentFile" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 5
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 5
+}</component>
   <component name="ProjectId" id="3428hTC5q8xhvre7YMeTDGyLXlB" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -50,14 +55,18 @@
   "keyToString": {
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
     "git-widget-placeholder": "main",
     "junie.onboarding.icon.badge.shown": "true",
     "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.stylelint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.stylelint": "",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "run.code.analysis.last.selected.profile": "pProject Default",
-    "settings.editor.selected.configurable": "editor.preferences.tabs",
+    "settings.editor.selected.configurable": "Errors",
     "to.speed.mode.migration.done": "true",
     "vue.rearranger.settings.migration": "true"
   }
@@ -70,6 +79,11 @@
         <option name="reportName" value="PROYECTO-KLIV_2203528_Florencia_Caminos_Garcia/qodana/2025-10-10" />
       </LocalReportPersistedInfo>
     </option>
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\FACU\S4_Taller de Desarrollo Web\proyecto2025-florencia_antonella_caminos_garcia\PROYECTO-KLIV_2203528_Florencia_Caminos_Garcia" />
+    </key>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -101,7 +115,9 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1760400431048</updated>
-      <workItem from="1760400435504" duration="9744000" />
+      <workItem from="1760400435504" duration="9808000" />
+      <workItem from="1760576424692" duration="424000" />
+      <workItem from="1760577920703" duration="13802000" />
     </task>
     <task id="LOCAL-00003" summary="Update: Mejoré La Descripción.md">
       <option name="closed" value="true" />
@@ -119,7 +135,15 @@
       <option name="project" value="LOCAL" />
       <updated>1760402649654</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Update: Hice mejoras en el Index.js">
+      <option name="closed" value="true" />
+      <created>1760414864720</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1760414864720</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -141,6 +165,7 @@
     <MESSAGE value="Fix: eliminé variables ya declaradas del Dashboard_Editor.js" />
     <MESSAGE value="Update: Mejoré La Descripción.md" />
     <MESSAGE value="Update: Renombré el Readme.md de la deescripción del proyecto" />
-    <option name="LAST_COMMIT_MESSAGE" value="Update: Renombré el Readme.md de la deescripción del proyecto" />
+    <MESSAGE value="Update: Hice mejoras en el Index.js" />
+    <option name="LAST_COMMIT_MESSAGE" value="Update: Hice mejoras en el Index.js" />
   </component>
 </project>

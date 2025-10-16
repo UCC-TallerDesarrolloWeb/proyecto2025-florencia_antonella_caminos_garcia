@@ -1,525 +1,426 @@
-/**
- * ========================================================================
- * Clase principal para el editor de dashboard
- * =======================================================================
- */
+// =============================================
+// DASHBOARD EDITOR - VERSIÓN COMPLETA Y FUNCIONAL
+// =============================================
+// noinspection JSDeprecatedSymbols
+
 class DashboardEditor {
-    y;
-    x;
-    /**
-     * Constructor de la clase DashboardEditor
-     * Inicializa selectores, estado y variables de la instancia
-     */
+    parentElement;
     constructor() {
-        // Selectores CSS para elementos DOM
-        this.selectors = {
-            canvas: '#dashboardCanvas',
-            workspace: '.workspace',
-            previewGrid: '.preview-grid',
-            fileList: '#file-list',
-            sidebarAdd: '#sidebar-add-options',
-            sidebarDelete: '#sidebar-delete-options',
-            managementSelect: '#management',
-            projects: '.project-btn',
+        this.config = this.initializeConfig();
+        this.state = this.initializeState();
+        this.elements = {};
+        this.canvas = null;
+        this.ctx = null;
+        this.draggingElement = null;
+        this.dragOffset = { x: 0, y: 0 };
+
+        this.initialize();
+    }
+
+    /**
+     * Configuración centralizada
+     */
+    initializeConfig() {
+        return {
+            storageKeys: {
+                dashboardState: 'dashboardState',
+                currentProject: 'currentProject',
+                canvasZoom: 'canvasZoom'
+            },
+            elementTypes: {
+                chart: { name: 'Gráfico', icon: '📊', color: '#3b82f6' },
+                table: { name: 'Tabla', icon: '📋', color: '#10b981' },
+                text: { name: 'Texto', icon: '📝', color: '#f59e0b' },
+                color: { name: 'Color', icon: '🎨', color: '#8b5cf6' },
+                filter: { name: 'Filtro', icon: '🔍', color: '#ef4444' },
+                pdf: { name: 'PDF', icon: '📄', color: '#6b7280' }
+            },
+            projects: ['personal', 'trabajo', 'estudio'],
+            defaultElements: {
+                personal: [
+                    { id: 'chart-1', type: 'chart', x: 50, y: 50, width: 300, height: 200, content: 'Gráfico de Productividad Personal' },
+                    { id: 'text-1', type: 'text', x: 400, y: 50, width: 250, height: 100, content: 'Mis Objetivos Diarios' }
+                ],
+                trabajo: [
+                    { id: 'table-1', type: 'table', x: 50, y: 50, width: 400, height: 250, content: 'Tabla de Proyectos Laborales' },
+                    { id: 'filter-1', type: 'filter', x: 500, y: 50, width: 200, height: 150, content: 'Filtros de Departamento' }
+                ],
+                estudio: [
+                    { id: 'pdf-1', type: 'pdf', x: 50, y: 50, width: 350, height: 400, content: 'Material de Estudio' },
+                    { id: 'chart-2', type: 'chart', x: 450, y: 50, width: 300, height: 200, content: 'Progreso de Aprendizaje' }
+                ]
+            },
+            canvas: {
+                minZoom: 0.5,
+                maxZoom: 2.0,
+                defaultZoom: 1.0,
+                gridSize: 20
+            }
+        };
+    }
+
+    /**
+     * Estado inicial de la aplicación
+     */
+    initializeState() {
+        return {
+            currentProject: 'personal',
+            elements: [],
             filters: {
-                priority: 'select[name="priority-filter"]',
-                device: 'select[name="device"]',
-                region: 'select[name="region"]',
-                newUsers: 'input[name="newUsers"]'
-            }
+                priority: 'all',
+                device: 'all',
+                region: 'all',
+                newUsers: false
+            },
+            canvasZoom: 1.0,
+            isPreviewMode: false,
+            nextElementId: 1
         };
-
-        // Iconos para cada tipo de elemento
-        this.icons = {
-            chart: '📊',
-            table: '📋',
-            text: '📝',
-            color: '🎨',
-            filter: '🔍',
-            pdf: '📄'
-        };
-
-        // Estado actual de la aplicación
-        // noinspection GrazieInspection
-        this.state = {
-            currentProject: 'personal',      // Proyecto activo actual
-            dashboardItems: [],              // Array de elementos del dashboard
-            isPreviewMode: false,            // Modo vista previa activado/desactivado
-            canvasMode: 'grid',              // Modo de visualización del canvas
-            selectedItems: [],               // Elementos seleccionados
-            isDragging: false,               // Estado de arrastre activo
-            dragStart: { x: 0, y: 0 },       // Posición inicial del arrastre
-            canvasZoom: 1.0                  // Nivel de zoom del canvas
-        };
-
-        // Mapa para almacenar elementos del canvas
-        this.canvasItems = new Map();
-        // Array para conexiones entre elementos
-        this.connections = [];
-        // Referencia al elemento siendo arrastrado
-        this.draggingItem = null;
-        // Timeout para redimensionamiento
-        this.resizeTimeout = null;
-
-        // Inicializar la aplicación
-        this.init();
     }
 
     /**
-     * Inicializa el editor de dashboard
-     * Configura todos los componentes necesarios
+     * Inicialización principal
      */
-    init() {
-        try {
-            this.cacheElements();        // Almacena referencias a elementos DOM
-            this.setupCanvas();          // Configura el elemento canvas
-            this.loadState();            // Carga el estado guardado
-            this.setupEventListeners();  // Configura event listeners
-            this.renderDashboard();      // Renderiza el dashboard
-            this.renderCanvas();         // Renderiza el canvas
-        } catch (error) {
-            console.error('Error initializing DashboardEditor:', error);
-            this.showNotification('Error al inicializar el editor');
+    initialize() {
+        this.loadInitialData();
+        this.cacheDOMElements();
+        this.initializeCanvas();
+        this.setupEventHandlers();
+        this.renderDashboard();
+        this.showNotification('Dashboard Editor cargado correctamente', 'success');
+    }
+
+    /**
+     * Carga datos iniciales
+     */
+    loadInitialData() {
+        // Cargar estado guardado
+        const savedState = this.getStoredData(this.config.storageKeys.dashboardState);
+        if (savedState) {
+            this.state = { ...this.state, ...savedState };
+        }
+
+        // Cargar proyecto actual
+        this.state.currentProject = this.getStoredData(this.config.storageKeys.currentProject) || 'personal';
+
+        // Cargar zoom del canvas
+        this.state.canvasZoom = parseFloat(this.getStoredData(this.config.storageKeys.canvasZoom)) || 1.0;
+
+        // Cargar elementos por defecto si no hay elementos guardados
+        if (!this.state.elements || this.state.elements.length === 0) {
+            this.state.elements = [...(this.config.defaultElements[this.state.currentProject] || [])];
         }
     }
 
     /**
-     * Configura el elemento canvas y su contexto 2D
-     * @throws {Error} Si el canvas o contexto 2D no están disponibles
+     * Cache de elementos DOM
      */
-    setupCanvas() {
-        if (!this.canvas) {
-            throw new Error('Canvas element not found');
-        }
+    cacheDOMElements() {
+        const elements = [
+            // Sidebar
+            'sidebar-add-options', 'sidebar-delete-options', 'priority-filter',
+            'device-filter', 'region-filter', 'newUsers', 'management',
 
-        this.ctx = this.canvas.getContext('2d');
-        if (!this.ctx) {
-            throw new Error('Could not get 2D context from canvas');
-        }
+            // Header
+            'saveBtn', 'previewBtn', 'exportBtn',
 
-        this.resizeCanvas();
+            // Canvas
+            'dashboardCanvas', 'zoomInBtn', 'zoomOutBtn', 'resetZoomBtn',
 
-        // Mejorar calidad de renderizado
-        this.ctx.imageSmoothingEnabled = true;
-        this.ctx.imageSmoothingQuality = 'high';
+            // Preview
+            'preview-container'
+        ];
 
-        // Redimensionar canvas cuando cambia el tamaño de la ventana
-        const self = this;
-        window.addEventListener('resize', function () {
-            if (self.resizeTimeout) {
-                clearTimeout(self.resizeTimeout);
-            }
-            self.resizeTimeout = setTimeout(function () {
-                self.resizeCanvas();
-                self.renderCanvas();
-            }, 250);
+        elements.forEach(id => {
+            this.elements[id] = document.getElementById(id);
         });
+
+        // Botones de proyecto
+        this.elements.projectButtons = document.querySelectorAll('.project-btn');
     }
 
     /**
-     * Ajusta el tamaño del canvas al contenedor padre
+     * Inicialización del canvas
      */
-    resizeCanvas() {
-        if (!this.canvas || !this.ctx) return;
-
-        const container = this.canvas.parentElement;
-        if (!container) return;
-
-        // Obtener dimensiones del contenedor
-        const rect = container.getBoundingClientRect();
-        this.canvas.width = Math.floor(rect.width);
-        this.canvas.height = Math.floor(rect.height);
-
-        // Guardar dimensiones para uso posterior
-        this.canvasBounds = {
-            width: rect.width,
-            height: rect.height,
-            centerX: rect.width / 2,
-            centerY: rect.height / 2
-        };
-    }
-
-    /**
-     * Almacena referencias a elementos DOM en propiedades de la clase
-     */
-    cacheElements() {
-        this.canvas = document.querySelector(this.selectors.canvas);
-        this.workspace = document.querySelector(this.selectors.workspace);
-        this.previewGrid = document.querySelector(this.selectors.previewGrid);
-        this.sidebarAdd = document.querySelector(this.selectors.sidebarAdd);
-        this.sidebarDelete = document.querySelector(this.selectors.sidebarDelete);
-        this.managementSelect = document.querySelector(this.selectors.managementSelect);
-        this.projects = document.querySelectorAll(this.selectors.projects);
-
-        // Almacenar elementos de filtro
-        this.filters = {
-            priority: document.querySelector(this.selectors.filters.priority),
-            device: document.querySelector(this.selectors.filters.device),
-            region: document.querySelector(this.selectors.filters.region),
-            newUsers: document.querySelector(this.selectors.filters.newUsers)
-        };
-
-        this.validateElements();
-    }
-
-    /**
-     * Valida que los elementos DOM requeridos estén presentes
-     * @throws {Error} Si faltan elementos requeridos
-     */
-    validateElements() {
-        const requiredElements = {
-            canvas: this.canvas,
-            workspace: this.workspace,
-            previewGrid: this.previewGrid
-        };
-
-        const missingElements = [];
-        for (const name in requiredElements) {
-            if (!requiredElements[name]) {
-                missingElements.push(name);
-            }
-        }
-
-        if (missingElements.length > 0) {
-            throw new Error('Required elements not found: ' + missingElements.join(', '));
-        }
-    }
-
-    /**
-     * Configura todos los event listeners de la aplicación
-     */
-    setupEventListeners() {
-        let self = this;
-
-        // Configurar event listeners específicos del canvas
-        this.setupCanvasEventListeners();
-
-        // Event listener para acciones en tarjetas de vista previa
-        if (this.previewGrid) {
-            this.previewGrid.addEventListener('click', function (e) {
-                const cardBtn = e.target.closest('.card-btn');
-                if (!cardBtn) return;
-
-                let card = cardBtn.closest('.preview-card');
-                const id = parseInt(card.dataset.id);
-                if (isNaN(id)) return;
-
-                // Manejar acciones de edición o eliminación
-                if (cardBtn.classList.contains('btn-edit')) {
-                    self.editItem(id);
-                } else if (cardBtn.classList.contains('btn-delete')) {
-                    self.removeItem(id);
-                }
-            });
-        }
-    }
-
-    /**
-     * Configura event listeners específicos para el canvas
-     */
-    setupCanvasEventListeners() {
+    initializeCanvas() {
+        this.canvas = this.elements['dashboardCanvas'];
         if (!this.canvas) return;
 
-        const self = this;
+        this.ctx = this.canvas.getContext('2d');
 
-        // Eventos de mouse para el canvas
-        this.canvas.addEventListener('mousedown', function (e) {
-            self.handleCanvasMouseDown(e);
-        });
-        this.canvas.addEventListener('mousemove', function (e) {
-            self.handleCanvasMouseMove(e);
-        });
-        this.canvas.addEventListener('mouseup', function () {
-            self.handleCanvasMouseUp();
-        });
-        this.canvas.addEventListener('wheel', function (e) {
-            self.handleCanvasWheel(e);
-        });
-        this.canvas.addEventListener('dblclick', function (e) {
-            self.handleCanvasDoubleClick(e);
-        });
+        // Configurar tamaño del canvas
+        this.resizeCanvas();
+        window.addEventListener('resize', () => this.resizeCanvas());
 
-        // Eventos táctiles para el canvas
-        this.canvas.addEventListener('touchstart', function (e) {
-            self.handleCanvasTouchStart(e);
-        });
-        this.canvas.addEventListener('touchmove', function (e) {
-            self.handleCanvasTouchMove(e);
-        });
-        this.canvas.addEventListener('touchend', function (e) {
-            self.handleCanvasTouchEnd(e);
-        });
+        // Configurar eventos del canvas
+        this.setupCanvasEvents();
     }
 
     /**
-     * Calcula la posición del mouse en el canvas considerando el zoom
-     * @param {Event} e - Evento del mouse
-     * @returns {Object} Coordenadas x, y en el espacio del canvas
+     * Ajustar tamaño del canvas
      */
-    getCanvasMousePos(e) {
-        // noinspection JSUndefinedPropertyAssignment
-        e.clientY = undefined;
-        if (!this.canvas) return { x: 0, y: 0 };
+    resizeCanvas() {
+        if (!this.canvas) return;
 
-        const rect = this.canvas.getBoundingClientRect();
-        // noinspection JSUnresolvedReference
-        return {
-            x: (e.clientY - rect.left) / this.state.canvasZoom,
-            y: (e.clientY - rect.top) / this.state.canvasZoom
-        };
-    }
-
-    /**
-     * Maneja el evento de presionar mouse en el canvas
-     * @param {Event} e - Evento del mouse
-     */
-    handleCanvasMouseDown(e) {
-        const pos = this.getCanvasMousePos(e);
-        const item = this.getItemAtPosition(pos.x, pos.y);
-
-        if (item) {
-            // Iniciar arrastre de elemento
-            this.draggingItem = item;
-            this.state.dragStart = { x: pos.x, y: pos.y };
-            this.canvas.style.cursor = 'grabbing';
-        } else {
-            // Iniciar arrastre de canvas
-            this.state.isDragging = true;
-            this.state.dragStart = { x: pos.x, y: pos.y };
-        }
-
-        e.preventDefault();
-    }
-
-    /**
-     * Maneja el evento de mover mouse en el canvas
-     * @param {Event} e - Evento del mouse
-     */
-    handleCanvasMouseMove(e) {
-        const pos = this.getCanvasMousePos(e);
-
-        if (this.draggingItem) {
-            // Mover elemento arrastrado
-            this.draggingItem.canvasX = pos.x - this.draggingItem.width / 2;
-            this.draggingItem.canvasY = pos.y - this.draggingItem.height / 2;
+        const container = this.canvas.parentElement;
+        if (container) {
+            this.canvas.width = container.clientWidth;
+            this.canvas.height = container.clientHeight;
             this.renderCanvas();
-        } else if (this.state.isDragging) {
-            // Mover canvas (panning)
-            // Canvas panning can be implemented here
-        } else {
-            // Cambiar cursor según si hay elemento bajo el mouse
-            const item = this.getItemAtPosition(pos.x, pos.y);
-            this.canvas.style.cursor = item ? 'grab' : 'default';
         }
     }
 
     /**
-     * Maneja el evento de soltar mouse en el canvas
+     * Configurar eventos del canvas
      */
-    handleCanvasMouseUp() {
-        if (this.draggingItem) {
-            this.saveState();
-            this.draggingItem = null;
+    setupCanvasEvents() {
+        if (!this.canvas) return;
+
+        this.canvas.addEventListener('mousedown', (e) => this.handleCanvasMouseDown(e));
+        this.canvas.addEventListener('mousemove', (e) => this.handleCanvasMouseMove(e));
+        this.canvas.addEventListener('mouseup', () => this.handleCanvasMouseUp());
+        this.canvas.addEventListener('mouseleave', () => this.handleCanvasMouseUp());
+
+        // Soporte táctil
+        this.canvas.addEventListener('touchstart', (e) => this.handleCanvasTouchStart(e));
+        this.canvas.addEventListener('touchmove', (e) => this.handleCanvasTouchMove(e));
+        this.canvas.addEventListener('touchend', () => this.handleCanvasMouseUp());
+    }
+
+    /**
+     * Configurar manejadores de eventos
+     */
+    setupEventHandlers() {
+        // Eventos de teclado
+        document.addEventListener('keydown', (e) => this.handleKeyboard(e));
+
+        // Eventos de filtros
+        if (this.elements['priority-filter']) {
+            this.elements['priority-filter'].addEventListener('change', () => this.handleFilterChange());
         }
-        this.state.isDragging = false;
-        this.canvas.style.cursor = 'default';
-    }
-
-    /**
-     * Maneja el evento de rueda del mouse para zoom
-     * @param {Event} e - Evento de rueda del mouse
-     */
-    handleCanvasWheel(e) {
-        e.deltaY = undefined;
-        e.preventDefault();
-
-        const zoomIntensity = 0.1;
-        this.getCanvasMousePos(e);
-        const wheel = e.deltaY < 0 ? 1 : -1;
-        const zoomFactor = wheel > 0 ? (1 + zoomIntensity) : (1 - zoomIntensity);
-
-        this.state.canvasZoom *= zoomFactor;
-        this.state.canvasZoom = Math.max(0.1, Math.min(3, this.state.canvasZoom));
-
-        this.renderCanvas();
-    }
-
-    /**
-     * Maneja el evento de doble click en el canvas
-     * @param {Event} e - Evento del mouse
-     */
-    handleCanvasDoubleClick(e) {
-        const pos = this.getCanvasMousePos(e);
-        const item = this.getItemAtPosition(pos.x, pos.y);
-
-        if (item) {
-            // Editar elemento existente
-            this.editItem(item.id);
-        } else {
-            // Agregar nuevo elemento en la posición del click
-            this.promptAddItemAtPosition();
+        if (this.elements['device-filter']) {
+            this.elements['device-filter'].addEventListener('change', () => this.handleFilterChange());
         }
-    }
-
-    /**
-     * Maneja el evento de toque inicial en canvas táctil
-     * @param {Event} e - Evento táctil
-     */
-    handleCanvasTouchStart(e) {
-        e.mouseEvent = undefined;
-        e.touches = undefined;
-        if (e.touches.length === 1) {
-            const touch = e.mouseEvent[0];
-            const mouseEvent = new MouseEvent('mousedown', {
-                clientX: touch.clientX,
-                clientY: touch.clientY,
-                bubbles: true
-            });
-            this.handleCanvasMouseDown(mouseEvent);
+        if (this.elements['region-filter']) {
+            this.elements['region-filter'].addEventListener('change', () => this.handleFilterChange());
         }
-        e.preventDefault();
-    }
-
-    /**
-     * Maneja el evento de movimiento táctil en canvas
-     * @param {Event} e - Evento táctil
-     */
-    handleCanvasTouchMove(e) {
-        e["touches"] = undefined;
-        if (e["touches"].length === 1) {
-            const touch = e["touches"][0];
-            const mouseEvent = new MouseEvent('mousemove', {
-                clientX: touch.clientX,
-                clientY: touch.clientY,
-                bubbles: true
-            });
-            this.handleCanvasMouseMove(mouseEvent);
+        if (this.elements['newUsers']) {
+            this.elements['newUsers'].addEventListener('change', () => this.handleFilterChange());
         }
-        e.preventDefault();
+
+        // Actualizar botones de proyecto activos
+        this.updateProjectButtons();
     }
 
     /**
-     * Maneja el evento de fin de toque en canvas
-     * @param {Event} e - Evento táctil
+     * Manejado de teclado
      */
-    handleCanvasTouchEnd(e) {
-        new MouseEvent('mouseup', { bubbles: true });
-        this.handleCanvasMouseUp();
-        e.preventDefault();
-    }
-
-    /**
-     * Encuentra un elemento en una posición específica del canvas
-     * @param {number} x - Coordenada x
-     * @param {number} y - Coordenada y
-     * @returns {Object|null} Elemento encontrado o null
-     */
-    getItemAtPosition(x, y) {
-        const items = Array.from(this.canvasItems.values());
-        for (let i = 0; i < items.length; i++) {
-            const item = items[i];
-            if (x >= item.canvasX && x <= item.canvasX + item.width &&
-                y >= item.canvasY && y <= item.canvasY + item.height) {
-                return item;
+    handleKeyboard(event) {
+        // Atajos globales
+        if (event.ctrlKey || event.metaKey) {
+            switch (event.key) {
+                case 's':
+                    event.preventDefault();
+                    this.saveState();
+                    break;
+                case 'e':
+                    event.preventDefault();
+                    this.exportData();
+                    break;
+                case 'p':
+                    event.preventDefault();
+                    this.togglePreview();
+                    break;
             }
         }
-        return null;
-    }
 
-    /**
-     * Solicita al usuario agregar un elemento en una posición específica
-     */
-    promptAddItemAtPosition() {
-        const type = prompt('¿Qué tipo de elemento quieres agregar? (chart, table, text, color, filter, pdf)');
-        if (type && this.icons[type]) {
-            this.addItem(type);
+        // Eliminar elemento seleccionado
+        if (event.key === 'Delete' && this.draggingElement) {
+            this.deleteElement(this.draggingElement.id);
+        }
+
+        // Navegación entre proyectos con números
+        if (event.key >= '1' && event.key <= '3') {
+            const projectIndex = parseInt(event.key) - 1;
+            const project = this.config.projects[projectIndex];
+            if (project) {
+                this.switchProject(project);
+            }
         }
     }
 
     /**
-     * Agrega un nuevo elemento al dashboard
-     * @param {string} type - Tipo de elemento a agregar
+     * Cambiar proyecto
      */
-    addItem(type) {
-        if (!type || !this.icons[type]) {
-            this.showNotification('Tipo de elemento no válido');
+    switchProject(project = null) {
+        // Determinar proyecto desde el botón clickeado
+        if (!project && event) {
+            const button = event.target.closest('.project-btn');
+            if (button) {
+                project = button.dataset.project;
+            }
+        }
+
+        if (!project || !this.config.projects.includes(project)) {
             return;
         }
 
-        // Calcular posición por defecto si no se especifica
-        const defaultX = this.x !== null && this.x !== undefined ? this.x : 50 + Math.random() * (this.canvasBounds.width - 200);
-        const defaultY = this.y !== null && this.y !== undefined ? this.y : 50 + Math.random() * (this.canvasBounds.height - 150);
+        // Guardar estado actual antes de cambiar
+        this.saveProjectState();
 
-        // Crear nuevo elemento
-        const item = {
-            id: Date.now() + Math.random(),
-            type: type,
-            content: this.icons[type] + ' Nuevo ' + type,
-            priority: 'Media',
-            device: 'all',
-            region: 'all',
-            newUsers: false,
-            createdAt: new Date().toISOString(),
-            canvasX: defaultX,
-            canvasY: defaultY,
-            width: 180,
-            height: 120,
-            color: this.getItemColor(type)
-        };
+        // Cambiar proyecto
+        this.state.currentProject = project;
 
-        // Agregar elemento al estado
-        this.state.dashboardItems.push(item);
-        this.updateCanvasItems();
+        // Cargar elementos del proyecto
+        this.loadProjectElements();
+
+        // Actualizar UI
+        this.updateProjectButtons();
         this.renderDashboard();
-        this.renderCanvas();
-        this.saveState();
 
-        // Resetear selector de agregar
-        if (this.sidebarAdd) {
-            this.sidebarAdd.value = '';
-        }
-
-        this.showNotification('Elemento ' + type + ' agregado correctamente');
+        this.showNotification(`Proyecto cambiado a: ${project}`, 'info');
     }
 
     /**
-     * Obtiene el color asociado a un tipo de elemento
-     * @param {string} type - Tipo de elemento
-     * @returns {string} Color hexadecimal
+     * Guardar estado del proyecto actual
      */
-    getItemColor(type) {
-        const colors = {
-            chart: '#4CAF50',
-            table: '#2196F3',
-            text: '#FF9800',
-            color: '#9C27B0',
-            filter: '#F44336',
-            pdf: '#607D8B'
+    saveProjectState() {
+        const projectData = {
+            elements: this.state.elements,
+            filters: this.state.filters
         };
-        return colors[type] || '#666666';
+
+        localStorage.setItem(`dashboard_${this.state.currentProject}`, JSON.stringify(projectData));
     }
 
     /**
-     * Actualiza el mapa de elementos del canvas
+     * Cargar elementos del proyecto
      */
-    updateCanvasItems() {
-        this.canvasItems.clear();
-        for (let i = 0; i < this.state.dashboardItems.length; i++) {
-            const item = this.state.dashboardItems[i];
-            // Asignar valores por defecto si no existen
-            if (item.canvasX === undefined || item.canvasY === undefined) {
-                item.canvasX = 50 + Math.random() * (this.canvasBounds.width - 200);
-                item.canvasY = 50 + Math.random() * (this.canvasBounds.height - 150);
-                item.width = 180;
-                item.height = 120;
-                item.color = this.getItemColor(item.type);
-            }
-            this.canvasItems.set(item.id, item);
+    loadProjectElements() {
+        const savedData = localStorage.getItem(`dashboard_${this.state.currentProject}`);
+
+        if (savedData) {
+            const projectData = JSON.parse(savedData);
+            this.state.elements = projectData.elements || [];
+            this.state.filters = projectData.filters || this.state.filters;
+        } else {
+            // Usar elementos por defecto
+            this.state.elements = [...(this.config.defaultElements[this.state.currentProject] || [])];
         }
     }
 
     /**
-     * Renderiza el contenido del canvas
+     * Actualizar botones de proyecto
+     */
+    updateProjectButtons() {
+        if (!this.elements.projectButtons) return;
+
+        this.elements.projectButtons.forEach(button => {
+            const isActive = button.dataset.project === this.state.currentProject;
+            button.classList.toggle('active', isActive);
+            button.setAttribute('aria-pressed', isActive);
+        });
+    }
+
+    /**
+     * Agregar elemento al dashboard
+     */
+    addItem(type) {
+        if (!type) return;
+
+        const elementType = this.config.elementTypes[type];
+        if (!elementType) {
+            this.showNotification('Tipo de elemento no válido', 'error');
+            return;
+        }
+
+        const newElement = {
+            id: `${type}-${Date.now()}`,
+            type: type,
+            x: 50 + (this.state.elements.length * 20),
+            y: 50 + (this.state.elements.length * 20),
+            width: 200,
+            height: 150,
+            content: `${elementType.name} ${this.state.elements.length + 1}`,
+            project: this.state.currentProject,
+            createdAt: new Date().toISOString()
+        };
+
+        this.state.elements.push(newElement);
+        this.renderDashboard();
+        this.showNotification(`${elementType.name} agregado correctamente`, 'success');
+
+        // Resetear selector
+        if (this.elements['sidebar-add-options']) {
+            this.elements['sidebar-add-options'].value = '';
+        }
+    }
+
+    /**
+     * Eliminar elementos por tipo
+     */
+    deleteItem(type) {
+        if (!type) return;
+
+        const elementType = this.config.elementTypes[type];
+        if (!elementType) {
+            this.showNotification('Tipo de elemento no válido', 'error');
+            return;
+        }
+
+        const elementsToDelete = this.state.elements.filter(el => el.type === type);
+
+        if (elementsToDelete.length === 0) {
+            this.showNotification(`No hay ${elementType.name.toLowerCase()}s para eliminar`, 'warning');
+            return;
+        }
+
+        if (confirm(`¿Eliminar ${elementsToDelete.length} ${elementType.name.toLowerCase()}(s)?`)) {
+            this.state.elements = this.state.elements.filter(el => el.type !== type);
+            this.renderDashboard();
+            this.showNotification(`${elementsToDelete.length} ${elementType.name.toLowerCase()}(s) eliminados`, 'success');
+        }
+
+        // Resetear selector
+        if (this.elements['sidebar-delete-options']) {
+            this.elements['sidebar-delete-options'].value = '';
+        }
+    }
+
+    /**
+     * Eliminar elemento específico
+     */
+    deleteElement(elementId) {
+        this.state.elements = this.state.elements.filter(el => el.id !== elementId);
+        this.renderDashboard();
+        this.showNotification('Elemento eliminado', 'success');
+    }
+
+    /**
+     * Manejar cambio de filtros
+     */
+    handleFilterChange() {
+        this.state.filters = {
+            priority: this.elements['priority-filter']?.value || 'all',
+            device: this.elements['device-filter']?.value || 'all',
+            region: this.elements['region-filter']?.value || 'all',
+            newUsers: this.elements['newUsers']?.checked || false
+        };
+
+        this.renderDashboard();
+    }
+
+    /**
+     * Renderizar dashboard completo
+     */
+    renderDashboard() {
+        this.renderCanvas();
+        this.renderPreview();
+        this.updateElementCounters();
+    }
+
+    /**
+     * Renderizar canvas
      */
     renderCanvas() {
         if (!this.ctx || !this.canvas) return;
@@ -527,39 +428,27 @@ class DashboardEditor {
         // Limpiar canvas
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-        // Aplicar transformaciones (zoom)
-        this.ctx.save();
-        this.ctx.scale(this.state.canvasZoom, this.state.canvasZoom);
+        // Dibujar grid
+        this.drawGrid();
 
-        this.drawGrid();        // Dibujar cuadrícula de fondo
-
-        // Dibujar todos los elementos
-        const items = Array.from(this.canvasItems.values());
-        for (let i = 0; i < items.length; i++) {
-            this.drawCanvasItem(items[i]);
-        }
-
-        this.drawConnections(); // Dibujar conexiones entre elementos
-
-        this.ctx.restore();
-
-        this.drawZoomInfo();    // Mostrar información de zoom
+        // Dibujar elementos
+        this.state.elements.forEach(element => {
+            this.drawElement(element);
+        });
     }
 
     /**
-     * Dibuja la cuadrícula de fondo del canvas
+     * Dibujar grid en el canvas
      */
     drawGrid() {
-        if (!this.ctx || !this.canvasBounds) return;
+        const gridSize = this.config.canvas.gridSize * this.state.canvasZoom;
+        const width = this.canvas.width;
+        const height = this.canvas.height;
 
-        const gridSize = 20;
-        const width = this.canvasBounds.width;
-        const height = this.canvasBounds.height;
-
-        this.ctx.strokeStyle = '#f0f0f0';
+        this.ctx.strokeStyle = '#e5e7eb';
         this.ctx.lineWidth = 0.5;
 
-        // Dibujar líneas verticales
+        // Líneas verticales
         for (let x = 0; x <= width; x += gridSize) {
             this.ctx.beginPath();
             this.ctx.moveTo(x, 0);
@@ -567,7 +456,7 @@ class DashboardEditor {
             this.ctx.stroke();
         }
 
-        // Dibujar líneas horizontales
+        // Líneas horizontales
         for (let y = 0; y <= height; y += gridSize) {
             this.ctx.beginPath();
             this.ctx.moveTo(0, y);
@@ -577,525 +466,449 @@ class DashboardEditor {
     }
 
     /**
-     * Dibuja un elemento individual en el canvas
-     * @param {Object} item - Elemento a dibujar
+     * Dibujar elemento en el canvas
      */
-    drawCanvasItem(item) {
-        if (!this.ctx) return;
+    drawElement(element) {
+        const typeConfig = this.config.elementTypes[element.type];
+        if (!typeConfig) return;
 
-        const canvasX = item.canvasX;
-        const canvasY = item.canvasY;
-        const width = item.width;
-        const height = item.height;
-        const color = item.color;
-        const type = item.type;
-        const content = item.content;
+        const x = element.x * this.state.canvasZoom;
+        const y = element.y * this.state.canvasZoom;
+        const width = element.width * this.state.canvasZoom;
+        const height = element.height * this.state.canvasZoom;
 
-        // Aplicar sombra
-        this.ctx.shadowColor = 'rgba(0, 0, 0, 0.2)';
-        this.ctx.shadowBlur = 8;
-        this.ctx.shadowOffsetX = 2;
-        this.ctx.shadowOffsetY = 2;
-
-        // Dibujar rectángulo del elemento
-        this.ctx.fillStyle = color + '20';
-        this.ctx.strokeStyle = color;
+        // Fondo del elemento
+        this.ctx.fillStyle = typeConfig.color + '20';
+        this.ctx.strokeStyle = typeConfig.color;
         this.ctx.lineWidth = 2;
-        this.ctx.fillRect(canvasX, canvasY, width, height);
-        this.ctx.strokeRect(canvasX, canvasY, width, height);
 
-        // Remover sombra
-        this.ctx.shadowColor = 'transparent';
-        this.ctx.shadowBlur = 0;
-        this.ctx.shadowOffsetX = 0;
-        this.ctx.shadowOffsetY = 0;
+        this.ctx.fillRect(x, y, width, height);
+        this.ctx.strokeRect(x, y, width, height);
 
-        // Dibujar icono
-        this.ctx.font = '24px Arial';
-        this.ctx.fillStyle = color;
-        this.ctx.fillText(this.icons[type], canvasX + 10, canvasY + 30);
+        // Icono y texto
+        this.ctx.fillStyle = typeConfig.color;
+        this.ctx.font = '14px Arial';
+        this.ctx.fillText(typeConfig.icon, x + 10, y + 25);
+        this.ctx.fillText(element.content, x + 40, y + 25);
 
-        // Dibujar título
-        this.ctx.font = 'bold 14px Arial';
-        this.ctx.fillStyle = '#333';
-        this.ctx.fillText(
-            type.charAt(0).toUpperCase() + type.slice(1),
-            canvasX + 45,
-            canvasY + 30
+        // Indicador de tipo
+        this.ctx.font = '12px Arial';
+        this.ctx.fillStyle = '#6b7280';
+        this.ctx.fillText(typeConfig.name, x + 10, y + height - 10);
+
+        // Resaltar elemento arrastrado
+        if (this.draggingElement === element) {
+            this.ctx.strokeStyle = '#3b82f6';
+            this.ctx.lineWidth = 3;
+            this.ctx.strokeRect(x, y, width, height);
+        }
+    }
+
+    /**
+     * Renderizar vista previa
+     */
+    renderPreview() {
+        const previewContainer = this.elements['preview-container'];
+        if (!previewContainer) return;
+
+        if (this.state.elements.length === 0) {
+            previewContainer.innerHTML = `
+                <div class="empty-state">
+                    <p>No hay elementos para mostrar</p>
+                    <p>Usa el panel de agregar para incluir nuevos elementos</p>
+                </div>
+            `;
+            return;
+        }
+
+        let previewHTML = '<div class="preview-grid">';
+
+        this.state.elements.forEach(element => {
+            const typeConfig = this.config.elementTypes[element.type];
+            previewHTML += `
+                <div class="preview-item" data-element-id="${element.id}">
+                    <div class="preview-header">
+                        <span class="preview-icon">${typeConfig.icon}</span>
+                        <span class="preview-title">${this.escapeHTML(element.content)}</span>
+                        <button class="preview-delete" onclick="window.dashboardEditor.deleteElement('${element.id}')" aria-label="Eliminar elemento">
+                            🗑️
+                        </button>
+                    </div>
+                    <div class="preview-content">
+                        <p><strong>Tipo:</strong> ${typeConfig.name}</p>
+                        <p><strong>Posición:</strong> ${element.x}px, ${element.y}px</p>
+                        <p><strong>Tamaño:</strong> ${element.width} × ${element.height}</p>
+                    </div>
+                </div>
+            `;
+        });
+
+        previewHTML += '</div>';
+        previewContainer.innerHTML = previewHTML;
+    }
+
+    /**
+     * Actualizar contadores de elementos
+     */
+    updateElementCounters() {
+        const counters = {};
+
+        // Contar elementos por tipo
+        this.state.elements.forEach(element => {
+            counters[element.type] = (counters[element.type] || 0) + 1;
+        });
+
+        // Actualizar opciones del sidebar con contadores
+        Object.keys(this.config.elementTypes).forEach(type => {
+            const count = counters[type] || 0;
+            const option = document.querySelector(`#sidebar-add-options option[value="${type}"]`);
+            if (option) {
+                const typeConfig = this.config.elementTypes[type];
+                option.textContent = `${typeConfig.icon} ${typeConfig.name} (${count})`;
+            }
+        });
+    }
+
+    /**
+     * Manejar eventos del canvas - Mouse Down
+     */
+    handleCanvasMouseDown(event) {
+        const rect = this.canvas.getBoundingClientRect();
+        const x = (event.clientX - rect.left) / this.state.canvasZoom;
+        const y = (event.clientY - rect.top) / this.state.canvasZoom;
+
+        // Buscar elemento clickeado
+        this.draggingElement = this.state.elements.find(element =>
+            x >= element.x && x <= element.x + element.width &&
+            y >= element.y && y <= element.y + element.height
         );
 
-        // Dibujar contenido (texto envuelto)
-        this.ctx.font = '12px Arial';
-        this.ctx.fillStyle = '#666';
-        const lines = this.wrapText(content, canvasX + 10, canvasY + 50, width - 20);
-        for (let i = 0; i < lines.length; i++) {
-            this.ctx.fillText(lines[i], canvasX + 10, canvasY + 50 + (i * 14));
+        if (this.draggingElement) {
+            this.dragOffset.x = x - this.draggingElement.x;
+            this.dragOffset.y = y - this.draggingElement.y;
+            this.canvas.style.cursor = 'grabbing';
         }
-
-        this.drawPriorityBadge(item);
     }
 
     /**
-     * Divide texto en líneas para que quepa en el ancho disponible
-     * @param {string} text - Texto a dividir
-     * @param {number} x - Posición x inicial
-     * @param {number} y - Posición y inicial
-     * @param {number} maxWidth - Ancho máximo disponible
-     * @returns {string[]} Array de líneas de texto
+     * Manejar eventos del canvas - Mouse Move
      */
-    wrapText(text, x, y, maxWidth) {
-        if (!this.ctx) return [text];
+    handleCanvasMouseMove(event) {
+        if (!this.draggingElement) return;
 
-        const words = text.split(' ');
-        const lines = [];
-        let currentLine = words[0];
+        const rect = this.canvas.getBoundingClientRect();
+        const x = (event.clientX - rect.left) / this.state.canvasZoom;
+        const y = (event.clientY - rect.top) / this.state.canvasZoom;
 
-        for (let i = 1; i < words.length; i++) {
-            const word = words[i];
-            const width = this.ctx.measureText(currentLine + " " + word).width;
-            if (width < maxWidth) {
-                currentLine += " " + word;
-            } else {
-                lines.push(currentLine);
-                currentLine = word;
-            }
+        // Actualizar posición del elemento
+        this.draggingElement.x = Math.max(0, x - this.dragOffset.x);
+        this.draggingElement.y = Math.max(0, y - this.dragOffset.y);
+
+        // Ajustar a grid
+        const gridSize = this.config.canvas.gridSize;
+        this.draggingElement.x = Math.round(this.draggingElement.x / gridSize) * gridSize;
+        this.draggingElement.y = Math.round(this.draggingElement.y / gridSize) * gridSize;
+
+        this.renderCanvas();
+    }
+
+    /**
+     * Manejar eventos del canvas - Mouse Up
+     */
+    handleCanvasMouseUp() {
+        if (this.draggingElement) {
+            this.draggingElement = null;
+            this.canvas.style.cursor = 'default';
         }
-        lines.push(currentLine);
-        return lines.slice(0, 3); // Limitar a 3 líneas
     }
 
     /**
-     * Dibuja la etiqueta de prioridad en un elemento
-     * @param {Object} item - Elemento al que agregar la etiqueta
+     * Manejar eventos táctiles del canvas
      */
-    drawPriorityBadge(item) {
-        if (!this.ctx) return;
+    handleCanvasTouchStart(event) {
+        event.preventDefault();
+        const touch = event.touches[0];
+        const mouseEvent = new MouseEvent('mousedown', {
+            clientX: touch.clientX,
+            clientY: touch.clientY
+        });
+        this.canvas.dispatchEvent(mouseEvent);
+    }
 
-        const priorityColors = {
-            Alta: '#f44336',
-            Media: '#ff9800',
-            Baja: '#4caf50'
-        };
-
-        const badgeWidth = 40;
-        const badgeHeight = 16;
-        const x = item.canvasX + item.width - badgeWidth - 5;
-        const y = item.canvasY + 5;
-
-        // Dibujar fondo de la etiqueta
-        this.ctx.fillStyle = priorityColors[item.priority] || '#666';
-        this.ctx.fillRect(x, y, badgeWidth, badgeHeight);
-
-        // Dibujar texto de la etiqueta
-        this.ctx.font = '10px Arial';
-        this.ctx.fillStyle = 'white';
-        this.ctx.textAlign = 'center';
-        this.ctx.fillText(item.priority, x + badgeWidth / 2, y + 11);
-        this.ctx.textAlign = 'left';
+    handleCanvasTouchMove(event) {
+        event.preventDefault();
+        const touch = event.touches[0];
+        const mouseEvent = new MouseEvent('mousemove', {
+            clientX: touch.clientX,
+            clientY: touch.clientY
+        });
+        this.canvas.dispatchEvent(mouseEvent);
     }
 
     /**
-     * Dibuja las conexiones entre elementos en el canvas
-     */
-    drawConnections() {
-        if (!this.ctx || this.connections.length === 0) return;
-
-        this.ctx.strokeStyle = '#999';
-        this.ctx.lineWidth = 1;
-        this.ctx.setLineDash([5, 3]); // Línea punteada
-
-        for (let i = 0; i < this.connections.length; i++) {
-            const connection = this.connections[i];
-            const fromItem = this.canvasItems.get(connection.from);
-            const toItem = this.canvasItems.get(connection.to);
-
-            if (fromItem && toItem) {
-                const fromX = fromItem.canvasX + fromItem.width / 2;
-                const fromY = fromItem.canvasY + fromItem.height;
-                const toX = toItem.canvasX + toItem.width / 2;
-                const toY = toItem.canvasY;
-
-                // Dibujar línea de conexión
-                this.ctx.beginPath();
-                this.ctx.moveTo(fromX, fromY);
-                this.ctx.lineTo(toX, toY);
-                this.ctx.stroke();
-            }
-        }
-
-        this.ctx.setLineDash([]); // Restaurar línea sólida
-    }
-
-    /**
-     * Dibuja la información de zoom en el canvas
-     */
-    drawZoomInfo() {
-        if (!this.ctx) return;
-
-        this.ctx.save();
-        this.ctx.setTransform(1, 0, 0, 1, 0, 0); // Restaurar transformación
-
-        // Dibujar fondo del indicador de zoom
-        this.ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
-        this.ctx.fillRect(10, 10, 80, 25);
-
-        // Dibujar texto del zoom
-        this.ctx.font = '12px Arial';
-        this.ctx.fillStyle = 'white';
-        this.ctx.fillText('Zoom: ' + Math.round(this.state.canvasZoom * 100) + '%', 20, 25);
-
-        this.ctx.restore();
-    }
-
-    // Agregar estos métodos a tu clase DashboardEditor
-    action;
-    projectId;
-    type;
-
-    /**
-     * Aumenta el zoom del canvas
+     * Control de zoom
      */
     zoomIn() {
-        this.state.canvasZoom *= 1.1;
-        this.state.canvasZoom = Math.min(3, this.state.canvasZoom);
+        this.state.canvasZoom = Math.min(
+            this.config.canvas.maxZoom,
+            this.state.canvasZoom + 0.1
+        );
+        this.saveCanvasZoom();
         this.renderCanvas();
+        this.showNotification(`Zoom: ${Math.round(this.state.canvasZoom * 100)}%`, 'info');
     }
 
-    /**
-     * Disminuye el zoom del canvas
-     */
     zoomOut() {
-        this.state.canvasZoom /= 1.1;
-        this.state.canvasZoom = Math.max(0.1, this.state.canvasZoom);
+        this.state.canvasZoom = Math.max(
+            this.config.canvas.minZoom,
+            this.state.canvasZoom - 0.1
+        );
+        this.saveCanvasZoom();
         this.renderCanvas();
+        this.showNotification(`Zoom: ${Math.round(this.state.canvasZoom * 100)}%`, 'info');
     }
 
-    /**
-     * Restablece el zoom del canvas al valor por defecto
-     */
     resetZoom() {
-        this.state.canvasZoom = 1.0;
+        this.state.canvasZoom = this.config.canvas.defaultZoom;
+        this.saveCanvasZoom();
         this.renderCanvas();
+        this.showNotification('Zoom restablecido', 'success');
     }
 
     /**
-     * Guarda el estado actual en localStorage
+     * Guardar zoom del canvas
      */
-    saveState() {
-        try {
-            const data = JSON.parse(localStorage.getItem('dashboardData')) || {};
-            data[this.state.currentProject] = this.state.dashboardItems;
-            localStorage.setItem('dashboardData', JSON.stringify(data));
-        } catch (error) {
-            console.error('Error saving state:', error);
-            this.showNotification('Error al guardar el dashboard');
-        }
+    saveCanvasZoom() {
+        this.setStoredData(this.config.storageKeys.canvasZoom, this.state.canvasZoom.toString());
     }
 
     /**
-     * Carga el estado guardado desde localStorage
-     */
-    loadState() {
-        try {
-            const data = JSON.parse(localStorage.getItem('dashboardData')) || {};
-            this.state.dashboardItems = data[this.state.currentProject] || [];
-            this.updateCanvasItems();
-        } catch (error) {
-            console.error('Error loading state:', error);
-            this.state.dashboardItems = [];
-        }
-    }
-
-    /**
-     * Renderiza la vista previa del dashboard
-     */
-    renderDashboard() {
-        if (!this.previewGrid) return;
-
-        // Filtrar elementos según filtros aplicados
-        const filteredItems = this.state.dashboardItems.filter(function (item) {
-            return this.applyFilters(item);
-        }.bind(this));
-
-        // Mostrar estado vacío si no hay elementos
-        if (filteredItems.length === 0) {
-            this.previewGrid.innerHTML = '<div class="empty-state"><p>No hay elementos para mostrar</p><p>Usa el panel de agregar para incluir nuevos elementos</p></div>';
-            return;
-        }
-
-        // Generar HTML para las tarjetas de vista previa
-        let html = '';
-        for (let i = 0; i < filteredItems.length; i++) {
-            const item = filteredItems[i];
-            const typeFormatted = item.type.charAt(0).toUpperCase() + item.type.slice(1);
-            const dateFormatted = new Date(item.createdAt).toLocaleDateString();
-
-            html += '<div class="preview-card" data-id="' + item.id + '">' +
-                '<div class="card-header">' +
-                '<span class="card-icon">' + this.icons[item.type] + '</span>' +
-                '<span class="card-title">' + typeFormatted + '</span>' +
-                '<span class="card-badge ' + item.priority.toLowerCase() + '">' + item.priority + '</span>' +
-                '</div>' +
-                '<div class="card-content">' + item.content + '</div>' +
-                '<div class="card-actions">' +
-                '<button class="card-btn btn-edit">Editar</button>' +
-                '<button class="card-btn btn-delete primary">Eliminar</button>' +
-                '</div>' +
-                '<div class="card-meta">' +
-                '<small>Creado: ' + dateFormatted + '</small>' +
-                '</div>' +
-                '</div>';
-        }
-        this.previewGrid.innerHTML = html;
-    }
-
-    /**
-     * Aplica los filtros actuales a un elemento
-     * @param {Object} item - Elemento a evaluar
-     * @returns {boolean} True si el elemento pasa los filtros
-     */
-    applyFilters(item) {
-        const priorityFilter = this.filters.priority ? this.filters.priority.value : 'all';
-        const deviceFilter = this.filters.device ? this.filters.device.value : 'all';
-        const regionFilter = this.filters.region ? this.filters.region.value : 'all';
-        const newUsersFilter = this.filters.newUsers ? this.filters.newUsers.checked : false;
-
-        // Verificar cada filtro
-        if (priorityFilter !== 'all' && item.priority !== priorityFilter) return false;
-        if (deviceFilter !== 'all' && item.device !== deviceFilter) return false;
-        if (regionFilter !== 'all' && item.region !== regionFilter) return false;
-        return !(newUsersFilter && !item.newUsers);
-
-
-    }
-
-    /**
-     * Elimina todos los elementos de un tipo específico
-     * @param {string} type - Tipo de elementos a eliminar
-     */
-    deleteItem(type) {
-        if (!type) return;
-
-        // Confirmar eliminación
-        if (!confirm('¿Estás seguro de que quieres eliminar todos los elementos de tipo ' + type + '?')) {
-            if (this.sidebarDelete) {
-                this.sidebarDelete.value = '';
-            }
-            return;
-        }
-
-        const initialLength = this.state.dashboardItems.length;
-        // Filtrar elementos manteniendo solo los que NO son del tipo especificado
-        this.state.dashboardItems = this.state.dashboardItems.filter(function (item) {
-            return item.type !== type;
-        });
-
-        // Verificar si se eliminaron elementos
-        if (initialLength === this.state.dashboardItems.length) {
-            this.showNotification('No se encontraron elementos de tipo ' + type);
-        } else {
-            this.updateCanvasItems();
-            this.renderDashboard();
-            this.renderCanvas();
-            this.saveState();
-            this.showNotification('Elementos de tipo ' + type + ' eliminados correctamente');
-        }
-
-        // Resetear selector de eliminación
-        if (this.sidebarDelete) {
-            this.sidebarDelete.value = '';
-        }
-    }
-
-    /**
-     * Maneja las acciones de gestión del dashboard
+     * Manejar acciones de gestión
      */
     handleManagement() {
+        const action = this.elements['management']?.value;
+        if (!action) return;
+
         const actions = {
-            saveDashboard: function () {
-                this.saveState();
-                this.showNotification('Dashboard guardado correctamente');
-            }.bind(this),
-            loadDashboard: function () {
-                this.loadState();
-                this.renderDashboard();
-                this.renderCanvas();
-                this.showNotification('Dashboard cargado correctamente');
-            }.bind(this),
-            previewMode: function () {
-                this.togglePreview();
-            }.bind(this),
-            exportData: function () {
-                this.exportData();
-            }.bind(this)
+            saveDashboard: () => this.saveState(),
+            loadDashboard: () => this.loadState(),
+            previewMode: () => this.togglePreview(),
+            exportData: () => this.exportData()
         };
 
-        if (actions[this.action]) {
-            actions[this.action]();
+        if (actions[action]) {
+            actions[action]();
+        }
+
+        // Resetear selector
+        this.elements['management'].value = '';
+    }
+
+    /**
+     * Guardar estado
+     */
+    saveState() {
+        const stateToSave = {
+            elements: this.state.elements,
+            filters: this.state.filters,
+            canvasZoom: this.state.canvasZoom,
+            currentProject: this.state.currentProject
+        };
+
+        if (this.setStoredData(this.config.storageKeys.dashboardState, stateToSave)) {
+            this.showNotification('Dashboard guardado correctamente', 'success');
         } else {
-            console.warn('Unknown action: ' + this.action);
-            this.showNotification('Acción desconocida: ' + this.action);
-        }
-
-        // Resetear selector de gestión
-        if (this.managementSelect) {
-            this.managementSelect.value = '';
+            this.showNotification('Error al guardar el dashboard', 'error');
         }
     }
 
     /**
-     * Cambia al proyecto especificado
+     * Cargar estado
      */
-    switchProject() {
-        this.state.currentProject = this.projectId;
-
-        // Actualizar estado visual de los botones de proyecto
-        if (this.projects) {
-            this.projects.forEach(function (btn) {
-                btn.classList.toggle('active', btn.dataset.project === this.projectId);
-            });
-        }
-
-        // Cargar y renderizar el nuevo proyecto
-        this.loadState();
-        this.renderDashboard();
-        this.renderCanvas();
-        let projectId;
-        this.showNotification('Proyecto ' + projectId + ' cargado');
-    }
-
-    /**
-     * Edita el contenido de un elemento
-     * @param {number} id - ID del elemento a editar
-     */
-    editItem(id) {
-        const item = this.state.dashboardItems.find(function (i) {
-            return i.id === id;
-        });
-        if (!item) {
-            this.showNotification('Elemento no encontrado');
-            return;
-        }
-
-        // Solicitar nuevo contenido al usuario
-        const newContent = prompt('Editar contenido:', item.content);
-        if (newContent && newContent.trim()) {
-            item.content = newContent.trim();
-            item.updatedAt = new Date().toISOString();
+    loadState() {
+        const savedState = this.getStoredData(this.config.storageKeys.dashboardState);
+        if (savedState) {
+            this.state = { ...this.state, ...savedState };
             this.renderDashboard();
-            this.renderCanvas();
-            this.saveState();
-            this.showNotification('Elemento actualizado correctamente');
+            this.updateProjectButtons();
+            this.showNotification('Dashboard cargado correctamente', 'success');
+        } else {
+            this.showNotification('No hay estado guardado', 'warning');
         }
     }
 
     /**
-     * Elimina un elemento específico
-     * @param {number} id - ID del elemento a eliminar
-     */
-    removeItem(id) {
-        const item = this.state.dashboardItems.find(function (i) {
-            return i.id === id;
-        });
-        if (!item) {
-            this.showNotification('Elemento no encontrado');
-            return;
-        }
-
-        // Confirmar eliminación
-        if (!confirm('¿Estás seguro de que quieres eliminar este elemento ' + item.type + '?')) return;
-
-        // Filtrar elemento eliminado
-        this.state.dashboardItems = this.state.dashboardItems.filter(function (i) {
-            return i.id !== id;
-        });
-        this.updateCanvasItems();
-        this.renderDashboard();
-        this.renderCanvas();
-        this.saveState();
-        this.showNotification('Elemento eliminado correctamente');
-    }
-
-    /**
-     * Alterna entre modo vista previa y modo edición
+     * Alternar vista previa
      */
     togglePreview() {
         this.state.isPreviewMode = !this.state.isPreviewMode;
-        if (this.workspace) {
-            this.workspace.classList.toggle('preview-mode', this.state.isPreviewMode);
-        }
 
-        this.showNotification(this.state.isPreviewMode ? 'Modo vista previa activado' : 'Modo vista previa desactivado');
+        const previewBtn = this.elements['previewBtn'];
+        const canvasContainer = document.querySelector('.canvas-container');
+
+        if (this.state.isPreviewMode) {
+            canvasContainer.style.display = 'none';
+            previewBtn.innerHTML = '<span aria-hidden="true">✏️</span> Modo Edición';
+            previewBtn.setAttribute('aria-label', 'Cambiar a modo edición');
+            this.showNotification('Modo vista previa activado', 'info');
+        } else {
+            canvasContainer.style.display = 'block';
+            previewBtn.innerHTML = '<span aria-hidden="true">👁️</span> Vista Previa';
+            previewBtn.setAttribute('aria-label', 'Cambiar a vista previa');
+            this.showNotification('Modo edición activado', 'info');
+        }
     }
 
     /**
-     * Exporta los datos del dashboard como archivo JSON
+     * Exportar datos
      */
     exportData() {
-        try {
-            const data = {
-                project: this.state.currentProject,
-                exportDate: new Date().toISOString(),
-                items: this.state.dashboardItems
-            };
+        const exportData = {
+            project: this.state.currentProject,
+            elements: this.state.elements,
+            filters: this.state.filters,
+            exportDate: new Date().toISOString(),
+            version: '1.0'
+        };
 
-            // Crear y descargar archivo
-            const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'dashboard-' + this.state.currentProject + '-' + Date.now() + '.json';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
+        const dataStr = JSON.stringify(exportData, null, 2);
+        const dataBlob = new Blob([dataStr], { type: 'application/json' });
 
-            this.showNotification('Datos exportados correctamente');
-        } catch (error) {
-            console.error('Error exporting data:', error);
-            this.showNotification('Error al exportar datos');
-        }
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(dataBlob);
+        link.download = `dashboard-${this.state.currentProject}-${new Date().toISOString().split('T')[0]}.json`;
+        link.click();
+
+        URL.revokeObjectURL(link.href);
+        this.showNotification('Datos exportados correctamente', 'success');
     }
 
     /**
-     * Muestra una notificación al usuario
-     * @param {string} message - Mensaje a mostrar
+     * Utilidades
      */
-    showNotification(message) {
-        if (this.type === undefined) this.type = 'success';
+    escapeHTML(text) {
+        if (!text) return '';
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
 
-        // Crear elemento de notificación
+    showNotification(message, type = 'info') {
+        // Sistema simple de notificaciones
         const notification = document.createElement('div');
-        notification.className = 'notification ' + this.type;
-        notification.textContent = message;
-        notification.style.cssText = 'position: fixed; top: 20px; right: 20px; padding: 12px 20px; background: ' + (this.type === 'error' ? '#f44336' : this.type === 'warning' ? '#ff9800' : '#4CAF50') + '; color: white; border-radius: 4px; z-index: 1000; animation: slideIn 0.3s ease; max-width: 300px; word-wrap: break-word;';
+        notification.className = `dashboard-notification dashboard-notification-${type}`;
+        notification.innerHTML = `
+            <span class="notification-message">${message}</span>
+            <button class="notification-close" onclick="this.parentElement.remove()">×</button>
+        `;
+
+        // Estilos inline para la notificación
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : type === 'warning' ? '#f59e0b' : '#3b82f6'};
+            color: white;
+            padding: 12px 16px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: slideIn 0.3s ease;
+        `;
 
         document.body.appendChild(notification);
 
-        // Eliminar notificación después de 3 segundos
-        setTimeout(function () {
-            if (notification.parentNode) {
-                notification.parentNode.removeChild(notification);
+        // Autoeliminar después de 4 segundos
+        setTimeout(() => {
+            if (notification.parentElement) {
+                notification.remove();
             }
-        }, 3000);
+        }, 4000);
+    }
+
+    getStoredData(key) {
+        try {
+            return JSON.parse(localStorage.getItem(key));
+        } catch (error) {
+            console.warn(`Error loading ${key}:`, error);
+            return null;
+        }
+    }
+
+    setStoredData(key, data) {
+        try {
+            localStorage.setItem(key, JSON.stringify(data));
+            return true;
+        } catch (error) {
+            console.error(`Error saving ${key}:`, error);
+            return false;
+        }
     }
 }
 
-/**
- * Inicializa el DashboardEditor cuando el DOM está listo
- */
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function () {
-        try {
-            window.dashboardEditor = new DashboardEditor();
-        } catch (error) {
-            console.error('Failed to initialize DashboardEditor:', error);
-        }
-    });
-} else {
+// Inicialización de la aplicación
+function initializeDashboardEditor() {
     try {
         window.dashboardEditor = new DashboardEditor();
+
+        // Manejo global de errores
+        window.addEventListener('error', (event) => {
+            console.error('Error en Dashboard Editor:', event.error);
+        });
+
     } catch (error) {
-        console.error('Failed to initialize DashboardEditor:', error);
+        console.error('Error inicializando Dashboard Editor:', error);
+        alert('Error al cargar el Dashboard Editor. Por favor recarga la página.');
     }
 }
+
+// Inicializar cuando el DOM esté listo
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeDashboardEditor);
+} else {
+    initializeDashboardEditor();
+}
+
+// Añadir estilos CSS para las notificaciones
+const notificationStyles = `
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.dashboard-notification {
+    font-family: system-ui, -apple-system, sans-serif;
+}
+
+.notification-close {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 0;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.notification-close:hover {
+    opacity: 0.8;
+}
+`;
+
+// Inyectar estilos
+const styleSheet = document.createElement('style');
+styleSheet.textContent = notificationStyles;
+document.head.appendChild(styleSheet);
