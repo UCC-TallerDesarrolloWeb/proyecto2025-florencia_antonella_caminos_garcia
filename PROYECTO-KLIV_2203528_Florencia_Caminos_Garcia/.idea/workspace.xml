@@ -4,14 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="008a4719-fdf7-4f4f-bc6e-b5f6b4369520" name="Changes" comment="Fix: Agregué secciones de info de la web en el index, mejoré la navegación en las páginas, corregí errores de variables en el Dashboard_Editor, cree métodos que me falta implementar en el Task_Mannager&#10;Add: Agregué Documentación que me falta escribir&#10;Then: Integrar mejor las funciones en el Index, Competar el Task_Mannager, Mejorar el Dashboard_Editor, Reescribir el SASS, Empezar React">
+    <list default="true" id="008a4719-fdf7-4f4f-bc6e-b5f6b4369520" name="Changes" comment="Fix: Errores">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CSS/Dashboard_Editor.css" beforeDir="false" afterPath="$PROJECT_DIR$/CSS/Dashboard_Editor.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CSS/Index.css" beforeDir="false" afterPath="$PROJECT_DIR$/CSS/Index.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CSS/Task_Mannager.css" beforeDir="false" afterPath="$PROJECT_DIR$/CSS/Task_Mannager.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/HTML/Task_Mannager.html" beforeDir="false" afterPath="$PROJECT_DIR$/HTML/Task_Mannager.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/JAVASCRIPT/Dashboard_Editor.js" beforeDir="false" afterPath="$PROJECT_DIR$/JAVASCRIPT/Dashboard_Editor.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/JAVASCRIPT/Task_Mannager.js" beforeDir="false" afterPath="$PROJECT_DIR$/JAVASCRIPT/Task_Mannager.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -124,7 +119,7 @@
       <workItem from="1760577920703" duration="14340000" />
       <workItem from="1760592422968" duration="26000" />
       <workItem from="1760650455529" duration="16326000" />
-      <workItem from="1760695343554" duration="2848000" />
+      <workItem from="1760695343554" duration="3529000" />
     </task>
     <task id="LOCAL-00003" summary="Update: Mejoré La Descripción.md">
       <option name="closed" value="true" />
@@ -158,7 +153,15 @@
       <option name="project" value="LOCAL" />
       <updated>1760592220518</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Fix: Errores">
+      <option name="closed" value="true" />
+      <created>1760698276733</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1760698276733</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -182,6 +185,7 @@
     <MESSAGE value="Update: Renombré el Readme.md de la deescripción del proyecto" />
     <MESSAGE value="Update: Hice mejoras en el Index.js" />
     <MESSAGE value="Fix: Agregué secciones de info de la web en el index, mejoré la navegación en las páginas, corregí errores de variables en el Dashboard_Editor, cree métodos que me falta implementar en el Task_Mannager&#10;Add: Agregué Documentación que me falta escribir&#10;Then: Integrar mejor las funciones en el Index, Competar el Task_Mannager, Mejorar el Dashboard_Editor, Reescribir el SASS, Empezar React" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fix: Agregué secciones de info de la web en el index, mejoré la navegación en las páginas, corregí errores de variables en el Dashboard_Editor, cree métodos que me falta implementar en el Task_Mannager&#10;Add: Agregué Documentación que me falta escribir&#10;Then: Integrar mejor las funciones en el Index, Competar el Task_Mannager, Mejorar el Dashboard_Editor, Reescribir el SASS, Empezar React" />
+    <MESSAGE value="Fix: Errores" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fix: Errores" />
   </component>
 </project>
