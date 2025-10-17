@@ -393,7 +393,7 @@ class DashboardEditor {
 
     /**
      * Eliminar elemento específico
-     * @param {number} elementId 
+     * @param {string} elementId
      */
     deleteElement(elementId) {
         this.state.elements = this.state.elements.filter(el => el.id !== elementId);
@@ -472,7 +472,7 @@ class DashboardEditor {
 
     /**
      * Dibujar elemento en el canvas
-     * @param {number} element 
+     * @param {string} element
      */
     drawElement(element) {
         const typeConfig = this.config.elementTypes[element.type];
@@ -848,7 +848,7 @@ class DashboardEditor {
 
     /**
      * 
-     * @param {number} key 
+     * @param {string} key
      * @returns {null}
      */
 
@@ -862,10 +862,10 @@ class DashboardEditor {
     }
 
     /**
-     * 
-     * @param {number} key 
-     * @param {string} data
-     * @returns 
+     *
+     * @param {string} key
+     * @param {{elements: [], filters: {priority: string, device: string, region: string, newUsers: boolean}, canvasZoom: number, currentProject: string}} data
+     * @returns
      */
     setStoredData(key, data) {
         try {
