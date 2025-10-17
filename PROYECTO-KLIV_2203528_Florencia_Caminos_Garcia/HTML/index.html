@@ -23,7 +23,7 @@
     </div>
 
     <div id="search-Section">
-        <input type="text" id="searchBox" placeholder="Buscar..." class="search-input">
+        <label for="searchBox"></label><input type="text" id="searchBox" placeholder="Buscar..." class="search-input">
         <button id="searchButton" class="btn-search">🔍 Buscar</button>
 
         <div id="short_Term_Error" class="error-container">
@@ -91,7 +91,7 @@
 </aside>
 
 <main id="site-main">
-    <!-- Navegación mejorada -->
+
     <div id="nav-controls" class="nav-controls">
         <button id="nav-prev" class="nav-btn" title="Sección anterior">← Anterior</button>
         <nav id="breadcrumbs" class="breadcrumbs" aria-label="Ruta de navegación">
@@ -103,10 +103,8 @@
         <button id="nav-next" class="nav-btn" title="Siguiente sección">Siguiente →</button>
     </div>
 
-    <!-- Contenedor para mensajes toast -->
     <div id="toast-container" class="toast-container"></div>
 
-    <!-- Sección Dashboard CORREGIDA -->
     <section id="Dashboard" class="main-section active-section">
         <h2 class="section-title">Dashboard</h2>
 
@@ -116,7 +114,7 @@
         </div>
 
         <div id="dashboard-grid" class="dashboard-grid">
-            <!-- Artículos CORREGIDOS con data-item-id únicos y estructura plana -->
+
             <article class="dashboard-card" data-item-id="pin-0">
                 <div class="card-image">
                     <img src="https://picsum.photos/200/300" alt="Pin 1">

@@ -4,15 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="008a4719-fdf7-4f4f-bc6e-b5f6b4369520" name="Changes" comment="Update: Hice mejoras en el Index.js">
-      <change afterPath="$PROJECT_DIR$/Documentacion/Documentacion.docs" afterDir="false" />
+    <list default="true" id="008a4719-fdf7-4f4f-bc6e-b5f6b4369520" name="Changes" comment="Fix: Agregué secciones de info de la web en el index, mejoré la navegación en las páginas, corregí errores de variables en el Dashboard_Editor, cree métodos que me falta implementar en el Task_Mannager&#10;Add: Agregué Documentación que me falta escribir&#10;Then: Integrar mejor las funciones en el Index, Competar el Task_Mannager, Mejorar el Dashboard_Editor, Reescribir el SASS, Empezar React">
+      <change afterPath="$PROJECT_DIR$/JAVASCRIPT/TaskManager.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CSS/Index.css" beforeDir="false" afterPath="$PROJECT_DIR$/CSS/Index.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CSS/Task_Mannager.css" beforeDir="false" afterPath="$PROJECT_DIR$/CSS/Task_Mannager.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Descripcion.md" beforeDir="false" afterPath="$PROJECT_DIR$/Descripcion.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/HTML/Task_Mannager.html" beforeDir="false" afterPath="$PROJECT_DIR$/HTML/Task_Mannager.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/HTML/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/HTML/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/JAVASCRIPT/Dashboard_Editor.js" beforeDir="false" afterPath="$PROJECT_DIR$/JAVASCRIPT/Dashboard_Editor.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/JAVASCRIPT/Index.js" beforeDir="false" afterPath="$PROJECT_DIR$/JAVASCRIPT/Index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/JAVASCRIPT/Task_Mannager.js" beforeDir="false" afterPath="$PROJECT_DIR$/JAVASCRIPT/Task_Mannager.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JAVASCRIPT/Task_Mannager.js" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,6 +39,9 @@
     &quot;accountId&quot;: &quot;1198a9b7-2469-45a7-aa21-001086c76675&quot;
   }
 }</component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/JAVASCRIPT/TaskManager.js" root0="FORCE_HIGHLIGHTING" />
+  </component>
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="CurrentFile" />
   </component>
@@ -54,10 +56,12 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "Node.js.TaskManager.js.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
     "git-widget-placeholder": "main",
+    "js.last.introduce.type": "CONST",
     "junie.onboarding.icon.badge.shown": "true",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.stylelint": "true",
@@ -65,7 +69,7 @@
     "node.js.selected.package.stylelint": "",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "run.code.analysis.last.selected.profile": "pProject Default",
+    "run.code.analysis.last.selected.profile": "aDefault",
     "settings.editor.selected.configurable": "Errors",
     "to.speed.mode.migration.done": "true",
     "vue.rearranger.settings.migration": "true"
@@ -117,7 +121,9 @@
       <updated>1760400431048</updated>
       <workItem from="1760400435504" duration="9808000" />
       <workItem from="1760576424692" duration="424000" />
-      <workItem from="1760577920703" duration="13802000" />
+      <workItem from="1760577920703" duration="14340000" />
+      <workItem from="1760592422968" duration="26000" />
+      <workItem from="1760650455529" duration="16326000" />
     </task>
     <task id="LOCAL-00003" summary="Update: Mejoré La Descripción.md">
       <option name="closed" value="true" />
@@ -143,7 +149,15 @@
       <option name="project" value="LOCAL" />
       <updated>1760414864720</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Fix: Agregué secciones de info de la web en el index, mejoré la navegación en las páginas, corregí errores de variables en el Dashboard_Editor, cree métodos que me falta implementar en el Task_Mannager&#10;Add: Agregué Documentación que me falta escribir&#10;Then: Integrar mejor las funciones en el Index, Competar el Task_Mannager, Mejorar el Dashboard_Editor, Reescribir el SASS, Empezar React">
+      <option name="closed" value="true" />
+      <created>1760592220518</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1760592220518</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -166,6 +180,7 @@
     <MESSAGE value="Update: Mejoré La Descripción.md" />
     <MESSAGE value="Update: Renombré el Readme.md de la deescripción del proyecto" />
     <MESSAGE value="Update: Hice mejoras en el Index.js" />
-    <option name="LAST_COMMIT_MESSAGE" value="Update: Hice mejoras en el Index.js" />
+    <MESSAGE value="Fix: Agregué secciones de info de la web en el index, mejoré la navegación en las páginas, corregí errores de variables en el Dashboard_Editor, cree métodos que me falta implementar en el Task_Mannager&#10;Add: Agregué Documentación que me falta escribir&#10;Then: Integrar mejor las funciones en el Index, Competar el Task_Mannager, Mejorar el Dashboard_Editor, Reescribir el SASS, Empezar React" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fix: Agregué secciones de info de la web en el index, mejoré la navegación en las páginas, corregí errores de variables en el Dashboard_Editor, cree métodos que me falta implementar en el Task_Mannager&#10;Add: Agregué Documentación que me falta escribir&#10;Then: Integrar mejor las funciones en el Index, Competar el Task_Mannager, Mejorar el Dashboard_Editor, Reescribir el SASS, Empezar React" />
   </component>
 </project>

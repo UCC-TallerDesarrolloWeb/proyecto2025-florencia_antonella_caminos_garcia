@@ -43,7 +43,7 @@
                placeholder="🔍 Buscar tareas...">
 
         <label for="sort-tasks-sidebar">Ordenar por:</label>
-        <select id="sort-tasks-sidebar" onchange="window.taskManager.sortTasks(this.value)">
+        <select id="sort-tasks-sidebar" onchange="window.taskManager.sortTasks()">
             <option value="fecha">Fecha</option>
             <option value="prioridad">Prioridad</option>
             <option value="nombre">Nombre</option>
@@ -181,9 +181,9 @@
     <div id="calendar-view" class="view">
         <h2>Vista Calendario</h2>
         <div id="calendar-header">
-            <button id="prev-month" onclick="window.taskManager.navigateCalendar(-1)">◀</button>
+            <button id="prev-month" onclick="window.taskManager.navigateCalendar()">◀</button>
             <h3 id="current-month">Septiembre 2023</h3>
-            <button id="next-month" onclick="window.taskManager.navigateCalendar(1)">▶</button>
+            <button id="next-month" onclick="window.taskManager.navigateCalendar()">▶</button>
         </div>
         <div id="calendar"></div>
     </div>

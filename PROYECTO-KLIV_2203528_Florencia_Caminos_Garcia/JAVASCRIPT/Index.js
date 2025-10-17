@@ -4,13 +4,6 @@
  * =====================
  * Clase DashboardApp - Versión Mejorada y Corregida
  * =====================
- *
- * Mejoras implementadas:
- * - Sistema completo de likes con persistencia
- * - Navegación mejorada con breadcrumbs e historial
- * - Manejo robusto de errores
- * - Optimización de rendimiento
- * - Compatibilidad con el nuevo CSS
  */
 class DashboardApp {
 
@@ -918,10 +911,10 @@ class DashboardApp {
         if (!passwordField || !confirmPasswordField) return;
 
         if (passwordField.value !== confirmPasswordField.value) {
-            confirmPasswordField.style.borderColor = 'var(--color-error)';
+            confirmPasswordField.style.borderColor = 'var(#e74c3c)';
             this.showError('⚠️ Las contraseñas no coinciden', 'settings-error');
         } else {
-            confirmPasswordField.style.borderColor = 'var(--color-exito)';
+            confirmPasswordField.style.borderColor = 'var(#2ecc71)';
             this.hideError('settings-error');
         }
     }
@@ -1446,7 +1439,7 @@ class DashboardApp {
         input.className = 'task-edit-input';
         input.style.width = '100%';
         input.style.padding = '8px';
-        input.style.border = '2px solid var(--color-primario)';
+        input.style.border = '2px solid var(#5CA7DB)';
         input.style.borderRadius = '4px';
 
         taskText.replaceWith(input);

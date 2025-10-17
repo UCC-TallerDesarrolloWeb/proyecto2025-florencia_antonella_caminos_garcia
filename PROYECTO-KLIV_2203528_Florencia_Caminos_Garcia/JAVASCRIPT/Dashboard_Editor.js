@@ -1,7 +1,6 @@
 // =============================================
 // DASHBOARD EDITOR - VERSIÓN COMPLETA Y FUNCIONAL
 // =============================================
-// noinspection JSDeprecatedSymbols
 
 class DashboardEditor {
     parentElement;
@@ -214,6 +213,7 @@ class DashboardEditor {
 
     /**
      * Manejado de teclado
+     * @param {number} event 
      */
     handleKeyboard(event) {
         // Atajos globales
@@ -251,6 +251,7 @@ class DashboardEditor {
 
     /**
      * Cambiar proyecto
+     * @param {null} [project=null] 
      */
     switchProject(project = null) {
         // Determinar proyecto desde el botón clickeado
@@ -324,6 +325,7 @@ class DashboardEditor {
 
     /**
      * Agregar elemento al dashboard
+     * @param {number} type 
      */
     addItem(type) {
         if (!type) return;
@@ -358,6 +360,7 @@ class DashboardEditor {
 
     /**
      * Eliminar elementos por tipo
+     * @param {number} type 
      */
     deleteItem(type) {
         if (!type) return;
@@ -389,6 +392,7 @@ class DashboardEditor {
 
     /**
      * Eliminar elemento específico
+     * @param {number} elementId 
      */
     deleteElement(elementId) {
         this.state.elements = this.state.elements.filter(el => el.id !== elementId);
@@ -467,6 +471,7 @@ class DashboardEditor {
 
     /**
      * Dibujar elemento en el canvas
+     * @param {number} element 
      */
     drawElement(element) {
         const typeConfig = this.config.elementTypes[element.type];
@@ -571,6 +576,7 @@ class DashboardEditor {
 
     /**
      * Manejar eventos del canvas - Mouse Down
+     * @param {number} event 
      */
     handleCanvasMouseDown(event) {
         const rect = this.canvas.getBoundingClientRect();
@@ -592,6 +598,7 @@ class DashboardEditor {
 
     /**
      * Manejar eventos del canvas - Mouse Move
+     * @param {number} event 
      */
     handleCanvasMouseMove(event) {
         if (!this.draggingElement) return;
@@ -624,6 +631,7 @@ class DashboardEditor {
 
     /**
      * Manejar eventos táctiles del canvas
+     * @param {Array} event 
      */
     handleCanvasTouchStart(event) {
         event.preventDefault();
@@ -784,7 +792,9 @@ class DashboardEditor {
     }
 
     /**
-     * Utilidades
+     * 
+     * @param {textContent} text 
+     * @returns 
      */
     escapeHTML(text) {
         if (!text) return '';
@@ -792,6 +802,12 @@ class DashboardEditor {
         div.textContent = text;
         return div.innerHTML;
     }
+
+    /**
+     * 
+     * @param {number} message 
+     * @param {string} type 
+     */
 
     showNotification(message, type = 'info') {
         // Sistema simple de notificaciones
@@ -829,6 +845,12 @@ class DashboardEditor {
         }, 4000);
     }
 
+    /**
+     * 
+     * @param {number} key 
+     * @returns {null}
+     */
+
     getStoredData(key) {
         try {
             return JSON.parse(localStorage.getItem(key));
@@ -838,6 +860,12 @@ class DashboardEditor {
         }
     }
 
+    /**
+     * 
+     * @param {number} key 
+     * @param {stringify} data 
+     * @returns 
+     */
     setStoredData(key, data) {
         try {
             localStorage.setItem(key, JSON.stringify(data));

@@ -77,16 +77,16 @@
 | Carpeta/Archivo                      | Descripción                   |
 |--------------------------------------|-------------------------------|
 | `HTML/Index.html`                    | Página principal del proyecto |
-| `HTML/Task_Mannager.html`            | Estilos CSS compilados        |
+| `HTML/TaskManager.html`            | Estilos CSS compilados        |
 | `HTML/Dashboard_Editor.html`         | Archivos Sass fuente          |
 | `CSS/Index.css`                      | Scripts JavaScript            |
-| `CSS/Task_Mannager.css`              | Página principal del proyecto |
+| `CSS/TaskManager.css`              | Página principal del proyecto |
 | `CSS/Dashboard_Editor.css`           | Estilos CSS compilados        |
 | `JAVASCRIPT/Index.js`                | Scripts JavaScript            |
-| `JAVASCRIPT/Task_Mannager.js`        | Página principal del proyecto |
+| `JAVASCRIPT/TaskManager.js`        | Página principal del proyecto |
 | `JAVASCRIPT/Dashboard_Editor.js`     | Estilos CSS compilados        |
 | `SASS/Index.scss`                    | Archivos Sass fuente          |
-| `SASS/Task_Mannager.scss`            | Archivos Sass fuente          |
+| `SASS/TaskManager.scss`            | Archivos Sass fuente          |
 | `SASS/Dashboard_Editor.scss`         | Scripts JavaScript            |
 | `SASS/_mobile_Index.scss`            | Recursos gráficos             |
 | `SASS/_mobile_Task_Mannager.scss`    | Fuentes e iconos              |
