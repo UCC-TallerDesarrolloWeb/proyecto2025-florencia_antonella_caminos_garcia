@@ -1,5 +1,3 @@
-// styles.scss
-
 $font-stack: "Quicksand", "SUSE Mono", monospace, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 $bg-gradient-body: linear-gradient(135deg, #f8f4ff, #f0e6ff);
 $sidebar-gradient: linear-gradient(180deg, #ffffff, #faf7ff);
@@ -294,30 +292,4 @@ smooth-transition(color, 0.3s);
   background: $accent-hover-purple;
 }
 
-@media (max-width: 1024px) {
-  .dashboard-container {
-    flex-direction: column;
-  }
-
-  .sidebar {
-    width: 100%;
-    flex-direction: row;
-    overflow-x: auto;
-  }
-
-  .project-buttons {
-    flex-direction: row;
-  }
-}
-
-@media (max-width: 480px) {
-  .app-header {
-    h2 {
-      font-size: 1.3rem;
-    }
-  }
-
-  .sidebar {
-    padding: 1rem;
-  }
-}
+@import "mobile_Dashboard_editor";
