@@ -239,7 +239,7 @@ class TaskManager {
     addTaskToBoard(task) {
         const li = document.createElement('li');
         li.textContent = task.title;
-        li.setAttribute('draggable', true);
+        li.draggable = true;
         li.dataset.id = task.id;
 
         li.addEventListener('dragstart', e => e.dataTransfer.setData('text/plain', task.id));

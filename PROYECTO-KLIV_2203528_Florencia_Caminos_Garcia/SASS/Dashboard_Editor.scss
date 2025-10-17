@@ -1,0 +1,323 @@
+// styles.scss
+
+$font-stack: "Quicksand", "SUSE Mono", monospace, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+$bg-gradient-body: linear-gradient(135deg, #f8f4ff, #f0e6ff);
+$sidebar-gradient: linear-gradient(180deg, #ffffff, #faf7ff);
+$card-gradient: linear-gradient(135deg, #ffffff, #f8f4ff);
+$accent-gradient: linear-gradient(135deg, #8A2BE2, #f838f2);
+$accent-purple: #8A2BE2;
+$accent-hover-purple: #7a2be2;
+$text-color: #2C2C2C;
+$muted-text: #5D5D5D;
+$light-bg: #faf8ff;
+$card-bg: #f8f4ff;
+$border-light: #d8c8ff;
+$shadow-1: 0 2px 12px rgba(138, 43, 226, 0.08);
+$shadow-2: 0 8px 24px rgba(138, 43, 226, 0.15);
+
+@mixin smooth-transition($props: all, $time: 0.3s, $timing: ease) {
+  transition: $props $time $timing;
+}
+
+@mixin soft-box-shadow($alpha) {
+  box-shadow: 0 2px 12px rgba(138, 43, 226, $alpha);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: $font-stack;
+  background: $bg-gradient-body;
+  color: $text-color;
+  line-height: 1.6;
+  @include smooth-transition(background, 0.3s);
+smooth-transition(color, 0.3s);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.dashboard-container {
+  display: flex;
+  min-height: 100vh;
+  position: relative;
+}
+
+.sidebar {
+  background: $sidebar-gradient;
+  border-right: 1px solid $border-light;
+  padding: 2rem 1rem;
+  width: 280px;
+  box-shadow: 4px 0 16px rgba(138, 43, 226, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.sidebar-header {
+  text-align: center;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid $border-light;
+  margin-bottom: 1rem;
+
+  h2 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, $accent-purple, #f838f2);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+}
+
+.sidebar-section {
+  background: $card-gradient;
+  border-radius: 16px;
+  padding: 1.2rem;
+  box-shadow: $shadow-1;
+  border: 1px solid $border-light;
+  @include smooth-transition(all, 0.3s);
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: $shadow-2;
+  }
+
+  h3 {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    color: $accent-purple;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+  }
+}
+
+
+.project-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.project-btn {
+  padding: 12px 16px;
+  border-radius: 16px;
+  cursor: pointer;
+  background: linear-gradient(135deg, #ffffff, #faf7ff);
+  color: $text-color;
+  font-size: 0.95rem;
+  font-weight: 500;
+  @include smooth-transition(all, 0.3s);
+  box-shadow: 0 2px 10px rgba(138, 43, 226, 0.08);
+  border: 1px solid $border-light;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  &:hover {
+    background: $accent-gradient;
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(138, 43, 226, 0.2);
+  }
+
+  &.active {
+    background: $accent-gradient;
+    color: white;
+    box-shadow: 0 10px 30px rgba(138, 43, 226, 0.25);
+  }
+}
+
+
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: $light-bg;
+}
+
+.main-header {
+  background: $accent-gradient;
+  color: white;
+  padding: 1rem 2rem;
+  font-size: 1.8rem;
+  font-weight: 700;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+}
+
+.app-header {
+  background-color: #ffffff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  box-shadow: 0 4px 10px rgba(138, 43, 226, 0.08);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+
+  h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: $text-color;
+  }
+
+  .header-controls {
+    display: flex;
+    gap: 12px;
+  }
+}
+
+.header-btn {
+  padding: 10px 20px;
+  border-radius: 16px;
+  border: none;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 500;
+  @include smooth-transition(all, 0.3s);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  &:not(.secondary) {
+    background: $accent-gradient;
+    color: white;
+  }
+
+  &.secondary {
+    background: linear-gradient(135deg, #ffffff, #faf7ff);
+    color: $text-color;
+    border: 1px solid $border-light;
+  }
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(138, 43, 226, 0.2);
+  }
+}
+
+
+.workspace {
+  flex: 1;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  overflow-y: auto;
+}
+
+.canvas-container {
+  position: relative;
+  border-radius: 16px;
+  background: $card-bg;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+  min-height: 480px;
+
+  #dashboardCanvas {
+    width: 100%;
+    height: 100%;
+    border-radius: 16px;
+    display: block;
+  }
+}
+
+.canvas-controls {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  padding: 12px;
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(138, 43, 226, 0.12);
+}
+
+.canvas-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: none;
+  background: $accent-purple;
+  color: white;
+  cursor: pointer;
+  font-size: 1.2rem;
+  font-weight: bold;
+  @include smooth-transition(all, 0.3s);
+
+  &:hover {
+    background: $accent-hover-purple;
+    transform: scale(1.1);
+  }
+}
+
+
+.preview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.empty-state {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 60px 20px;
+  color: $muted-text;
+  background: linear-gradient(135deg, #ffffff, #fcfaff);
+  border-radius: 16px;
+  border: 2px dashed $border-light;
+}
+
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f8f4ff;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: $accent-purple;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: $accent-hover-purple;
+}
+
+@media (max-width: 1024px) {
+  .dashboard-container {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    flex-direction: row;
+    overflow-x: auto;
+  }
+
+  .project-buttons {
+    flex-direction: row;
+  }
+}
+
+@media (max-width: 480px) {
+  .app-header {
+    h2 {
+      font-size: 1.3rem;
+    }
+  }
+
+  .sidebar {
+    padding: 1rem;
+  }
+}

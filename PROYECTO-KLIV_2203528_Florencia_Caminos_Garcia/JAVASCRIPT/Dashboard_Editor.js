@@ -688,7 +688,24 @@ class DashboardEditor {
      * Guardar zoom del canvas
      */
     saveCanvasZoom() {
-        this.setStoredData(this.config.storageKeys.canvasZoom, this.state.canvasZoom.toString());
+        // Obtener la configuración actual
+        const currentConfig = this.getStoredData(this.config.storageKeys.canvasZoom) || {
+            elements: [],
+            filters: {
+                priority: "",
+                device: "",
+                region: "",
+                newUsers: false
+            },
+            canvasZoom: 1.0,
+            currentProject: ""
+        };
+
+        // Actualizar solo el zoom
+        currentConfig.canvasZoom = this.state.canvasZoom;
+
+        // Guardar el objeto completo
+        this.setStoredData(this.config.storageKeys.canvasZoom, currentConfig);
     }
 
     /**
