@@ -1,4 +1,6 @@
-/** 
+// noinspection JSValidateTypes,GrazieInspection,JSUndefinedPropertyAssignment,JSUnresolvedReference
+
+/**
  * ====================
  * Task_Mannager.js 
  * ====================
@@ -8,6 +10,7 @@
  * Clase principal TaskManager que maneja tareas, proyectos y vistas
  */
 class TaskManager {
+    e;
     /** 
      * Constructor de la clase
      * Inicializa tareas, proyectos, vistas, elementos del DOM, calendario y estadísticas
@@ -69,7 +72,7 @@ class TaskManager {
         document.getElementById('btn-delete-project').addEventListener('click', () => this.deleteCurrentProject());
 
         /** Formularios */
-        this.taskForm.addEventListener('submit', e => this.handleTaskFormSubmit(e));
+        this.taskForm.addEventListener('submit', () => this.handleTaskFormSubmit());
         document.getElementById('save-project').addEventListener('click', () => this.createProjectFromModal());
         document.getElementById('cancel-project').addEventListener('click', () => this.closeProjectModal());
 
@@ -201,13 +204,12 @@ class TaskManager {
         localStorage.setItem('projects', JSON.stringify(this.projects));
     }
 
-    /** 
-     *  Tareas 
+    /**
+     *  Tareas
      * @description Maneja el submit del formulario de tarea
-     * @param {Event} e - Evento submit del formulario
      */
-    handleTaskFormSubmit(e) {
-        e.preventDefault();
+    handleTaskFormSubmit() {
+        this.e.preventDefault();
         const id = document.getElementById('taskId').value || Date.now();
         const title = document.getElementById('taskTitle').value.trim();
         const project = document.getElementById('taskProject').value;
@@ -217,7 +219,7 @@ class TaskManager {
         const tags = Array.from(document.querySelectorAll('input[name="tags"]:checked')).map(el => el.value);
         const subtasks = document.getElementById('subtasks').value.split(',').map(s => s.trim()).filter(Boolean);
 
-        const existingIndex = this.tasks.findIndex(t => t.id == id);
+        const existingIndex = this.tasks.findIndex(t => t.id === id);
         const taskData = { id, title, project, description, status, dueDate, tags, subtasks, comments: [] };
 
         if (existingIndex > -1) this.tasks[existingIndex] = taskData;
@@ -365,9 +367,12 @@ class TaskManager {
      * @param {string} newStatus - Nuevo estado: 'todo', 'inprogress', 'done'
      */
     handleDrop(e, newStatus) {
+
+        e.dataTransfer = undefined;
+        e.dataTransfer = undefined;
         e.preventDefault();
         const taskId = e.dataTransfer.getData('text/plain');
-        const task = this.tasks.find(t => t.id == taskId);
+        const task = this.tasks.find(t => t.id === taskId);
         if (task) {
             task.status = newStatus;
             this.saveTasks();

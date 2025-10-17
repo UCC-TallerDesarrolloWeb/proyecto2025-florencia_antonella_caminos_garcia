@@ -235,48 +235,6 @@ body {
   gap: 1.5rem;
 }
 
-.preview-card {
-  background: linear-gradient(135deg, #ffffff, #fcfaff);
-  border-radius: 16px;
-  padding: 20px;
-  color: #2C2C2C;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 12px rgba(138, 43, 226, 0.08);
-  border: 1px solid #d8c8ff;
-  display: flex;
-  flex-direction: column;
-}
-
-.preview-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 12px 32px rgba(138, 43, 226, 0.18);
-}
-
-.card-btn {
-  padding: 8px 16px;
-  border-radius: 16px;
-  border: none;
-  cursor: pointer;
-  font-size: 0.9rem;
-  font-weight: 500;
-  transition: all 0.3s ease;
-}
-
-.btn-edit {
-  background: #3b82f6;
-  color: white;
-}
-
-.btn-delete {
-  background: #ef4444;
-  color: white;
-}
-
-.card-btn:hover {
-  transform: translateY(-2px);
-  opacity: 0.9;
-}
-
 .empty-state {
   grid-column: 1 / -1;
   text-align: center;
@@ -326,11 +284,7 @@ body {
     font-size: 1.3rem;
   }
 
-  .card-actions {
-    flex-direction: column;
-  }
-
-  .sidebar {
+    .sidebar {
     padding: 1rem;
   }
 }

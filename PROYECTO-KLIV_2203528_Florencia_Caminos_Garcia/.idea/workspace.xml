@@ -5,13 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="008a4719-fdf7-4f4f-bc6e-b5f6b4369520" name="Changes" comment="Fix: Agregué secciones de info de la web en el index, mejoré la navegación en las páginas, corregí errores de variables en el Dashboard_Editor, cree métodos que me falta implementar en el Task_Mannager&#10;Add: Agregué Documentación que me falta escribir&#10;Then: Integrar mejor las funciones en el Index, Competar el Task_Mannager, Mejorar el Dashboard_Editor, Reescribir el SASS, Empezar React">
-      <change afterPath="$PROJECT_DIR$/JAVASCRIPT/TaskManager.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CSS/Dashboard_Editor.css" beforeDir="false" afterPath="$PROJECT_DIR$/CSS/Dashboard_Editor.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CSS/Index.css" beforeDir="false" afterPath="$PROJECT_DIR$/CSS/Index.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CSS/Task_Mannager.css" beforeDir="false" afterPath="$PROJECT_DIR$/CSS/Task_Mannager.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Descripcion.md" beforeDir="false" afterPath="$PROJECT_DIR$/Descripcion.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/HTML/Task_Mannager.html" beforeDir="false" afterPath="$PROJECT_DIR$/HTML/Task_Mannager.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/HTML/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/HTML/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/JAVASCRIPT/Task_Mannager.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/JAVASCRIPT/Dashboard_Editor.js" beforeDir="false" afterPath="$PROJECT_DIR$/JAVASCRIPT/Dashboard_Editor.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JAVASCRIPT/Task_Mannager.js" beforeDir="false" afterPath="$PROJECT_DIR$/JAVASCRIPT/Task_Mannager.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -69,7 +69,7 @@
     "node.js.selected.package.stylelint": "",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "run.code.analysis.last.selected.profile": "aDefault",
+    "run.code.analysis.last.selected.profile": "pProject Default",
     "settings.editor.selected.configurable": "Errors",
     "to.speed.mode.migration.done": "true",
     "vue.rearranger.settings.migration": "true"
@@ -124,6 +124,7 @@
       <workItem from="1760577920703" duration="14340000" />
       <workItem from="1760592422968" duration="26000" />
       <workItem from="1760650455529" duration="16326000" />
+      <workItem from="1760695343554" duration="2848000" />
     </task>
     <task id="LOCAL-00003" summary="Update: Mejoré La Descripción.md">
       <option name="closed" value="true" />

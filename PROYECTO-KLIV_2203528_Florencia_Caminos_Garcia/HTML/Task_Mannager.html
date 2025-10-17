@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!--suppress ALL -->
 <html lang="es" data-theme="light">
 
 <head>
@@ -24,7 +25,13 @@
                 📁 Nuevo Proyecto
             </button>
             <button class="sidebar-btn danger" id="btn-delete-completed-tasks"
-                    onclick="window.taskManager.deleteCompletedTasks()">
+                    onclick="window.taskManager.deleteCompletedTasks = function () {
+                        const tasks = window.taskManager.getTasks();
+                        const remainingTasks = tasks.filter(task => !task.completed);
+                        window.taskManager.saveTasks(remainingTasks);
+                        window.taskManager.renderTasks();
+                    };
+                    window.taskManager.deleteCompletedTasks()">
                 🗑️ Eliminar Completadas
             </button>
             <button class="sidebar-btn danger" id="btn-delete-project"

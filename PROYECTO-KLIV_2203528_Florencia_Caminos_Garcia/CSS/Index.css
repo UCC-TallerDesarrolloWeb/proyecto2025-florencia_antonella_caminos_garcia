@@ -157,7 +157,6 @@ body {
 
 .sidebar-item {
     background: rgba(255, 255, 255, 0.1);
-    border: none;
     border-radius: 16px;
     color: white;
     cursor: pointer;
@@ -370,37 +369,6 @@ body {
 .file-upload {
     margin-top: 2rem;
     text-align: center;
-}
-
-.btn {
-    border: none;
-    border-radius: 14px;
-    cursor: pointer;
-    font-weight: 600;
-    padding: 12px 24px;
-    transition: all 0.3s ease;
-    font-family: inherit;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    justify-content: center;
-    position: relative;
-    overflow: hidden;
-}
-
-.btn::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-    transition: left 0.5s;
-}
-
-.btn:hover::before {
-    left: 100%;
 }
 
 .btn-primary {
@@ -619,11 +587,10 @@ body {
 }
 
 .card-item {
-    padding: 8px 0;
     border-bottom: 1px solid #f1f3f6;
     color: #4a5568;
     position: relative;
-    padding-left: 1rem;
+    padding: 8px 0 8px 1rem;
 }
 
 .card-item::before {
@@ -822,7 +789,7 @@ body {
     font-weight: 600;
     font-size: 0.9rem;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 1px;
 }
 
 .table-body tr {
@@ -864,16 +831,6 @@ body {
 .priority-high {
     background: #fed7d7;
     color: #c53030;
-}
-
-.priority-medium {
-    background: #fef5e7;
-    color: #d69e2e;
-}
-
-.priority-low {
-    background: #c6f6d5;
-    color: #276749;
 }
 
 .settings-grid {
@@ -1266,11 +1223,6 @@ body {
 
     .section-actions {
         flex-direction: column;
-    }
-
-    .btn {
-        width: 100%;
-        justify-content: center;
     }
 
     .card-actions {

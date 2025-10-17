@@ -41,7 +41,7 @@ button, input, select, textarea {
 .toolbar p {
   font-weight: 600;
   margin-bottom: 12px;
-  letter-spacing: 0.5px;
+  letter-spacing: 1px;
 }
 
 .toolbar-buttons {
@@ -283,6 +283,7 @@ header button:hover {
   background: linear-gradient(135deg, #ff5f2e, #ff9a2e);
 }
 
+/*noinspection ALL*/
 .task-card {
   background: #fff;
   padding: 14px;
@@ -292,6 +293,7 @@ header button:hover {
   cursor: grab;
 }
 
+/*noinspection ALL*/
 .task-card:hover {
   transform: translateY(-3px);
   box-shadow: 0 6px 16px rgba(0,0,0,0.15);
@@ -338,6 +340,7 @@ header button:hover {
   to {opacity: 1; transform: scale(1);}
 }
 
+/*noinspection ALL*/
 .modal-close {
   position: absolute;
   top: 14px;
@@ -347,6 +350,7 @@ header button:hover {
   cursor: pointer;
 }
 
+/*noinspection ALL*/
 .modal-close:hover {
   color: #000;
 }
@@ -513,12 +517,14 @@ body {
     color: #fff;
 }
 
+/*noinspection ALL*/
 .calendar-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     gap: 0.5rem;
 }
 
+/*noinspection ALL*/
 .calendar-day-header {
     font-weight: 600;
     text-align: center;
@@ -528,6 +534,7 @@ body {
     color: #334155;
 }
 
+/*noinspection ALL*/
 .calendar-day {
     min-height: 80px;
     background-color: #ffffff;
@@ -540,21 +547,25 @@ body {
     transition: transform 0.2s ease;
 }
 
+/*noinspection ALL*/
 .calendar-day:hover {
     transform: translateY(-2px);
 }
 
+/*noinspection ALL*/
 .day-number {
     font-weight: 600;
     text-align: right;
     color: #1e293b;
 }
 
+/*noinspection ALL*/
 .today {
     border: 2px solid #3b82f6;
     background-color: #dbeafe;
 }
 
+/*noinspection ALL*/
 .calendar-task {
     background-color: #3b82f6;
     color: #fff;
@@ -568,6 +579,7 @@ body {
     text-overflow: ellipsis;
 }
 
+/*noinspection ALL*/
 .calendar-task:hover {
     background-color: #2563eb;
     transform: scale(1.02);

@@ -1,6 +1,7 @@
 // =============================================
 // DASHBOARD EDITOR - VERSIÓN COMPLETA Y FUNCIONAL
 // =============================================
+// noinspection JSUnusedGlobalSymbols,JSDeprecatedSymbols,JSValidateTypes
 
 class DashboardEditor {
     parentElement;
@@ -213,7 +214,7 @@ class DashboardEditor {
 
     /**
      * Manejado de teclado
-     * @param {number} event 
+     * @param {KeyboardEvent} event
      */
     handleKeyboard(event) {
         // Atajos globales
@@ -805,7 +806,7 @@ class DashboardEditor {
 
     /**
      * 
-     * @param {number} message 
+     * @param {string} message
      * @param {string} type 
      */
 
@@ -863,7 +864,7 @@ class DashboardEditor {
     /**
      * 
      * @param {number} key 
-     * @param {stringify} data 
+     * @param {string} data
      * @returns 
      */
     setStoredData(key, data) {
