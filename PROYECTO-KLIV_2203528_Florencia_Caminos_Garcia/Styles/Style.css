@@ -170,16 +170,6 @@
     box-shadow: 0 8px 20px rgba(139, 92, 246, 0.2);
 }
 
-.btn {
-    background: linear-gradient(45deg, #8b5cf6, #c084fc);
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-weight: 500;
-}
 
 .btn:hover {
     transform: translateY(-2px);
