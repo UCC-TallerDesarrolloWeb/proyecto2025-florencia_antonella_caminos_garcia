@@ -25,7 +25,7 @@ Tener en cuenta:
 - [X] Modificar el Readme.MD y colocar información del proyecto/página (mínimamente: título del proyecto, autores con nombre y apellido, link de gh-pages, contenido de la página,  listado de tecnologías usadas, etc)
 - [X] En el **readme.md** se debe emplear Markdown y aplicar negrita, titulo de orden 1, 2 y 3, link, items, tabla, index a cada sección
 - [X] El código debe estar pusheado en el repositorio (emplear gh-pages ó publicar la página desde el main), y no debe haber diferencias entre **main** y **gh-pages** (verificar de realizar el Merge).
-- [ ] Publicar la Web empleando GitHubPages
+- [X] Publicar la Web empleando GitHubPages
 - [X] El repositorio no debe contener archivos innecesarios (no debe contener .idea o .vsc ni .DS_Store, en todo caso emplear **.gitignore**)
 
 ### Sobre el Proyecto General
@@ -133,7 +133,7 @@ Por cada corrección o defecto en el HTML+CSS+Js se descontará un 5% del 85%.
 ## Requisitos del Segundo Parcial
 
 ### Sobre React
-- [ ] Se debe emplear **Vite** para instalar **React**
+- [X] Se debe emplear **Vite** para instalar **React**
 - [ ] Se debe emplear **Hooks**, useState, useEffect, useContext, useNavigate
 - [ ] Se debe emplear **react-router-dom** para el enrutamiento a otras páginas
 - [ ] Se debe emplear **outlet** para que un componente principal renderice componentes de rutas hijas.
@@ -166,10 +166,10 @@ const activities = [
 ````
 
 ### Sobre las Correcciones
-- [ ] Todas las correcciones y mejoras (sugerencias) solicitadas durante el primer parcial deben estar corregidas.
-- [ ] No debe haber errores presentes en el código (realizar *Code* > *Inspect Code* para verificar que no haya errores)
-- [ ] Se corregirá el proyecto con el último commit realizado en Github hasta las 23:59 del día anterior a la fecha de entrega
-- [ ] Las notas serán de la siguiente manera: (Por ejemplo 55% 4; 59% 5; 67% 6; 75% 7; 82% 8; 89% 9; 97% 10)
+- [X] Todas las correcciones y mejoras (sugerencias) solicitadas durante el primer parcial deben estar corregidas.
+- [X] No debe haber errores presentes en el código (realizar *Code* > *Inspect Code* para verificar que no haya errores)
+- [X] Se corregirá el proyecto con el último commit realizado en Github hasta las 23:59 del día anterior a la fecha de entrega
+- [X] Las notas serán de la siguiente manera: (Por ejemplo 55% 4; 59% 5; 67% 6; 75% 7; 82% 8; 89% 9; 97% 10)
 - Las sugerencias sobre el HTML, CSS y Js realizadas en el anterior parcial dejen ser corregidas.
 
 | Items a Evaluar                          | %   |
