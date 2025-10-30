@@ -4,17 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="008a4719-fdf7-4f4f-bc6e-b5f6b4369520" name="Changes" comment="Fix: AxeTools">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CSS/Task_Mannager.css" beforeDir="false" afterPath="$PROJECT_DIR$/CSS/Task_Mannager.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Documentacion/Documentacion.docs" beforeDir="false" afterPath="$PROJECT_DIR$/Documentacion/Documentacion.docx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SASS/Dashboard_Editor.scss" beforeDir="false" afterPath="$PROJECT_DIR$/SASS/Dashboard_Editor.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SASS/Task_Mannager.scss" beforeDir="false" afterPath="$PROJECT_DIR$/SASS/Task_Mannager.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SASS/_mobile_Dashboard_editor.scss" beforeDir="false" afterPath="$PROJECT_DIR$/SASS/_mobile_Dashboard_editor.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SASS/_mobile_Task_Mannager.scss" beforeDir="false" afterPath="$PROJECT_DIR$/SASS/_mobile_Task_Mannager.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SASS/_mobile_index.scss" beforeDir="false" afterPath="$PROJECT_DIR$/SASS/_mobile_index.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SASS/index.scss" beforeDir="false" afterPath="$PROJECT_DIR$/SASS/index.scss" afterDir="false" />
-    </list>
+    <list default="true" id="008a4719-fdf7-4f4f-bc6e-b5f6b4369520" name="Changes" comment="Update: Reescribí el CSS a SASS y generé cambios en la Documentación" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -119,7 +109,7 @@
       <workItem from="1760592422968" duration="26000" />
       <workItem from="1760650455529" duration="16326000" />
       <workItem from="1760695343554" duration="11679000" />
-      <workItem from="1760730963102" duration="4391000" />
+      <workItem from="1760730963102" duration="4515000" />
     </task>
     <task id="LOCAL-00003" summary="Update: Mejoré La Descripción.md">
       <option name="closed" value="true" />
@@ -185,7 +175,15 @@
       <option name="project" value="LOCAL" />
       <updated>1760699410205</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Update: Reescribí el CSS a SASS y generé cambios en la Documentación">
+      <option name="closed" value="true" />
+      <created>1760737400219</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1760737400219</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -211,6 +209,7 @@
     <MESSAGE value="Fix: Agregué secciones de info de la web en el index, mejoré la navegación en las páginas, corregí errores de variables en el Dashboard_Editor, cree métodos que me falta implementar en el Task_Mannager&#10;Add: Agregué Documentación que me falta escribir&#10;Then: Integrar mejor las funciones en el Index, Competar el Task_Mannager, Mejorar el Dashboard_Editor, Reescribir el SASS, Empezar React" />
     <MESSAGE value="Fix: Errores" />
     <MESSAGE value="Fix: AxeTools" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fix: AxeTools" />
+    <MESSAGE value="Update: Reescribí el CSS a SASS y generé cambios en la Documentación" />
+    <option name="LAST_COMMIT_MESSAGE" value="Update: Reescribí el CSS a SASS y generé cambios en la Documentación" />
   </component>
 </project>
