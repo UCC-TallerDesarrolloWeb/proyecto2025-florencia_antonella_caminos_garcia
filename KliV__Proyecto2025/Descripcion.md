@@ -77,16 +77,16 @@
 | Carpeta/Archivo                      | Descripción                   |
 |--------------------------------------|-------------------------------|
 | `HTML/Index.html`                    | Página principal del proyecto |
-| `HTML/TaskManager.html`            | Estilos CSS compilados        |
+| `HTML/TaskManager.html`              | Estilos CSS compilados        |
 | `HTML/Dashboard_Editor.html`         | Archivos Sass fuente          |
 | `CSS/Index.css`                      | Scripts JavaScript            |
-| `CSS/TaskManager.css`              | Página principal del proyecto |
+| `CSS/TaskManager.css`                | Página principal del proyecto |
 | `CSS/Dashboard_Editor.css`           | Estilos CSS compilados        |
 | `JAVASCRIPT/Index.js`                | Scripts JavaScript            |
-| `JAVASCRIPT/TaskManager.js`        | Página principal del proyecto |
+| `JAVASCRIPT/TaskManager.js`          | Página principal del proyecto |
 | `JAVASCRIPT/Dashboard_Editor.js`     | Estilos CSS compilados        |
 | `SASS/Index.scss`                    | Archivos Sass fuente          |
-| `SASS/TaskManager.scss`            | Archivos Sass fuente          |
+| `SASS/TaskManager.scss`              | Archivos Sass fuente          |
 | `SASS/Dashboard_Editor.scss`         | Scripts JavaScript            |
 | `SASS/_mobile_Index.scss`            | Recursos gráficos             |
 | `SASS/_mobile_Task_Mannager.scss`    | Fuentes e iconos              |
@@ -100,7 +100,7 @@
 
 ## 🌐 Demo Online
 
-**🔗 [Ver Kliv Dashboard en GitHub Pages](https://ucc-tallerdesarrolloweb.github.io/proyecto2025-florencia_antonella_caminos_garcia/PROYECTO-KLIV_2203528_Florencia_Caminos_Garcia/HTML/index.html)**
+**🔗 [Ver Kliv Dashboard en GitHub Pages](https://ucc-tallerdesarrolloweb.github.io/proyecto2025-florencia_antonella_caminos_garcia/KliV__Proyecto2025/html/index.html)**
 
 ---
 
