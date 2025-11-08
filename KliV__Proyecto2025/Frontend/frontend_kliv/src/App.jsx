@@ -1,27 +1,34 @@
-import { Routes, Route, Navigate } from 'react-router-dom'
-import DashboardEditor from './components/DashboardEditor/DashboardEditor'
-import TaskManager from './components/TaskManager/TaskManager'
-import KlivDashboard from './components/KlivDashboard/KlivDashboard'
-import { useTheme } from './contexts/ThemeContext'
-import './App.css'
+// src/App.jsx
+import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom'
+import Home from '@pages/Home'
+import Login from '@pages/Login'
+import Dashboard from '@pages/Dashboard'
+import Navbar from '@components/Navbar'
 
-function App() {
-    const { theme } = useTheme()
-
+// Componente principal de la aplicación
+export default function App() {
     return (
-        <div className={`app ${theme}`}>
+        <BrowserRouter>
             <Routes>
-                <Route path="/" element={<Navigate to="/dashboard" replace />} />
-                <Route path="/dashboard" element={<KlivDashboard />} />
-                <Route path="/dashboard-editor" element={<DashboardEditor />} />
-                <Route path="/task-manager" element={<TaskManager />} />
-                <Route path="/projects" element={<div className="page-container">Proyectos - En construcción</div>} />
-                <Route path="/gallery" element={<div className="page-container">Galería - En construcción</div>} />
-                <Route path="/settings" element={<div className="page-container">Configuración - En construcción</div>} />
-                <Route path="*" element={<div className="page-container">Página no encontrada</div>} />
+                <Route path="/" element={<Layout />}>
+                    {/* Página principal redirige al login */}
+                    <Route index element={<Navigate to="/login" />} />
+                    {/* Rutas de la aplicación */}
+                    <Route path="home" element={<Home />} />
+                    <Route path="login" element={<Login />} />
+                    <Route path="dashboard" element={<Dashboard />} />
+                </Route>
             </Routes>
-        </div>
+        </BrowserRouter>
     )
 }
 
-export default App
+// Layout que renderiza Navbar + contenido dinámico
+function Layout() {
+    return (
+        <>
+            <Navbar />
+            <Outlet />
+        </>
+    )
+}
