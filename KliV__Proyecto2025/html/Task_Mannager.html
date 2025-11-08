@@ -8,6 +8,11 @@
     <link rel="icon" href="../Favicon/Favicon.png" type="image/png">
     <link rel="stylesheet" href="../Styles/Styles.css">
     <script src="../JavaScript/Task_Mannager.js" defer></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+            href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&family=SUSE+Mono:ital,wght@0,100..800;1,100..800&family=Source+Code+Pro:ital,wght@1,700&display=swap"
+            rel="stylesheet">
 </head>
 
 <body>
@@ -23,13 +28,9 @@
             <button class="sidebar-btn" id="btn-new-project" onclick="window.taskManager.openProjectModal()">
                 📁 Nuevo Proyecto
             </button>
+
             <button class="sidebar-btn danger" id="btn-delete-completed-tasks"
-                    onclick="window.taskManager.deleteCompletedTasks = function () {
-                        const tasks = window.taskManager.getTasks();
-                        const remainingTasks = tasks.filter(task => !task.completed);
-                        window.taskManager.saveTasks(remainingTasks);
-                        window.taskManager.renderTasks();
-                    };
+                    onclick="
                     window.taskManager.deleteCompletedTasks()">
                 🗑️ Eliminar Completadas
             </button>
@@ -203,6 +204,7 @@
         <div class="modal-content">
             <h2>Crear / Editar Tarea</h2>
             <form id="formTask" onsubmit="window.taskManager.handleTaskFormSubmit()">
+                <label for="taskId">Tarea</label>
                 <input type="hidden" id="taskId" name="taskId">
 
                 <label for="taskProject">Proyecto:</label>
@@ -225,12 +227,15 @@
 
                 <fieldset>
                     <legend>Prioridad:</legend>
-                    <input type="radio" id="high" name="priority" value="Alta">
                     <label for="high">Alta</label>
-                    <input type="radio" id="medium" name="priority" value="Media" checked>
+                    <input type="radio" id="high" name="priority" value="Alta">
+
                     <label for="medium">Media</label>
-                    <input type="radio" id="low" name="priority" value="Baja">
+                    <input type="radio" id="medium" name="priority" value="Media" checked>
+
                     <label for="low">Baja</label>
+                    <input type="radio" id="low" name="priority" value="Baja">
+
                 </fieldset>
 
                 <label for="dueDate">Fecha de entrega:</label>
@@ -238,12 +243,15 @@
 
                 <label>Etiquetas:</label>
                 <div class="tags-container">
-                    <input type="checkbox" id="tagUrgente" name="tags" value="Urgente">
                     <label for="tagUrgente">Urgente</label>
-                    <input type="checkbox" id="tagImportante" name="tags" value="Importante">
+                    <input type="checkbox" id="tagUrgente" name="tags" value="Urgente">
+
                     <label for="tagImportante">Importante</label>
-                    <input type="checkbox" id="tagOpcional" name="tags" value="Opcional">
+                    <input type="checkbox" id="tagImportante" name="tags" value="Importante">
+
                     <label for="tagOpcional">Opcional</label>
+                    <input type="checkbox" id="tagOpcional" name="tags" value="Opcional">
+
                 </div>
 
                 <label for="subtasks">Subtareas (separadas por coma):</label>
@@ -272,10 +280,6 @@
                         Mostrar Comentarios
                     </button>
                     <button type="reset">Limpiar</button>
-                    <button type="button" id="btn-cancel-task"
-                            onclick="window.taskManager.closeTaskForm()">
-                        Cancelar
-                    </button>
                 </div>
             </form>
         </div>
@@ -289,7 +293,6 @@
         <input type="text" id="new-project-name" placeholder="Nombre del proyecto">
         <div class="modal-actions">
             <button id="save-project" onclick="window.taskManager.createProjectFromModal()">Guardar</button>
-            <button id="cancel-project" onclick="window.taskManager.closeProjectModal()">Cancelar</button>
         </div>
     </div>
 </div>
@@ -316,7 +319,6 @@
         <p>¿Estás seguro de que quieres eliminar esta tarea? Esta acción no se puede deshacer.</p>
         <div class="modal-actions">
             <button id="confirm-delete" onclick="window.taskManager.confirmTaskDeletion()">Sí, eliminar</button>
-            <button id="cancel-delete" onclick="window.taskManager.closeDeleteModal()">Cancelar</button>
         </div>
     </div>
 </div>

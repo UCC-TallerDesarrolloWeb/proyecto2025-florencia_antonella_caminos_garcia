@@ -1,180 +1,193 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Editor</title>
-    <link rel="icon" href="../Favicon/Favicon.png" type="image-icon">
-    <link rel="stylesheet" href="../CSS/Dashboard_Editor.css">
+    <title>Dashboard Editor Optimizado</title>
+    <link rel="stylesheet" href="../Styles/Styles.css">
     <script src="../JavaScript/Dashboard_Editor.js" defer></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&family=SUSE+Mono:ital,wght@0,100..800;1,100..800&family=Source+Code+Pro:ital,wght@1,700&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+            href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&family=SUSE+Mono:ital,wght@0,100..800;1,100..800&family=Source+Code+Pro:ital,wght@1,700&display=swap"
+            rel="stylesheet">
 </head>
-
 <body>
-    <header class="main-header" role="banner">
-        <h1>Dashboard</h1>
-    </header>
-
-    <div class="dashboard-container" role="main">
-
-        <aside class="sidebar" aria-label="Panel de control del dashboard">
-            <div class="sidebar-header">
-                <h2>Opciones del Dashboard</h2>
-            </div>
-
-            <div class="sidebar-section">
-                <h3>📁 Proyectos</h3>
-                <div class="project-buttons" role="group" aria-label="Selección de proyectos">
-                    <button class="project-btn active" data-project="personal" aria-pressed="true"
-                            onclick="window.dashboardEditor.switchProject()">
-                        <span aria-hidden="true">👤</span>
-                        <span class="sr-only">Proyecto</span> Personal
-                    </button>
-                    <button class="project-btn" data-project="trabajo" aria-pressed="false"
-                            onclick="window.dashboardEditor.switchProject()">
-                        <span aria-hidden="true">💼</span>
-                        <span class="sr-only">Proyecto</span> Trabajo
-                    </button>
-                    <button class="project-btn" data-project="estudio" aria-pressed="false"
-                            onclick="window.dashboardEditor.switchProject()">
-                        <span aria-hidden="true">📚</span>
-                        <span class="sr-only">Proyecto</span> Estudio
-                    </button>
-                </div>
-            </div>
-
-            <div class="sidebar-section">
-                <h3 id="add-label">➕ Agregar</h3>
-                <label for="sidebar-add-options" class="sr-only">Seleccionar tipo de elemento para agregar</label>
-                <select id="sidebar-add-options" aria-labelledby="add-label" onchange="window.dashboardEditor.addItem(this.value)">
-                    <option value="">Selecciona un elemento...</option>
-                    <option value="chart">📊 Gráfico</option>
-                    <option value="table">📋 Tabla</option>
-                    <option value="text">📝 Texto</option>
-                    <option value="color">🎨 Color</option>
-                    <option value="filter">🔍 Filtro</option>
-                    <option value="pdf">📄 PDF</option>
-                </select>
-            </div>
-
-            <div class="sidebar-section">
-                <h3 id="delete-label">🗑️ Eliminar</h3>
-                <label for="sidebar-delete-options" class="sr-only">Seleccionar tipo de elemento para eliminar</label>
-                <select id="sidebar-delete-options" aria-labelledby="delete-label" onchange="window.dashboardEditor.deleteItem(this.value)">
-                    <option value="">Selecciona tipo a eliminar...</option>
-                    <option value="chart">📊 Gráficos</option>
-                    <option value="table">📋 Tablas</option>
-                    <option value="text">📝 Textos</option>
-                    <option value="color">🎨 Colores</option>
-                    <option value="filter">🔍 Filtros</option>
-                    <option value="pdf">📄 PDFs</option>
-                </select>
-            </div>
-
-            <div class="sidebar-section">
-                <h3 id="filters-label">⚙️ Filtros</h3>
-                <div role="group" aria-labelledby="filters-label">
-                    <label for="priority-filter" class="sr-only">Filtrar por prioridad</label>
-                    <select id="priority-filter" name="priority-filter" onchange="window.dashboardEditor.renderDashboard(); window.dashboardEditor.renderCanvas();">
-                        <option value="all">Todas las prioridades</option>
-                        <option value="Alta">Alta prioridad</option>
-                        <option value="Media">Prioridad media</option>
-                        <option value="Baja">Baja prioridad</option>
-                    </select>
-
-                    <label for="device-filter" class="sr-only">Filtrar por dispositivo</label>
-                    <select id="device-filter" name="device" onchange="window.dashboardEditor.renderDashboard(); window.dashboardEditor.renderCanvas();">
-                        <option value="all">Todos los dispositivos</option>
-                        <option value="mobile">Móvil</option>
-                        <option value="tablet">Tablet</option>
-                        <option value="desktop">Escritorio</option>
-                    </select>
-
-                    <label for="region-filter" class="sr-only">Filtrar por región</label>
-                    <select id="region-filter" name="region" onchange="window.dashboardEditor.renderDashboard(); window.dashboardEditor.renderCanvas();">
-                        <option value="all">Todas las regiones</option>
-                        <option value="norte">Norte</option>
-                        <option value="sur">Sur</option>
-                        <option value="este">Este</option>
-                        <option value="oeste">Oeste</option>
-                    </select>
-
-                    <div class="filter-checkbox">
-                        <input type="checkbox" id="newUsers" name="newUsers" aria-describedby="newUsers-desc"
-                               onchange="window.dashboardEditor.renderDashboard(); window.dashboardEditor.renderCanvas();">
-                        <label for="newUsers">Solo nuevos usuarios</label>
-                        <span id="newUsers-desc" class="sr-only">Filtrar para mostrar solo elementos de nuevos
-                            usuarios</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="sidebar-section">
-                <h3 id="management-label">🔧 Gestión</h3>
-                <label for="management" class="sr-only">Seleccionar acción de gestión</label>
-                <select id="management" aria-labelledby="management-label" onchange="window.dashboardEditor.handleManagement()">
-                    <option value="">Acciones...</option>
-                    <option value="saveDashboard">💾 Guardar Dashboard</option>
-                    <option value="loadDashboard">📂 Cargar Dashboard</option>
-                    <option value="previewMode">👁️ Modo Vista Previa</option>
-                    <option value="exportData">📤 Exportar Datos</option>
-                </select>
-            </div>
-        </aside>
-
-        <div class="main-content">
-            <div class="app-header">
-                <h2>Mi Dashboard</h2>
-                <div class="header-controls">
-                    <button class="header-btn" id="saveBtn" aria-label="Guardar dashboard"
-                            onclick="window.dashboardEditor.saveState(); window.dashboardEditor.showNotification('Dashboard guardado correctamente');">
-                        <span aria-hidden="true">💾</span> Guardar
-                    </button>
-                    <button class="header-btn secondary" id="previewBtn" aria-label="Alternar vista previa"
-                            onclick="window.dashboardEditor.togglePreview();">
-                        <span aria-hidden="true">👁️</span> Vista Previa
-                    </button>
-                    <button class="header-btn secondary" id="exportBtn" aria-label="Exportar datos del dashboard"
-                            onclick="window.dashboardEditor.exportData();">
-                        <span aria-hidden="true">📤</span> Exportar
-                    </button>
-                </div>
-            </div>
-
-            <div class="workspace">
-
-                <section class="canvas-container" aria-label="Área de edición del dashboard">
-                    <canvas id="dashboardCanvas" aria-label="Canvas para organizar elementos del dashboard"></canvas>
-                    <div class="canvas-controls" role="group" aria-label="Controles de zoom del canvas">
-                        <button class="canvas-btn" id="zoomInBtn" aria-label="Acercar zoom"
-                                onclick="window.dashboardEditor.zoomIn();">+</button>
-                        <button class="canvas-btn" id="zoomOutBtn" aria-label="Alejar zoom"
-                                onclick="window.dashboardEditor.zoomOut();">-</button>
-                        <button class="canvas-btn" id="resetZoomBtn" aria-label="Restablecer zoom"
-                                onclick="window.dashboardEditor.resetZoom();">↺</button>
-                    </div>
-                </section>
-
-                <section class="preview-container" aria-label="Vista previa de elementos del dashboard">
-                    <div class="preview-grid">
-
-                        <div class="empty-state">
-                            <p>No hay elementos para mostrar</p>
-                            <p>Usa el panel de agregar para incluir nuevos elementos</p>
-                        </div>
-                    </div>
-                </section>
-            </div>
-        </div>
+<header>
+    <h1>Dashboard Editor Optimizado</h1>
+    <div>
+        <span>Proyecto: <strong id="proyecto-actual">personal</strong></span>
+        <span> | Zoom: <strong id="zoom-actual">1.0x</strong></span>
+        <span> | Elementos: <strong id="elementos-actual">0</strong></span>
     </div>
+</header>
 
+<main>
+
+    <section>
+        <h2>Controles Principales</h2>
+
+        <fieldset>
+            <legend>Agregar Elementos</legend>
+            <button type="button" onclick="dashboardEditor.agregarElemento('chart')">
+                Agregar Gráfico
+            </button>
+            <button type="button" onclick="dashboardEditor.agregarElemento('text')">
+                Agregar Texto
+            </button>
+            <button type="button" onclick="dashboardEditor.agregarElemento('table')">
+                Agregar Tabla
+            </button>
+            <button type="button" onclick="dashboardEditor.agregarElemento('filter')">
+                Agregar Filtro
+            </button>
+            <button type="button" onclick="dashboardEditor.agregarElemento('pdf')">
+                Agregar PDF
+            </button>
+        </fieldset>
+
+        <fieldset>
+            <legend>Control de Zoom</legend>
+            <button type="button" onclick="dashboardEditor.ajustarZoom(1.2)">
+                Zoom In
+            </button>
+            <button type="button" onclick="dashboardEditor.ajustarZoom(0.8)">
+                Zoom Out
+            </button>
+            <button type="button" onclick="dashboardEditor.zoom = 1.0; dashboardEditor.renderizarVista();">
+                Reset Zoom
+            </button>
+        </fieldset>
+
+        <fieldset>
+            <legend>Selección de Proyecto</legend>
+            <button type="button" onclick="dashboardEditor.cambiarProyecto('personal')">
+                Proyecto Personal
+            </button>
+            <button type="button" onclick="dashboardEditor.cambiarProyecto('trabajo')">
+                Proyecto Trabajo
+            </button>
+            <button type="button" onclick="dashboardEditor.cambiarProyecto('estudio')">
+                Proyecto Estudio
+            </button>
+        </fieldset>
+    </section>
+
+    <section>
+        <h2>Gestión de Elementos</h2>
+
+        <fieldset>
+            <legend>Buscar y Eliminar</legend>
+            <div>
+                <label for="buscar-id">Buscar por ID:</label>
+                <input type="number" id="buscar-id" min="1">
+                <button type="button" onclick="buscarElemento()">Buscar</button>
+            </div>
+            <div>
+                <label for="eliminar-id">Eliminar por ID:</label>
+                <input type="number" id="eliminar-id" min="1">
+                <button type="button" onclick="eliminarElemento()">Eliminar</button>
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>Mover Elementos</legend>
+            <div>
+                <label for="ids-mover">IDs (separados por coma):</label>
+                <input type="text" id="ids-mover">
+            </div>
+            <div>
+                <label for="dx">Desplazamiento X:</label>
+                <input type="number" id="dx" value="1">
+                <label for="dy">Desplazamiento Y:</label>
+                <input type="number" id="dy" value="1">
+            </div>
+            <button type="button" onclick="moverElementos()">Mover Elementos</button>
+        </fieldset>
+    </section>
+
+    <section>
+        <h2>Comandos Directos</h2>
+
+        <fieldset>
+            <legend>Comandos Predefinidos</legend>
+            <button type="button" onclick="dashboardEditor.ejecutarComando('add chart')">
+                add chart
+            </button>
+            <button type="button" onclick="dashboardEditor.ejecutarComando('add text')">
+                add text
+            </button>
+            <button type="button" onclick="dashboardEditor.ejecutarComando('add table')">
+                add table
+            </button>
+            <button type="button" onclick="dashboardEditor.ejecutarComando('zoom in')">
+                zoom in
+            </button>
+            <button type="button" onclick="dashboardEditor.ejecutarComando('zoom out')">
+                zoom out
+            </button>
+            <button type="button" onclick="dashboardEditor.ejecutarComando('reset zoom')">
+                reset zoom
+            </button>
+            <button type="button" onclick="dashboardEditor.ejecutarComando('estadisticas')">
+                estadisticas
+            </button>
+            <button type="button" onclick="dashboardEditor.ejecutarComando('personal')">
+                personal
+            </button>
+            <button type="button" onclick="dashboardEditor.ejecutarComando('trabajo')">
+                trabajo
+            </button>
+            <button type="button" onclick="dashboardEditor.ejecutarComando('estudio')">
+                estudio
+            </button>
+            <button type="button" onclick="dashboardEditor.ejecutarComando('limpiar')">
+                limpiar
+            </button>
+        </fieldset>
+    </section>
+
+    <section>
+        <h2>Información del Dashboard</h2>
+
+        <fieldset>
+            <legend>Estadísticas</legend>
+            <div>
+                <button type="button" onclick="dashboardEditor.actualizarEstadisticas()">
+                    Actualizar Estadísticas
+                </button>
+                <button type="button" onclick="dashboardEditor.mostrarResumen()">
+                    Mostrar Resumen
+                </button>
+            </div>
+            <div>
+                <p><strong>Estadísticas actuales:</strong></p>
+                <div id="estadisticas-actuales"></div>
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>Elementos Activos</legend>
+            <div id="lista-elementos"></div>
+        </fieldset>
+    </section>
+
+    <section>
+        <h2>Vista del Dashboard</h2>
+        <div id="vista-dashboard">
+            <p>La visualización del grid aparecerá en la consola del navegador.</p>
+            <button type="button" onclick="dashboardEditor.renderizarVista()">
+                Renderizar Vista en Consola
+            </button>
+        </div>
+    </section>
+</main>
+
+<footer>
+    <div id="notificaciones">
+        <h3>Notificaciones</h3>
+        <div id="lista-notificaciones"></div>
+    </div>
+</footer>
 </body>
-
 </html>

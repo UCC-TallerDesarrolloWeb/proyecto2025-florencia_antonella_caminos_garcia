@@ -1,96 +1,152 @@
-// noinspection JSVoidFunctionReturnValueUsed
+/**
+ * @file Sistema de Dashboard Kliv - Versión Mejorada y Corregida
+ * @description Sistema completo de gestión de dashboard con múltiples secciones interactivas
+ * @version 1.0.0
+ * @author Florencia Antonella Caminos Garcia
+ */
 
 /**
- * =====================
- * Clase DashboardApp - Versión Mejorada y Corregida
- * =====================
+ * @classdesc Clase principal que gestiona todas las operaciones del dashboard Kliv
+ * @class DashboardApp
+ * @property {string[]} sections - Lista de secciones disponibles en el dashboard
+ * @property {string} currentSection - Sección actualmente activa
+ * @property {string[]} navigationHistory - Historial de navegación entre secciones
+ * @property {Object} likesData - Datos de likes almacenados localmente
+ * @property {boolean} isInitialized - Estado de inicialización de la aplicación
+ * @property {Object} stickers - Datos de stickers e imágenes del dashboard
  */
 class DashboardApp {
-
     /**
-     * Constructor principal
-     * Inicializa propiedades y configura la aplicación
+     * @method constructor
+     * @description Constructor principal que inicializa propiedades y configura la aplicación
+     * @example
+     * const dashboard = new DashboardApp();
      */
     constructor() {
-        // Agregar las nuevas secciones al array
+        /**
+         * @type {string[]}
+         * @description Array con todas las secciones disponibles en el dashboard
+         */
         this.sections = ['Dashboard', 'Project', 'Gallery', 'Tasks', 'Settings', 'Help', 'Privacy', 'Terms', 'About'];
+
+        /**
+         * @type {string}
+         * @description Sección actualmente activa en el dashboard
+         */
         this.currentSection = 'Dashboard';
+
+        /**
+         * @type {string[]}
+         * @description Historial de navegación para funcionalidad de retroceso
+         */
         this.navigationHistory = ['Dashboard'];
+
+        /**
+         * @type {Object}
+         * @description Datos de likes cargados desde localStorage
+         */
         this.likesData = this.loadLikesData();
+
+        /**
+         * @type {boolean}
+         * @description Bandera que indica si la aplicación ha sido inicializada
+         */
         this.isInitialized = false;
+
+        /**
+         * @type {Object}
+         * @description Datos de stickers e imágenes del dashboard
+         */
+        this.stickers = {
+            default: [
+                { id: 'sticker-1', type: 'emoji', content: '⭐', category: 'decorative' },
+                { id: 'sticker-2', type: 'emoji', content: '🎯', category: 'goals' },
+                { id: 'sticker-3', type: 'emoji', content: '🚀', category: 'progress' },
+                { id: 'sticker-4', type: 'emoji', content: '💡', category: 'ideas' },
+                { id: 'sticker-5', type: 'emoji', content: '📌', category: 'markers' }
+            ],
+            custom: []
+        };
 
         this.init();
     }
 
+    // ==========================
+    // MÉTODOS DE INICIALIZACIÓN
+    // ==========================
+
     /**
-     * Inicialización de la aplicación
-     * Configura todos los componentes necesarios
+     * @method init
+     * @description Inicialización de la aplicación - configura todos los componentes necesarios
+     * @returns {void}
      */
-    init() {
+    init = () => {
         if (this.isInitialized) {
             console.warn('Dashboard ya está inicializado');
             return;
         }
 
-        // Esperar a que el DOM esté completamente cargado
         if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', () => this.initializeApp());
+            document.addEventListener('DOMContentLoaded', this.initializeApp);
         } else {
             this.initializeApp();
         }
     }
 
     /**
-     * Configuración inicial de la aplicación
-     * Limpia errores, oculta secciones y activa la sección por defecto
+     * @method initializeApp
+     * @description Configuración inicial de la aplicación, limpia los errores, oculta secciones y activa la sección por defecto
+     * @returns {void}
      */
-    initializeApp() {
+    initializeApp = () => {
         console.log('🚀 Inicializando Kliv Dashboard...');
 
-        // Ocultar todos los mensajes de error y éxito
         this.hideAllErrors();
         this.hideAllSuccessMessages();
-
-        // Ocultar todas las secciones excepto Dashboard
         this.hideAllSections();
-
-        // Configurar eventos
         this.setupAllEvents();
         this.setupLikesSystem();
         this.setupEnhancedNavigation();
-
-        // Activar sección por defecto
+        this.setupStickerSystem();
         this.activateSection('Dashboard');
 
         this.isInitialized = true;
         console.log("✅ Kliv Dashboard Initialized, nice to see you again!");
-
-        // Debug opcional
         this.debugSections();
     }
 
+    // ==========================
+    // MÉTODOS DE CONFIGURACIÓN INICIAL
+    // ==========================
+
     /**
-     * Oculta todos los mensajes de error
+     * @method hideAllErrors
+     * @description Oculta todos los mensajes de error en la interfaz
+     * @returns {void}
      */
-    hideAllErrors() {
+    hideAllErrors = () => {
         document.querySelectorAll('.error-msg').forEach(el => {
             el.style.display = 'none';
         });
     }
 
     /**
-     * Oculta todos los mensajes de éxito
+     * @method hideAllSuccessMessages
+     * @description Oculta todos los mensajes de éxito en la interfaz
+     * @returns {void}
      */
-    hideAllSuccessMessages() {
+    hideAllSuccessMessages = () => {
         document.querySelectorAll('.success-msg').forEach(el => {
             el.style.display = 'none';
         });
     }
 
     /**
-     * Oculta todas las secciones
+     * @method hideAllSections
+     * @description Oculta todas las secciones principales del dashboard
+     * @returns {void}
      */
-    hideAllSections() {
+    hideAllSections = () => {
         document.querySelectorAll('.main-section').forEach(section => {
             section.style.display = 'none';
             section.classList.remove('active-section');
@@ -98,10 +154,11 @@ class DashboardApp {
     }
 
     /**
-     * Configuración de todos los eventos
-     * Orquesta la inicialización de todos los sistemas de eventos
+     * @method setupAllEvents
+     * @description Configuración de todos los eventos - orquesta la inicialización de todos los sistemas de eventos
+     * @returns {void}
      */
-    setupAllEvents() {
+    setupAllEvents = () => {
         this.setupKeyboardNavigation();
         this.setupHeaderEvents();
         this.setupSidebarEvents();
@@ -114,32 +171,396 @@ class DashboardApp {
     }
 
     /**
-     * Configuración del sistema de likes
-     * Inicializa el contador y los eventos de interacción
+     * @setupLikesSystem
+     * @description Configuración del sistema de likes - inicializa el contador y los eventos de interacción
+     * @returns {void}
      */
-    setupLikesSystem() {
+    setupLikesSystem = () => {
         this.updateAllLikesCounters();
         this.setupLikesEvents();
     }
 
     /**
-     * Configuración de navegación mejorada
-     * Añade breadcrumbs y controles de navegación
+     * @method setupEnhancedNavigation
+     * @description Configuración de navegación mejorada - añade breadcrumbs y controles de navegación
+     * @returns {void}
      */
-    setupEnhancedNavigation() {
+    setupEnhancedNavigation = () => {
         this.createBreadcrumbs();
         this.setupNavigationControls();
     }
 
+    // ==========================
+    // SISTEMA DE STICKERS E IMÁGENES
+    // ==========================
+
     /**
-     * Configura eventos de teclado para navegación
-     * Flechas izquierda/derecha para cambiar secciones
+     * @method setupStickerSystem
+     * @description Configuración del sistema de stickers e imágenes
+     * @returns {void}
      */
-    setupKeyboardNavigation() {
+    setupStickerSystem = () => {
+        this.loadCustomStickers();
+        this.setupStickerEvents();
+        this.setupDragAndDrop();
+    }
+
+    /**
+     * @method setupStickerEvents
+     * @description Configura eventos del sistema de stickers
+     * @returns {void}
+     */
+    setupStickerEvents = () => {
+        const stickerBtn = document.getElementById('sticker-gallery-btn');
+        if (stickerBtn) {
+            stickerBtn.addEventListener('click', this.openStickerGallery);
+        }
+
+        const uploadBtn = document.getElementById('sticker-upload');
+        if (uploadBtn) {
+            uploadBtn.addEventListener('change', this.handleStickerUpload);
+        }
+    }
+
+    /**
+     * @method setupDragAndDrop
+     * @description Configura sistema de arrastrar y soltar para stickers
+     * @returns {void}
+     */
+    setupDragAndDrop = () => {
+        this.setupStickerDrag();
+        this.setupCanvasDrop();
+    }
+
+    /**
+     * @method setupStickerDrag
+     * @description Configura el comportamiento de arrastre para stickers
+     * @returns {void}
+     */
+    setupStickerDrag = () => {
+        document.addEventListener('dragstart', (e) => {
+            if (e.target.closest('.sticker-item')) {
+                const stickerId = e.target.closest('.sticker-item').dataset.stickerId;
+                e.dataTransfer.setData('text/plain', JSON.stringify({
+                    type: 'sticker',
+                    id: stickerId
+                }));
+            }
+        });
+    }
+
+    /**
+     * @method setupCanvasDrop
+     * @description Configura el área de drop para el canvas
+     * @returns {void}
+     */
+    setupCanvasDrop = () => {
+        const canvas = document.getElementById('dashboardCanvas');
+        if (canvas) {
+            canvas.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                canvas.classList.add('drag-over');
+            });
+
+            canvas.addEventListener('drop', this.handleCanvasDrop);
+        }
+    }
+
+    /**
+     * @method handleCanvasDrop
+     * @description Maneja el evento de soltar elementos en el canvas
+     * @param {DragEvent} e - Evento de drag and drop
+     * @returns {void}
+     */
+    handleCanvasDrop = (e) => {
+        e.preventDefault();
+        const canvas = e.currentTarget;
+        canvas.classList.remove('drag-over');
+
+        try {
+            const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+            if (data.type === 'sticker') {
+                this.placeStickerOnCanvas(data.id, e.offsetX, e.offsetY);
+            }
+        } catch (error) {
+            console.error('Error processing drop:', error);
+        }
+    }
+
+    /**
+     * @OpenStickerGallery
+     * @description Abre la galería de stickers modal
+     * @returns {void}
+     */
+    openStickerGallery = () => {
+        const galleryHTML = `
+            <div class="sticker-modal">
+                <div class="sticker-header">
+                    <h3>🎨 Galería de Stickers</h3>
+                    <button class="close-btn" onclick="this.closest('.sticker-modal').remove()">×</button>
+                </div>
+                <div class="sticker-categories">
+                    <button class="category-btn active" data-category="all">Todos</button>
+                    <button class="category-btn" data-category="emojis">Emojis</button>
+                    <button class="category-btn" data-category="shapes">Formas</button>
+                    <button class="category-btn" data-category="custom">Personalizados</button>
+                </div>
+                <div class="sticker-grid">
+                    ${this.generateStickerGrid()}
+                </div>
+                <div class="sticker-upload">
+                    <input type="file" id="sticker-upload-input" accept="image/*" style="display: none;">
+                    <button onclick="document.getElementById('sticker-upload-input').click()">
+                        📤 Subir Sticker
+                    </button>
+                </div>
+            </div>
+        `;
+
+        document.body.insertAdjacentHTML('beforeend', galleryHTML);
+        this.setupStickerSelection();
+    }
+
+    /**
+     * @method generateStickerGrid
+     * @description Genera la cuadrícula de stickers para la galería
+     * @returns {string} HTML de la cuadrícula de stickers
+     */
+    generateStickerGrid = () => {
+        const allStickers = [...this.stickers.default, ...this.stickers.custom];
+        return allStickers.map(sticker => `
+            <div class="sticker-item" draggable="true" data-sticker-id="${sticker.id}" data-type="${sticker.type}">
+                ${sticker.type === 'emoji' ?
+            `<div class="sticker-emoji">${sticker.content}</div>` :
+            `<img src="${sticker.content}" alt="Sticker" class="sticker-image">`
+        }
+            </div>
+        `).join('');
+    }
+
+    /**
+     * @method setupStickerSelection
+     * @description Configura la selección de stickers en la galería
+     * @returns {void}
+     */
+    setupStickerSelection = () => {
+        document.querySelectorAll('.sticker-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const stickerId = item.dataset.stickerId;
+                this.selectSticker(stickerId);
+            });
+        });
+
+        document.querySelectorAll('.category-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+                this.filterStickersByCategory(e.target.dataset.category);
+            });
+        });
+    }
+
+    /**
+     * @method filterStickersByCategory
+     * @description Filtra stickers por categoría en la galería
+     * @param {string} category - Categoría por la cual filtrar
+     * @returns {void}
+     */
+    filterStickersByCategory = (category) => {
+        const allStickers = document.querySelectorAll('.sticker-item');
+        allStickers.forEach(sticker => {
+            if (category === 'all') {
+                sticker.style.display = 'block';
+            } else {
+                const stickerCategory = this.getStickerCategory(sticker.dataset.stickerId);
+                sticker.style.display = stickerCategory === category ? 'block' : 'none';
+            }
+        });
+    }
+
+    /**
+     * @method getStickerCategory
+     * @description Obtiene la categoría de un sticker específico
+     * @param {string} stickerId - ID del sticker
+     * @returns {string} Categoría del sticker
+     */
+    getStickerCategory = (stickerId) => {
+        const allStickers = [...this.stickers.default, ...this.stickers.custom];
+        const sticker = allStickers.find(s => s.id === stickerId);
+        return sticker ? sticker.category : 'unknown';
+    }
+
+    /**
+     * @method selectSticker
+     * @description Selecciona un sticker para usar
+     * @param {string} stickerId - ID del sticker seleccionado
+     * @returns {void}
+     */
+    selectSticker = (stickerId) => {
+        const sticker = this.getStickerById(stickerId);
+        if (sticker) {
+            this.showToast(`Sticker ${sticker.type === 'emoji' ? sticker.content : 'seleccionado'} listo para usar`, 'success');
+        }
+    }
+
+    /**
+     * @method placeStickerOnCanvas
+     * @description Coloca un sticker en el canvas en posición específica
+     * @param {string} stickerId - ID del sticker a colocar
+     * @param {number} x - Posición horizontal
+     * @param {number} y - Posición vertical
+     * @returns {void}
+     */
+    placeStickerOnCanvas = (stickerId, x, y) => {
+        const sticker = this.getStickerById(stickerId);
+        if (!sticker) return;
+
+        const stickerElement = document.createElement('div');
+        stickerElement.className = 'canvas-sticker';
+        stickerElement.dataset.stickerId = stickerId;
+        stickerElement.style.cssText = `
+            position: absolute;
+            left: ${x}px;
+            top: ${y}px;
+            cursor: move;
+            user-select: none;
+            font-size: ${sticker.type === 'emoji' ? '2rem' : 'auto'};
+            z-index: 1000;
+        `;
+
+        if (sticker.type === 'emoji') {
+            stickerElement.innerHTML = sticker.content;
+        } else {
+            stickerElement.innerHTML = `<img src="${sticker.content}" alt="Sticker" style="max-width: 100px; max-height: 100px;">`;
+        }
+
+        this.makeDraggable(stickerElement);
+        document.getElementById('dashboardCanvas').appendChild(stickerElement);
+        this.showToast('Sticker agregado al canvas', 'success');
+    }
+
+    /**
+     * @method makeDraggable
+     * @description Hace un elemento arrastrable en el canvas
+     * @param {HTMLElement} element - Elemento a hacer arrastrable
+     * @returns {void}
+     */
+    makeDraggable = (element) => {
+        let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+
+        const dragMouseDown = (e) => {
+            e.preventDefault();
+            pos3 = e.clientX;
+            pos4 = e.clientY;
+            document.onmouseup = closeDragElement;
+            document.onmousemove = elementDrag;
+        };
+
+        const elementDrag = (e) => {
+            e.preventDefault();
+            pos1 = pos3 - e.clientX;
+            pos2 = pos4 - e.clientY;
+            pos3 = e.clientX;
+            pos4 = e.clientY;
+
+            element.style.top = (element.offsetTop - pos2) + "px";
+            element.style.left = (element.offsetLeft - pos1) + "px";
+        };
+
+        const closeDragElement = () => {
+            document.onmouseup = null;
+            document.onmousemove = null;
+        };
+
+        element.onmousedown = dragMouseDown;
+    }
+
+    /**
+     * @method handleStickerUpload
+     * @description Maneja la subida de nuevos stickers personalizados
+     * @param {Event} event - Evento de cambio de input file
+     * @returns {void}
+     */
+    handleStickerUpload = (event) => {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        if (!file.type.startsWith('image/')) {
+            this.showError('Por favor sube solo archivos de imagen');
+            return;
+        }
+
+        if (file.size > 5 * 1024 * 1024) {
+            this.showError('La imagen debe ser menor a 5MB');
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const newSticker = {
+                id: `custom-${Date.now()}`,
+                src: e.target.result,
+                category: 'custom',
+                type: 'image',
+                name: file.name
+            };
+
+            this.saveCustomSticker(newSticker);
+            this.showToast('Sticker personalizado agregado', 'success');
+        };
+
+        reader.readAsDataURL(file);
+    }
+
+    /**
+     * @method saveCustomSticker
+     * @description Guarda un sticker personalizado en localStorage
+     * @param {Object} sticker - Datos del sticker a guardar
+     * @returns {void}
+     */
+    saveCustomSticker = (sticker) => {
+        const customStickers = JSON.parse(localStorage.getItem('customStickers') || '[]');
+        customStickers.push(sticker);
+        localStorage.setItem('customStickers', JSON.stringify(customStickers));
+        this.stickers.custom.push(sticker);
+    }
+
+    /**
+     * @method load CustomStickers
+     * @description Carga stickers personalizados desde localStorage
+     * @returns {void}
+     */
+    loadCustomStickers = () => {
+        try {
+            this.stickers.custom = JSON.parse(localStorage.getItem('customStickers') || '[]');
+        } catch (error) {
+            console.error('Error loading custom stickers:', error);
+            this.stickers.custom = [];
+        }
+    }
+
+    /**
+     * @method getStickerById
+     * @description Obtiene un sticker por su ID
+     * @param {string} stickerId - ID del sticker a buscar
+     * @returns {Object|null} Datos del sticker o null si no se encuentra
+     */
+    getStickerById = (stickerId) => {
+        const allStickers = [...this.stickers.default, ...this.stickers.custom];
+        return allStickers.find(sticker => sticker.id === stickerId) || null;
+    }
+// ==========================
+    // SISTEMA DE NAVEGACIÓN
+    // ==========================
+
+    /**
+     * @method setupKeyboardNavigation
+     * @description Configura eventos de teclado para navegación con flechas izquierda/derecha
+     * @returns {void}
+     */
+    setupKeyboardNavigation = () => {
         document.addEventListener('keydown', (e) => {
-            // Solo procesar si no estamos en un campo de entrada
             if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
-                // Manejar Escape en campos de búsqueda
                 if (e.key === 'Escape' && e.target.id === 'searchBox') {
                     e.target.value = '';
                     this.removeAllHighlights();
@@ -166,7 +587,6 @@ class DashboardApp {
                 this.activateSection(prevSection);
             }
 
-            // Escape para limpiar búsqueda
             if (e.key === 'Escape') {
                 const searchBox = document.getElementById('searchBox');
                 if (searchBox) {
@@ -180,19 +600,19 @@ class DashboardApp {
     }
 
     /**
-     * Configura eventos del header
-     * Búsqueda y menú de usuario
+     * @method setupHeaderEvents
+     * @description Configura eventos del header - búsqueda y menú de usuario
+     * @returns {void}
      */
-    setupHeaderEvents() {
+    setupHeaderEvents = () => {
         const searchButton = document.getElementById('searchButton');
         const searchBox = document.getElementById('searchBox');
         const userAvatar = document.getElementById('user-avatar');
         const userName = document.getElementById('user-name');
         const logoutBtn = document.getElementById('logout-btn');
 
-        /* ---------- Búsqueda ---------- */
         if (searchButton && searchBox) {
-            searchButton.addEventListener('click', () => this.handleSearch());
+            searchButton.addEventListener('click', this.handleSearch);
             searchBox.addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') this.handleSearch();
             });
@@ -201,21 +621,15 @@ class DashboardApp {
             });
         }
 
-        /* ---------- Menú usuario ---------- */
         if (userAvatar && userName) {
-            userAvatar.addEventListener('click', () => this.toggleUserMenu());
-            userName.addEventListener('click', () => this.toggleUserMenu());
+            userAvatar.addEventListener('click', this.toggleUserMenu);
+            userName.addEventListener('click', this.toggleUserMenu);
         }
 
-        /* ---------- Logout ---------- */
         if (logoutBtn) {
-            logoutBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                this.handleLogout();
-            });
+            logoutBtn.addEventListener('click', this.handleLogout);
         }
 
-        // Cerrar menú al hacer clic fuera
         document.addEventListener('click', (e) => {
             const userMenu = document.getElementById('user-menu');
             const userInfo = document.getElementById('user-info');
@@ -228,34 +642,36 @@ class DashboardApp {
     }
 
     /**
-     * Maneja el cierre de sesión
+     * @method handleLogout
+     * @description Maneja el proceso de cierre de sesión del usuario
+     * @param {Event} e - Evento de clic
+     * @returns {void}
      */
-    handleLogout() {
+    handleLogout = (e) => {
+        e.preventDefault();
         if (confirm('¿Estás seguro de que quieres cerrar sesión?')) {
             this.showToast('Cerrando sesión...', 'success');
             setTimeout(() => {
-                // Aquí iría la lógica real de logout
                 window.location.href = '../HTML/Login.html';
             }, 1500);
         }
     }
 
     /**
-     * Configura eventos del sidebar
+     * @method setupSidebarEvents
+     * @description Configura eventos del sidebar para navegación entre secciones
+     * @returns {void}
      */
-    setupSidebarEvents() {
+    setupSidebarEvents = () => {
         const sidebarItems = document.querySelectorAll('.sidebar-item');
-
         sidebarItems.forEach(item => {
             item.addEventListener('click', (e) => {
                 e.preventDefault();
-
                 sidebarItems.forEach(i => i.classList.remove('active'));
                 item.classList.add('active');
 
                 const sectionId = item.id.replace('menu-', '');
                 if (sectionId) {
-                    // Mapeo exacto de sidebar a secciones
                     const sectionMap = {
                         'dashboard': 'Dashboard',
                         'projects': 'Project',
@@ -280,47 +696,53 @@ class DashboardApp {
     }
 
     /**
-     * Configura controles de navegación mejorada
+     * @method setupNavigationControls
+     * @description Configura controles de navegación mejorada (anterior/siguiente)
+     * @returns {void}
      */
-    setupNavigationControls() {
-        // Los controles ya están en el html, solo configuramos eventos
+    setupNavigationControls = () => {
         const prevBtn = document.getElementById('nav-prev');
         const nextBtn = document.getElementById('nav-next');
 
         if (prevBtn) {
-            prevBtn.addEventListener('click', () => this.navigateToPrevious());
+            prevBtn.addEventListener('click', this.navigateToPrevious);
         }
 
         if (nextBtn) {
-            nextBtn.addEventListener('click', () => this.navigateToNext());
+            nextBtn.addEventListener('click', this.navigateToNext);
         }
     }
 
     /**
-     * Navega a la sección anterior en el historial
+     * @method navigateToPrevious
+     * @description Navega a la sección anterior en el historial de navegación
+     * @returns {void}
      */
-    navigateToPrevious() {
+    navigateToPrevious = () => {
         if (this.navigationHistory.length > 1) {
-            this.navigationHistory.pop(); // Remover actual
+            this.navigationHistory.pop();
             const previousSection = this.navigationHistory[this.navigationHistory.length - 1];
             this.activateSection(previousSection);
         }
     }
 
     /**
-     * Navega a la siguiente sección en orden
+     * @method navigateToNext
+     * @description Navega a la siguiente sección en orden predefinido
+     * @returns {void}
      */
-    navigateToNext() {
+    navigateToNext = () => {
         const currentIndex = this.sections.indexOf(this.currentSection);
         const nextIndex = (currentIndex + 1) % this.sections.length;
         this.activateSection(this.sections[nextIndex]);
     }
 
     /**
-     * Crea breadcrumbs para navegación contextual
+     * @method createBreadcrumbs
+     * @description Crea breadcrumbs para navegación contextual
+     * @returns {void}
      */
-    createBreadcrumbs() {
-        // Los breadcrumbs ya están en el html, solo configuramos eventos
+    createBreadcrumbs = () => {
         const breadcrumbLink = document.querySelector('.breadcrumb-link');
         if (breadcrumbLink) {
             breadcrumbLink.addEventListener('click', (e) => {
@@ -331,9 +753,12 @@ class DashboardApp {
     }
 
     /**
-     * Actualiza los breadcrumbs según la sección actual
+     * @method updateBreadcrumbs
+     * @description Actualiza los breadcrumbs según la sección actual
+     * @param {string} sectionName - Nombre de la sección actual
+     * @returns {void}
      */
-    updateBreadcrumbs(sectionName) {
+    updateBreadcrumbs = (sectionName) => {
         const currentCrumb = document.getElementById('current-breadcrumb');
         if (currentCrumb) {
             currentCrumb.textContent = this.getSectionDisplayName(sectionName);
@@ -341,9 +766,12 @@ class DashboardApp {
     }
 
     /**
-     * Obtiene el nombre para mostrar de una sección
+     * @method getSectionDisplayName
+     * @description Obtiene el nombre para mostrar de una sección
+     * @param {string} sectionId - ID de la sección
+     * @returns {string} Nombre para mostrar de la sección
      */
-    getSectionDisplayName(sectionId) {
+    getSectionDisplayName = (sectionId) => {
         const names = {
             'Dashboard': 'Dashboard',
             'Project': 'Proyectos',
@@ -358,76 +786,224 @@ class DashboardApp {
         return names[sectionId] || sectionId;
     }
 
+    // ==========================
+    // SISTEMA DE BÚSQUEDA
+    // ==========================
+
     /**
-     * Método para exportar datos (usado en la sección Privacy)
+     * @method handleSearch
+     * @description Maneja la funcionalidad de búsqueda en todo el dashboard
+     * @returns {void}
      */
-    exportData() {
-        this.showToast('Preparando exportación de datos...', 'success');
-        // Simular exportación
-        setTimeout(() => {
-            this.showToast('Datos exportados correctamente', 'success');
-        }, 2000);
+    handleSearch = () => {
+        const searchBox = document.getElementById('searchBox');
+        if (!searchBox) return;
+
+        const query = searchBox.value.trim().toLowerCase();
+
+        if (!query) {
+            this.showError('⚠️ Por favor ingrese un término de búsqueda.', 'search-error');
+            this.restoreNormalView();
+            return;
+        }
+
+        if (query.length < 2) {
+            this.showError('⚠️ Ingrese al menos 2 caracteres para buscar.', 'search-error');
+            return;
+        }
+
+        this.hideError('search-error');
+        this.removeAllHighlights();
+
+        let found = false;
+        let matchCount = 0;
+
+        document.querySelectorAll('.main-section').forEach(section => {
+            const sectionContent = section.textContent.toLowerCase();
+            if (sectionContent.includes(query)) {
+                section.style.display = 'block';
+                found = true;
+                const matches = this.highlightText(section, query);
+                matchCount += matches;
+            } else {
+                if (section.id !== this.currentSection) {
+                    section.style.display = 'none';
+                }
+            }
+        });
+
+        if (!found) {
+            this.showError('🔍 No se encontraron coincidencias para: "' + query + '"', 'search-error');
+            this.restoreNormalView();
+        } else {
+            this.showToast(`Se encontraron ${matchCount} coincidencia(s) para: "${query}"`, 'success');
+        }
     }
 
     /**
-     * Configura eventos del dashboard
+     * @method removeAllHighlights
+     * @description Remueve todos los resaltados de búsqueda previos
+     * @returns {void}
      */
-    setupDashboardEvents() {
-        const openEditorBtn = document.getElementById('open-editor');
-        const refreshBtn = document.getElementById('refresh-dashboard');
-        const filterBtn = document.getElementById('filter-dashboard');
+    removeAllHighlights = () => {
+        document.querySelectorAll('.search-highlight').forEach(highlight => {
+            const parent = highlight.parentNode;
+            if (parent) {
+                const text = document.createTextNode(highlight.textContent);
+                parent.replaceChild(text, highlight);
+                parent.normalize();
+            }
+        });
+    }
 
-        if (openEditorBtn) {
-            openEditorBtn.addEventListener('click', () => {
-                this.hideError('editor-error');
-                openEditorBtn.textContent = 'Cargando editor...';
-                openEditorBtn.disabled = true;
+    /**
+     * @method restoreNormalView
+     * @description Restaura la vista normal después de una búsqueda
+     * @returns {void}
+     */
+    restoreNormalView = () => {
+        document.querySelectorAll('.main-section').forEach(section => {
+            section.style.display = 'block';
+        });
 
-                setTimeout(() => {
-                    if (Math.random() > 0.3) {
-                        this.showSuccessMessage('editor-success');
-                        setTimeout(() => {
-                            window.location.href = '../HTML/Dashboard_Editor.html';
-                        }, 1000);
-                    } else {
-                        this.showError('⚠️ No se pudo abrir el editor, revise la conexión.', 'editor-error');
+        const currentSection = document.getElementById(this.currentSection);
+        if (currentSection) {
+            currentSection.style.display = 'block';
+        }
+    }
+
+    /**
+     * @description Resalta texto en un elemento específico según la consulta de búsqueda
+     * @param {HTMLElement} element - Elemento donde buscar y resaltar
+     * @param {string} query - Término de búsqueda a resaltar
+     * @returns {number} Número de coincidencias encontradas
+     */
+    highlightText = (element, query) => {
+        if (!element || !query) {
+            console.warn('highlightText: Parámetros inválidos', { element, query });
+            return 0;
+        }
+
+        try {
+            const walker = document.createTreeWalker(
+                element,
+                NodeFilter.SHOW_TEXT,
+                {
+                    acceptNode: function(node) {
+                        return node.textContent.toLowerCase().includes(query) ?
+                            NodeFilter.FILTER_ACCEPT :
+                            NodeFilter.FILTER_REJECT;
                     }
-                    openEditorBtn.textContent = 'Ir al Dashboard Editor';
-                    openEditorBtn.disabled = false;
-                }, 1500);
-            });
-        }
+                }
+            );
 
-        if (refreshBtn) {
-            refreshBtn.addEventListener('click', () => {
-                this.refreshDashboard();
-            });
-        }
+            let node;
+            const nodes = [];
+            let totalMatches = 0;
 
-        if (filterBtn) {
-            filterBtn.addEventListener('click', () => {
-                this.showToast('Función de filtro próximamente', 'info');
+            while ((node = walker.nextNode())) {
+                if (node.textContent.toLowerCase().includes(query)) {
+                    nodes.push(node);
+                    totalMatches++;
+                }
+            }
+
+            nodes.forEach(node => {
+                this.highlightNode(node, query);
             });
+
+            return totalMatches;
+
+        } catch (error) {
+            console.error('Error en highlightText:', error);
+            this.simpleTextHighlight(element, query);
+            return 1;
         }
     }
 
     /**
-     * Refresca el dashboard
+     * @method highlightNode
+     * @description Resalta un nodo de texto específico con la consulta de búsqueda
+     * @param {Node} textNode - Nodo de texto a resaltar
+     * @param {string} query - Término de búsqueda a resaltar
+     * @returns {void}
      */
-    refreshDashboard() {
-        this.showToast('Actualizando dashboard...', 'info');
-        // Simular actualización
-        setTimeout(() => {
-            this.updateAllLikesCounters();
-            this.showToast('Dashboard actualizado', 'success');
-        }, 1000);
+    highlightNode = (textNode, query) => {
+        const parent = textNode.parentNode;
+        if (!parent || parent.classList.contains('search-highlight')) {
+            return;
+        }
+
+        const text = textNode.textContent;
+        const lowerText = text.toLowerCase();
+        const lowerQuery = query.toLowerCase();
+        const queryIndex = lowerText.indexOf(lowerQuery);
+
+        if (queryIndex === -1) return;
+
+        const beforeText = text.substring(0, queryIndex);
+        const highlightedText = text.substring(queryIndex, queryIndex + query.length);
+        const afterText = text.substring(queryIndex + query.length);
+
+        const highlightSpan = document.createElement('span');
+        highlightSpan.className = 'search-highlight';
+        highlightSpan.style.cssText = `
+            background-color: yellow;
+            color: black;
+            padding: 2px 1px;
+            border-radius: 3px;
+            font-weight: bold;
+        `;
+        highlightSpan.textContent = highlightedText;
+
+        const fragment = document.createDocumentFragment();
+
+        if (beforeText) {
+            fragment.appendChild(document.createTextNode(beforeText));
+        }
+
+        fragment.appendChild(highlightSpan);
+
+        if (afterText) {
+            fragment.appendChild(document.createTextNode(afterText));
+        }
+
+        parent.replaceChild(fragment, textNode);
     }
 
     /**
-     * Configura eventos del sistema de likes
+     * @method simpleTextHighLight
+     * @description Método alternativo simple para resaltar texto (fallback)
+     * @param {HTMLElement} element - Elemento donde buscar
+     * @param {string} query - Término de búsqueda
+     * @returns {void}
      */
-    setupLikesEvents() {
-        // Likes para imágenes del dashboard
+    simpleTextHighlight = (element, query) => {
+        const html = element.innerHTML;
+        const regex = new RegExp(`(${this.escapeRegex(query)})`, 'gi');
+        element.innerHTML = html.replace(regex, '<span class="search-highlight" style="background-color: yellow; color: black; padding: 2px 1px; border-radius: 3px; font-weight: bold;">$1</span>');
+    }
+
+    /**
+     * @method escapeRegex
+     * @description Escapa caracteres especiales para usar en expresiones regulares
+     * @param {string} string - Cadena a escapar
+     * @returns {string} Cadena escapada
+     */
+    escapeRegex = (string) => {
+        return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+
+    // ==========================
+    // SISTEMA DE LIKES
+    // ==========================
+
+    /**
+     * @method setupLikesEvents
+     * @description Configura eventos del sistema de likes para imágenes y contenido
+     * @returns {void}
+     */
+    setupLikesEvents = () => {
         document.querySelectorAll('.dashboard-card').forEach((article) => {
             const likeBtn = article.querySelector('.like-btn');
             const itemId = article.getAttribute('data-item-id');
@@ -439,7 +1015,6 @@ class DashboardApp {
             }
         });
 
-        // Likes para imágenes de la galería
         document.querySelectorAll('.gallery-item').forEach((figure) => {
             const likeBtn = figure.querySelector('.like-btn');
             const itemId = figure.getAttribute('data-item-id');
@@ -451,15 +1026,15 @@ class DashboardApp {
             }
         });
 
-        // Eventos para otros botones interactivos
         this.setupInteractiveButtons();
     }
 
     /**
-     * Configura botones interactivos adicionales
+     * @method setupInteractiveButtons
+     * @description Configura botones interactivos adicionales (comentarios, descarga, compartir)
+     * @returns {void}
      */
-    setupInteractiveButtons() {
-        // Botones de comentarios
+    setupInteractiveButtons = () => {
         document.querySelectorAll('.comment-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
@@ -467,19 +1042,16 @@ class DashboardApp {
             });
         });
 
-        // Botones de descarga
         document.querySelectorAll('.download-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 this.showToast('Descargando imagen...', 'info');
-                // Simular descarga
                 setTimeout(() => {
                     this.showToast('Imagen descargada correctamente', 'success');
                 }, 1500);
             });
         });
 
-        // Botones de compartir
         document.querySelectorAll('.share-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
@@ -489,10 +1061,12 @@ class DashboardApp {
     }
 
     /**
-     * Alterna el estado de like de un elemento
+     * @method toggleLike
+     * @description Alterna el estado de like de un elemento específico
+     * @param {string} itemId - ID único del elemento a likear
+     * @returns {void}
      */
-    toggleLike(itemId) {
-        // Inicializar si no existe
+    toggleLike = (itemId) => {
         if (!this.likesData[itemId]) {
             this.likesData[itemId] = {
                 likes: parseInt(document.querySelector(`[data-item-id="${itemId}"] .like-count`)?.textContent || 0),
@@ -500,32 +1074,28 @@ class DashboardApp {
             };
         }
 
-        // Alternar estado
         this.likesData[itemId].liked = !this.likesData[itemId].liked;
         this.likesData[itemId].likes += this.likesData[itemId].liked ? 1 : -1;
 
-        // Actualizar UI
         this.updateLikeCounter(itemId);
-
-        // Guardar cambios
         this.saveLikesData();
 
-        // Mostrar feedback
         const action = this.likesData[itemId].liked ? 'liked' : 'unliked';
         this.showToast(`Has ${action === 'liked' ? 'dado like' : 'quitado el like'}`, 'success');
     }
 
     /**
-     * Actualiza el contador de likes para un elemento específico
+     * @method updateLikeCounter
+     * @description Actualiza el contador de likes para un elemento específico
+     * @param {string} itemId - ID único del elemento
+     * @returns {void}
      */
-    updateLikeCounter(itemId) {
+    updateLikeCounter = (itemId) => {
         const likeData = this.likesData[itemId];
         if (!likeData) return;
 
-        // Buscar y actualizar todos los contadores para este elemento
         document.querySelectorAll(`[data-item-id="${itemId}"] .like-count`).forEach(counter => {
             counter.textContent = likeData.likes;
-            // Actualizar texto si es necesario
             if (counter.classList.contains('like-count')) {
                 counter.textContent = likeData.likes;
             } else {
@@ -533,12 +1103,9 @@ class DashboardApp {
             }
         });
 
-        // Actualizar estado del botón
         document.querySelectorAll(`[data-item-id="${itemId}"] .like-btn`).forEach(btn => {
             btn.classList.toggle('liked', likeData.liked);
             btn.innerHTML = likeData.liked ? '❤️' : '🤍';
-
-            // Añadir animación
             btn.style.animation = 'none';
             setTimeout(() => {
                 btn.style.animation = 'likePulse 0.6s ease';
@@ -547,18 +1114,22 @@ class DashboardApp {
     }
 
     /**
-     * Actualiza todos los contadores de likes en la página
+     * @method updateAllLikesCounters
+     * @description Actualiza todos los contadores de likes en la página
+     * @returns {void}
      */
-    updateAllLikesCounters() {
+    updateAllLikesCounters = () => {
         Object.keys(this.likesData).forEach(itemId => {
             this.updateLikeCounter(itemId);
         });
     }
 
     /**
-     * Carga los datos de likes desde localStorage
+     * @method loadLikesData
+     * @description Carga los datos de likes desde localStorage
+     * @returns {Object} Datos de likes cargados
      */
-    loadLikesData() {
+    loadLikesData = () => {
         try {
             return JSON.parse(localStorage.getItem('dashboardLikes')) || {};
         } catch (error) {
@@ -568,9 +1139,11 @@ class DashboardApp {
     }
 
     /**
-     * Guarda los datos de likes en localStorage
+     * @method saveLikesData
+     * @description Guarda los datos de likes en localStorage
+     * @returns {void}
      */
-    saveLikesData() {
+    saveLikesData = () => {
         try {
             localStorage.setItem('dashboardLikes', JSON.stringify(this.likesData));
         } catch (error) {
@@ -578,10 +1151,322 @@ class DashboardApp {
         }
     }
 
+    // ==========================
+    // MÉTODOS DE UTILIDAD Y NAVEGACIÓN
+    // ==========================
+
     /**
-     * Configura eventos de proyectos
+     * @method showToast
+     * @description Muestra una notificación toast al usuario
+     * @param {string} message - Mensaje a mostrar
+     * @param {string} type - Tipo de toast ('success', 'error', 'info', 'warning')
+     * @returns {void}
      */
-    setupProjectsEvents() {
+    showToast = (message, type = 'success') => {
+        let toastContainer = document.getElementById('toast-container');
+        if (!toastContainer) {
+            toastContainer = document.createElement('div');
+            toastContainer.id = 'toast-container';
+            toastContainer.className = 'toast-container';
+            document.body.appendChild(toastContainer);
+        }
+
+        const toast = document.createElement('div');
+        toast.className = `toast toast-${type}`;
+        toast.innerHTML = `
+            <div class="toast-content">
+                <span>${this.getToastIcon(type)}</span>
+                <p>${message}</p>
+            </div>
+        `;
+        toastContainer.appendChild(toast);
+
+        setTimeout(() => toast.classList.add('show'), 10);
+
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => {
+                if (toast.parentNode) {
+                    toast.parentNode.removeChild(toast);
+                }
+            }, 300);
+        }, 4000);
+    }
+
+    /**
+     * @method getToastIcon
+     * @description Obtiene el icono apropiado para el tipo de toast
+     * @param {string} type - Tipo de toast
+     * @returns {string} Emoji del icono correspondiente
+     */
+    getToastIcon = (type) => {
+        const icons = {
+            'success': '✅',
+            'error': '❌',
+            'info': 'ℹ️',
+            'warning': '⚠️'
+        };
+        return icons[type] || '💡';
+    }
+
+    /**
+     * @method debugSections
+     * @description Método de debug para verificar la existencia de todas las secciones
+     * @returns {boolean} True si todas las secciones existen, false en caso contrario
+     */
+    debugSections = () => {
+        console.log('📋 Secciones configuradas:', this.sections);
+        let allSectionsExist = true;
+
+        this.sections.forEach(section => {
+            const exists = !!document.getElementById(section);
+            console.log(`   ${section}: ${exists ? '✅ Existe' : '❌ No existe'}`);
+            if (!exists) allSectionsExist = false;
+        });
+
+        if (!allSectionsExist) {
+            console.warn('⚠️ Algunas secciones no se encontraron en el DOM');
+        }
+
+        return allSectionsExist;
+    }
+
+    /**
+     * @method toggleUserMenu
+     * @description Alterna la visibilidad del menú de usuario
+     * @returns {void}
+     */
+    toggleUserMenu = () => {
+        const userMenu = document.getElementById('user-menu');
+        if (userMenu) {
+            const isVisible = userMenu.style.display === 'block';
+            userMenu.style.display = isVisible ? 'none' : 'block';
+
+            if (!isVisible) {
+                userMenu.style.opacity = '0';
+                userMenu.style.transform = 'translateY(-10px)';
+                setTimeout(() => {
+                    userMenu.style.transition = 'all 0.3s ease';
+                    userMenu.style.opacity = '1';
+                    userMenu.style.transform = 'translateY(0)';
+                }, 10);
+            }
+        }
+    }
+
+    /**
+     * @method updateSidebarActiveState
+     * @description Actualiza el estado activo del sidebar según la sección actual
+     * @param {string} sectionId - ID de la sección activa
+     * @returns {void}
+     */
+    updateSidebarActiveState = (sectionId) => {
+        document.querySelectorAll('.sidebar-item').forEach(item => {
+            item.classList.remove('active');
+        });
+
+        const menuItemId = `menu-${sectionId.toLowerCase()}`;
+        const menuItem = document.getElementById(menuItemId);
+        if (menuItem) {
+            menuItem.classList.add('active');
+        }
+    }
+
+    /**
+     * @method updateNavigationControls
+     * @description Actualiza el estado de los controles de navegación (anterior/siguiente)
+     * @returns {void}
+     */
+    updateNavigationControls = () => {
+        const prevBtn = document.getElementById('nav-prev');
+        const nextBtn = document.getElementById('nav-next');
+
+        if (prevBtn) {
+            prevBtn.disabled = this.navigationHistory.length <= 1;
+        }
+
+        if (nextBtn) {
+            nextBtn.disabled = false;
+        }
+    }
+
+    // ==========================
+    // MÉTODOS DE LAS SECCIONES ESPECÍFICAS
+    // ==========================
+
+    /**
+     * @method setupDashboardEvents
+     * @description Configura eventos específicos de la sección Dashboard
+     * @returns {void}
+     */
+    setupDashboardEvents = () => {
+        const openEditorBtn = document.getElementById('open-editor');
+        const refreshBtn = document.getElementById('refresh-dashboard');
+        const filterBtn = document.getElementById('filter-dashboard');
+
+        if (openEditorBtn) {
+            openEditorBtn.addEventListener('click', this.handleEditorOpen);
+        }
+
+        if (refreshBtn) {
+            refreshBtn.addEventListener('click', this.refreshDashboard);
+        }
+
+        if (filterBtn) {
+            filterBtn.addEventListener('click', () => {
+                this.showToast('Función de filtro próximamente', 'info');
+            });
+        }
+    }
+
+    /**
+     * @method handleEditorOpen
+     * @description Maneja la apertura del editor de dashboard
+     * @returns {void}
+     */
+    handleEditorOpen = () => {
+        const openEditorBtn = document.getElementById('open-editor');
+        this.hideError('editor-error');
+        openEditorBtn.textContent = 'Cargando editor...';
+        openEditorBtn.disabled = true;
+
+        setTimeout(() => {
+            if (Math.random() > 0.3) {
+                this.showSuccessMessage('editor-success');
+                setTimeout(() => {
+                    window.location.href = '../HTML/Dashboard_Editor.html';
+                }, 1000);
+            } else {
+                this.showError('⚠️ No se pudo abrir el editor, revise la conexión.', 'editor-error');
+            }
+            openEditorBtn.textContent = 'Ir al Dashboard Editor';
+            openEditorBtn.disabled = false;
+        }, 1500);
+    }
+
+    /**
+     * @method refreshDashboard
+     * @description Refresca el dashboard actualizando contadores y datos
+     * @returns {void}
+     */
+    refreshDashboard = () => {
+        this.showToast('Actualizando dashboard...', 'info');
+        setTimeout(() => {
+            this.updateAllLikesCounters();
+            this.showToast('Dashboard actualizado', 'success');
+        }, 1000);
+    }
+
+    // ==========================
+    // MÉTODOS DE GESTIÓN DE SECCIONES
+    // ==========================
+
+    /**
+     * @method activateSection
+     * @description Activa una sección específica del dashboard
+     * @param {string} sectionId - ID de la sección a activar
+     * @returns {boolean} True si la activación fue exitosa, false en caso contrario
+     */
+    activateSection = (sectionId) => {
+        const targetSection = document.getElementById(sectionId);
+        if (!targetSection) {
+            console.error(`❌ No se puede encontrar la sección: ${sectionId}`);
+            this.showError(`No se pudo cargar la sección: ${sectionId}`);
+            return false;
+        }
+
+        this.hideAllSections();
+
+        targetSection.style.display = 'block';
+        targetSection.classList.add('active-section');
+
+        targetSection.style.opacity = '0';
+        targetSection.style.transform = 'translateY(20px)';
+
+        requestAnimationFrame(() => {
+            targetSection.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
+            targetSection.style.opacity = '1';
+            targetSection.style.transform = 'translateY(0)';
+        });
+
+        this.currentSection = sectionId;
+
+        if (this.navigationHistory[this.navigationHistory.length - 1] !== sectionId) {
+            this.navigationHistory.push(sectionId);
+            if (this.navigationHistory.length > 10) {
+                this.navigationHistory.shift();
+            }
+        }
+
+        this.updateSidebarActiveState(sectionId);
+        this.updateBreadcrumbs(sectionId);
+        this.updateNavigationControls();
+
+        targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+        console.log(`✅ Sección activada: ${sectionId}`);
+        return true;
+    }
+
+    // ==========================
+    // MÉTODOS DE MANEJO DE ERRORES Y MENSAJES
+    // ==========================
+
+    /**
+     * @method showError
+     * @description Muestra un mensaje de error al usuario
+     * @param {string} message - Mensaje de error a mostrar
+     * @param {string} targetId - ID del contenedor de error (opcional)
+     * @returns {void}
+     */
+    showError = (message, targetId = 'errorMessage') => {
+        const errorContainer = document.getElementById(targetId);
+        if (errorContainer) {
+            errorContainer.textContent = message;
+            errorContainer.style.display = 'block';
+            setTimeout(() => {
+                errorContainer.style.display = 'none';
+            }, 5000);
+        } else {
+            this.showToast(message, 'error');
+        }
+    }
+
+    /**
+     * @method showSuccessMessage
+     * @description Muestra un mensaje de éxito al usuario
+     * @param {string} targetId - ID del elemento de éxito
+     * @returns {void}
+     */
+    showSuccessMessage = (targetId) => {
+        const successElement = document.getElementById(targetId);
+        if (successElement) {
+            successElement.style.display = 'block';
+            setTimeout(() => {
+                successElement.style.display = 'none';
+            }, 3000);
+        }
+    }
+
+    /**
+     * @method hideError
+     * @description Oculta un mensaje de error específico
+     * @param {string} targetId - ID del elemento de error
+     * @returns {void}
+     */
+    hideError = (targetId = 'errorMessage') => {
+        const errorElement = document.getElementById(targetId);
+        if (errorElement) {
+            errorElement.style.display = 'none';
+        }
+    }
+
+    /**
+     * @method setupProjectsEvents
+     * @description Configura eventos de la sección de Proyectos
+     * @returns {void}
+     */
+    setupProjectsEvents = () => {
         const projectForm = document.getElementById('add-project-content');
         const clearBtn = document.getElementById('clear-form');
         const previewBtn = document.getElementById('preview-content');
@@ -619,19 +1504,20 @@ class DashboardApp {
             });
         }
 
-        // Eventos para tarjetas de proyecto
         this.setupProjectCardsEvents();
     }
 
     /**
-     * Configura eventos para las tarjetas de proyecto
+     * @method setupProjectCardsEvents
+     * @description Configura eventos para las tarjetas de proyecto individuales
+     * @returns {void}
      */
-    setupProjectCardsEvents() {
+    setupProjectCardsEvents = () => {
         document.querySelectorAll('.edit-card').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
-                e.target.closest('.project-card');
-                this.editProjectCard();
+                const card = e.target.closest('.project-card');
+                this.editProjectCard(card);
             });
         });
 
@@ -645,46 +1531,12 @@ class DashboardApp {
     }
 
     /**
-     * Edita una tarjeta de proyecto
+     * @method handleProjectFormSubmit
+     * @description Maneja el envío del formulario de proyecto con validaciones
+     * @param {Event} event - Evento de envío del formulario
+     * @returns {void}
      */
-    editProjectCard() {
-        this.showToast('Editando tarjeta de proyecto...', 'info');
-    }
-
-    /**
-     * Elimina una tarjeta de proyecto
-     */
-    deleteProjectCard(card) {
-        if (confirm('¿Estás seguro de que quieres eliminar esta tarjeta?')) {
-            card.style.opacity = '0';
-            card.style.transform = 'translateX(100px)';
-            setTimeout(() => {
-                card.remove();
-                this.showToast('Tarjeta eliminada correctamente', 'success');
-            }, 300);
-        }
-    }
-
-    /**
-     * Exporta proyectos
-     */
-    exportProjects() {
-        this.showToast('Exportando proyectos...', 'info');
-        setTimeout(() => {
-            this.showToast('Proyectos exportados correctamente', 'success');
-        }, 2000);
-    }
-
-    /**
-     * Maneja envío de formulario de proyecto
-     */
-    /**
-     * Maneja envío de formulario de proyecto - VERSIÓN MEJORADA
-     */
-    /**
-     * Maneja envío de formulario de proyecto - VERSIÓN MEJORADA
-     */
-    handleProjectFormSubmit(event) {
+    handleProjectFormSubmit = (event) => {
         event.preventDefault();
 
         const contentInput = document.getElementById('project-content-text');
@@ -698,7 +1550,6 @@ class DashboardApp {
         const content = contentInput.value.trim();
         const targetCard = targetCardSelect.value;
 
-        // Validaciones directas
         if (!content) {
             this.showError('⚠️ El contenido del proyecto no puede estar vacío.');
             return;
@@ -733,9 +1584,11 @@ class DashboardApp {
     }
 
     /**
-     * Muestra vista previa del contenido del proyecto
+     * @method previewProjectContent
+     * @description Muestra vista previa del contenido del proyecto
+     * @returns {void}
      */
-    previewProjectContent() {
+    previewProjectContent = () => {
         const contentInput = document.getElementById('project-content-text');
         if (!contentInput) return;
 
@@ -750,9 +1603,11 @@ class DashboardApp {
     }
 
     /**
-     * Limpia el formulario de proyecto
+     * @method clearProjectForm
+     * @description Limpia el formulario de proyecto y restablece el estado
+     * @returns {void}
      */
-    clearProjectForm() {
+    clearProjectForm = () => {
         const contentInput = document.getElementById('project-content-text');
         const targetCardSelect = document.getElementById('target-card');
 
@@ -764,9 +1619,53 @@ class DashboardApp {
     }
 
     /**
-     * Configura eventos de tareas
+     * @method editProjectCard
+     * @returns {void}
      */
-    setupTasksEvents() {
+    editProjectCard = () => {
+        this.showToast('Editando tarjeta de proyecto...', 'info');
+        // Aquí iría la lógica específica de edición
+    }
+
+    /**
+     * @method deleteProjectCard
+     * @description Elimina una tarjeta de proyecto con animación
+     * @param {HTMLElement} card - Elemento de la tarjeta a eliminar
+     * @returns {void}
+     */
+    deleteProjectCard = (card) => {
+        if (confirm('¿Estás seguro de que quieres eliminar esta tarjeta?')) {
+            card.style.opacity = '0';
+            card.style.transform = 'translateX(100px)';
+            setTimeout(() => {
+                card.remove();
+                this.showToast('Tarjeta eliminada correctamente', 'success');
+            }, 300);
+        }
+    }
+
+    /**
+     * @method exportProjects
+     * @description Exporta los proyectos actuales
+     * @returns {void}
+     */
+    exportProjects = () => {
+        this.showToast('Exportando proyectos...', 'info');
+        setTimeout(() => {
+            this.showToast('Proyectos exportados correctamente', 'success');
+        }, 2000);
+    }
+
+// ==========================
+// SISTEMA DE TAREAS
+// ==========================
+
+    /**
+     * @method setupTaskEvents
+     * @description Configura eventos de la sección de Tareas
+     * @returns {void}
+     */
+    setupTasksEvents = () => {
         // Checkboxes de tareas
         document.querySelectorAll('.task-checkbox').forEach(checkbox => {
             checkbox.addEventListener('change', () => {
@@ -808,14 +1707,15 @@ class DashboardApp {
             });
         }
 
-        // Eventos para acciones individuales de tareas
         this.setupTaskActionsEvents();
     }
 
     /**
-     * Configura eventos para acciones individuales de tareas
+     * @method setupTaskActionsEvents
+     * @description Configura eventos para acciones individuales de tareas
+     * @returns {void}
      */
-    setupTaskActionsEvents() {
+    setupTaskActionsEvents = () => {
         document.querySelectorAll('.edit-task').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
@@ -834,9 +1734,12 @@ class DashboardApp {
     }
 
     /**
-     * Elimina una tarea
+     * @method deleteTask
+     * @description Elimina una tarea específica con animación
+     * @param {HTMLElement} row - Fila de la tabla que contiene la tarea
+     * @returns {void}
      */
-    deleteTask(row) {
+    deleteTask = (row) => {
         if (confirm('¿Estás seguro de que quieres eliminar esta tarea?')) {
             row.style.opacity = '0';
             row.style.transform = 'translateX(100px)';
@@ -849,9 +1752,11 @@ class DashboardApp {
     }
 
     /**
-     * Marca todas las tareas como completadas
+     * @method markAllTasksComplete
+     * @description Marca todas las tareas como completadas
+     * @returns {void}
      */
-    markAllTasksComplete() {
+    markAllTasksComplete = () => {
         const checkboxes = document.querySelectorAll('.task-checkbox:not(:checked)');
         if (checkboxes.length === 0) {
             this.showToast('Todas las tareas ya están completadas', 'info');
@@ -869,534 +1774,11 @@ class DashboardApp {
     }
 
     /**
-     * Exporta tareas
+     * @method removeCompletesTasks
+     * @description Elimina todas las tareas marcadas como completadas
+     * @returns {number} Número de tareas eliminadas
      */
-    exportTasks() {
-        this.showToast('Exportando tareas...', 'info');
-        setTimeout(() => {
-            this.showToast('Tareas exportadas correctamente', 'success');
-        }, 2000);
-    }
-
-    /**
-     * Configura eventos de configuración
-     */
-    setupSettingsEvents() {
-        document.querySelectorAll('.settings-form').forEach(form => {
-            form.addEventListener('submit', (e) => {
-                e.preventDefault();
-                this.hideError();
-                this.handleSettingsSubmit(form);
-            });
-        });
-
-        // Validación de contraseñas
-        const passwordField = document.getElementById('user-password');
-        const confirmPasswordField = document.getElementById('confirm-password');
-
-        if (passwordField && confirmPasswordField) {
-            confirmPasswordField.addEventListener('input', () => {
-                this.validatePasswords();
-            });
-        }
-    }
-
-    /**
-     * Valida que las contraseñas coincidan
-     */
-    validatePasswords() {
-        const passwordField = document.getElementById('user-password');
-        const confirmPasswordField = document.getElementById('confirm-password');
-
-        if (!passwordField || !confirmPasswordField) return;
-
-        if (passwordField.value !== confirmPasswordField.value) {
-            confirmPasswordField.style.borderColor = 'var(#e74c3c)';
-            this.showError('⚠️ Las contraseñas no coinciden', 'settings-error');
-        } else {
-            confirmPasswordField.style.borderColor = 'var(#2ecc71)';
-            this.hideError('settings-error');
-        }
-    }
-
-    /**
-     * Configura eventos de ayuda
-     */
-    setupHelpEvents() {
-        const contactSupportBtn = document.getElementById('contact-support');
-        const viewTutorialsBtn = document.getElementById('view-tutorials');
-
-        if (contactSupportBtn) {
-            contactSupportBtn.addEventListener('click', () => {
-                this.contactSupport();
-            });
-        }
-
-        if (viewTutorialsBtn) {
-            viewTutorialsBtn.addEventListener('click', () => {
-                this.viewTutorials();
-            });
-        }
-
-        // Tracking de secciones de ayuda expandidas
-        document.querySelectorAll('#Help details').forEach(detail => {
-            detail.addEventListener('toggle', () => {
-                if (detail.open) {
-                    const summaryText = detail.querySelector('summary').textContent;
-                    console.log('❓ Sección de ayuda abierta:', summaryText);
-                }
-            });
-        });
-    }
-
-    /**
-     * Contacta con soporte
-     */
-    contactSupport() {
-        this.showToast('Redirigiendo a soporte...', 'info');
-        // Simular redirección
-        setTimeout(() => {
-            window.location.href = 'mailto:soporte@kliv.com';
-        }, 1000);
-    }
-
-    /**
-     * Visualiza tutoriales
-     */
-    viewTutorials() {
-        this.showToast('Cargando tutoriales...', 'info');
-        // Aquí iría la lógica para mostrar tutoriales
-    }
-
-    /**
-     * Configura eventos globales
-     */
-    setupGlobalEvents() {
-        document.addEventListener('keydown', (e) => {
-            if (e.ctrlKey && e.key === 'f') {
-                e.preventDefault();
-                const searchBox = document.getElementById('searchBox');
-                if (searchBox) searchBox.focus();
-            }
-
-            if (e.key === 'Escape') {
-                const searchBox = document.getElementById('searchBox');
-                if (searchBox) searchBox.value = '';
-                document.querySelectorAll('.search-highlight').forEach(el => {
-                    el.classList.remove('search-highlight');
-                });
-                this.hideError('search-error');
-            }
-        });
-    }
-
-    /**
-     * Activa una sección específica
-     */
-    activateSection(sectionId) {
-        // Validar que la sección existe
-        const targetSection = document.getElementById(sectionId);
-        if (!targetSection) {
-            console.error(`❌ No se puede encontrar la sección: ${sectionId}`);
-            this.showError(`No se pudo cargar la sección: ${sectionId}`);
-            return false;
-        }
-
-        // Ocultar todas las secciones
-        this.hideAllSections();
-
-        // Mostrar sección objetivo
-        targetSection.style.display = 'block';
-        targetSection.classList.add('active-section');
-
-        // Animación de entrada
-        targetSection.style.opacity = '0';
-        targetSection.style.transform = 'translateY(20px)';
-
-        requestAnimationFrame(() => {
-            targetSection.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
-            targetSection.style.opacity = '1';
-            targetSection.style.transform = 'translateY(0)';
-        });
-
-        // Actualizar estado
-        this.currentSection = sectionId;
-
-        // Actualizar historial (evitar duplicados consecutivos)
-        if (this.navigationHistory[this.navigationHistory.length - 1] !== sectionId) {
-            this.navigationHistory.push(sectionId);
-            // Limitar historial a 10 elementos
-            if (this.navigationHistory.length > 10) {
-                this.navigationHistory.shift();
-            }
-        }
-
-        // Actualizar UI
-        this.updateSidebarActiveState(sectionId);
-        this.updateBreadcrumbs(sectionId);
-        this.updateNavigationControls();
-
-        // Scroll al inicio de la sección
-        targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-        console.log(`✅ Sección activada: ${sectionId}`);
-        return true;
-    }
-
-    /**
-     * Actualiza el estado activo del sidebar
-     */
-    updateSidebarActiveState(sectionId) {
-        document.querySelectorAll('.sidebar-item').forEach(item => {
-            item.classList.remove('active');
-        });
-
-        const menuItemId = `menu-${sectionId.toLowerCase()}`;
-        const menuItem = document.getElementById(menuItemId);
-        if (menuItem) {
-            menuItem.classList.add('active');
-        }
-    }
-
-    /**
-     * Actualiza el estado de los controles de navegación
-     */
-    updateNavigationControls() {
-        const prevBtn = document.getElementById('nav-prev');
-        const nextBtn = document.getElementById('nav-next');
-
-        if (prevBtn) {
-            prevBtn.disabled = this.navigationHistory.length <= 1;
-        }
-
-        if (nextBtn) {
-            nextBtn.disabled = false;
-        }
-    }
-
-    /**
-     * Maneja la funcionalidad de búsqueda
-     */
-    handleSearch() {
-        const searchBox = document.getElementById('searchBox');
-        if (!searchBox) return;
-
-        const query = searchBox.value.trim().toLowerCase();
-
-        if (!query) {
-            this.showError('⚠️ Por favor ingrese un término de búsqueda.', 'search-error');
-            // Restaurar vista normal si la búsqueda está vacía
-            this.restoreNormalView();
-            return;
-        }
-
-        if (query.length < 2) {
-            this.showError('⚠️ Ingrese al menos 2 caracteres para buscar.', 'search-error');
-            return;
-        }
-
-        this.hideError('search-error');
-
-        // Remover resaltados previos
-        this.removeAllHighlights();
-
-        let found = false;
-        let matchCount = 0;
-
-        // Buscar en todas las secciones visibles
-        document.querySelectorAll('.main-section').forEach(section => {
-            const sectionContent = section.textContent.toLowerCase();
-            if (sectionContent.includes(query)) {
-                section.style.display = 'block';
-                found = true;
-
-                // Resaltar términos encontrados
-                const matches = this.highlightText(section, query);
-                matchCount += matches;
-            } else {
-                // Ocultar secciones sin resultados
-                if (section.id !== this.currentSection) {
-                    section.style.display = 'none';
-                }
-            }
-        });
-
-        if (!found) {
-            this.showError('🔍 No se encontraron coincidencias para: "' + query + '"', 'search-error');
-            this.restoreNormalView();
-        } else {
-            this.showToast(`Se encontraron ${matchCount} coincidencia(s) para: "${query}"`, 'success');
-        }
-    }
-
-    /**
-     * Remueve todos los resaltados de búsqueda
-     */
-    removeAllHighlights() {
-        document.querySelectorAll('.search-highlight').forEach(highlight => {
-            const parent = highlight.parentNode;
-            if (parent) {
-                // Reemplazar el highlight con solo el texto
-                const text = document.createTextNode(highlight.textContent);
-                parent.replaceChild(text, highlight);
-                // Normalizar el nodo padre para unir nodos de texto adyacentes
-                parent.normalize();
-            }
-        });
-    }
-
-    /**
-     * Restaura la vista normal después de una búsqueda
-     */
-    restoreNormalView() {
-        // Mostrar todas las secciones principales
-        document.querySelectorAll('.main-section').forEach(section => {
-            section.style.display = 'block';
-        });
-
-        // Asegurar que la sección actual esté visible
-        const currentSection = document.getElementById(this.currentSection);
-        if (currentSection) {
-            currentSection.style.display = 'block';
-        }
-    }
-
-    /**
-     * Resalta texto en un elemento
-     */
-    highlightText(element, query) {
-        // Validar parámetros
-        if (!element || !query) {
-            console.warn('highlightText: Parámetros inválidos', { element, query });
-            return;
-        }
-
-        try {
-            // Crear TreeWalker con la sintaxis correcta (máximo 3 parámetros)
-            const walker = document.createTreeWalker(
-                element,
-                NodeFilter.SHOW_TEXT,
-                {
-                    acceptNode: function(node) {
-                        // Aceptar todos los nodos de texto que contengan la query
-                        return node.textContent.toLowerCase().includes(query) ?
-                            NodeFilter.FILTER_ACCEPT :
-                            NodeFilter.FILTER_REJECT;
-                    }
-                }
-            );
-
-            let node;
-            const nodes = [];
-
-            // Recopilar nodos que coincidan con la búsqueda
-            while ((node = walker.nextNode())) {
-                if (node.textContent.toLowerCase().includes(query)) {
-                    nodes.push(node);
-                }
-            }
-
-            // Resaltar cada nodo encontrado
-            nodes.forEach(node => {
-                this.highlightNode(node, query);
-            });
-
-        } catch (error) {
-            console.error('Error en highlightText:', error);
-            // Fallback: resaltado simple si TreeWalker falla
-            this.simpleTextHighlight(element, query);
-        }
-    }
-
-    /**
-     * Resalta un nodo de texto específico
-     */
-    highlightNode(textNode, query) {
-        const parent = textNode.parentNode;
-        if (!parent || parent.classList.contains('search-highlight')) {
-            return; // Evitar múltiples resaltados
-        }
-
-        const text = textNode.textContent;
-        const lowerText = text.toLowerCase();
-        const lowerQuery = query.toLowerCase();
-        const queryIndex = lowerText.indexOf(lowerQuery);
-
-        if (queryIndex === -1) return;
-
-        // Crear elementos para el texto antes, el resaltado y el texto después
-        const beforeText = text.substring(0, queryIndex);
-        const highlightedText = text.substring(queryIndex, queryIndex + query.length);
-        const afterText = text.substring(queryIndex + query.length);
-
-        // Crear span para el texto resaltado
-        const highlightSpan = document.createElement('span');
-        highlightSpan.className = 'search-highlight';
-        highlightSpan.style.cssText = `
-        background-color: yellow;
-        color: black;
-        padding: 2px 1px;
-        border-radius: 3px;
-        font-weight: bold;
-    `;
-        highlightSpan.textContent = highlightedText;
-
-        // Reemplazar el nodo de texto original con los nuevos elementos
-        const fragment = document.createDocumentFragment();
-
-        if (beforeText) {
-            fragment.appendChild(document.createTextNode(beforeText));
-        }
-
-        fragment.appendChild(highlightSpan);
-
-        if (afterText) {
-            fragment.appendChild(document.createTextNode(afterText));
-        }
-
-        parent.replaceChild(fragment, textNode);
-    }
-
-    /**
-     * Método alternativo simple para resaltar texto (fallback)
-     */
-    simpleTextHighlight(element, query) {
-        const html = element.innerHTML;
-        const regex = new RegExp(`(${this.escapeRegex(query)})`, 'gi');
-        element.innerHTML = html.replace(regex, '<span class="search-highlight" style="background-color: yellow; color: black; padding: 2px 1px; border-radius: 3px; font-weight: bold;">$1</span>');
-    }
-
-    /**
-     * Escapa caracteres especiales para regex
-     */
-    escapeRegex(string) {
-        return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    }
-
-
-    /**
-     * Alterna menú de usuario
-     */
-    toggleUserMenu() {
-        const userMenu = document.getElementById('user-menu');
-        if (userMenu) {
-            const isVisible = userMenu.style.display === 'block';
-            userMenu.style.display = isVisible ? 'none' : 'block';
-
-            // Animación
-            if (!isVisible) {
-                userMenu.style.opacity = '0';
-                userMenu.style.transform = 'translateY(-10px)';
-                setTimeout(() => {
-                    userMenu.style.transition = 'all 0.3s ease';
-                    userMenu.style.opacity = '1';
-                    userMenu.style.transform = 'translateY(0)';
-                }, 10);
-            }
-        }
-    }
-
-    /**
-     * Maneja envío de formularios de configuración - VERSIÓN CORREGIDA
-     */
-    handleSettingsSubmit(form) {
-        console.log('Settings form submitted:', form.id);
-
-        this.saveSettings()
-            .then(() => {
-                this.showSuccessMessage('settings-success');
-                this.showToast('Configuración guardada correctamente', 'success');
-            })
-            .catch((error) => {
-                console.error('Error en configuración:', error);
-                this.showError(error.message || 'Error al guardar la configuración');
-            });
-    }
-
-    /**
-     * Muestra notificación toast
-     */
-    showToast(message, type = 'success') {
-        // Crear contenedor de toasts si no existe
-        let toastContainer = document.getElementById('toast-container');
-        if (!toastContainer) {
-            toastContainer = document.createElement('div');
-            toastContainer.id = 'toast-container';
-            toastContainer.className = 'toast-container';
-            document.body.appendChild(toastContainer);
-        }
-
-        const toast = document.createElement('div');
-        toast.className = `toast toast-${type}`;
-        toast.innerHTML = `
-            <div class="toast-content">
-                <span>${this.getToastIcon(type)}</span>
-                <p>${message}</p>
-            </div>
-        `;
-        toastContainer.appendChild(toast);
-
-        // Animación de entrada
-        setTimeout(() => toast.classList.add('show'), 10);
-
-        // Auto-eliminación
-        setTimeout(() => {
-            toast.classList.remove('show');
-            setTimeout(() => {
-                if (toast.parentNode) {
-                    toast.parentNode.removeChild(toast);
-                }
-            }, 300);
-        }, 4000);
-    }
-
-    /**
-     * Obtiene el icono para el toast
-     */
-    getToastIcon(type) {
-        const icons = {
-            'success': '✅',
-            'error': '❌',
-            'info': 'ℹ️',
-            'warning': '⚠️'
-        };
-        return icons[type] || '💡';
-    }
-    /**
-     * Actualiza estadísticas de tareas
-     */
-    updateTaskStatistics() {
-        const totalTasks = document.querySelectorAll('.task-checkbox').length;
-        if (totalTasks === 0) return;
-
-        const completedTasks = document.querySelectorAll('.task-checkbox:checked').length;
-        const percentage = Math.round((completedTasks / totalTasks) * 100);
-
-        // Actualizar contadores
-        const totalTasksElement = document.getElementById('total-tasks');
-        const completedTasksElement = document.getElementById('completed-tasks');
-        const pendingTasksElement = document.getElementById('pending-tasks');
-
-        if (totalTasksElement) this.animateNumber(totalTasksElement, totalTasks);
-        if (completedTasksElement) this.animateNumber(completedTasksElement, completedTasks);
-        if (pendingTasksElement) this.animateNumber(pendingTasksElement, totalTasks - completedTasks);
-
-        // Actualizar progress bar
-        const progressBar = document.querySelector('progress');
-        if (progressBar) {
-            progressBar.value = percentage;
-        }
-
-        // Mostrar notificación cuando se completen todas las tareas
-        if (percentage === 100 && totalTasks > 0) {
-            this.showToast('¡Todas las tareas completadas! 🎉', 'success');
-        }
-    }
-
-    /**
-     * Elimina tareas completadas
-     */
-    removeCompletedTasks() {
+    removeCompletedTasks = () => {
         const completedTasks = document.querySelectorAll('.task-checkbox:checked');
         const removed = completedTasks.length;
 
@@ -1426,9 +1808,24 @@ class DashboardApp {
     }
 
     /**
-     * Permite edición inline de tareas
+     * @method exportTasks
+     * @description Exporta las tareas actuales
+     * @returns {void}
      */
-    editTaskInline(row) {
+    exportTasks = () => {
+        this.showToast('Exportando tareas...', 'info');
+        setTimeout(() => {
+            this.showToast('Tareas exportadas correctamente', 'success');
+        }, 2000);
+    }
+
+    /**
+     * @method editTaskInline
+     * @description Permite edición inline de tareas en la tabla
+     * @param {HTMLElement} row - Fila de la tabla que contiene la tarea
+     * @returns {void}
+     */
+    editTaskInline = (row) => {
         const taskText = row.querySelector('.task-text');
         if (!taskText) return;
 
@@ -1437,10 +1834,13 @@ class DashboardApp {
         input.type = 'text';
         input.value = currentText;
         input.className = 'task-edit-input';
-        input.style.width = '100%';
-        input.style.padding = '8px';
-        input.style.border = '2px solid var(#5CA7DB)';
-        input.style.borderRadius = '4px';
+        input.style.cssText = `
+        width: 100%;
+        padding: 8px;
+        border: 2px solid var(--primary-color);
+        border-radius: 4px;
+        font-family: inherit;
+    `;
 
         taskText.replaceWith(input);
         input.focus();
@@ -1462,9 +1862,46 @@ class DashboardApp {
     }
 
     /**
-     * Animación numérica suave
+     * @method updateTaskStatics
+     * @description Actualiza las estadísticas de tareas (completadas, pendientes, porcentaje)
+     * @returns {void}
      */
-    animateNumber(element, targetNumber) {
+    updateTaskStatistics = () => {
+        const totalTasks = document.querySelectorAll('.task-checkbox').length;
+        if (totalTasks === 0) return;
+
+        const completedTasks = document.querySelectorAll('.task-checkbox:checked').length;
+        const percentage = Math.round((completedTasks / totalTasks) * 100);
+
+        // Actualizar contadores
+        const totalTasksElement = document.getElementById('total-tasks');
+        const completedTasksElement = document.getElementById('completed-tasks');
+        const pendingTasksElement = document.getElementById('pending-tasks');
+
+        if (totalTasksElement) this.animateNumber(totalTasksElement, totalTasks);
+        if (completedTasksElement) this.animateNumber(completedTasksElement, completedTasks);
+        if (pendingTasksElement) this.animateNumber(pendingTasksElement, totalTasks - completedTasks);
+
+        // Actualizar progress bar
+        const progressBar = document.querySelector('progress');
+        if (progressBar) {
+            progressBar.value = percentage;
+        }
+
+        // Mostrar notificación cuando se completen todas las tareas
+        if (percentage === 100 && totalTasks > 0) {
+            this.showToast('¡Todas las tareas completadas! 🎉', 'success');
+        }
+    }
+
+    /**
+     * @method animateNumber
+     * @description Animación numérica suave para contadores
+     * @param {HTMLElement} element - Elemento que contiene el número
+     * @param {number} targetNumber - Valor objetivo del contador
+     * @returns {void}
+     */
+    animateNumber = (element, targetNumber) => {
         if (!element) return;
 
         const start = parseInt(element.textContent) || 0;
@@ -1489,183 +1926,802 @@ class DashboardApp {
         requestAnimationFrame(updateNumber);
     }
 
-    /**
-     * Muestra mensaje de error
-     */
-    showError(message, targetId = 'errorMessage') {
-        const errorContainer = document.getElementById(targetId);
-        if (errorContainer) {
-            errorContainer.textContent = message;
-            errorContainer.style.display = 'block';
+// ==========================
+// SISTEMA DE CONFIGURACIÓN
+// ==========================
 
-            // Autoocultar después de 5 segundos
-            setTimeout(() => {
-                errorContainer.style.display = 'none';
-            }, 5000);
+    /**
+     * @method setupSettingsEvents
+     * @description Configura eventos de la sección de Configuración
+     * @returns {void}
+     */
+    setupSettingsEvents = () => {
+        document.querySelectorAll('.settings-form').forEach(form => {
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.hideError();
+                this.handleSettingsSubmit(form);
+            });
+        });
+
+        // Validación de contraseñas
+        const passwordField = document.getElementById('user-password');
+        const confirmPasswordField = document.getElementById('confirm-password');
+
+        if (passwordField && confirmPasswordField) {
+            confirmPasswordField.addEventListener('input', () => {
+                this.validatePasswords();
+            });
+        }
+
+        // Configuración de tema
+        const themeSelector = document.getElementById('theme-selector');
+        if (themeSelector) {
+            themeSelector.addEventListener('change', (e) => {
+                this.changeTheme(e.target.value);
+            });
+        }
+
+        // Configuración de idioma
+        const languageSelector = document.getElementById('language-selector');
+        if (languageSelector) {
+            languageSelector.addEventListener('change', (e) => {
+                this.changeLanguage(e.target.value);
+            });
+        }
+
+        // Configuración de notificaciones
+        const notificationToggle = document.getElementById('notifications-toggle');
+        if (notificationToggle) {
+            notificationToggle.addEventListener('change', (e) => {
+                this.toggleNotifications(e.target.checked);
+            });
+        }
+    }
+
+    /**
+     * @method handleSettingsSubmit
+     * @description Maneja el envío de formularios de configuración
+     * @param {HTMLFormElement} form - Formulario de configuración
+     * @returns {void}
+     */
+    handleSettingsSubmit = (form) => {
+        console.log('Settings form submitted:', form.id);
+
+        this.saveSettings()
+            .then(() => {
+                this.showSuccessMessage('settings-success');
+                this.showToast('Configuración guardada correctamente', 'success');
+            })
+            .catch((error) => {
+                console.error('Error en configuración:', error);
+                this.showError(error.message || 'Error al guardar la configuración');
+            });
+    }
+
+    /**
+     * @method validatePasswords
+     * @description Valida que las contraseñas coincidan en el formulario
+     * @returns {void}
+     */
+    validatePasswords = () => {
+        const passwordField = document.getElementById('user-password');
+        const confirmPasswordField = document.getElementById('confirm-password');
+
+        if (!passwordField || !confirmPasswordField) return;
+
+        if (passwordField.value !== confirmPasswordField.value) {
+            confirmPasswordField.style.borderColor = '#e74c3c';
+            this.showError('⚠️ Las contraseñas no coinciden', 'settings-error');
         } else {
-            // Fallback: usar toast
-            this.showToast(message, 'error');
+            confirmPasswordField.style.borderColor = '#2ecc71';
+            this.hideError('settings-error');
         }
     }
 
     /**
-     * Muestra mensaje de éxito
+     * @method changeTheme
+     * @description Cambia el tema de la aplicación
+     * @param {string} theme - Nombre del tema a aplicar
+     * @returns {void}
      */
-    showSuccessMessage(targetId) {
-        const successElement = document.getElementById(targetId);
-        if (successElement) {
-            successElement.style.display = 'block';
+    changeTheme = (theme) => {
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('dashboard-theme', theme);
+        this.showToast(`Tema ${theme} aplicado correctamente`, 'success');
+    }
 
-            // Autoocultar después de 3 segundos
-            setTimeout(() => {
-                successElement.style.display = 'none';
-            }, 3000);
+    /**
+     * @method changeLanguage
+     * @description Cambia el idioma de la aplicación
+     * @param {string} language - Código del idioma a aplicar
+     * @returns {void}
+     */
+    changeLanguage = (language) => {
+        // Aquí iría la lógica de internacionalización
+        this.showToast(`Idioma cambiado a ${language}`, 'success');
+        // En una implementación real, esto cargaría las traducciones correspondientes
+    }
+
+    /**
+     * @method toggleNotifications
+     * @description Alterna las notificaciones del sistema
+     * @param {boolean} enabled - Estado de las notificaciones
+     * @returns {void}
+     */
+    toggleNotifications = (enabled) => {
+        if (enabled && 'Notification' in window) {
+            if (Notification.permission === 'default') {
+                Notification.requestPermission().then(permission => {
+                    if (permission === 'granted') {
+                        this.showToast('Notificaciones activadas', 'success');
+                    }
+                });
+            }
+        }
+        this.showToast(`Notificaciones ${enabled ? 'activadas' : 'desactivadas'}`, 'info');
+    }
+
+// ==========================
+// SISTEMA DE AYUDA
+// ==========================
+
+    /**
+     * @method setupHelpEvents
+     * @description Configura eventos de la sección de Ayuda
+     * @returns {void}
+     */
+    setupHelpEvents = () => {
+        const contactSupportBtn = document.getElementById('contact-support');
+        const viewTutorialsBtn = document.getElementById('view-tutorials');
+        const reportBugBtn = document.getElementById('report-bug');
+        const suggestFeatureBtn = document.getElementById('suggest-feature');
+
+        if (contactSupportBtn) {
+            contactSupportBtn.addEventListener('click', () => {
+                this.contactSupport();
+            });
+        }
+
+        if (viewTutorialsBtn) {
+            viewTutorialsBtn.addEventListener('click', () => {
+                this.viewTutorials();
+            });
+        }
+
+        if (reportBugBtn) {
+            reportBugBtn.addEventListener('click', () => {
+                this.reportBug();
+            });
+        }
+
+        if (suggestFeatureBtn) {
+            suggestFeatureBtn.addEventListener('click', () => {
+                this.suggestFeature();
+            });
+        }
+
+        // Acordeones de preguntas frecuentes
+        document.querySelectorAll('#Help details').forEach(detail => {
+            detail.addEventListener('toggle', () => {
+                if (detail.open) {
+                    const summaryText = detail.querySelector('summary').textContent;
+                    console.log('❓ Sección de ayuda abierta:', summaryText);
+                    // Podrías trackear qué secciones de ayuda son más populares
+                }
+            });
+        });
+
+        // Búsqueda en ayuda
+        const helpSearch = document.getElementById('help-search');
+        if (helpSearch) {
+            helpSearch.addEventListener('input', (e) => {
+                this.searchHelpContent(e.target.value);
+            });
         }
     }
 
     /**
-     * Oculto mensaje de éxito
+     * @method contactSupport
+     * @description Inicia el proceso de contacto con soporte técnico
+     * @returns {void}
      */
-    hideSuccessMessage(targetId) {
-        const successElement = document.getElementById(targetId);
-        if (successElement) {
-            successElement.style.display = 'none';
+    contactSupport = () => {
+        this.showToast('Redirigiendo a soporte...', 'info');
+        setTimeout(() => {
+            window.location.href = 'mailto:soporte@kliv.com?subject=Soporte Dashboard Kliv';
+        }, 1000);
+    }
+
+    /**
+     * @method viewTutorials
+     * @description Inicia la visualización de tutoriales
+     * @returns {void}
+     */
+    viewTutorials = () => {
+        this.showToast('Cargando tutoriales...', 'info');
+        // Simular carga de tutoriales
+        setTimeout(() => {
+            const tutorialHTML = `
+            <div class="tutorial-modal">
+                <div class="tutorial-header">
+                    <h3>📚 Tutoriales Disponibles</h3>
+                    <button class="close-btn" onclick="this.closest('.tutorial-modal').remove()">×</button>
+                </div>
+                <div class="tutorial-list">
+                    <div class="tutorial-item">
+                        <h4>🎯 Primeros Pasos</h4>
+                        <p>Aprende a navegar por el dashboard</p>
+                        <button class="tutorial-btn" onclick="window.dashboardApp.startTutorial('first-steps')">Comenzar</button>
+                    </div>
+                    <div class="tutorial-item">
+                        <h4>📊 Gestión de Proyectos</h4>
+                        <p>Cómo crear y organizar tus proyectos</p>
+                        <button class="tutorial-btn" onclick="window.dashboardApp.startTutorial('projects')">Comenzar</button>
+                    </div>
+                    <div class="tutorial-item">
+                        <h4>🎨 Personalización</h4>
+                        <p>Personaliza tu espacio de trabajo</p>
+                        <button class="tutorial-btn" onclick="window.dashboardApp.startTutorial('customization')">Comenzar</button>
+                    </div>
+                </div>
+            </div>
+        `;
+            document.body.insertAdjacentHTML('beforeend', tutorialHTML);
+        }, 1500);
+    }
+
+    /**
+     * @method startTutorial
+     * @description Inicia un tutorial específico
+     * @param {string} tutorialId - ID del tutorial a iniciar
+     * @returns {void}
+     */
+    startTutorial = (tutorialId) => {
+        this.showToast(`Iniciando tutorial: ${tutorialId}`, 'info');
+        // Aquí iría la lógica para iniciar el tutorial específico
+    }
+
+    /**
+     * @method reportBug
+     * @description Abre el formulario para reportar un bug
+     * @returns {void}
+     */
+    reportBug = () => {
+        const bugReportHTML = `
+        <div class="bug-report-modal">
+            <div class="modal-header">
+                <h3>🐛 Reportar Problema</h3>
+                <button class="close-btn" onclick="this.closest('.bug-report-modal').remove()">×</button>
+            </div>
+            <form class="bug-report-form">
+                <div class="form-group">
+                    <label for="bug-title">Título del problema:</label>
+                    <input type="text" id="bug-title" required>
+                </div>
+                <div class="form-group">
+                    <label for="bug-description">Descripción detallada:</label>
+                    <textarea id="bug-description" rows="4" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="bug-steps">Pasos para reproducir:</label>
+                    <textarea id="bug-steps" rows="3" required></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Enviar Reporte</button>
+            </form>
+        </div>
+    `;
+        document.body.insertAdjacentHTML('beforeend', bugReportHTML);
+
+        // Configurar el envío del formulario
+        const form = document.querySelector('.bug-report-form');
+        if (form) {
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.submitBugReport();
+            });
         }
     }
 
     /**
-     * Oculto mensaje de error
+     * @method submitBugReport
+     * @description Envía el reporte de bug
+     * @returns {void}
      */
-    hideError(targetId = 'errorMessage') {
-        const errorElement = document.getElementById(targetId);
-        if (errorElement) {
-            errorElement.style.display = 'none';
+    submitBugReport = () => {
+        this.showToast('Enviando reporte de problema...', 'info');
+        setTimeout(() => {
+            this.showToast('Reporte enviado correctamente. Gracias por tu feedback.', 'success');
+            document.querySelector('.bug-report-modal')?.remove();
+        }, 2000);
+    }
+
+    /**
+     * @method suggestFeature
+     * @description Abre el formulario para sugerir una nueva característica
+     * @returns {void}
+     */
+    suggestFeature = () => {
+        const featureSuggestionHTML = `
+        <div class="feature-suggestion-modal">
+            <div class="modal-header">
+                <h3>💡 Sugerir Característica</h3>
+                <button class="close-btn" onclick="this.closest('.feature-suggestion-modal').remove()">×</button>
+            </div>
+            <form class="feature-suggestion-form">
+                <div class="form-group">
+                    <label for="feature-title">Nombre de la característica:</label>
+                    <input type="text" id="feature-title" required>
+                </div>
+                <div class="form-group">
+                    <label for="feature-description">Descripción:</label>
+                    <textarea id="feature-description" rows="4" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="feature-benefit">¿Cómo te ayudaría?</label>
+                    <textarea id="feature-benefit" rows="3" required></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Enviar Sugerencia</button>
+            </form>
+        </div>
+    `;
+        document.body.insertAdjacentHTML('beforeend', featureSuggestionHTML);
+
+        const form = document.querySelector('.feature-suggestion-form');
+        if (form) {
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.submitFeatureSuggestion();
+            });
         }
     }
 
     /**
-     * Guarda proyecto en localStorage
+     * @method submitFeatureSuggestion
+     * @description Envía la sugerencia de característica
+     * @returns {void}
      */
-    saveProject(projectData) {
-        return new Promise((resolve, reject) => {
-            // Validaciones iniciales
-            if (!projectData) {
-                reject(new Error('Datos del proyecto no proporcionados.'));
-                return;
+    submitFeatureSuggestion = () => {
+        this.showToast('Enviando sugerencia...', 'info');
+        setTimeout(() => {
+            this.showToast('Sugerencia enviada correctamente. ¡Gracias por tu idea!', 'success');
+            document.querySelector('.feature-suggestion-modal')?.remove();
+        }, 2000);
+    }
+
+    /**
+     * @method searchHelpContent
+     * @description Busca contenido en la sección de ayuda
+     * @param {string} query - Término de búsqueda
+     * @returns {void}
+     */
+    searchHelpContent = (query) => {
+        if (query.length < 2) {
+            // Mostrar todos los elementos si la búsqueda es muy corta
+            document.querySelectorAll('#Help details').forEach(detail => {
+                detail.style.display = 'block';
+            });
+            return;
+        }
+
+        const searchTerm = query.toLowerCase();
+        let foundResults = false;
+
+        document.querySelectorAll('#Help details').forEach(detail => {
+            const content = detail.textContent.toLowerCase();
+            if (content.includes(searchTerm)) {
+                detail.style.display = 'block';
+                foundResults = true;
+
+                // Resaltar el término buscado
+                this.highlightText(detail, searchTerm);
+            } else {
+                detail.style.display = 'none';
+            }
+        });
+
+        if (!foundResults) {
+            this.showToast('No se encontraron resultados en la ayuda', 'info');
+        }
+    }
+
+// ==========================
+// EVENTOS GLOBALES
+// ==========================
+
+    /**
+     * @method setupGlobalEvents
+     * @setupGlobalEvents
+     * @description Configura eventos globales de la aplicación
+     * @returns {void}
+     */
+    setupGlobalEvents = () => {
+        // Atajos de teclado globales
+        document.addEventListener('keydown', (e) => {
+            // Ctrl+S para guardar
+            if (e.ctrlKey && e.key === 's') {
+                e.preventDefault();
+                this.saveCurrentState();
             }
 
-            if (!projectData.content || !projectData.content.trim()) {
-                reject(new Error('El contenido del proyecto no puede estar vacío.'));
-                return;
+            // Ctrl+F para buscar
+            if (e.ctrlKey && e.key === 'f') {
+                e.preventDefault();
+                const searchBox = document.getElementById('searchBox');
+                if (searchBox) searchBox.focus();
             }
 
-            if (!projectData.targetCard) {
-                reject(new Error('Debe seleccionar una tarjeta destino.'));
-                return;
+            // ¿Ctrl+? Para ayuda
+            if (e.ctrlKey && e.key === '?') {
+                e.preventDefault();
+                this.activateSection('Help');
             }
 
-            // Solo try-catch para operaciones de localStorage
-            try {
-                const existingProjects = JSON.parse(localStorage.getItem('Project')) || [];
-                const newProject = {
-                    id: Date.now(),
-                    ...projectData,
-                    createdAt: new Date().toISOString(),
-                    status: 'active'
-                };
-
-                existingProjects.push(newProject);
-                localStorage.setItem('Project', JSON.stringify(existingProjects));
-
-                console.log('Proyecto guardado:', newProject);
-                resolve(newProject);
-
-            } catch (error) {
-                console.error('Error en operación localStorage:', error);
-                reject(new Error('No se pudo guardar el proyecto en el almacenamiento local.'));
+            // Escape para cerrar modales
+            if (e.key === 'Escape') {
+                this.closeAllModals();
             }
+        });
+
+        // Prevenir acciones no deseadas
+        document.addEventListener('contextmenu', (e) => {
+            if (e.target.closest('.protected-content')) {
+                e.preventDefault();
+                this.showToast('Esta acción no está permitida', 'warning');
+            }
+        });
+
+        // Manejar cambios de visibilidad de la página
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                this.autoSave();
+            }
+        });
+
+        // Manejar cierre de la página
+        window.addEventListener('beforeunload', (e) => {
+            if (this.hasUnsavedChanges) {
+                e.preventDefault();
+                console.log ('⚠️ Cambios sin guardar - mostrando diálogo de confirmación del navegador');
+                this.showToast('Tienes cambios sin guardar', 'warning');
+            }
+        });
+
+        // Responsive design - manejar cambios de tamaño
+        window.addEventListener('resize', () => {
+            this.handleResize();
+        });
+
+        // Clic fuera de menús para cerrarlos
+        document.addEventListener('click', (e) => {
+            this.handleOutsideClick(e);
         });
     }
 
     /**
-     * Método de debug para verificar secciones
+     * @method saveCurrentState
+     * @description Guarda el estado actual de la aplicación
+     * @returns {void}
      */
-    debugSections() {
-        console.log('📋 Secciones configuradas:', this.sections);
-        let allSectionsExist = true;
-
-        this.sections.forEach(section => {
-            const exists = !!document.getElementById(section);
-            console.log(`   ${section}: ${exists ? '✅ Existe' : '❌ No existe'}`);
-            if (!exists) allSectionsExist = false;
-        });
-
-        if (!allSectionsExist) {
-            console.warn('⚠️ Algunas secciones no se encontraron en el DOM');
-        }
-
-        return allSectionsExist;
+    saveCurrentState = () => {
+        this.showToast('Guardando...', 'info');
+        // Aquí iría la lógica para guardar el estado actual
+        setTimeout(() => {
+            this.showToast('Estado guardado correctamente', 'success');
+            this.hasUnsavedChanges = false;
+        }, 1000);
     }
 
     /**
-     * Guarda configuración de usuario - USANDO EL PATRÓN
+     * @method closeAllModals
+     * @description Cierra todos los modales abiertos
+     * @returns {void}
+     */
+    closeAllModals = () => {
+        document.querySelectorAll('.modal, .sticker-modal, .tutorial-modal, .bug-report-modal, .feature-suggestion-modal').forEach(modal => {
+            modal.remove();
+        });
+    }
+
+    /**
+     * @method autoSave
+     * @description Guardado automático cuando la página pierde visibilidad
+     * @returns {void}
+     */
+    autoSave = () => {
+        if (this.hasUnsavedChanges) {
+            console.log('Auto-guardando cambios...');
+            this.saveCurrentState();
+        }
+    }
+
+    /**
+     * @method handleResize
+     * @description Maneja el redimensionado de la ventana
+     * @returns {void}
+     */
+    handleResize = () => {
+        const width = window.innerWidth;
+
+        // Ajustar layout para móviles
+        if (width < 768) {
+            document.body.classList.add('mobile-view');
+            this.showToast('Modo móvil activado', 'info');
+        } else {
+            document.body.classList.remove('mobile-view');
+        }
+
+        // Re-renderizar componentes responsivos si es necesario
+        this.updateResponsiveComponents();
+    }
+
+    /**
+     * @method updateResponsiveComponents
+     * @description Actualiza componentes responsivos
+     * @returns {void}
+     */
+    updateResponsiveComponents = () => {
+        // Aquí iría la lógica para actualizar componentes que dependen del tamaño de pantalla
+        const canvas = document.getElementById('dashboardCanvas');
+        if (canvas) {
+            // Ajustar tamaño del canvas si es necesario
+        }
+    }
+
+    /**
+     * @method handleOutsideClick
+     * @description Maneja clics fuera de menús para cerrarlos
+     * @param {Event} e - Evento de clic
+     * @returns {void}
+     */
+    handleOutsideClick = (e) => {
+        // Cerrar menú de usuario si se hace clic fuera
+        const userMenu = document.getElementById('user-menu');
+        const userInfo = document.getElementById('user-info');
+
+        if (userMenu && userMenu.style.display === 'block' && !userInfo.contains(e.target)) {
+            userMenu.style.display = 'none';
+        }
+
+        // Cerrar otros menús desplegables de manera similar
+        // (implementar según sea necesario para otros menús)
+    }
+
+    /**
+     * @method closest
+     * @description Encuentra el elemento ancestro más cercano que coincida con el selector
+     * @param {Element} element - Elemento desde el cual comenzar la búsqueda
+     * @param {string} selector - Selector CSS para buscar
+     * @returns {Element|null} Elemento encontrado o null si no se encuentra
+     */
+    closest = (element, selector) => {
+        if (!element || !selector) return null;
+
+        // Usar el método nativo closest si está disponible
+        if (element.closest) {
+            return element.closest(selector);
+        }
+
+        // Polyfill para navegadores antiguos
+        let currentElement = element;
+        while (currentElement && currentElement !== document.documentElement) {
+            if (currentElement.matches(selector)) {
+                return currentElement;
+            }
+            currentElement = currentElement.parentElement;
+        }
+
+        return null;
+    }
+    /**
+     * @method saveSettings
+     * @description Guarda la configuración de usuario en localStorage de forma autónoma
+     * @returns {Promise<Object>} Promesa que resuelve con las configuraciones guardadas
      */
     saveSettings = () => {
         return new Promise((resolve, reject) => {
-            // ========== VALIDACIONES ==========
-            const userSettings = {
-                username: document.getElementById('user-name')?.value.trim() || '',
-                email: document.getElementById('user-email')?.value.trim() || '',
-                savedAt: new Date().toISOString()
-            };
-
-            if (!userSettings.username) {
-                reject(new Error('Por favor completa el nombre de usuario.'));
-                return;
-            }
-
-            if (!userSettings.email) {
-                reject(new Error('Por favor completa el correo electrónico.'));
-                return;
-            }
-
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(userSettings.email)) {
-                reject(new Error('Por favor ingresa un correo electrónico válido.'));
-                return;
-            }
-
-            // ========== OPERACIÓN PRINCIPAL ==========
             try {
-                // Guardar configuraciones
-                localStorage.setItem('userSettings', JSON.stringify(userSettings));
-
-                const appSettings = {
-                    theme: document.getElementById('theme')?.value || 'light',
-                    language: document.getElementById('lang')?.value || 'es',
-                    notifications: document.getElementById('notif')?.checked || false
+                // Recopilar datos del formulario de configuración
+                const userSettings = {
+                    username: document.getElementById('user-name')?.value?.trim() || 'Usuario',
+                    email: document.getElementById('user-email')?.value?.trim() || '',
+                    theme: document.getElementById('theme-selector')?.value || 'light',
+                    language: document.getElementById('language-selector')?.value || 'es',
+                    notifications: document.getElementById('notifications-toggle')?.checked || false,
+                    savedAt: new Date().toISOString()
                 };
 
-                localStorage.setItem('appSettings', JSON.stringify(appSettings));
+                // Validaciones básicas
+                if (userSettings.email && !this.isValidEmail(userSettings.email)) {
+                    reject(new Error('Por favor ingresa un correo electrónico válido.'));
+                    return;
+                }
 
-                console.log('Configuraciones guardadas:', { userSettings, appSettings });
-                resolve({ userSettings, appSettings });
+                // Guardar en localStorage
+                localStorage.setItem('dashboardUserSettings', JSON.stringify(userSettings));
+
+                // Aplicar cambios inmediatos
+                this.applySettingsChanges(userSettings);
+
+                console.log('✅ Configuración guardada:', userSettings);
+                resolve(userSettings);
 
             } catch (error) {
-                console.error('Error en operación localStorage:', error);
-                reject(new Error('No se pudieron guardar las configuraciones.'));
+                console.error('❌ Error al guardar configuración:', error);
+                reject(new Error('No se pudieron guardar las configuraciones. Intenta nuevamente.'));
             }
         });
-    };
+    }
+
+    /**
+     * @method isValidEmail
+     * @description Valida formato de email de forma autónoma
+     * @param {string} email - Email a validar
+     * @returns {boolean} True si el email es válido
+     */
+    isValidEmail = (email) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
+
+    /**
+     * @method applySettingsChanges
+     * @description Aplica los cambios de configuración inmediatamente
+     * @param {Object} settings - Configuraciones a aplicar
+     * @returns {void}
+     */
+    applySettingsChanges = (settings) => {
+        // Aplicar tema
+        if (settings.theme) {
+            document.documentElement.setAttribute('data-theme', settings.theme);
+        }
+
+        // Aplicar idioma (simulación)
+        if (settings.language) {
+            document.documentElement.lang = settings.language;
+        }
+
+        // Mostrar notificación de cambios aplicados
+        if (settings.username) {
+            const userNameElement = document.getElementById('user-name-display');
+            if (userNameElement) {
+                userNameElement.textContent = settings.username;
+            }
+        }
+    }
+
+    /**
+     * @method hideSuccessMessage
+     * @description Oculta un mensaje de éxito específico de forma autónoma
+     * @param {string} messageId - ID del elemento de mensaje de éxito
+     * @returns {void}
+     */
+    hideSuccessMessage = (messageId) => {
+        if (!messageId) {
+            console.warn('No se proporcionó un ID de mensaje de éxito');
+            return;
+        }
+
+        const successElement = document.getElementById(messageId);
+        if (successElement) {
+            // Animación de desvanecimiento
+            successElement.style.transition = 'opacity 0.3s ease';
+            successElement.style.opacity = '0';
+
+            setTimeout(() => {
+                successElement.style.display = 'none';
+                successElement.style.opacity = '1';
+            }, 300);
+        } else {
+            console.warn(`No se encontró el elemento de éxito con ID: ${messageId}`);
+        }
+    }
+
+    /**
+     * @method saveProject
+     * @description Guarda un proyecto en localStorage de forma autónoma
+     * @param {Object} projectData - Datos del proyecto a guardar
+     * @returns {Promise<Object>} Promesa que resuelve con el proyecto guardado
+     */
+    saveProject = (projectData) => {
+        return new Promise((resolve, reject) => {
+            if (!projectData) {
+                reject(new Error('No se proporcionaron datos del proyecto.'));
+                return;
+            }
+
+            try {
+                // Validaciones básicas
+                if (!projectData.content || !projectData.content.trim()) {
+                    reject(new Error('El contenido del proyecto no puede estar vacío.'));
+                    return;
+                }
+
+                if (!projectData.targetCard) {
+                    reject(new Error('Debe seleccionar una tarjeta destino.'));
+                    return;
+                }
+
+                // Generar ID único si no existe
+                const projectId = projectData.id || `project-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+
+                // Estructura completa del proyecto
+                const completeProject = {
+                    id: projectId,
+                    content: projectData.content.trim(),
+                    targetCard: projectData.targetCard,
+                    title: projectData.title || `Proyecto ${new Date().toLocaleDateString()}`,
+                    status: projectData.status || 'active',
+                    priority: projectData.priority || 'medium',
+                    createdAt: projectData.createdAt || new Date().toISOString(),
+                    updatedAt: new Date().toISOString(),
+                    createdBy: projectData.createdBy || 'current-user'
+                };
+
+                // Obtener proyectos existentes
+                const existingProjects = JSON.parse(localStorage.getItem('dashboardProjects') || '[]');
+
+                // Evitar duplicados basados en ID
+                const existingIndex = existingProjects.findIndex(p => p.id === projectId);
+
+                if (existingIndex >= 0) {
+                    // Actualizar proyecto existente
+                    existingProjects[existingIndex] = {
+                        ...existingProjects[existingIndex],
+                        ...completeProject,
+                        updatedAt: new Date().toISOString()
+                    };
+                } else {
+                    // Agregar nuevo proyecto
+                    existingProjects.push(completeProject);
+                }
+
+                // Guardar en localStorage
+                localStorage.setItem('dashboardProjects', JSON.stringify(existingProjects));
+
+                // Actualizar UI si es necesario
+                this.updateProjectsDisplay();
+
+                console.log('✅ Proyecto guardado:', completeProject);
+                resolve(completeProject);
+
+            } catch (error) {
+                console.error('❌ Error al guardar proyecto:', error);
+                reject(new Error('No se pudo guardar el proyecto en el almacenamiento local. Verifica la consola para más detalles.'));
+            }
+        });
+    }
+
+    /**
+     * @method updateProjectsDisplay
+     * @description Actualiza la visualización de proyectos en la UI
+     * @returns {void}
+     */
+    updateProjectsDisplay = () => {
+        // Esta función actualizaría la lista de proyectos en la UI
+        // Por ahora solo es un placeholder
+        console.log('🔄 Actualizando visualización de proyectos...');
+    }
+    exportData = () => {
+
+    }
 }
 
-// Inicialización mejorada
-function initializeDashboard() {
+// ==========================
+// INICIALIZACIÓN GLOBAL
+// ==========================
+
+/**
+ * @method initializeDashboard
+ * @description Inicializa la aplicación Dashboard con manejo de errores robusto
+ * @returns {void}
+ * @throws {Error} Si falla la inicialización del dashboard
+ */
+let initializeDashboard = () => {
     try {
         console.log('🎉 Iniciando Kliv Dashboard...');
         window.dashboardApp = new DashboardApp();
 
-        // Verificación adicional después de la inicialización
         setTimeout(() => {
             if (window.dashboardApp && window.dashboardApp.isInitialized) {
                 console.log('✅ Dashboard inicializado correctamente');
@@ -1677,7 +2733,6 @@ function initializeDashboard() {
     } catch (error) {
         console.error('💥 Error crítico al inicializar Dashboard:', error);
 
-        // Mostrar error al usuario
         const errorMessage = document.createElement('div');
         errorMessage.style.cssText = `
             position: fixed;
@@ -1706,7 +2761,7 @@ function initializeDashboard() {
         `;
         document.body.appendChild(errorMessage);
     }
-}
+};
 
 // Múltiples métodos de inicialización para mayor robustez
 if (document.readyState === 'loading') {

@@ -1,16 +1,18 @@
 /**
- * @file Gestor principal de tareas con funciones flechas
- * @description Sistema completo de gestión de tareas con vistas Kanban, Calendario y Lista
- * @version 1.0.0
+ * @file Gestor completo optimizado de tareas con funciones flecha
+ * @description Sistema eficiente de gestión de tareas con todas las funcionalidades
+ * @version 3.0.0
+ * @author Florencia Antonella Caminos Garcia
  */
 
 /**
- * @classdesc Clase principal que gestiona todas las operaciones del gestor de tareas
+ * @classdesc Clase completa optimizada que gestiona todas las operaciones
  * @class TaskManager
+ * @returns {Object} API pública completa con métodos optimizados
  */
 const TaskManager = () => {
-    // Estado interno de la aplicación
-    let state = {
+    // Estado interno optimizado
+    const state = {
         tasks: JSON.parse(localStorage.getItem('tasks')) || [],
         projects: JSON.parse(localStorage.getItem('projects')) || ['Personal'],
         currentProject: 'Personal',
@@ -20,10 +22,23 @@ const TaskManager = () => {
         theme: localStorage.getItem('theme') || 'light'
     };
 
+    // Cache para optimización
+    let taskCache = new Map();
+    let cacheDirty = true;
+    let currentTaskToDelete = null;
+
+    // Constantes para comparaciones rápidas
+    const STATUS = {
+        TODO: 'todo',
+        INPROGRESS: 'inprogress',
+        DONE: 'done'
+    };
+
     // Referencias a elementos DOM
     const elements = {
         taskForm: document.getElementById('task-form'),
         projectModal: document.getElementById('project-modal'),
+        deleteConfirmModal: document.getElementById('delete-confirm'),
         projectList: document.getElementById('project-list'),
         taskProjectSelect: document.getElementById('taskProject'),
         todoList: document.getElementById('todo-tasks'),
@@ -38,9 +53,90 @@ const TaskManager = () => {
         pendingTasksElem: document.getElementById('pending-tasks')
     };
 
+    // ==========================
+    // FUNCIONES DE CIERRE OPTIMIZADAS
+    // ==========================
+
+    /**
+     * @method closeTaskForm
+     * @description Cierra el formulario de tareas y restablece todos los campos
+     *              a sus valores por defecto. Limpia los comentarios y el ID de tarea.
+     * @returns {void}
+     */
+    const closeTaskForm = () => {
+        if (!elements.taskForm) return;
+
+        // Ocultar el formulario
+        elements.taskForm.style.display = 'none';
+
+        // Restablecer el formulario a valores por defecto
+        elements.taskForm.reset();
+
+        // Limpiar comentarios
+        const commentsList = document.getElementById('comments-list');
+        if (commentsList) {
+            commentsList.innerHTML = '';
+        }
+
+        // Limpiar ID de tarea
+        const taskIdInput = document.getElementById('taskId');
+        if (taskIdInput) {
+            taskIdInput.value = '';
+        }
+
+        // Restablecer visibilidad de comentarios si estaba oculta
+        const commentsSection = document.getElementById('task-comments');
+        const showCommentsBtn = document.getElementById('btn-show-comments');
+        if (commentsSection && showCommentsBtn) {
+            commentsSection.style.display = 'block';
+            showCommentsBtn.textContent = 'Ocultar Comentarios';
+        }
+
+        console.log('📝 Formulario de tarea cerrado');
+    };
+
+    /**
+     * @method closeDeleteModal
+     * @description Cierra el modal de confirmación de eliminación y restablece
+     *              el estado de la tarea pendiente de eliminación.
+     * @returns {void}
+     */
+    const closeDeleteModal = () => {
+        // Restablecer la tarea pendiente de eliminación
+        currentTaskToDelete = null;
+
+        // Ocultar el modal
+        if (elements.deleteConfirmModal) {
+            elements.deleteConfirmModal.style.display = 'none';
+        }
+
+        console.log('🗑️ Modal de eliminación cerrado');
+    };
+
+    /**
+     * @method closeProjectModal
+     * @description Cierra el modal de creación de proyectos y limpia el campo
+     *              de nombre del proyecto.
+     * @returns {void}
+     */
+    const closeProjectModal = () => {
+        if (!elements.projectModal) return;
+
+        // Ocultar el modal
+        elements.projectModal.style.display = 'none';
+
+        // Limpiar el campo de nombre del proyecto
+        const projectNameInput = document.getElementById('new-project-name');
+        if (projectNameInput) {
+            projectNameInput.value = '';
+        }
+
+        console.log('📁 Modal de proyecto cerrado');
+    };
+
     /**
      * @method initialize
-     * @description Inicializa la aplicación y configura todos los event listeners
+     * @description Inicializa la aplicación completamente
      * @returns {void}
      */
     const initialize = () => {
@@ -55,14 +151,13 @@ const TaskManager = () => {
 
     /**
      * @method bindEvents
-     * @description Configura todos los event listeners del DOM
+     * @description Configura todos los event listeners de manera eficiente
      * @returns {void}
      */
     const bindEvents = () => {
-        // Eventos de teclado
         document.addEventListener('keydown', handleKeyboardShortcuts);
 
-        // Eventos de drag and drop
+        // Drag and drop optimizado
         ['todo', 'inprogress', 'done'].forEach(status => {
             const list = document.getElementById(
                 status === 'inprogress' ? 'inprogress_tasks' : `${status}-tasks`
@@ -78,67 +173,116 @@ const TaskManager = () => {
 
     /**
      * @method handleKeyboardShortcuts
-     * @description Maneja los atajos de teclado de la aplicación
+     * @description Maneja atajos de teclado de forma optimizada
      * @param {KeyboardEvent} e - Evento del teclado
      * @returns {void}
      */
     const handleKeyboardShortcuts = (e) => {
         if (e.ctrlKey || e.metaKey) {
-            switch(e.key) {
-                case 'n':
-                    e.preventDefault();
-                    openTaskForm();
-                    break;
-                case 'f':
-                    e.preventDefault();
-                    document.getElementById('search-tasks-sidebar')?.focus();
-                    break;
-                case 's':
-                    e.preventDefault();
-                    if (elements.taskForm.style.display === 'block') {
-                        handleTaskFormSubmit();
-                    }
-                    break;
-            }
+            const actions = {
+                'n': () => { e.preventDefault(); openTaskForm(); },
+                'f': () => { e.preventDefault(); document.getElementById('search-tasks-sidebar')?.focus(); },
+                's': () => { e.preventDefault(); elements.taskForm.style.display === 'block' && handleTaskFormSubmit(); }
+            };
+            actions[e.key]?.();
         }
 
         if (e.key === 'Escape') {
             closeTaskForm();
             closeProjectModal();
+            closeDeleteModal();
+            closeHelp();
         }
     };
 
     // ==========================
-    // GESTIÓN DE TAREAS
+    // GESTIÓN COMPLETA DE TAREAS
     // ==========================
+
+    /**
+     * @method deleteTask
+     * @description Elimina una tarea de manera eficiente con confirmación
+     * @param {string} taskId - ID de la tarea a eliminar
+     * @returns {void}
+     */
+    const deleteTask = (taskId) => {
+        currentTaskToDelete = taskId;
+
+        // Mostrar modal de confirmación
+        if (elements.deleteConfirmModal) {
+            elements.deleteConfirmModal.style.display = 'block';
+        } else {
+            // Fallback: confirmación básica si no hay modal
+            if (confirm('¿Estás seguro de que quieres eliminar esta tarea?')) {
+                confirmTaskDeletion();
+            }
+        }
+    };
+
+    /**
+     * @method confirmTaskDeletion
+     * @description Confirma y ejecuta la eliminación de la tarea
+     * @returns {void}
+     */
+    const confirmTaskDeletion = () => {
+        if (!currentTaskToDelete) return;
+
+        const initialLength = state.tasks.length;
+        state.tasks = state.tasks.filter(t => t.id !== currentTaskToDelete);
+
+        const deleted = state.tasks.length < initialLength;
+        if (deleted) {
+            cacheDirty = true;
+            saveTasks();
+            renderTasks();
+            renderCalendar();
+            updateStats();
+        }
+
+        // Limpiar y cerrar modal
+        currentTaskToDelete = null;
+        closeDeleteModal();
+    };
+
+    /**
+     * @method deleteCompletedTasks
+     * @description Elimina todas las tareas completadas del proyecto actual
+     * @returns {void}
+     */
+    const deleteCompletedTasks = () => {
+        if (!confirm('¿Estás seguro de que quieres eliminar todas las tareas completadas?')) {
+            return;
+        }
+
+        const initialLength = state.tasks.length;
+        state.tasks = state.tasks.filter(t =>
+            !(t.project === state.currentProject && t.status === STATUS.DONE)
+        );
+
+        if (state.tasks.length < initialLength) {
+            cacheDirty = true;
+            saveTasks();
+            renderTasks();
+            renderCalendar();
+            updateStats();
+        }
+    };
 
     /**
      * @method openTaskForm
      * @description Abre el formulario para crear/editar tareas
-     * @param {Object} task - Tarea existente para editar (opcional)
+     * @param {Object} task - Tarea existente para editar
      * @returns {void}
      */
     const openTaskForm = (task = null) => {
         elements.taskForm.style.display = 'block';
         populateProjectSelect();
-        if (task) fillTaskForm(task);
-    };
-
-    /**
-     * @method closeTaskForm
-     * @description Cierra el formulario de tareas y limpia los campos
-     * @returns {void}
-     */
-    const closeTaskForm = () => {
-        elements.taskForm.style.display = 'none';
-        elements.taskForm.reset();
-        document.getElementById('comments-list').innerHTML = '';
-        document.getElementById('taskId').value = '';
+        task && fillTaskForm(task);
     };
 
     /**
      * @method handleTaskFormSubmit
-     * @description Maneja el envío del formulario de tareas
+     * @description Maneja el envío del formulario de manera optimizada
      * @returns {void}
      */
     const handleTaskFormSubmit = () => {
@@ -146,7 +290,7 @@ const TaskManager = () => {
         const title = document.getElementById('taskTitle').value.trim();
         const project = document.getElementById('taskProject').value;
         const description = document.getElementById('taskDescription').value.trim();
-        const status = document.querySelector('input[name="priority"]:checked')?.value.toLowerCase() || 'todo';
+        const status = document.querySelector('input[name="priority"]:checked')?.value.toLowerCase() || STATUS.TODO;
         const dueDate = document.getElementById('dueDate').value;
         const tags = Array.from(document.querySelectorAll('input[name="tags"]:checked')).map(el => el.value);
         const subtasks = document.getElementById('subtasks').value.split(',').map(s => s.trim()).filter(Boolean);
@@ -166,7 +310,7 @@ const TaskManager = () => {
             dueDate,
             tags,
             subtasks,
-            comments: [],
+            comments: existingIndex > -1 ? state.tasks[existingIndex].comments : [],
             createdAt: existingIndex > -1 ? state.tasks[existingIndex].createdAt : new Date().toISOString(),
             updatedAt: new Date().toISOString()
         };
@@ -177,6 +321,7 @@ const TaskManager = () => {
             state.tasks.push(taskData);
         }
 
+        cacheDirty = true;
         saveTasks();
         renderTasks();
         renderCalendar();
@@ -185,7 +330,7 @@ const TaskManager = () => {
 
     /**
      * @method fillTaskForm
-     * @description Rellena el formulario con los datos de una tarea existente
+     * @description Rellena el formulario con datos de tarea existente
      * @param {Object} task - Tarea a editar
      * @returns {void}
      */
@@ -207,15 +352,41 @@ const TaskManager = () => {
             `input[name="priority"][value="${task.status.charAt(0).toUpperCase() + task.status.slice(1)}"]`
         );
         if (priorityRadio) priorityRadio.checked = true;
+
+        // Renderizar comentarios
+        renderTaskComments(task);
+    };
+
+    /**
+     * @method renderTaskComments
+     * @description Renderiza comentarios de tarea de manera eficiente
+     * @param {Object} task - Tarea con comentarios
+     * @returns {void}
+     */
+    const renderTaskComments = (task) => {
+        const commentsList = document.getElementById('comments-list');
+        if (!commentsList) return;
+
+        commentsList.innerHTML = '';
+        task.comments.forEach(comment => {
+            const commentDiv = document.createElement('div');
+            commentDiv.className = 'comment-item';
+            commentDiv.innerHTML = `
+                <strong>${escapeHtml(comment.author)}</strong>
+                <span class="comment-time">${formatDate(comment.timestamp)}</span>
+                <p>${escapeHtml(comment.text)}</p>
+            `;
+            commentsList.appendChild(commentDiv);
+        });
     };
 
     /**
      * @method quickAddTask
-     * @description Crea una tarea rápida sin formulario completo
-     * @param {string} status - Estado inicial de la tarea
+     * @description Crea tarea rápida de manera optimizada
+     * @param {string} status - Estado de la tarea
      * @returns {void}
      */
-    const quickAddTask = (status = 'todo') => {
+    const quickAddTask = (status = STATUS.TODO) => {
         const title = prompt('Título de la tarea rápida:');
         if (title) {
             const taskData = {
@@ -233,18 +404,19 @@ const TaskManager = () => {
             };
 
             state.tasks.push(taskData);
+            cacheDirty = true;
             saveTasks();
             renderTasks();
         }
     };
 
     // ==========================
-    // GESTIÓN DE PROYECTOS
+    // GESTIÓN COMPLETA DE PROYECTOS
     // ==========================
 
     /**
      * @method openProjectModal
-     * @description Abre el modal para crear nuevos proyectos
+     * @description Abre modal de proyectos
      * @returns {void}
      */
     const openProjectModal = () => {
@@ -253,18 +425,8 @@ const TaskManager = () => {
     };
 
     /**
-     * @method closeProjectModal
-     * @description Cierra el modal de proyectos
-     * @returns {void}
-     */
-    const closeProjectModal = () => {
-        elements.projectModal.style.display = 'none';
-        document.getElementById('new-project-name').value = '';
-    };
-
-    /**
      * @method createProjectFromModal
-     * @description Crea un nuevo proyecto desde el modal
+     * @description Crea proyecto desde modal
      * @returns {void}
      */
     const createProjectFromModal = () => {
@@ -277,6 +439,7 @@ const TaskManager = () => {
         if (!state.projects.includes(projectName)) {
             state.projects.push(projectName);
             state.currentProject = projectName;
+            cacheDirty = true;
             saveProjects();
             renderProjects();
             renderTasks();
@@ -287,7 +450,7 @@ const TaskManager = () => {
 
     /**
      * @method deleteCurrentProject
-     * @description Elimina el proyecto actual y sus tareas
+     * @description Elimina proyecto actual y sus tareas
      * @returns {void}
      */
     const deleteCurrentProject = () => {
@@ -304,6 +467,7 @@ const TaskManager = () => {
         state.projects = state.projects.filter(p => p !== state.currentProject);
         state.currentProject = state.projects[0];
 
+        cacheDirty = true;
         saveProjects();
         saveTasks();
         renderProjects();
@@ -312,24 +476,25 @@ const TaskManager = () => {
 
     /**
      * @method populateProjectSelect
-     * @description Llena el select de proyectos en el formulario
+     * @description Llena select de proyectos de manera eficiente
      * @returns {void}
      */
     const populateProjectSelect = () => {
-        if (!elements.taskProjectSelect) return;
+        const selectElement = elements.taskProjectSelect;
+        if (!selectElement || selectElement.tagName !== "SELECT") return;
 
-        elements.taskProjectSelect.innerHTML = '';
+        selectElement.innerHTML = "";
         state.projects.forEach(project => {
-            const option = document.createElement('option');
+            const option = document.createElement("option");
             option.value = project;
             option.textContent = project;
-            elements.taskProjectSelect.appendChild(option);
+            selectElement.appendChild(option);
         });
     };
 
     /**
      * @method renderProjects
-     * @description Renderiza la lista de proyectos en la sidebar
+     * @description Renderiza lista de proyectos optimizada
      * @returns {void}
      */
     const renderProjects = () => {
@@ -343,6 +508,7 @@ const TaskManager = () => {
 
             li.addEventListener('click', () => {
                 state.currentProject = project;
+                cacheDirty = true;
                 renderProjects();
                 renderTasks();
                 updateStats();
@@ -353,35 +519,23 @@ const TaskManager = () => {
     };
 
     // ==========================
-    // RENDERIZADO DE TAREAS
+    // RENDERIZADO COMPLETO OPTIMIZADO
     // ==========================
 
     /**
      * @method renderTasks
-     * @description Renderiza todas las tareas en las vistas correspondientes
+     * @description Renderiza todas las tareas de manera eficiente
      * @returns {void}
      */
     const renderTasks = () => {
         clearTaskLists();
+        cacheDirty = false;
+
         const filteredTasks = state.tasks.filter(t => t.project === state.currentProject);
 
         filteredTasks.forEach(task => {
             const taskElement = createTaskElement(task);
-
-            // Vista Kanban
-            switch(task.status) {
-                case 'todo':
-                    elements.todoList.appendChild(taskElement);
-                    break;
-                case 'inprogress':
-                    elements.inprogressList.appendChild(taskElement);
-                    break;
-                case 'done':
-                    elements.doneList.appendChild(taskElement);
-                    break;
-            }
-
-            // Vista Lista
+            getTaskList(task.status)?.appendChild(taskElement);
             renderTaskInListView(task);
         });
 
@@ -391,9 +545,9 @@ const TaskManager = () => {
 
     /**
      * @method createTaskElement
-     * @description Crea un elemento DOM para una tarea
+     * @description Crea elemento DOM optimizado para tarea
      * @param {Object} task - Tarea a renderizar
-     * @returns {HTMLElement} Elemento DOM de la tarea
+     * @returns {HTMLElement} - Elemento DOM creado
      */
     const createTaskElement = (task) => {
         const li = document.createElement('li');
@@ -429,7 +583,7 @@ const TaskManager = () => {
 
     /**
      * @method renderTaskInListView
-     * @description Renderiza una tarea en la vista de lista
+     * @description Renderiza tarea en vista de lista
      * @param {Object} task - Tarea a renderizar
      * @returns {void}
      */
@@ -455,13 +609,13 @@ const TaskManager = () => {
     };
 
     // ==========================
-    // VISTAS Y NAVEGACIÓN
+    // VISTAS Y NAVEGACIÓN COMPLETAS
     // ==========================
 
     /**
      * @method switchToView
-     * @description Cambia entre las diferentes vistas de la aplicación
-     * @param {string} view - Vista a mostrar ('kanban', 'calendar', 'list')
+     * @description Cambia entre vistas de manera optimizada
+     * @param {string} view - Vista a mostrar
      * @returns {void}
      */
     const switchToView = (view) => {
@@ -488,7 +642,7 @@ const TaskManager = () => {
 
     /**
      * @method renderCalendar
-     * @description Renderiza la vista de calendario con las tareas
+     * @description Renderiza calendario de manera eficiente
      * @returns {void}
      */
     const renderCalendar = () => {
@@ -561,8 +715,8 @@ const TaskManager = () => {
 
     /**
      * @method changeMonth
-     * @description Navega entre meses en el calendario
-     * @param {number} delta - Dirección del cambio (-1: anterior, 1: siguiente)
+     * @description Cambia mes en calendario
+     * @param {number} delta - Dirección del cambio
      * @returns {void}
      */
     const changeMonth = (delta) => {
@@ -580,82 +734,99 @@ const TaskManager = () => {
     };
 
     // ==========================
-    // BÚSQUEDA Y FILTRADO
+    // BÚSQUEDA Y FILTRADO COMPLETOS
     // ==========================
 
     /**
      * @method searchTasks
-     * @description Busca tareas por texto en título y descripción
+     * @description Búsqueda eficiente con cache
      * @param {string} query - Texto de búsqueda
      * @returns {void}
      */
     const searchTasks = (query) => {
         const searchTerm = query.toLowerCase().trim();
-        const taskItems = document.querySelectorAll('.task-item, .list-task-item');
+        if (!searchTerm) {
+            renderTasks();
+            return;
+        }
 
-        taskItems.forEach(item => {
-            const text = item.textContent.toLowerCase();
-            item.style.display = text.includes(searchTerm) ? 'block' : 'none';
-        });
+        const cacheKey = `search_${searchTerm}_${state.currentProject}`;
+        if (!cacheDirty && taskCache.has(cacheKey)) {
+            renderFilteredTasks(taskCache.get(cacheKey));
+            return;
+        }
+
+        const results = state.tasks.filter(task =>
+            task.project === state.currentProject &&
+            (task.title.toLowerCase().includes(searchTerm) ||
+                task.description.toLowerCase().includes(searchTerm))
+        );
+
+        taskCache.set(cacheKey, results);
+        renderFilteredTasks(results);
     };
 
     /**
      * @method filterTasksByCriteria
-     * @description Filtra tareas por criterios específicos
+     * @description Filtrado eficiente por criterios
      * @param {string} criteria - Criterio de filtrado
      * @returns {void}
      */
     const filterTasksByCriteria = (criteria) => {
-        const taskItems = document.querySelectorAll('.task-item, .list-task-item');
+        if (!criteria) {
+            renderTasks();
+            return;
+        }
 
-        taskItems.forEach(item => {
-            const taskId = item.dataset.id;
-            const task = state.tasks.find(t => t.id === taskId);
+        const cacheKey = `filter_${criteria}_${state.currentProject}`;
+        if (!cacheDirty && taskCache.has(cacheKey)) {
+            renderFilteredTasks(taskCache.get(cacheKey));
+            return;
+        }
 
-            if (!task) return;
+        const results = state.tasks.filter(task =>
+            task.project === state.currentProject && task.tags.includes(criteria)
+        );
 
-            const shouldShow = !criteria || task.tags.includes(criteria);
-            item.style.display = shouldShow ? 'block' : 'none';
-        });
+        taskCache.set(cacheKey, results);
+        renderFilteredTasks(results);
     };
 
     /**
      * @method sortTasks
-     * @description Ordena las tareas según el criterio seleccionado
+     * @description Ordena tareas de manera optimizada
      * @returns {void}
      */
     const sortTasks = () => {
         const sortBy = document.getElementById('sort-tasks-sidebar')?.value || 'fecha';
 
         state.tasks.sort((a, b) => {
-            switch(sortBy) {
-                case 'nombre':
-                    return a.title.localeCompare(b.title);
-                case 'fecha':
-                    return new Date(a.dueDate || 0) - new Date(b.dueDate || 0);
-                case 'reciente':
-                    return new Date(b.createdAt) - new Date(a.createdAt);
-                case 'prioridad':
+            const sorters = {
+                'nombre': () => a.title.localeCompare(b.title),
+                'fecha': () => new Date(a.dueDate || 0) - new Date(b.dueDate || 0),
+                'reciente': () => new Date(b.createdAt) - new Date(a.createdAt),
+                'prioridad': () => {
                     const priorityOrder = { 'Alta': 3, 'Media': 2, 'Baja': 1 };
                     return (priorityOrder[b.tags[0]] || 0) - (priorityOrder[a.tags[0]] || 0);
-                default:
-                    return 0;
-            }
+                }
+            };
+            return sorters[sortBy]?.() || 0;
         });
 
+        cacheDirty = true;
         saveTasks();
         renderTasks();
     };
 
     // ==========================
-    // DRAG AND DROP
+    // DRAG AND DROP OPTIMIZADO
     // ==========================
 
     /**
      * @method handleDrop
-     * @description Maneja el evento de soltar tareas en las columnas
-     * @param {DragEvent} e - Evento de drag and drop
-     * @param {string} newStatus - Nuevo estado de la tarea
+     * @description Maneja drop de tareas entre columnas
+     * @param {DragEvent} e - Evento de drop
+     * @param {string} newStatus - Nuevo estado
      * @returns {void}
      */
     const handleDrop = (e, newStatus) => {
@@ -666,43 +837,66 @@ const TaskManager = () => {
         if (task) {
             task.status = newStatus;
             task.updatedAt = new Date().toISOString();
+            cacheDirty = true;
             saveTasks();
             renderTasks();
         }
     };
 
     // ==========================
-    // ESTADÍSTICAS Y MÉTRICAS
+    // ESTADÍSTICAS Y MÉTRICAS COMPLETAS
     // ==========================
 
     /**
      * @method updateStats
-     * @description Actualiza las estadísticas mostradas en la sidebar
+     * @description Actualiza estadísticas de manera eficiente
      * @returns {void}
      */
     const updateStats = () => {
-        const projectTasks = state.tasks.filter(t => t.project === state.currentProject);
-        const total = projectTasks.length;
-        const completed = projectTasks.filter(t => t.status === 'done').length;
-        const inProgress = projectTasks.filter(t => t.status === 'inprogress').length;
-        const pending = projectTasks.filter(t => t.status === 'todo').length;
+        const stats = getStats();
 
-        if (elements.totalTasksElem) elements.totalTasksElem.textContent = total;
-        if (elements.completedTasksElem) elements.completedTasksElem.textContent = completed;
-        if (elements.inprogressTasksElem) elements.inprogressTasksElem.textContent = inProgress;
-        if (elements.pendingTasksElem) elements.pendingTasksElem.textContent = pending;
+        const updates = [
+            { elem: elements.totalTasksElem, value: stats.total },
+            { elem: elements.completedTasksElem, value: stats.completed },
+            { elem: elements.inprogressTasksElem, value: stats.inprogress },
+            { elem: elements.pendingTasksElem, value: stats.pending }
+        ];
+
+        updates.forEach(({ elem, value }) => {
+            if (elem) elem.textContent = value;
+        });
+    };
+
+    /**
+     * @method getStats
+     * @description Calcula estadísticas en una sola pasada
+     * @returns {Object} - Estadísticas calculadas
+     */
+    const getStats = () => {
+        const stats = { total: 0, completed: 0, inprogress: 0, pending: 0 };
+
+        state.tasks.forEach(task => {
+            if (task.project === state.currentProject) {
+                stats.total++;
+                if (task.status === STATUS.DONE) stats.completed++;
+                else if (task.status === STATUS.INPROGRESS) stats.inprogress++;
+                else if (task.status === STATUS.TODO) stats.pending++;
+            }
+        });
+
+        return stats;
     };
 
     /**
      * @method updateTaskCounts
-     * @description Actualiza los contadores de tareas en las columnas Kanban
+     * @description Actualiza contadores de tareas
      * @returns {void}
      */
     const updateTaskCounts = () => {
         const counts = {
-            todo: state.tasks.filter(t => t.status === 'todo' && t.project === state.currentProject).length,
-            inprogress: state.tasks.filter(t => t.status === 'inprogress' && t.project === state.currentProject).length,
-            done: state.tasks.filter(t => t.status === 'done' && t.project === state.currentProject).length
+            todo: state.tasks.filter(t => t.status === STATUS.TODO && t.project === state.currentProject).length,
+            inprogress: state.tasks.filter(t => t.status === STATUS.INPROGRESS && t.project === state.currentProject).length,
+            done: state.tasks.filter(t => t.status === STATUS.DONE && t.project === state.currentProject).length
         };
 
         Object.keys(counts).forEach(status => {
@@ -712,25 +906,313 @@ const TaskManager = () => {
     };
 
     // ==========================
-    // PERSISTENCIA
+    // FUNCIONALIDADES ADICIONALES COMPLETAS
+    // ==========================
+
+    /**
+     * @method addCommentToTask
+     * @description Agrega comentario a tarea actual
+     * @returns {void}
+     */
+    const addCommentToTask = () => {
+        const taskId = document.getElementById('taskId').value;
+        const commentText = document.getElementById('new-comment').value.trim();
+
+        if (!taskId || !commentText) {
+            alert('No hay tarea activa o comentario vacío');
+            return;
+        }
+
+        const task = state.tasks.find(t => t.id === taskId);
+        if (task) {
+            const comment = {
+                id: Date.now().toString(),
+                text: commentText,
+                timestamp: new Date().toISOString(),
+                author: 'Usuario'
+            };
+
+            task.comments.push(comment);
+            task.updatedAt = new Date().toISOString();
+
+            cacheDirty = true;
+            saveTasks();
+            renderTaskComments(task);
+            document.getElementById('new-comment').value = '';
+        }
+    };
+
+    /**
+     * @method addCustomTag
+     * @description Agrega etiqueta personalizada
+     * @returns {void}
+     */
+    const addCustomTag = () => {
+        const newTag = prompt('Ingresa el nombre de la nueva etiqueta:');
+        if (newTag && newTag.trim()) {
+            const tagsContainer = document.querySelector('.tags-container');
+            if (tagsContainer) {
+                const tagId = `tag-${newTag.toLowerCase().replace(/\s+/g, '-')}`;
+
+                if (!document.getElementById(tagId)) {
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.id = tagId;
+                    checkbox.name = 'tags';
+                    checkbox.value = newTag;
+
+                    const label = document.createElement('label');
+                    label.htmlFor = tagId;
+                    label.textContent = newTag;
+
+                    tagsContainer.appendChild(checkbox);
+                    tagsContainer.appendChild(label);
+                } else {
+                    alert('Esta etiqueta ya existe');
+                }
+            }
+        }
+    };
+
+    /**
+     * @method applyTaskTemplate
+     * @description Aplica plantilla predefinida
+     * @param {string} templateName - Nombre de la plantilla
+     * @returns {void}
+     */
+    const applyTaskTemplate = (templateName) => {
+        const templates = {
+            reunion: {
+                title: 'Reunión semanal',
+                description: 'Reunión de seguimiento y planificación semanal',
+                tags: ['Importante'],
+                priority: 'Media'
+            },
+            revision: {
+                title: 'Revisión de código',
+                description: 'Revisar pull requests y código del equipo',
+                tags: ['Urgente', 'Importante'],
+                priority: 'Alta'
+            },
+            estudio: {
+                title: 'Sesión de estudio',
+                description: 'Tiempo dedicado al aprendizaje y desarrollo profesional',
+                tags: ['Opcional'],
+                priority: 'Baja'
+            }
+        };
+
+        const template = templates[templateName];
+        if (template) {
+            document.getElementById('taskTitle').value = template.title;
+            document.getElementById('taskDescription').value = template.description;
+
+            const priorityRadio = document.querySelector(
+                `input[name="priority"][value="${template.priority}"]`
+            );
+            if (priorityRadio) priorityRadio.checked = true;
+
+            document.querySelectorAll('input[name="tags"]').forEach(cb => {
+                cb.checked = template.tags.includes(cb.value);
+            });
+        }
+    };
+
+    /**
+     * @method showDailySummary
+     * @description Muestra resumen diario
+     * @returns {void}
+     */
+    const showDailySummary = () => {
+        const today = new Date().toISOString().split("T")[0];
+        const todayTasks = state.tasks.filter(task => {
+            const taskDate = task.dueDate ? task.dueDate.split("T")[0] : null;
+            return taskDate === today;
+        });
+
+        const completedToday = todayTasks.filter(task => task.status === STATUS.DONE).length;
+        const pendingToday = todayTasks.filter(task => task.status === STATUS.TODO).length;
+
+        alert(`📊 Resumen Diario - ${formatDate(today)}\n\n` +
+            `✅ Completadas hoy: ${completedToday}\n` +
+            `⏳ Pendientes hoy: ${pendingToday}\n` +
+            `📋 Total tareas del día: ${todayTasks.length}`);
+    };
+
+    /**
+     * @method setDailyGoal
+     * @description Establece meta diaria
+     * @returns {void}
+     */
+    const setDailyGoal = () => {
+        const GoalManager = {
+            get: () => {
+                const stored = localStorage.getItem('dailyGoal');
+                return stored && !isNaN(stored) ? parseInt(stored) : 5;
+            },
+            set: (goal) => {
+                localStorage.setItem('dailyGoal', goal.toString());
+                return goal;
+            },
+            validate: (input) => {
+                if (input === null) return { valid: false, reason: 'cancelled' };
+                const number = parseInt(input);
+                if (isNaN(number)) return { valid: false, reason: 'not-a-number' };
+                if (number <= 0) return { valid: false, reason: 'too-low' };
+                if (number > 100) return { valid: false, reason: 'too-high' };
+                return { valid: true, value: number };
+            }
+        };
+
+        const currentGoal = GoalManager.get();
+        const userInput = prompt('Establecer meta diaria de tareas completadas:', currentGoal);
+        const validation = GoalManager.validate(userInput);
+
+        switch (validation.reason) {
+            case 'cancelled': break;
+            case 'not-a-number': alert('Por favor, introduce un número válido.'); break;
+            case 'too-low': alert('La meta debe ser mayor que cero.'); break;
+            case 'too-high': alert('La meta no puede ser mayor a 100 tareas.'); break;
+            default: GoalManager.set(validation.value);
+        }
+    };
+
+    /**
+     * @method showHelp
+     * @description Muestra ayuda de atajos
+     * @returns {void}
+     */
+    const showHelp = () => {
+        document.getElementById('shortcut-help').style.display = 'block';
+    };
+
+    /**
+     * @method closeHelp
+     * @description Cierra ayuda
+     * @returns {void}
+     */
+    const closeHelp = () => {
+        document.getElementById('shortcut-help').style.display = 'none';
+    };
+
+    /**
+     * @method showTutorial
+     * @description Muestra tutorial
+     * @returns {void}
+     */
+    const showTutorial = () => {
+        const tutorialContent = `
+🎯 TUTORIAL - TASK MANAGER PRO
+
+📋 VISTAS DISPONIBLES:
+• Kanban: Organiza tareas en columnas (To Do, In Progress, Done)
+• Calendario: Ve tus tareas organizadas por fechas
+• Lista: Vista compacta de todas las tareas
+
+🚀 FUNCIONALIDADES PRINCIPALES:
+• Crear tareas con título, descripción, prioridad y fecha
+• Arrastrar y soltar entre columnas
+• Buscar y filtrar tareas
+• Gestión de múltiples proyectos
+• Comentarios en tareas
+• Estadísticas de productividad
+
+⌨️ ATAJOS DE TECLADO:
+• Ctrl+N: Nueva tarea
+• Ctrl+F: Buscar
+• Ctrl+S: Guardar tarea
+• Esc: Cerrar modales
+
+💡 CONSEJOS:
+• Usa etiquetas para categorizar tus tareas
+• Establece metas diarias para mantener la productividad
+• Revisa las estadísticas para trackear tu progreso
+    `;
+        alert(tutorialContent);
+    };
+
+    /**
+     * @method toggleCommentsVisibility
+     * @description Muestra/oculta comentarios
+     * @returns {void}
+     */
+    const toggleCommentsVisibility = () => {
+        const commentsSection = document.getElementById('task-comments');
+        const btn = document.getElementById('btn-show-comments');
+
+        if (commentsSection && btn) {
+            const isVisible = commentsSection.style.display !== 'none';
+            commentsSection.style.display = isVisible ? 'none' : 'block';
+            btn.textContent = isVisible ? 'Mostrar Comentarios' : 'Ocultar Comentarios';
+        }
+    };
+
+    /**
+     * @method toggleNotifications
+     * @description Activa/desactiva notificaciones
+     * @returns {void}
+     */
+    const toggleNotifications = () => {
+        const notificationsEnabled = localStorage.getItem('notificationsEnabled') !== 'false';
+        const newStatus = !notificationsEnabled;
+
+        localStorage.setItem('notificationsEnabled', newStatus.toString());
+
+        const btn = document.getElementById('btn-notifications');
+        if (btn) {
+            btn.textContent = newStatus ? '🔔' : '🔕';
+        }
+
+        alert(`Notificaciones ${newStatus ? 'activadas' : 'desactivadas'}`);
+    };
+
+    /**
+     * @method undoLastAction
+     * @description Intenta deshacer última acción
+     * @returns {void}
+     */
+    const undoLastAction = () => {
+        const lastTaskCount = localStorage.getItem('lastTaskCount');
+        const currentCount = state.tasks.length;
+
+        if (lastTaskCount && parseInt(lastTaskCount) > currentCount) {
+            alert('Última acción: Eliminación de tarea. No se puede recuperar automáticamente.');
+        } else {
+            alert('Funcionalidad de deshacer no disponible en esta versión');
+        }
+    };
+
+    // ==========================
+    // PERSISTENCIA OPTIMIZADA
     // ==========================
 
     /**
      * @method saveTasks
-     * @description Guarda las tareas en localStorage
+     * @description Guarda tareas en localStorage
      * @returns {void}
      */
     const saveTasks = () => {
         localStorage.setItem('tasks', JSON.stringify(state.tasks));
+        localStorage.setItem('lastTaskCount', state.tasks.length.toString());
     };
 
     /**
      * @method saveProjects
-     * @description Guarda los proyectos en localStorage
+     * @description Guarda proyectos en localStorage
      * @returns {void}
      */
     const saveProjects = () => {
         localStorage.setItem('projects', JSON.stringify(state.projects));
+    };
+
+    /**
+     * @method saveData
+     * @description Guarda todos los datos
+     * @returns {void}
+     */
+    const saveData = () => {
+        saveTasks();
+        saveProjects();
     };
 
     // ==========================
@@ -739,7 +1221,7 @@ const TaskManager = () => {
 
     /**
      * @method toggleTheme
-     * @description Alterna entre tema claro y oscuro
+     * @description Alterna entre temas
      * @returns {void}
      */
     const toggleTheme = () => {
@@ -750,8 +1232,8 @@ const TaskManager = () => {
 
     /**
      * @method applyTheme
-     * @description Aplica el tema seleccionado al documento
-     * @param {string} theme - Nombre del tema ('light' o 'dark')
+     * @description Aplica tema al documento
+     * @param {string} theme - Tema a aplicar
      * @returns {void}
      */
     const applyTheme = (theme) => {
@@ -767,8 +1249,23 @@ const TaskManager = () => {
     };
 
     // ==========================
-    // FUNCIONES AUXILIARES
+    // FUNCIONES AUXILIARES OPTIMIZADAS
     // ==========================
+
+    /**
+     * @method getTaskList
+     * @description Obtiene lista de tareas por estado
+     * @param {string} status - Estado de las tareas
+     * @returns {HTMLElement} - Elemento de lista
+     */
+    const getTaskList = (status) => {
+        const listIds = {
+            [STATUS.TODO]: 'todo-tasks',
+            [STATUS.INPROGRESS]: 'inprogress_tasks',
+            [STATUS.DONE]: 'done-tasks'
+        };
+        return document.getElementById(listIds[status]);
+    };
 
     /**
      * @method clearTaskLists
@@ -776,17 +1273,36 @@ const TaskManager = () => {
      * @returns {void}
      */
     const clearTaskLists = () => {
-        if (elements.todoList) elements.todoList.innerHTML = '';
-        if (elements.inprogressList) elements.inprogressList.innerHTML = '';
-        if (elements.doneList) elements.doneList.innerHTML = '';
-        if (elements.listViewContainer) elements.listViewContainer.innerHTML = '';
+        ['todo-tasks', 'inprogress_tasks', 'done-tasks', 'list-tasks-container']
+            .forEach(id => {
+                const element = document.getElementById(id);
+                if (element) element.innerHTML = '';
+            });
+    };
+
+    /**
+     * @method renderFilteredTasks
+     * @description Renderiza tareas filtradas
+     * @param {Array} tasks - Tareas a renderizar
+     * @returns {void}
+     */
+    const renderFilteredTasks = (tasks) => {
+        clearTaskLists();
+
+        tasks.forEach(task => {
+            const taskElement = createTaskElement(task);
+            getTaskList(task.status)?.appendChild(taskElement);
+            renderTaskInListView(task);
+        });
+
+        updateTaskCounts();
     };
 
     /**
      * @method escapeHtml
-     * @description Escapa caracteres HTML para prevenir XSS
+     * @description Escapa HTML para prevenir XSS
      * @param {string} text - Texto a escapar
-     * @returns {string} Texto escapado
+     * @returns {string} - Texto escapado
      */
     const escapeHtml = (text) => {
         const div = document.createElement('div');
@@ -796,9 +1312,9 @@ const TaskManager = () => {
 
     /**
      * @method formatDate
-     * @description Formatea una fecha para mostrar
-     * @param {string} dateString - Fecha en formato string
-     * @returns {string} Fecha formateada
+     * @description Formatea fecha para mostrar
+     * @param {string} dateString - Fecha a formatear
+     * @returns {string} - Fecha formateada
      */
     const formatDate = (dateString) => {
         return new Date(dateString).toLocaleDateString('es-ES');
@@ -806,9 +1322,9 @@ const TaskManager = () => {
 
     /**
      * @method getStatusText
-     * @description Obtiene el texto descriptivo de un estado
+     * @description Obtiene texto descriptivo de estado
      * @param {string} status - Estado de la tarea
-     * @returns {string} Texto del estado
+     * @returns {string} - Texto del estado
      */
     const getStatusText = (status) => {
         const statusMap = {
@@ -819,63 +1335,78 @@ const TaskManager = () => {
         return statusMap[status] || status;
     };
 
+    /**
+     * @method getTasks
+     * @description Obtiene todas las tareas
+     * @returns {Array} - Array de tareas
+     */
+    const getTasks = () => [...state.tasks];
+
+    /**
+     * @method navigateCalendar
+     * @description Navega al mes siguiente
+     * @returns {void}
+     */
+    const navigateCalendar = () => changeMonth(1);
+
     // ==========================
-    // API PÚBLICA
+    // API PÚBLICA COMPLETA
     // ==========================
 
     return {
         // Inicialización
         initialize,
 
-        // Tareas
-        openTaskForm,
+        // Gestión de tareas
+        openTaskForm: () => openTaskForm(),
         closeTaskForm,
         handleTaskFormSubmit,
-        quickAddTask,
         editTask: (id) => {
             const task = state.tasks.find(t => t.id === id);
-            if (task) openTaskForm(task);
+            task && openTaskForm(task);
         },
-        deleteTask: (id) => {
-            if (confirm('¿Eliminar esta tarea?')) {
-                state.tasks = state.tasks.filter(t => t.id !== id);
-                saveTasks();
-                renderTasks();
-            }
-        },
+        deleteTask,
+        quickAddTask,
+        deleteCompletedTasks,
 
-        // Proyectos
+        // Gestión de proyectos
         openProjectModal,
         closeProjectModal,
         createProjectFromModal,
         deleteCurrentProject,
 
-        // Vistas
-        switchToView,
-        renderCalendar,
-        navigateCalendar: () => changeMonth(1), // Para compatibilidad con HTML
-
-        // Búsqueda y Filtrado
+        // Búsqueda y filtrado
         searchTasks,
         filterTasksByCriteria,
         sortTasks,
 
-        // Drag and Drop
-        handleDrop,
+        // Vistas
+        switchToView,
+        renderCalendar,
+        navigateCalendar,
 
-        // UI y Configuración
+        // Comentarios y plantillas
+        addCommentToTask,
+        applyTaskTemplate,
+        toggleCommentsVisibility,
+
+        // Utilidades
         toggleTheme,
-        showHelp: () => {
-            document.getElementById('shortcut-help').style.display = 'block';
-        },
-        closeHelp: () => {
-            document.getElementById('shortcut-help').style.display = 'none';
-        },
+        toggleNotifications,
+        showHelp,
+        closeHelp,
+        showTutorial,
+        showDailySummary,
+        setDailyGoal,
+        addCustomTag,
+        undoLastAction,
 
-        // Métodos de acceso para debugging
-        getState: () => ({ ...state }),
-        getTasks: () => [...state.tasks],
-        getProjects: () => [...state.projects]
+        // Confirmaciones
+        confirmTaskDeletion,
+        closeDeleteModal,
+
+        // Getters
+        getTasks
     };
 };
 
@@ -889,6 +1420,5 @@ const TaskManager = () => {
 document.addEventListener('DOMContentLoaded', () => {
     window.taskManager = TaskManager();
     window.taskManager.initialize();
-
     console.log('✅ Task Manager Pro inicializado correctamente');
 });
