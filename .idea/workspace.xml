@@ -4,11 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4e9aab01-0135-4572-83a6-76887b2c8b8c" name="Changes" comment="Fix: Labels, Arrow functions, documentation, css, react">
+    <list default="true" id="4e9aab01-0135-4572-83a6-76887b2c8b8c" name="Changes" comment="Add: etiquetas meta con descripciones breves del html implementado">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/KliV__Proyecto2025/html/Dashboard_Editor.html" beforeDir="false" afterPath="$PROJECT_DIR$/KliV__Proyecto2025/html/Dashboard_Editor.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/KliV__Proyecto2025/html/Task_Mannager.html" beforeDir="false" afterPath="$PROJECT_DIR$/KliV__Proyecto2025/html/Task_Mannager.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/KliV__Proyecto2025/html/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/KliV__Proyecto2025/html/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/KliV__Proyecto2025/Sketch/Sketch Dibujado.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/KliV__Proyecto2025/Wireframe/Sketch Wireframe_Desktop.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/KliV__Proyecto2025/Wireframe/Sketch Wireframe_Mobile.jpg/Sketch Wireframe_1_Mobile.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/KliV__Proyecto2025/Wireframe/Sketch Wireframe_Mobile.jpg/Sketch Wireframe_2_Mobile.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/KliV__Proyecto2025/Wireframe/Sketch Wireframe_Mobile.jpg/Sketch Wireframe_3_Mobile.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/KliV__Proyecto2025/Wireframe/Sketch Wireframe_Mobile.jpg/Sketch Wireframe_4_Mobile.jpg" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -94,7 +97,7 @@
       <workItem from="1762546066613" duration="334000" />
       <workItem from="1762546404724" duration="63000" />
       <workItem from="1762546500935" duration="4490000" />
-      <workItem from="1762551091401" duration="41988000" />
+      <workItem from="1762551091401" duration="44153000" />
     </task>
     <task id="LOCAL-00001" summary="Fix: Labels, Arrow functions, documentation, css, react">
       <option name="closed" value="true" />
@@ -104,7 +107,15 @@
       <option name="project" value="LOCAL" />
       <updated>1762612457950</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Add: etiquetas meta con descripciones breves del html implementado">
+      <option name="closed" value="true" />
+      <created>1762613552279</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1762613552279</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -129,6 +140,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Fix: Labels, Arrow functions, documentation, css, react" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fix: Labels, Arrow functions, documentation, css, react" />
+    <MESSAGE value="Add: etiquetas meta con descripciones breves del html implementado" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add: etiquetas meta con descripciones breves del html implementado" />
   </component>
 </project>
