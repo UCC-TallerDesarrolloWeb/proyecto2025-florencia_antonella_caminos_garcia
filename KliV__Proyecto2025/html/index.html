@@ -19,396 +19,397 @@
 
 <body id="site-body" class="light-mode">
 
-<header id="site-header">
-    <div id="header-content">
-        <h1 id="main-title">KliV</h1>
-        <h2 id="dashboard-subtitle">Dashboard Principal</h2>
-    </div>
-
-    <div id="search-Section">
-        <label for="searchBox"></label>
-        <input type="text" id="searchBox" placeholder="Buscar..." class="search-input">
-        <button id="searchButton" class="btn-search">🔍 Buscar</button>
-
-        <div id="short_Term_Error" class="error-container">
-            <p role="alert" class="error-msg" id="search-error">⚠️ Su búsqueda no ha arrojado resultados</p>
-        </div>
-    </div>
-
-    <div id="user-info">
-        <div id="user-avatar" class="avatar-container">
-            <img src="../Imagenes/avatar.jpg" alt="Avatar de usuario">
-        </div>
-        <span id="user_name">Flor</span>
-        <div id="user-menu" class="user-menu">
-            <ul>
-                <li><a href="#Settings" class="menu-link">Mi Perfil</a></li>
-                <li><a href="#Settings" class="menu-link">Configuración</a></li>
-                <li><button id="logout-btn" class="menu-link logout">Cerrar Sesión</button></li>
-            </ul>
-        </div>
-    </div>
-</header>
-
-<aside id="sidebar">
-    <h2 class="sidebar-title">Inicio</h2>
-    <nav>
-        <ul id="sidebar-menu">
-            <li id="menu-dashboard" class="sidebar-item active">
-                <a href="#Dashboard" class="sidebar-link">
-                    <span class="sidebar-icon">📊</span>
-                    <span class="sidebar-text">Dashboard</span>
-                </a>
-            </li>
-            <li id="menu-projects" class="sidebar-item">
-                <a href="#Project" class="sidebar-link">
-                    <span class="sidebar-icon">📁</span>
-                    <span class="sidebar-text">Proyectos</span>
-                </a>
-            </li>
-            <li id="menu-gallery" class="sidebar-item">
-                <a href="#Gallery" class="sidebar-link">
-                    <span class="sidebar-icon">🖼️</span>
-                    <span class="sidebar-text">Galería</span>
-                </a>
-            </li>
-            <li id="menu-tasks" class="sidebar-item">
-                <a href="#Tasks" class="sidebar-link">
-                    <span class="sidebar-icon">✅</span>
-                    <span class="sidebar-text">Tareas</span>
-                </a>
-            </li>
-            <li id="menu-settings" class="sidebar-item">
-                <a href="#Settings" class="sidebar-link">
-                    <span class="sidebar-icon">⚙️</span>
-                    <span class="sidebar-text">Configuración</span>
-                </a>
-            </li>
-            <li id="menu-help" class="sidebar-item">
-                <a href="#Help" class="sidebar-link">
-                    <span class="sidebar-icon">❓</span>
-                    <span class="sidebar-text">Ayuda</span>
-                </a>
-            </li>
-        </ul>
-    </nav>
-</aside>
-
-<main id="site-main">
-
-    <div id="nav-controls" class="nav-controls">
-        <button id="nav-prev" class="nav-btn" title="Sección anterior">← Anterior</button>
-        <nav id="breadcrumbs" class="breadcrumbs" aria-label="Ruta de navegación">
-            <ol>
-                <li><a href="#Dashboard" data-section="Dashboard" class="breadcrumb-link">Inicio</a></li>
-                <li id="current-breadcrumb">Dashboard</li>
-            </ol>
-        </nav>
-        <button id="nav-next" class="nav-btn" title="Siguiente sección">Siguiente →</button>
-    </div>
-
-    <div id="toast-container" class="toast-container"></div>
-
-    <section id="Dashboard" class="main-section active-section">
-        <h2 class="section-title">Dashboard</h2>
-
-        <div class="section-actions">
-            <button id="refresh-dashboard" class="btn-secondary btn-sm">🔄 Actualizar</button>
-            <button id="filter-dashboard" class="btn-secondary btn-sm">🔍 Filtrar</button>
+    <header id="site-header">
+        <div id="header-content">
+            <h1 id="main-title">KliV</h1>
+            <h2 id="dashboard-subtitle">Dashboard Principal</h2>
         </div>
 
-        <div id="dashboard-grid" class="dashboard-grid">
+        <div id="search-Section">
+            <label for="searchBox"></label>
+            <input type="text" id="searchBox" placeholder="Buscar..." class="search-input">
+            <button id="searchButton" class="btn-search">🔍 Buscar</button>
 
-            <article class="dashboard-card" data-item-id="pin-0">
-                <div class="card-image">
-                    <img src="https://picsum.photos/200/300" alt="Pin 1">
-                </div>
-                <footer class="card-footer">
-                    <div class="interaction-buttons">
-                        <button class="like-btn interactive-btn" title="Me gusta">🤍</button>
-                        <span class="like-count">120</span>
-                        <button class="comment-btn interactive-btn" title="Comentar">💬</button>
-                        <span class="comment-count">45</span>
-                    </div>
-                </footer>
-            </article>
-
-            <article class="dashboard-card" data-item-id="pin-1">
-                <div class="card-image">
-                    <img src="https://picsum.photos/200/180" alt="Pin 2">
-                </div>
-                <footer class="card-footer">
-                    <div class="interaction-buttons">
-                        <button class="like-btn interactive-btn" title="Me gusta">🤍</button>
-                        <span class="like-count">89</span>
-                        <button class="comment-btn interactive-btn" title="Comentar">💬</button>
-                        <span class="comment-count">12</span>
-                    </div>
-                </footer>
-            </article>
-
-            <article class="dashboard-card" data-item-id="pin-2">
-                <div class="card-image">
-                    <img src="https://picsum.photos/200/250" alt="Pin 3">
-                </div>
-                <footer class="card-footer">
-                    <div class="interaction-buttons">
-                        <button class="like-btn interactive-btn" title="Me gusta">🤍</button>
-                        <span class="like-count">90</span>
-                        <button class="comment-btn interactive-btn" title="Comentar">💬</button>
-                        <span class="comment-count">78</span>
-                    </div>
-                </footer>
-            </article>
-
-            <article class="dashboard-card" data-item-id="pin-3">
-                <div class="card-image">
-                    <img src="https://picsum.photos/200/230" alt="Pin 4">
-                </div>
-                <footer class="card-footer">
-                    <div class="interaction-buttons">
-                        <button class="like-btn interactive-btn" title="Me gusta">🤍</button>
-                        <span class="like-count">86</span>
-                        <button class="comment-btn interactive-btn" title="Comentar">💬</button>
-                        <span class="comment-count">13</span>
-                    </div>
-                </footer>
-            </article>
-
-            <article class="dashboard-card" data-item-id="pin-4">
-                <div class="card-image">
-                    <img src="https://picsum.photos/200/270" alt="Pin 5">
-                </div>
-                <footer class="card-footer">
-                    <div class="interaction-buttons">
-                        <button class="like-btn interactive-btn" title="Me gusta">🤍</button>
-                        <span class="like-count">120</span>
-                        <button class="comment-btn interactive-btn" title="Comentar">💬</button>
-                        <span class="comment-count">20</span>
-                    </div>
-                </footer>
-            </article>
-
-            <article class="dashboard-card" data-item-id="pin-5">
-                <div class="card-image">
-                    <img src="https://picsum.photos/200/320" alt="Pin 6">
-                </div>
-                <footer class="card-footer">
-                    <div class="interaction-buttons">
-                        <button class="like-btn interactive-btn" title="Me gusta">🤍</button>
-                        <span class="like-count">15</span>
-                        <button class="comment-btn interactive-btn" title="Comentar">💬</button>
-                        <span class="comment-count">5</span>
-                    </div>
-                </footer>
-            </article>
-
-            <article class="dashboard-card" data-item-id="pin-6">
-                <div class="card-image">
-                    <img src="https://picsum.photos/200/200" alt="Pin 7">
-                </div>
-                <footer class="card-footer">
-                    <div class="interaction-buttons">
-                        <button class="like-btn interactive-btn" title="Me gusta">🤍</button>
-                        <span class="like-count">80</span>
-                        <button class="comment-btn interactive-btn" title="Comentar">💬</button>
-                        <span class="comment-count">74</span>
-                    </div>
-                </footer>
-            </article>
-
-            <article class="dashboard-card" data-item-id="pin-7">
-                <div class="card-image">
-                    <img src="https://picsum.photos/200/391" alt="Pin 8">
-                </div>
-                <footer class="card-footer">
-                    <div class="interaction-buttons">
-                        <button class="like-btn interactive-btn" title="Me gusta">🤍</button>
-                        <span class="like-count">34</span>
-                        <button class="comment-btn interactive-btn" title="Comentar">💬</button>
-                        <span class="comment-count">81</span>
-                    </div>
-                </footer>
-            </article>
-
-            <article class="dashboard-card" data-item-id="pin-8">
-                <div class="card-image">
-                    <img src="https://picsum.photos/200/741" alt="Pin 9">
-                </div>
-                <footer class="card-footer">
-                    <div class="interaction-buttons">
-                        <button class="like-btn interactive-btn" title="Me gusta">🤍</button>
-                        <span class="like-count">311</span>
-                        <button class="comment-btn interactive-btn" title="Comentar">💬</button>
-                        <span class="comment-count">289</span>
-                    </div>
-                </footer>
-            </article>
-
-            <article class="dashboard-card" data-item-id="pin-9">
-                <div class="card-image">
-                    <img src="https://picsum.photos/200/711" alt="Pin 10">
-                </div>
-                <footer class="card-footer">
-                    <div class="interaction-buttons">
-                        <button class="like-btn interactive-btn" title="Me gusta">🤍</button>
-                        <span class="like-count">76</span>
-                        <button class="comment-btn interactive-btn" title="Comentar">💬</button>
-                        <span class="comment-count">45</span>
-                    </div>
-                </footer>
-            </article>
-
-            <!-- Continuar con los otros 10 artículos con data-item-id único -->
-            <article class="dashboard-card" data-item-id="pin-10">
-                <div class="card-image">
-                    <img src="https://picsum.photos/200/891" alt="Pin 11">
-                </div>
-                <footer class="card-footer">
-                    <div class="interaction-buttons">
-                        <button class="like-btn interactive-btn" title="Me gusta">🤍</button>
-                        <span class="like-count">31</span>
-                        <button class="comment-btn interactive-btn" title="Comentar">💬</button>
-                        <span class="comment-count">20</span>
-                    </div>
-                </footer>
-            </article>
-
-            <article class="dashboard-card" data-item-id="pin-11">
-                <div class="card-image">
-                    <img src="https://picsum.photos/200/431" alt="Pin 12">
-                </div>
-                <footer class="card-footer">
-                    <div class="interaction-buttons">
-                        <button class="like-btn interactive-btn" title="Me gusta">🤍</button>
-                        <span class="like-count">49</span>
-                        <button class="comment-btn interactive-btn" title="Comentar">💬</button>
-                        <span class="comment-count">0</span>
-                    </div>
-                </footer>
-            </article>
-
-            <article class="dashboard-card" data-item-id="pin-12">
-                <div class="card-image">
-                    <img src="https://picsum.photos/200/71" alt="Pin 13">
-                </div>
-                <footer class="card-footer">
-                    <div class="interaction-buttons">
-                        <button class="like-btn interactive-btn" title="Me gusta">🤍</button>
-                        <span class="like-count">67</span>
-                        <button class="comment-btn interactive-btn" title="Comentar">💬</button>
-                        <span class="comment-count">90</span>
-                    </div>
-                </footer>
-            </article>
-
-            <article class="dashboard-card" data-item-id="pin-13">
-                <div class="card-image">
-                    <img src="https://picsum.photos/200/330" alt="Pin 14">
-                </div>
-                <footer class="card-footer">
-                    <div class="interaction-buttons">
-                        <button class="like-btn interactive-btn" title="Me gusta">🤍</button>
-                        <span class="like-count">450</span>
-                        <button class="comment-btn interactive-btn" title="Comentar">💬</button>
-                        <span class="comment-count">800</span>
-                    </div>
-                </footer>
-            </article>
-
-            <article class="dashboard-card" data-item-id="pin-14">
-                <div class="card-image">
-                    <img src="https://picsum.photos/200/210" alt="Pin 15">
-                </div>
-                <footer class="card-footer">
-                    <div class="interaction-buttons">
-                        <button class="like-btn interactive-btn" title="Me gusta">🤍</button>
-                        <span class="like-count">139</span>
-                        <button class="comment-btn interactive-btn" title="Comentar">💬</button>
-                        <span class="comment-count">71</span>
-                    </div>
-                </footer>
-            </article>
-
-            <article class="dashboard-card" data-item-id="pin-15">
-                <div class="card-image">
-                    <img src="https://picsum.photos/200/188" alt="Pin 16">
-                </div>
-                <footer class="card-footer">
-                    <div class="interaction-buttons">
-                        <button class="like-btn interactive-btn" title="Me gusta">🤍</button>
-                        <span class="like-count">56</span>
-                        <button class="comment-btn interactive-btn" title="Comentar">💬</button>
-                        <span class="comment-count">99</span>
-                    </div>
-                </footer>
-            </article>
-
-            <article class="dashboard-card" data-item-id="pin-16">
-                <div class="card-image">
-                    <img src="https://picsum.photos/200/500" alt="Pin 17">
-                </div>
-                <footer class="card-footer">
-                    <div class="interaction-buttons">
-                        <button class="like-btn interactive-btn" title="Me gusta">🤍</button>
-                        <span class="like-count">3</span>
-                        <button class="comment-btn interactive-btn" title="Comentar">💬</button>
-                        <span class="comment-count">1</span>
-                    </div>
-                </footer>
-            </article>
-
-            <article class="dashboard-card" data-item-id="pin-17">
-                <div class="card-image">
-                    <img src="https://picsum.photos/200/111" alt="Pin 18">
-                </div>
-                <footer class="card-footer">
-                    <div class="interaction-buttons">
-                        <button class="like-btn interactive-btn" title="Me gusta">🤍</button>
-                        <span class="like-count">231</span>
-                        <button class="comment-btn interactive-btn" title="Comentar">💬</button>
-                        <span class="comment-count">54</span>
-                    </div>
-                </footer>
-            </article>
-
-            <article class="dashboard-card" data-item-id="pin-18">
-                <div class="card-image">
-                    <img src="https://picsum.photos/200/340" alt="Pin 19">
-                </div>
-                <footer class="card-footer">
-                    <div class="interaction-buttons">
-                        <button class="like-btn interactive-btn" title="Me gusta">🤍</button>
-                        <span class="like-count">500</span>
-                        <button class="comment-btn interactive-btn" title="Comentar">💬</button>
-                        <span class="comment-count">100</span>
-                    </div>
-                </footer>
-            </article>
-
-            <article class="dashboard-card" data-item-id="pin-19">
-                <div class="card-image">
-                    <img src="https://picsum.photos/200/260" alt="Pin 20">
-                </div>
-                <footer class="card-footer">
-                    <div class="interaction-buttons">
-                        <button class="like-btn interactive-btn" title="Me gusta">🤍</button>
-                        <span class="like-count">12</span>
-                        <button class="comment-btn interactive-btn" title="Comentar">💬</button>
-                        <span class="comment-count">2</span>
-                    </div>
-                </footer>
-            </article>
-        </div>
-
-        <div class="file-upload">
-            <button id="open-editor" class="btn-primary">Ir al Dashboard Editor</button>
-            <div id="editor-success" class="success-msg">✅ Editor abierto correctamente</div>
-            <div id="short-Term-Error" class="error-container">
-                <p role="alert" class="error-msg" id="editor-error">⚠️ No se pudo abrir el editor, revise la conexión.</p>
+            <div id="short_Term_Error" class="error-container">
+                <p role="alert" class="error-msg" id="search-error">⚠️ Su búsqueda no ha arrojado resultados</p>
             </div>
         </div>
-    </section>
+
+        <div id="user-info">
+            <div id="user-avatar" class="avatar-container">
+                <img src="../Imagenes/avatar.jpg" alt="Avatar de usuario">
+            </div>
+            <span id="user_name">Flor</span>
+            <div id="user-menu" class="user-menu">
+                <ul>
+                    <li><a href="#Settings" class="menu-link">Mi Perfil</a></li>
+                    <li><a href="#Settings" class="menu-link">Configuración</a></li>
+                    <li><button id="logout-btn" class="menu-link logout">Cerrar Sesión</button></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <aside id="sidebar">
+        <h2 class="sidebar-title">Inicio</h2>
+        <nav>
+            <ul id="sidebar-menu">
+                <li id="menu-dashboard" class="sidebar-item active">
+                    <a href="#Dashboard" class="sidebar-link">
+                        <span class="sidebar-icon">📊</span>
+                        <span class="sidebar-text">Dashboard</span>
+                    </a>
+                </li>
+                <li id="menu-projects" class="sidebar-item">
+                    <a href="#Project" class="sidebar-link">
+                        <span class="sidebar-icon">📁</span>
+                        <span class="sidebar-text">Proyectos</span>
+                    </a>
+                </li>
+                <li id="menu-gallery" class="sidebar-item">
+                    <a href="#Gallery" class="sidebar-link">
+                        <span class="sidebar-icon">🖼️</span>
+                        <span class="sidebar-text">Galería</span>
+                    </a>
+                </li>
+                <li id="menu-tasks" class="sidebar-item">
+                    <a href="#Tasks" class="sidebar-link">
+                        <span class="sidebar-icon">✅</span>
+                        <span class="sidebar-text">Tareas</span>
+                    </a>
+                </li>
+                <li id="menu-settings" class="sidebar-item">
+                    <a href="#Settings" class="sidebar-link">
+                        <span class="sidebar-icon">⚙️</span>
+                        <span class="sidebar-text">Configuración</span>
+                    </a>
+                </li>
+                <li id="menu-help" class="sidebar-item">
+                    <a href="#Help" class="sidebar-link">
+                        <span class="sidebar-icon">❓</span>
+                        <span class="sidebar-text">Ayuda</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main id="site-main">
+
+        <div id="nav-controls" class="nav-controls">
+            <button id="nav-prev" class="nav-btn" title="Sección anterior">← Anterior</button>
+            <nav id="breadcrumbs" class="breadcrumbs" aria-label="Ruta de navegación">
+                <ol>
+                    <li><a href="#Dashboard" data-section="Dashboard" class="breadcrumb-link">Inicio</a></li>
+                    <li id="current-breadcrumb">Dashboard</li>
+                </ol>
+            </nav>
+            <button id="nav-next" class="nav-btn" title="Siguiente sección">Siguiente →</button>
+        </div>
+
+        <div id="toast-container" class="toast-container"></div>
+
+        <section id="Dashboard" class="main-section active-section">
+            <h2 class="section-title">Dashboard</h2>
+
+            <div class="section-actions">
+                <button id="refresh-dashboard" class="btn-secondary btn-sm">🔄 Actualizar</button>
+                <button id="filter-dashboard" class="btn-secondary btn-sm">🔍 Filtrar</button>
+            </div>
+
+            <div id="dashboard-grid" class="dashboard-grid">
+
+                <article class="dashboard-card" data-item-id="pin-0">
+                    <div class="card-image">
+                        <img src="https://picsum.photos/200/300" alt="Pin 1">
+                    </div>
+                    <footer class="card-footer">
+                        <div class="interaction-buttons">
+                            <button class="like-btn interactive-btn" title="Me gusta">🤍</button>
+                            <span class="like-count">120</span>
+                            <button class="comment-btn interactive-btn" title="Comentar">💬</button>
+                            <span class="comment-count">45</span>
+                        </div>
+                    </footer>
+                </article>
+
+                <article class="dashboard-card" data-item-id="pin-1">
+                    <div class="card-image">
+                        <img src="https://picsum.photos/200/180" alt="Pin 2">
+                    </div>
+                    <footer class="card-footer">
+                        <div class="interaction-buttons">
+                            <button class="like-btn interactive-btn" title="Me gusta">🤍</button>
+                            <span class="like-count">89</span>
+                            <button class="comment-btn interactive-btn" title="Comentar">💬</button>
+                            <span class="comment-count">12</span>
+                        </div>
+                    </footer>
+                </article>
+
+                <article class="dashboard-card" data-item-id="pin-2">
+                    <div class="card-image">
+                        <img src="https://picsum.photos/200/250" alt="Pin 3">
+                    </div>
+                    <footer class="card-footer">
+                        <div class="interaction-buttons">
+                            <button class="like-btn interactive-btn" title="Me gusta">🤍</button>
+                            <span class="like-count">90</span>
+                            <button class="comment-btn interactive-btn" title="Comentar">💬</button>
+                            <span class="comment-count">78</span>
+                        </div>
+                    </footer>
+                </article>
+
+                <article class="dashboard-card" data-item-id="pin-3">
+                    <div class="card-image">
+                        <img src="https://picsum.photos/200/230" alt="Pin 4">
+                    </div>
+                    <footer class="card-footer">
+                        <div class="interaction-buttons">
+                            <button class="like-btn interactive-btn" title="Me gusta">🤍</button>
+                            <span class="like-count">86</span>
+                            <button class="comment-btn interactive-btn" title="Comentar">💬</button>
+                            <span class="comment-count">13</span>
+                        </div>
+                    </footer>
+                </article>
+
+                <article class="dashboard-card" data-item-id="pin-4">
+                    <div class="card-image">
+                        <img src="https://picsum.photos/200/270" alt="Pin 5">
+                    </div>
+                    <footer class="card-footer">
+                        <div class="interaction-buttons">
+                            <button class="like-btn interactive-btn" title="Me gusta">🤍</button>
+                            <span class="like-count">120</span>
+                            <button class="comment-btn interactive-btn" title="Comentar">💬</button>
+                            <span class="comment-count">20</span>
+                        </div>
+                    </footer>
+                </article>
+
+                <article class="dashboard-card" data-item-id="pin-5">
+                    <div class="card-image">
+                        <img src="https://picsum.photos/200/320" alt="Pin 6">
+                    </div>
+                    <footer class="card-footer">
+                        <div class="interaction-buttons">
+                            <button class="like-btn interactive-btn" title="Me gusta">🤍</button>
+                            <span class="like-count">15</span>
+                            <button class="comment-btn interactive-btn" title="Comentar">💬</button>
+                            <span class="comment-count">5</span>
+                        </div>
+                    </footer>
+                </article>
+
+                <article class="dashboard-card" data-item-id="pin-6">
+                    <div class="card-image">
+                        <img src="https://picsum.photos/200/200" alt="Pin 7">
+                    </div>
+                    <footer class="card-footer">
+                        <div class="interaction-buttons">
+                            <button class="like-btn interactive-btn" title="Me gusta">🤍</button>
+                            <span class="like-count">80</span>
+                            <button class="comment-btn interactive-btn" title="Comentar">💬</button>
+                            <span class="comment-count">74</span>
+                        </div>
+                    </footer>
+                </article>
+
+                <article class="dashboard-card" data-item-id="pin-7">
+                    <div class="card-image">
+                        <img src="https://picsum.photos/200/391" alt="Pin 8">
+                    </div>
+                    <footer class="card-footer">
+                        <div class="interaction-buttons">
+                            <button class="like-btn interactive-btn" title="Me gusta">🤍</button>
+                            <span class="like-count">34</span>
+                            <button class="comment-btn interactive-btn" title="Comentar">💬</button>
+                            <span class="comment-count">81</span>
+                        </div>
+                    </footer>
+                </article>
+
+                <article class="dashboard-card" data-item-id="pin-8">
+                    <div class="card-image">
+                        <img src="https://picsum.photos/200/741" alt="Pin 9">
+                    </div>
+                    <footer class="card-footer">
+                        <div class="interaction-buttons">
+                            <button class="like-btn interactive-btn" title="Me gusta">🤍</button>
+                            <span class="like-count">311</span>
+                            <button class="comment-btn interactive-btn" title="Comentar">💬</button>
+                            <span class="comment-count">289</span>
+                        </div>
+                    </footer>
+                </article>
+
+                <article class="dashboard-card" data-item-id="pin-9">
+                    <div class="card-image">
+                        <img src="https://picsum.photos/200/711" alt="Pin 10">
+                    </div>
+                    <footer class="card-footer">
+                        <div class="interaction-buttons">
+                            <button class="like-btn interactive-btn" title="Me gusta">🤍</button>
+                            <span class="like-count">76</span>
+                            <button class="comment-btn interactive-btn" title="Comentar">💬</button>
+                            <span class="comment-count">45</span>
+                        </div>
+                    </footer>
+                </article>
+
+                <!-- Continuar con los otros 10 artículos con data-item-id único -->
+                <article class="dashboard-card" data-item-id="pin-10">
+                    <div class="card-image">
+                        <img src="https://picsum.photos/200/891" alt="Pin 11">
+                    </div>
+                    <footer class="card-footer">
+                        <div class="interaction-buttons">
+                            <button class="like-btn interactive-btn" title="Me gusta">🤍</button>
+                            <span class="like-count">31</span>
+                            <button class="comment-btn interactive-btn" title="Comentar">💬</button>
+                            <span class="comment-count">20</span>
+                        </div>
+                    </footer>
+                </article>
+
+                <article class="dashboard-card" data-item-id="pin-11">
+                    <div class="card-image">
+                        <img src="https://picsum.photos/200/431" alt="Pin 12">
+                    </div>
+                    <footer class="card-footer">
+                        <div class="interaction-buttons">
+                            <button class="like-btn interactive-btn" title="Me gusta">🤍</button>
+                            <span class="like-count">49</span>
+                            <button class="comment-btn interactive-btn" title="Comentar">💬</button>
+                            <span class="comment-count">0</span>
+                        </div>
+                    </footer>
+                </article>
+
+                <article class="dashboard-card" data-item-id="pin-12">
+                    <div class="card-image">
+                        <img src="https://picsum.photos/200/71" alt="Pin 13">
+                    </div>
+                    <footer class="card-footer">
+                        <div class="interaction-buttons">
+                            <button class="like-btn interactive-btn" title="Me gusta">🤍</button>
+                            <span class="like-count">67</span>
+                            <button class="comment-btn interactive-btn" title="Comentar">💬</button>
+                            <span class="comment-count">90</span>
+                        </div>
+                    </footer>
+                </article>
+
+                <article class="dashboard-card" data-item-id="pin-13">
+                    <div class="card-image">
+                        <img src="https://picsum.photos/200/330" alt="Pin 14">
+                    </div>
+                    <footer class="card-footer">
+                        <div class="interaction-buttons">
+                            <button class="like-btn interactive-btn" title="Me gusta">🤍</button>
+                            <span class="like-count">450</span>
+                            <button class="comment-btn interactive-btn" title="Comentar">💬</button>
+                            <span class="comment-count">800</span>
+                        </div>
+                    </footer>
+                </article>
+
+                <article class="dashboard-card" data-item-id="pin-14">
+                    <div class="card-image">
+                        <img src="https://picsum.photos/200/210" alt="Pin 15">
+                    </div>
+                    <footer class="card-footer">
+                        <div class="interaction-buttons">
+                            <button class="like-btn interactive-btn" title="Me gusta">🤍</button>
+                            <span class="like-count">139</span>
+                            <button class="comment-btn interactive-btn" title="Comentar">💬</button>
+                            <span class="comment-count">71</span>
+                        </div>
+                    </footer>
+                </article>
+
+                <article class="dashboard-card" data-item-id="pin-15">
+                    <div class="card-image">
+                        <img src="https://picsum.photos/200/188" alt="Pin 16">
+                    </div>
+                    <footer class="card-footer">
+                        <div class="interaction-buttons">
+                            <button class="like-btn interactive-btn" title="Me gusta">🤍</button>
+                            <span class="like-count">56</span>
+                            <button class="comment-btn interactive-btn" title="Comentar">💬</button>
+                            <span class="comment-count">99</span>
+                        </div>
+                    </footer>
+                </article>
+
+                <article class="dashboard-card" data-item-id="pin-16">
+                    <div class="card-image">
+                        <img src="https://picsum.photos/200/500" alt="Pin 17">
+                    </div>
+                    <footer class="card-footer">
+                        <div class="interaction-buttons">
+                            <button class="like-btn interactive-btn" title="Me gusta">🤍</button>
+                            <span class="like-count">3</span>
+                            <button class="comment-btn interactive-btn" title="Comentar">💬</button>
+                            <span class="comment-count">1</span>
+                        </div>
+                    </footer>
+                </article>
+
+                <article class="dashboard-card" data-item-id="pin-17">
+                    <div class="card-image">
+                        <img src="https://picsum.photos/200/111" alt="Pin 18">
+                    </div>
+                    <footer class="card-footer">
+                        <div class="interaction-buttons">
+                            <button class="like-btn interactive-btn" title="Me gusta">🤍</button>
+                            <span class="like-count">231</span>
+                            <button class="comment-btn interactive-btn" title="Comentar">💬</button>
+                            <span class="comment-count">54</span>
+                        </div>
+                    </footer>
+                </article>
+
+                <article class="dashboard-card" data-item-id="pin-18">
+                    <div class="card-image">
+                        <img src="https://picsum.photos/200/340" alt="Pin 19">
+                    </div>
+                    <footer class="card-footer">
+                        <div class="interaction-buttons">
+                            <button class="like-btn interactive-btn" title="Me gusta">🤍</button>
+                            <span class="like-count">500</span>
+                            <button class="comment-btn interactive-btn" title="Comentar">💬</button>
+                            <span class="comment-count">100</span>
+                        </div>
+                    </footer>
+                </article>
+
+                <article class="dashboard-card" data-item-id="pin-19">
+                    <div class="card-image">
+                        <img src="https://picsum.photos/200/260" alt="Pin 20">
+                    </div>
+                    <footer class="card-footer">
+                        <div class="interaction-buttons">
+                            <button class="like-btn interactive-btn" title="Me gusta">🤍</button>
+                            <span class="like-count">12</span>
+                            <button class="comment-btn interactive-btn" title="Comentar">💬</button>
+                            <span class="comment-count">2</span>
+                        </div>
+                    </footer>
+                </article>
+            </div>
+
+            <div class="file-upload">
+                <button id="open-editor" class="btn-primary">Ir al Dashboard Editor</button>
+                <div id="editor-success" class="success-msg">✅ Editor abierto correctamente</div>
+                <div id="short-Term-Error" class="error-container">
+                    <p role="alert" class="error-msg" id="editor-error">⚠️ No se pudo abrir el editor, revise la
+                        conexión.</p>
+                </div>
+            </div>
+        </section>
 
         <section id="Project" class="main-section">
             <h2 class="section-title">Proyectos</h2>
@@ -439,16 +440,18 @@
                         </select>
 
                         <div id="short-Term-Errors" class="error-container">
-                            <span class="error-msg" role="alert" id="card-error">⚠️ Debe elegir una tarjeta antes de continuar.</span>
+                            <span class="error-msg" role="alert" id="card-error">⚠️ Debe elegir una tarjeta antes de
+                                continuar.</span>
                         </div>
 
                         <label for="project-content-text" class="form-label">Contenido:</label>
                         <input id="project-content-text" name="project-content-text" type="text"
-                               placeholder="Texto para agregar" class="form-input" required minlength="5" maxlength="100"
-                               pattern="[A-Za-z0-9 áéíóúÁÉÍÓÚñÑ,.-]+" title="Solo letras, números y signos básicos." />
+                            placeholder="Texto para agregar" class="form-input" required minlength="5" maxlength="100"
+                            pattern="[A-Za-z0-9 áéíóúÁÉÍÓÚñÑ,.-]+" title="Solo letras, números y signos básicos." />
 
                         <div class="error-container">
-                            <span class="error-msg" role="alert" id="content-error">⚠️ Entre 5 y 100 caracteres, sin símbolos raros.</span>
+                            <span class="error-msg" role="alert" id="content-error">⚠️ Entre 5 y 100 caracteres, sin
+                                símbolos raros.</span>
                         </div>
                     </div>
                     <div class="button-group">
@@ -504,12 +507,18 @@
             <div class="gallery-controls">
                 <h3 class="control-title">Opciones de Imagen</h3>
                 <div class="option-group">
-                    <label><input type="radio" name="photo-option" value="no-show" required> No Mostrar</label>
-                    <label><input type="radio" name="photo-option" value="save"> Guardar</label>
-                    <label><input type="radio" name="photo-option" value="react"> Reaccionar</label>
+                    <label> No Mostrar</label>
+                    <input type="radio" name="photo-option" value="no-show" required>
+
+                    <label> Guardar</label>
+                    <input type="radio" name="photo-option" value="save">
+
+                    <label> Reaccionar</label>
+                    <input type="radio" name="photo-option" value="react">
                 </div>
                 <div class="error-container">
-                    <p role="alert" class="error-msg" id="gallery-error">⚠️ Debe seleccionar una imagen antes de continuar.</p>
+                    <p role="alert" class="error-msg" id="gallery-error">⚠️ Debe seleccionar una imagen antes de
+                        continuar.</p>
                 </div>
             </div>
 
@@ -567,32 +576,32 @@
 
             <table id="tasks-table" class="tasks-table">
                 <thead class="table-header">
-                <tr>
-                    <th class="table-col-status">Estado</th>
-                    <th class="table-col-task">Tarea</th>
-                    <th class="table-col-assignee">Responsable</th>
-                    <th class="table-col-priority">Prioridad</th>
-                    <th class="table-col-deadline">Fecha límite</th>
-                    <th class="table-col-actions">Acciones</th>
-                </tr>
+                    <tr>
+                        <th class="table-col-status">Estado</th>
+                        <th class="table-col-task">Tarea</th>
+                        <th class="table-col-assignee">Responsable</th>
+                        <th class="table-col-priority">Prioridad</th>
+                        <th class="table-col-deadline">Fecha límite</th>
+                        <th class="table-col-actions">Acciones</th>
+                    </tr>
                 </thead>
                 <tbody class="table-body">
-                <tr class="task-row">
-                    <td class="task-status">
-                        <label class="checkbox-label">
+                    <tr class="task-row">
+                        <td class="task-status">
+                            <label class="checkbox-label"></label>
                             <input type="checkbox" class="task-checkbox">
                             <span class="checkbox-text">Completada</span>
-                        </label>
-                    </td>
-                    <td class="task-text">Revisar contratos</td>
-                    <td class="task-assignee">Ana</td>
-                    <td class="task-priority priority-high">Alta</td>
-                    <td class="task-deadline">27/09/2025</td>
-                    <td class="task-actions">
-                        <button class="btn-sm edit-task" title="Editar tarea">✏️</button>
-                        <button class="btn-sm delete-task" title="Eliminar tarea">🗑️</button>
-                    </td>
-                </tr>
+
+                        </td>
+                        <td class="task-text">Revisar contratos</td>
+                        <td class="task-assignee">Ana</td>
+                        <td class="task-priority priority-high">Alta</td>
+                        <td class="task-deadline">27/09/2025</td>
+                        <td class="task-actions">
+                            <button class="btn-sm edit-task" title="Editar tarea">✏️</button>
+                            <button class="btn-sm delete-task" title="Eliminar tarea">🗑️</button>
+                        </td>
+                    </tr>
 
                 </tbody>
             </table>
@@ -620,7 +629,8 @@
 
                             <div class="form-group">
                                 <label for="user-photo" class="form-label">Foto de perfil:</label>
-                                <input id="user-photo" name="user-photo" type="file" accept="image/*" class="form-input">
+                                <input id="user-photo" name="user-photo" type="file" accept="image/*"
+                                    class="form-input">
                                 <small class="form-hint">Formatos: JPG, PNG, GIF. Máx: 5MB</small>
                                 <div class="error-container">
                                     <small role="alert" class="error-msg">Debe subir una imagen de perfil.</small>
@@ -630,18 +640,20 @@
                             <div class="form-group">
                                 <label for="user-name" class="form-label">Nombre:</label>
                                 <input id="user-name" name="user-name" type="text" value="Juan Pérez"
-                                       placeholder="Ingrese su nombre" class="form-input">
+                                    placeholder="Ingrese su nombre" class="form-input">
                                 <div class="error-container">
-                                    <small role="alert" class="error-msg">Solo letras y espacios (3 a 50 caracteres).</small>
+                                    <small role="alert" class="error-msg">Solo letras y espacios (3 a 50
+                                        caracteres).</small>
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <label for="user-email" class="form-label">Email:</label>
                                 <input id="user-email" name="user-email" type="email" value="juan@mail.com"
-                                       placeholder="Ingrese su email" class="form-input">
+                                    placeholder="Ingrese su email" class="form-input">
                                 <div class="error-container">
-                                    <small role="alert" class="error-msg">Ingrese un correo válido (ejemplo@mail.com).</small>
+                                    <small role="alert" class="error-msg">Ingrese un correo válido
+                                        (ejemplo@mail.com).</small>
                                 </div>
                             </div>
                         </fieldset>
@@ -703,7 +715,7 @@
                             <div class="form-group">
                                 <label for="user-password" class="form-label">Nueva contraseña:</label>
                                 <input id="user-password" name="user-password" type="password"
-                                       placeholder="Ingrese nueva contraseña" class="form-input">
+                                    placeholder="Ingrese nueva contraseña" class="form-input">
                                 <div class="error-container">
                                     <small role="alert" class="error-msg">Entre 6 y 20 caracteres.</small>
                                 </div>
@@ -712,9 +724,10 @@
                             <div class="form-group">
                                 <label for="confirm-password" class="form-label">Confirmar contraseña:</label>
                                 <input id="confirm-password" name="confirm-password" type="password"
-                                       placeholder="Confirme la contraseña" class="form-input">
+                                    placeholder="Confirme la contraseña" class="form-input">
                                 <div class="error-container">
-                                    <small role="alert" class="error-msg">Repita la contraseña para confirmación.</small>
+                                    <small role="alert" class="error-msg">Repita la contraseña para
+                                        confirmación.</small>
                                 </div>
                             </div>
 
@@ -734,7 +747,7 @@
                             <div class="form-group">
                                 <label for="security-answer" class="form-label">Respuesta:</label>
                                 <input id="security-answer" name="security-answer" type="text"
-                                       placeholder="Ingrese su respuesta" class="form-input">
+                                    placeholder="Ingrese su respuesta" class="form-input">
                                 <div class="error-container">
                                     <small role="alert" class="error-msg">La respuesta es obligatoria.</small>
                                 </div>
@@ -829,7 +842,8 @@
                     </ul>
 
                     <div class="privacy-actions">
-                        <button class="btn-primary" onclick="dashboardApp.activateSection('Settings')">Configurar Privacidad</button>
+                        <button class="btn-primary" onclick="dashboardApp.activateSection('Settings')">Configurar
+                            Privacidad</button>
                         <button class="btn-secondary" onclick="dashboardApp.exportData()">Exportar Mis Datos</button>
                     </div>
                 </div>
@@ -860,12 +874,15 @@
 
                     <div class="terms-section">
                         <h4>3. Propiedad Intelectual</h4>
-                        <p>Conservas los derechos de tu contenido, pero nos concedes licencia para mostrarlo en la plataforma.</p>
+                        <p>Conservas los derechos de tu contenido, pero nos concedes licencia para mostrarlo en la
+                            plataforma.</p>
                     </div>
 
                     <div class="terms-actions">
-                        <button class="btn-primary" onclick="dashboardApp.showToast('Términos aceptados', 'success')">Aceptar Términos</button>
-                        <button class="btn-secondary" onclick="dashboardApp.activateSection('Help')">Obtener Ayuda</button>
+                        <button class="btn-primary"
+                            onclick="dashboardApp.showToast('Términos aceptados', 'success')">Aceptar Términos</button>
+                        <button class="btn-secondary" onclick="dashboardApp.activateSection('Help')">Obtener
+                            Ayuda</button>
                     </div>
                 </div>
             </div>
@@ -876,7 +893,8 @@
                 <div class="about-hero">
                     <div class="about-text">
                         <h3>Transformando tu Productividad</h3>
-                        <p>KliV es una plataforma integral diseñada para ayudarte a organizar tus proyectos, tareas y contenido en un solo lugar.</p>
+                        <p>KliV es una plataforma integral diseñada para ayudarte a organizar tus proyectos, tareas y
+                            contenido en un solo lugar.</p>
 
                         <div class="features-grid">
                             <div class="feature-card">
@@ -905,7 +923,8 @@
 
                 <div class="team-section">
                     <h3>Nuestro Compromiso</h3>
-                    <p>Estamos comprometidos con crear herramientas que realmente mejoren tu productividad y experiencia de usuario.</p>
+                    <p>Estamos comprometidos con crear herramientas que realmente mejoren tu productividad y experiencia
+                        de usuario.</p>
 
                     <div class="stats-grid">
                         <div class="stat-item">
@@ -925,7 +944,9 @@
 
                 <div class="about-actions">
                     <button class="btn-primary" onclick="dashboardApp.activateSection('Help')">Comenzar a Usar</button>
-                    <button class="btn-secondary" onclick="dashboardApp.showToast('¡Gracias por tu interés!', 'success')">Contactar Soporte</button>
+                    <button class="btn-secondary"
+                        onclick="dashboardApp.showToast('¡Gracias por tu interés!', 'success')">Contactar
+                        Soporte</button>
                 </div>
             </div>
         </section>
@@ -942,4 +963,5 @@
         </div>
     </footer>
 </body>
+
 </html>

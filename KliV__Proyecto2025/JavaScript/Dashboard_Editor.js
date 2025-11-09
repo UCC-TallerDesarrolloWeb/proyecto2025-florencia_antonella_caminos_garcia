@@ -241,7 +241,7 @@ class DashboardEditor {
         const baseY = Math.floor(this.elements.length / 4) * 170;
 
         let newElement;
-        switch(type) {
+        switch (type) {
             case 'chart':
                 newElement = new ChartElement(this.nextElementId, baseX, baseY);
                 break;
@@ -273,7 +273,7 @@ class DashboardEditor {
      * @method eliminarElemento
      * @returns {boolean} True si se eliminó correctamente
      */
-    const: eliminarElemento = () => {
+    eliminarElemento = () => {
         const idInput = document.getElementById('eliminar-id');
         const id = parseInt(idInput.value);
         if (!isNaN(id)) {
@@ -281,14 +281,15 @@ class DashboardEditor {
         } else {
             dashboardEditor.mostrarNotificacion('❌ Por favor ingresa un ID válido', 'error');
         }
-    }
+    };
+
 
     /**
      * Busca un elemento en el dashboard por ID
      * @method buscarElemento
      * @returns {DashboardElement|null} Elemento encontrado o null
      */
-     buscarElemento = () => {
+    buscarElemento = () => {
         const idInput = document.getElementById('buscar-id');
         const id = parseInt(idInput.value);
         if (!isNaN(id)) {
@@ -376,7 +377,7 @@ class DashboardEditor {
     ejecutarComando = (comando) => {
         console.log(`🎯 Ejecutando comando: ${comando}`);
 
-        switch(comando) {
+        switch (comando) {
             case 'add chart':
                 this.agregarElemento('chart');
                 break;
@@ -621,7 +622,7 @@ class DashboardEditor {
      */
     exportarCanvas = () => {
         const enlace = document.createElement('a');
-        enlace.download = `dashboard-${this.currentProject}-${new Date().toISOString().slice(0,10)}.png`;
+        enlace.download = `dashboard-${this.currentProject}-${new Date().toISOString().slice(0, 10)}.png`;
         enlace.href = this.canvas.toDataURL();
         enlace.click();
         this.mostrarNotificacion('💾 Canvas exportado como imagen');

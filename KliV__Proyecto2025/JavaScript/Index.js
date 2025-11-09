@@ -309,10 +309,12 @@ class DashboardApp {
                     ${this.generateStickerGrid()}
                 </div>
                 <div class="sticker-upload">
-                    <input type="file" id="sticker-upload-input" accept="image/*" style="display: none;">
-                    <button onclick="document.getElementById('sticker-upload-input').click()">
-                        📤 Subir Sticker
-                    </button>
+                <label for="sticker-upload-input" class="sticker-upload-label">📤 Subir Sticker</label>
+                <input type="file" id="sticker-upload-input" accept="image/*">
+                    
+                <button onclick="document.getElementById('sticker-upload-input').click()">
+                    📤 Subir Sticker
+                </button>
                 </div>
             </div>
         `;
@@ -331,9 +333,9 @@ class DashboardApp {
         return allStickers.map(sticker => `
             <div class="sticker-item" draggable="true" data-sticker-id="${sticker.id}" data-type="${sticker.type}">
                 ${sticker.type === 'emoji' ?
-            `<div class="sticker-emoji">${sticker.content}</div>` :
-            `<img src="${sticker.content}" alt="Sticker" class="sticker-image">`
-        }
+                `<div class="sticker-emoji">${sticker.content}</div>` :
+                `<img src="${sticker.content}" alt="Sticker" class="sticker-image">`
+            }
             </div>
         `).join('');
     }
@@ -431,7 +433,7 @@ class DashboardApp {
         if (sticker.type === 'emoji') {
             stickerElement.innerHTML = sticker.content;
         } else {
-            stickerElement.innerHTML = `<img src="${sticker.content}" alt="Sticker" style="max-width: 100px; max-height: 100px;">`;
+            stickerElement.innerHTML = `<img src="${sticker.content}" alt="Sticker">`;
         }
 
         this.makeDraggable(stickerElement);
@@ -549,7 +551,7 @@ class DashboardApp {
         const allStickers = [...this.stickers.default, ...this.stickers.custom];
         return allStickers.find(sticker => sticker.id === stickerId) || null;
     }
-// ==========================
+    // ==========================
     // SISTEMA DE NAVEGACIÓN
     // ==========================
 
@@ -889,7 +891,7 @@ class DashboardApp {
                 element,
                 NodeFilter.SHOW_TEXT,
                 {
-                    acceptNode: function(node) {
+                    acceptNode: function (node) {
                         return node.textContent.toLowerCase().includes(query) ?
                             NodeFilter.FILTER_ACCEPT :
                             NodeFilter.FILTER_REJECT;
@@ -981,7 +983,7 @@ class DashboardApp {
     simpleTextHighlight = (element, query) => {
         const html = element.innerHTML;
         const regex = new RegExp(`(${this.escapeRegex(query)})`, 'gi');
-        element.innerHTML = html.replace(regex, '<span class="search-highlight" style="background-color: yellow; color: black; padding: 2px 1px; border-radius: 3px; font-weight: bold;">$1</span>');
+        element.innerHTML = html.replace(regex, '<span class="search-highlight">$1</span>');
     }
 
     /**
@@ -1656,9 +1658,9 @@ class DashboardApp {
         }, 2000);
     }
 
-// ==========================
-// SISTEMA DE TAREAS
-// ==========================
+    // ==========================
+    // SISTEMA DE TAREAS
+    // ==========================
 
     /**
      * @method setupTaskEvents
@@ -1926,9 +1928,9 @@ class DashboardApp {
         requestAnimationFrame(updateNumber);
     }
 
-// ==========================
-// SISTEMA DE CONFIGURACIÓN
-// ==========================
+    // ==========================
+    // SISTEMA DE CONFIGURACIÓN
+    // ==========================
 
     /**
      * @method setupSettingsEvents
@@ -2062,9 +2064,9 @@ class DashboardApp {
         this.showToast(`Notificaciones ${enabled ? 'activadas' : 'desactivadas'}`, 'info');
     }
 
-// ==========================
-// SISTEMA DE AYUDA
-// ==========================
+    // ==========================
+    // SISTEMA DE AYUDA
+    // ==========================
 
     /**
      * @method setupHelpEvents
@@ -2325,9 +2327,9 @@ class DashboardApp {
         }
     }
 
-// ==========================
-// EVENTOS GLOBALES
-// ==========================
+    // ==========================
+    // EVENTOS GLOBALES
+    // ==========================
 
     /**
      * @method setupGlobalEvents
@@ -2382,7 +2384,7 @@ class DashboardApp {
         window.addEventListener('beforeunload', (e) => {
             if (this.hasUnsavedChanges) {
                 e.preventDefault();
-                console.log ('⚠️ Cambios sin guardar - mostrando diálogo de confirmación del navegador');
+                console.log('⚠️ Cambios sin guardar - mostrando diálogo de confirmación del navegador');
                 this.showToast('Tienes cambios sin guardar', 'warning');
             }
         });
@@ -2749,15 +2751,7 @@ let initializeDashboard = () => {
         errorMessage.innerHTML = `
             <h3>❌ Error al cargar la aplicación</h3>
             <p>No se pudo inicializar el Dashboard. Por favor, recarga la página.</p>
-            <button onclick="location.reload()" style="
-                background: white;
-                color: #e74c3c;
-                border: none;
-                padding: 10px 20px;
-                border-radius: 5px;
-                cursor: pointer;
-                margin-top: 10px;
-            ">Recargar Página</button>
+            <button onclick="location.reload()">Recargar Página</button>
         `;
         document.body.appendChild(errorMessage);
     }
