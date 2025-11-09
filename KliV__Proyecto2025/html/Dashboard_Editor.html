@@ -57,7 +57,7 @@
             <button type="button" onclick="dashboardEditor.ajustarZoom(0.8)">
                 Zoom Out
             </button>
-            <button type="button" onclick="dashboardEditor.zoom = 1.0; dashboardEditor.renderizarVista();">
+            <button type="button" onclick="dashboardEditor.resetZoom()">
                 Reset Zoom
             </button>
         </fieldset>
@@ -177,11 +177,49 @@
 
     <section>
         <h2>Vista del Dashboard</h2>
+
+        <fieldset>
+            <legend>Controles del Canvas</legend>
+            <div class="canvas-controls">
+                <button type="button" onclick="dashboardEditor.mostrarGrid()">
+                    Mostrar/Ocultar Grid
+                </button>
+                <button type="button" onclick="dashboardEditor.limpiarCanvas()">
+                    Limpiar Canvas
+                </button>
+                <button type="button" onclick="dashboardEditor.exportarCanvas()">
+                    Exportar como Imagen
+                </button>
+                <label for="grid-opacity">Opacidad Grid:</label>
+                <input type="range" id="grid-opacity" min="0" max="100" value="30"
+                       oninput="dashboardEditor.ajustarOpacidadGrid(this.value)">
+            </div>
+        </fieldset>
+
         <div id="vista-dashboard">
-            <p>La visualización del grid aparecerá en la consola del navegador.</p>
-            <button type="button" onclick="dashboardEditor.renderizarVista()">
-                Renderizar Vista en Consola
-            </button>
+            <div class="canvas-container">
+                <canvas id="dashboard-canvas" width="1200" height="800">
+                    Tu navegador no soporta el elemento canvas.
+                </canvas>
+                <div id="canvas-overlay" class="canvas-overlay"></div>
+            </div>
+
+            <div class="canvas-info">
+                <p><strong>Zoom:</strong> <span id="zoom-visual">1.0x</span></p>
+                <p><strong>Elementos:</strong> <span id="elementos-count">0</span></p>
+                <p><strong>Proyecto:</strong> <span id="proyecto-visual">personal</span></p>
+            </div>
+
+            <div class="canvas-actions">
+                <button type="button" onclick="dashboardEditor.renderizarCanvasCompleto()"
+                        class="btn-primary">
+                    Renderizar Vista Completa
+                </button>
+                <button type="button" onclick="dashboardEditor.mostrarEnConsola()"
+                        class="btn-secondary">
+                    Mostrar en Consola
+                </button>
+            </div>
         </div>
     </section>
 </main>
