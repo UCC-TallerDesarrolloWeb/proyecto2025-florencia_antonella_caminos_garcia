@@ -1,78 +1,60 @@
-// src/contexts/AuthContext.jsx
-import React, { createContext, useContext, useState, useEffect } from 'react'
+import { createContext, useState, useEffect, useContext } from "react"
 
-/**
- * Contexto de autenticación global para la aplicación.
- * Permite gestionar el estado del usuario (login, logout)
- * y persistirlo en localStorage.
- */
-const AuthContext = createContext(null)
+export const AuthContext = createContext()
 
-/**
- * Hook personalizado que facilita el acceso al contexto de autenticación.
- * Ejemplo: const {user, login, logout, isAuthenticated} = useAuth();
- */
-export function useAuth() {
-    const context = useContext(AuthContext)
-    if (!context) {
-        throw new Error('useAuth debe usarse dentro de un <AuthProvider>')
-    }
-    return context
-}
-
-/**
- * Proveedor de autenticación global.
- * Envuelve la aplicación para compartir el estado del usuario.
- */
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null)
     const [loading, setLoading] = useState(true)
+    const [error, setError] = useState(null)
+    const [token, setToken] = useState(null)
 
-    // Carga el usuario guardado al iniciar la app
     useEffect(() => {
-        const savedUser = localStorage.getItem('user')
-        if (savedUser) {
-            setUser(JSON.parse(savedUser))
+        const storedUser = localStorage.getItem("user")
+        const storedToken = localStorage.getItem("token")
+        if (storedUser && storedToken) {
+            setUser(JSON.parse(storedUser))
+            setToken(storedToken)
         }
         setLoading(false)
     }, [])
 
-    /**
-     * Inicia sesión si las credenciales son válidas
-     * @param {string} email
-     * @param {string} password
-     * @returns {boolean} éxito o error
-     */
-    const login = (email, password) => {
-        // ⚠️ Ejemplo simple de validación (puedes reemplazarlo con backend o JSON)
-        if (email === 'flor@kliv.com' && password === '12345') {
-            const userData = {
-                id: 1,
-                name: 'Flor',
-                email,
-                avatar: '/imagenes/avatar.jpg'
+    const login = async (credentials) => {
+        setLoading(true)
+        setError(null)
+        try {
+            const response = await fakeAuthRequest(credentials)
+            if (response.success) {
+                setUser(response.user)
+                setToken(response.token)
+                localStorage.setItem("user", JSON.stringify(response.user))
+                localStorage.setItem("token", response.token)
+            } else {
+                setError("Credenciales inválidas")
             }
-            setUser(userData)
-            localStorage.setItem('user', JSON.stringify(userData))
-            return true
+        } catch {
+            setError("Error de conexión")
+        } finally {
+            setLoading(false)
         }
-        return false
     }
 
-    /**
-     * Cierra la sesión y limpia el almacenamiento
-     */
     const logout = () => {
         setUser(null)
-        localStorage.removeItem('user')
+        setToken(null)
+        localStorage.removeItem("user")
+        localStorage.removeItem("token")
     }
+
+    const isAuthenticated = !!user && !!token
 
     const value = {
         user,
-        isAuthenticated: !!user,
+        token,
+        error,
         loading,
         login,
-        logout
+        logout,
+        isAuthenticated,
     }
 
     return (
@@ -81,3 +63,20 @@ export const AuthProvider = ({ children }) => {
         </AuthContext.Provider>
     )
 }
+
+const fakeAuthRequest = (credentials) =>
+    new Promise((resolve) => {
+        setTimeout(() => {
+            if (credentials.email === "admin@kliv.com" && credentials.password === "1234") {
+                resolve({
+                    success: true,
+                    user: { name: "Administrador", email: credentials.email, role: "admin" },
+                    token: "fake-jwt-token-123",
+                })
+            } else {
+                resolve({ success: false })
+            }
+        }, 800)
+    })
+
+export const useAuth = () => useContext(AuthContext)
