@@ -1,4 +1,3 @@
-// src/pages/Dashboard.jsx
 import React, { useState, useEffect, useContext } from "react"
 import { useNavigate } from "react-router-dom"
 import { motion } from "framer-motion"

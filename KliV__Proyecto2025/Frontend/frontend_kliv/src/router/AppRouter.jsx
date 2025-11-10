@@ -1,8 +1,6 @@
 import React, { useContext } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext";
-
-// Importar páginas
 import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Register from "../pages/Register";

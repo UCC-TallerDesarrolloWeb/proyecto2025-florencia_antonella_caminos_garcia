@@ -1,24 +1,8 @@
-/**
- * main.jsx
- * ============================================================
- * Punto de entrada principal de la aplicación Task Manager Pro.
- * Configura los contextos globales (Tema y Autenticación),
- * enrutamiento con React Router y modo estricto de React.
- *
- * @version 2.0
- * @author
- * Florencia Antonella Caminos García
- */
-
 import React, { StrictMode } from "react"
 import { createRoot } from "react-dom/client"
 import { BrowserRouter } from "react-router-dom"
-
-// Contextos globales
 import { ThemeProvider } from "@contexts/ThemeContext"
 import { AuthProvider } from "@contexts/AuthContext"
-
-// Componente raíz
 import App from "./App.jsx"
 
 // Contenedor raíz seguro

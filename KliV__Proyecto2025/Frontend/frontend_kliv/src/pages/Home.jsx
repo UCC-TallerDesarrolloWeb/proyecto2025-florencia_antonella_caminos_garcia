@@ -1,15 +1,18 @@
-// src/pages/Home.jsx
-import React, { useEffect, useContext } from "react"
+import React, { useEffect, useContext, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { motion } from "framer-motion"
 import { ThemeContext } from "@contexts/ThemeContext"
 import useAuth from "@hooks/useAuth"
+import { fetchAllUsers } from "@api/users"
 import "@styles/Home.css"
 
 export default function Home() {
     const navigate = useNavigate()
     const { user, isAuthenticated, logout } = useAuth()
     const { darkMode, setDarkMode } = useContext(ThemeContext)
+
+    const [users, setUsers] = useState([])
+    const [loading, setLoading] = useState(true)
 
     // Sincroniza clase del body con el tema actual
     useEffect(() => {
@@ -28,6 +31,13 @@ export default function Home() {
             return () => clearTimeout(timer)
         }
     }, [isAuthenticated, navigate])
+
+    // Llamada a API mock para obtener usuarios
+    useEffect(() => {
+        fetchAllUsers()
+            .then((data) => setUsers(data))
+            .finally(() => setLoading(false))
+    }, [])
 
     return (
         <motion.section
@@ -53,6 +63,19 @@ export default function Home() {
                     Organiza tus proyectos, gestiona tus tareas y mejora tu
                     productividad con estilo y simplicidad.
                 </p>
+
+                {/* Lista de usuarios mock */}
+                {loading ? (
+                    <p>Cargando usuarios...</p>
+                ) : (
+                    <ul>
+                        {users.map((u) => (
+                            <li key={u.id}>
+                                {u.name} - {u.email}
+                            </li>
+                        ))}
+                    </ul>
+                )}
 
                 <motion.div
                     className="home-actions"

@@ -1,18 +1,3 @@
-/**
- * useAuth.js (versión mejorada con async/await)
- * ============================================================
- * Hook personalizado para manejar autenticación reactiva.
- * Incluye:
- * - Sincronización automática con localStorage.
- * - Redirección segura en rutas protegidas.
- * - Manejo asíncrono de login/logout.
- * - Compatibilidad total con AuthContext.
- *
- * @version 3.1
- * @author
- * Florencia Antonella Caminos García
- */
-
 import { useContext, useEffect, useCallback } from "react"
 import { useNavigate } from "react-router-dom"
 import { AuthContext } from "@contexts/AuthContext"

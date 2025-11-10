@@ -1,4 +1,3 @@
-// src/pages/Login.jsx
 import React, { useState, useContext, useEffect } from "react"
 import { useNavigate, Link } from "react-router-dom"
 import { motion } from "framer-motion"
