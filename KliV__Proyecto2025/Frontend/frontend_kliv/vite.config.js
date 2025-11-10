@@ -1,6 +1,6 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import {resolve} from "node:path";
+import { resolve } from "node:path";
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -14,4 +14,11 @@ export default defineConfig({
             '@data': resolve(__dirname, './src/data'),
         },
     },
+    css: {
+        preprocessorOptions: {
+            scss: {
+                additionalData: `@import "@styles/index.scss";`
+            }
+        }
+    }
 })

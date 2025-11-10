@@ -1,0 +1,194 @@
+// src/styles/Register.scss
+
+// Variables de colores
+$primary-color: #4f46e5;
+$success-color: #10b981;
+$danger-color: #ef4444;
+$light-color: #f3f4f6;
+$dark-color: #1f2937;
+$text-light: #ffffff;
+$text-dark: #111827;
+$transition-speed: 0.3s;
+
+// Tipografía
+$font-main: 'Inter', sans-serif;
+
+// Mixins
+@mixin flex-center($direction: column, $justify: center, $align: center) {
+    display: flex;
+    flex-direction: $direction;
+    justify-content: $justify;
+    align-items: $align;
+}
+
+@mixin btn-style($bg, $color) {
+    background-color: $bg;
+    color: $color;
+    border: none;
+    padding: 0.7rem 1.5rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-weight: 500;
+    text-align: center;
+    transition: all $transition-speed ease-in-out;
+
+    &:hover {
+        opacity: 0.85;
+        transform: translateY(-2px);
+    }
+
+    &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+}
+
+// Contenedor principal
+.register-container {
+    min-height: 100vh;
+    padding: 2rem;
+    font-family: $font-main;
+    @include flex-center(column, center, center);
+
+    &.light {
+        background-color: $light-color;
+        color: $text-dark;
+    }
+
+    &.dark {
+        background-color: $dark-color;
+        color: $text-light;
+    }
+}
+
+// Card de registro
+.register-card {
+    background-color: inherit;
+    border-radius: 1rem;
+    padding: 2rem;
+    max-width: 450px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    transition: all $transition-speed ease-in-out;
+
+    &:hover {
+        box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+    }
+}
+
+// Títulos
+.register-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.register-subtitle {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+
+    strong {
+        color: $primary-color;
+    }
+}
+
+// Formulario
+.register-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        text-align: left;
+
+        label {
+            margin-bottom: 0.3rem;
+            font-weight: 500;
+        }
+
+        input {
+            padding: 0.6rem 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid gray;
+            font-size: 0.95rem;
+            outline: none;
+            transition: all $transition-speed ease-in-out;
+
+            &:focus {
+                border-color: $primary-color;
+                box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
+            }
+        }
+    }
+
+    .error-message {
+        font-size: 0.9rem;
+        margin-top: -0.5rem;
+        margin-bottom: 0.5rem;
+        text-align: center;
+
+        &.error {
+            color: $danger-color;
+        }
+
+        &.success {
+            color: $success-color;
+        }
+    }
+
+    .btn-primary {
+        @include btn-style($primary-color, $text-light);
+    }
+}
+
+// Footer
+.register-footer {
+    margin-top: 1.5rem;
+    font-size: 0.9rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: center;
+
+    .login-link {
+        color: $primary-color;
+        font-weight: 500;
+        text-decoration: none;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+
+    .back-home {
+        color: gray;
+        text-decoration: none;
+        font-size: 0.85rem;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}
+
+// Responsivo
+@media (max-width: 480px) {
+    .register-card {
+        padding: 1.5rem;
+    }
+
+    .register-title {
+        font-size: 1.6rem;
+    }
+
+    .register-subtitle {
+        font-size: 0.95rem;
+    }
+
+    .register-form .btn-primary {
+        width: 100%;
+    }
+}

@@ -1,0 +1,162 @@
+// src/styles/Home.scss
+
+// Variables de colores
+$primary-color: #4f46e5;
+$danger-color: #ef4444;
+$alt-color: #10b981;
+$light-color: #f3f4f6;
+$dark-color: #1f2937;
+$text-light: #ffffff;
+$text-dark: #111827;
+$transition-speed: 0.3s;
+
+// Tipografía
+$font-main: 'Inter', sans-serif;
+
+// Mixins
+@mixin flex-center($direction: column, $justify: center, $align: center) {
+    display: flex;
+    flex-direction: $direction;
+    justify-content: $justify;
+    align-items: $align;
+}
+
+@mixin btn-style($bg, $color) {
+    background-color: $bg;
+    color: $color;
+    border: none;
+    padding: 0.7rem 1.5rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-weight: 500;
+    text-decoration: none;
+    text-align: center;
+    transition: all $transition-speed ease-in-out;
+
+    &:hover {
+        opacity: 0.85;
+        transform: translateY(-2px);
+    }
+
+    &:active {
+        transform: translateY(0);
+    }
+}
+
+// Contenedor principal
+.home-container {
+    min-height: 100vh;
+    padding: 2rem;
+    font-family: $font-main;
+    @include flex-center(column, center, center);
+    gap: 2rem;
+
+    &.light {
+        background-color: $light-color;
+        color: $text-dark;
+    }
+
+    &.dark {
+        background-color: $dark-color;
+        color: $text-light;
+    }
+}
+
+// Contenido principal
+.home-content {
+    background-color: inherit;
+    border-radius: 1rem;
+    padding: 2rem;
+    max-width: 700px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    transition: all $transition-speed ease-in-out;
+
+    &:hover {
+        box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+    }
+}
+
+// Títulos
+.home-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.home-subtitle {
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+    line-height: 1.5;
+    color: gray;
+}
+
+// Acciones (botones)
+.home-actions {
+    @include flex-center(row, center, center);
+    gap: 1rem;
+    flex-wrap: wrap;
+
+    .btn {
+        font-size: 1rem;
+
+        &.btn-primary {
+            @include btn-style($primary-color, $text-light);
+        }
+
+        &.btn-alt {
+            @include btn-style($alt-color, $text-light);
+        }
+
+        &.btn-danger {
+            @include btn-style($danger-color, $text-light);
+        }
+    }
+}
+
+// Toggle de tema
+.theme-toggle {
+    margin-top: 2rem;
+    background: transparent;
+    border: 2px solid currentColor;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all $transition-speed ease-in-out;
+
+    &:hover {
+        background-color: currentColor;
+        color: $light-color;
+    }
+}
+
+// Responsivo
+@media (max-width: 768px) {
+    .home-content {
+        padding: 1.5rem;
+    }
+
+    .home-title {
+        font-size: 1.7rem;
+    }
+
+    .home-subtitle {
+        font-size: 1rem;
+    }
+
+    .home-actions {
+        flex-direction: column;
+        gap: 0.75rem;
+
+        .btn {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+
+    .theme-toggle {
+        width: 100%;
+    }
+}

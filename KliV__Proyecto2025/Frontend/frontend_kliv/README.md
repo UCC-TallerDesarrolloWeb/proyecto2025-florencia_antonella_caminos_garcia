@@ -1,16 +1,57 @@
-# React + Vite
+# Task Manager Pro - React + Vite + Tailwind + SCSS
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Este proyecto es una **aplicación de gestión de tareas** desarrollada con **React** y **Vite**, optimizada para desarrollo rápido y escalable. Incluye un panel de usuario, autenticación, gestión de temas (modo claro/oscuro) y componentes reutilizables.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Características principales
 
-## React Compiler
+- **React con Vite:** configuración mínima para HMR (Hot Module Replacement) y compilación rápida.
+- **Rutas y navegación:** implementadas con `react-router-dom`, incluyendo `Home`, `Login`, `Register` y `Dashboard`.
+- **Autenticación:** hooks personalizados (`useAuth`) para manejar login, logout y redirecciones automáticas.
+- **Modo oscuro dinámico:** usando `ThemeContext` y clases `dark/light` en `<body>`.
+- **SCSS global y modular:** con variables, mixins y base de estilos unificada (`index.scss`) para consistencia de UI.
+- **TailwindCSS integrado:** con configuración extendida de colores, tipografía, sombras y bordes, compatible con SCSS.
+- **Componentes reutilizables:** `Navbar`, `Cards`, `Botones` estilizados con Tailwind y SCSS.
+- **Animaciones:** utilizando `Framer Motion` para transiciones suaves en componentes y páginas.
+- **Responsive:** diseño adaptativo para móviles y tablets.
+- **Validación de formularios:** login y registro con mensajes de error y feedback visual.
+- **Configuración moderna de Vite:** 
+  - Alias para carpetas (`@components`, `@pages`, `@contexts`, `@styles`, `@data`).
+  - SCSS global disponible en todos los componentes.
+  - Integración con PostCSS para Tailwind y autoprefixer.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## Estructura de carpetas
+src/
+├─ components/ # Componentes reutilizables (Navbar, Cards, etc.)
+├─ pages/ # Páginas principales (Home, Login, Register, Dashboard)
+├─ contexts/ # Contextos de React (ThemeContext, AuthContext)
+├─ styles/ # SCSS global y específicos de páginas
+├─ data/ # Archivos de datos o mock
+├─ hooks/ # Hooks personalizados (useAuth, useTheme)
+├─ App.jsx # Componente principal con rutas
+├─ main.jsx # Entrada de Vite
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+
+---
+
+## Tecnologías utilizadas
+
+- [React 18+](https://reactjs.org/)
+- [Vite](https://vitejs.dev/)
+- [TailwindCSS](https://tailwindcss.com/)
+- [SCSS](https://sass-lang.com/)
+- [Framer Motion](https://www.framer.com/motion/)
+- [React Router DOM](https://reactrouter.com/)
+- [PostCSS & Autoprefixer](https://postcss.org/)
+
+---
+
+## Configuración del proyecto
+
+1. **Instalación de dependencias:**
+
+```bash
+npm install

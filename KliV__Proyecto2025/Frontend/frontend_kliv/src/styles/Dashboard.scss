@@ -1,0 +1,176 @@
+// src/styles/Dashboard.scss
+
+// Variables de colores
+$primary-color: #4f46e5;
+$danger-color: #ef4444;
+$light-color: #f3f4f6;
+$dark-color: #1f2937;
+$text-light: #ffffff;
+$text-dark: #111827;
+$accent-color: #10b981;
+$transition-speed: 0.3s;
+
+// Tipografía
+$font-main: 'Inter', sans-serif;
+
+// Mixins
+@mixin flex-center($direction: row, $justify: center, $align: center) {
+    display: flex;
+    flex-direction: $direction;
+    justify-content: $justify;
+    align-items: $align;
+}
+
+@mixin btn-style($bg, $color) {
+    background-color: $bg;
+    color: $color;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all $transition-speed ease-in-out;
+
+    &:hover {
+        opacity: 0.85;
+        transform: translateY(-2px);
+    }
+
+    &:active {
+        transform: translateY(0);
+    }
+}
+
+// Dashboard Container
+.dashboard-container {
+    min-height: 100vh;
+    padding: 2rem;
+    font-family: $font-main;
+    @include flex-center(column, center, flex-start);
+    gap: 2rem;
+
+    &.light {
+        background-color: $light-color;
+        color: $text-dark;
+    }
+
+    &.dark {
+        background-color: $dark-color;
+        color: $text-light;
+    }
+}
+
+// Card
+.dashboard-card {
+    background-color: inherit;
+    border-radius: 1rem;
+    padding: 2rem;
+    max-width: 800px;
+    width: 100%;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    transition: all $transition-speed ease-in-out;
+
+    &:hover {
+        box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+    }
+}
+
+// Header
+.dashboard-header {
+    margin-bottom: 1.5rem;
+
+    .titulo {
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+
+        .user {
+            color: $primary-color;
+        }
+    }
+
+    .fecha {
+        font-size: 0.9rem;
+        color: gray;
+    }
+}
+
+// Texto descriptivo
+.texto {
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+
+    strong {
+        color: $accent-color;
+        font-weight: 600;
+    }
+}
+
+// Actions
+.dashboard-actions {
+    @include flex-center(row, flex-start, center);
+    gap: 1rem;
+    flex-wrap: wrap;
+
+    .btn {
+        font-size: 0.95rem;
+
+        &.btn-primary {
+            @include btn-style($primary-color, $text-light);
+        }
+
+        &.btn-danger {
+            @include btn-style($danger-color, $text-light);
+        }
+
+        &.btn-theme {
+            &.btn-dark {
+                @include btn-style($dark-color, $text-light);
+                border: 1px solid $text-light;
+            }
+
+            &.btn-light {
+                @include btn-style($light-color, $text-dark);
+                border: 1px solid $text-dark;
+            }
+        }
+    }
+}
+
+// Footer
+.dashboard-footer {
+    margin-top: 3rem;
+    font-size: 0.8rem;
+    color: gray;
+    text-align: center;
+}
+
+// Responsivo
+@media (max-width: 768px) {
+    .dashboard-card {
+        padding: 1.5rem;
+    }
+
+    .dashboard-header .titulo {
+        font-size: 1.5rem;
+    }
+
+    .texto {
+        font-size: 0.95rem;
+    }
+
+    .dashboard-actions {
+        gap: 0.5rem;
+        flex-direction: column;
+        align-items: stretch;
+
+        .btn {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+}

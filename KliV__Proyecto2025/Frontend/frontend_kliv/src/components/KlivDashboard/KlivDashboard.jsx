@@ -1,84 +1,102 @@
-// src/components/KlivDashboard/KlivDashboard.jsx
-import React, { useState, useEffect } from 'react'
-import { useAuth } from '@context/AuthContext'
-import { useNavigate } from 'react-router-dom'
-import '@styles/KlivDashboard.css'
+import React, { useState, useEffect, useMemo, useCallback } from "react"
+import { useAuth } from "@context/AuthContext"
+import { useNavigate } from "react-router-dom"
+import { LogOut, Search, Heart, MessageSquare, Settings, HelpCircle, LayoutDashboard, FolderKanban, Image as ImageIcon, ListTodo } from "lucide-react"
+import "@styles/KlivDashboard.css"
 
-/**
- * KlivDashboard - Panel principal del usuario
- * Permite navegar entre secciones, visualizar contenido dinámico y cerrar sesión.
- */
 const KlivDashboard = () => {
     const navigate = useNavigate()
     const { user, logout, isAuthenticated } = useAuth()
-    const [activeSection, setActiveSection] = useState('Dashboard')
-    const [searchQuery, setSearchQuery] = useState('')
+
+    const [activeSection, setActiveSection] = useState("Dashboard")
+    const [searchQuery, setSearchQuery] = useState("")
     const [pins, setPins] = useState([])
+    const [isSidebarOpen, setSidebarOpen] = useState(true)
 
-    // Cargar pines dinámicos (simula fetch desde JSON local)
     useEffect(() => {
-        const storedPins = [
-            { id: 1, image: 'https://picsum.photos/200/300', likes: 120, comments: 45 },
-            { id: 2, image: 'https://picsum.photos/200/180', likes: 89, comments: 12 },
-            { id: 3, image: 'https://picsum.photos/200/250', likes: 90, comments: 78 }
-        ]
-        setPins(storedPins)
-    }, [])
-
-    // Si el usuario no está autenticado, redirige al login
-    useEffect(() => {
-        if (!isAuthenticated) {
-            navigate('/login', { replace: true })
-        }
+        if (!isAuthenticated) navigate("/login", { replace: true })
     }, [isAuthenticated, navigate])
 
-    const handleLogout = () => {
-        logout()
-        navigate('/login')
-    }
+    useEffect(() => {
+        setPins([
+            { id: 1, image: "https://picsum.photos/400/250", likes: 124, comments: 34, category: "Design" },
+            { id: 2, image: "https://picsum.photos/400/280", likes: 87, comments: 18, category: "UI" },
+            { id: 3, image: "https://picsum.photos/400/300", likes: 154, comments: 54, category: "Research" },
+            { id: 4, image: "https://picsum.photos/400/260", likes: 45, comments: 9, category: "Ideas" }
+        ])
+    }, [])
 
-    const filteredPins = pins.filter(pin =>
-        pin.id.toString().includes(searchQuery.trim()) // simple ejemplo de búsqueda
-    )
+    const filteredPins = useMemo(() => {
+        const query = searchQuery.trim().toLowerCase()
+        return pins.filter(pin =>
+            pin.category.toLowerCase().includes(query) ||
+            pin.id.toString().includes(query)
+        )
+    }, [pins, searchQuery])
+
+    const handleLogout = useCallback(() => {
+        logout()
+        navigate("/login")
+    }, [logout, navigate])
+
+    const sections = useMemo(() => ([
+        { name: "Dashboard", icon: <LayoutDashboard size={18} /> },
+        { name: "Projects", icon: <FolderKanban size={18} /> },
+        { name: "Gallery", icon: <ImageIcon size={18} /> },
+        { name: "Tasks", icon: <ListTodo size={18} /> },
+        { name: "Settings", icon: <Settings size={18} /> },
+        { name: "Help", icon: <HelpCircle size={18} /> }
+    ]), [])
 
     return (
-        <div className="kliv-dashboard">
-            {/* Header */}
+        <div className={`kliv-dashboard ${isSidebarOpen ? "sidebar-open" : "sidebar-closed"}`}>
+            {/* HEADER */}
             <header className="kliv-header">
-                <div>
+                <div className="kliv-header-left">
+                    <button
+                        className="sidebar-toggle"
+                        onClick={() => setSidebarOpen(!isSidebarOpen)}
+                        title="Mostrar/Ocultar menú"
+                    >
+                        ☰
+                    </button>
                     <h1 className="kliv-title">KliV</h1>
-                    <p className="kliv-subtitle">Dashboard Principal</p>
+                    <span className="kliv-subtitle">Panel Principal</span>
                 </div>
 
-                <div className="kliv-header-actions">
-                    <input
-                        type="text"
-                        placeholder="Buscar..."
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        className="kliv-search"
-                    />
-                    <div className="kliv-user-info">
-                        <span className="kliv-username">{user?.name}</span>
-                        <button onClick={handleLogout} className="kliv-logout">
-                            Cerrar Sesión
+                <div className="kliv-header-right">
+                    <div className="kliv-search-container">
+                        <Search className="icon" size={16} />
+                        <input
+                            type="text"
+                            placeholder="Buscar proyectos, categorías..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            className="kliv-search-input"
+                        />
+                    </div>
+                    <div className="kliv-user-controls">
+                        <span className="kliv-username">{user?.name || "Usuario"}</span>
+                        <button className="kliv-logout" onClick={handleLogout}>
+                            <LogOut size={16} />
+                            <span>Salir</span>
                         </button>
                     </div>
                 </div>
             </header>
 
-            {/* Sidebar */}
+            {/* SIDEBAR */}
             <aside className="kliv-sidebar">
-                <h2>Inicio</h2>
-                <nav>
+                <nav className="kliv-nav">
                     <ul>
-                        {['Dashboard', 'Projects', 'Gallery', 'Tasks', 'Settings', 'Help'].map(section => (
-                            <li key={section}>
+                        {sections.map(({ name, icon }) => (
+                            <li key={name}>
                                 <button
-                                    onClick={() => setActiveSection(section)}
-                                    className={`kliv-sidebar-btn ${activeSection === section ? 'active' : ''}`}
+                                    className={`kliv-sidebar-btn ${activeSection === name ? "active" : ""}`}
+                                    onClick={() => setActiveSection(name)}
                                 >
-                                    {section}
+                                    {icon}
+                                    <span>{name}</span>
                                 </button>
                             </li>
                         ))}
@@ -86,37 +104,43 @@ const KlivDashboard = () => {
                 </nav>
             </aside>
 
-            {/* Main Content */}
+            {/* MAIN */}
             <main className="kliv-main">
                 <div className="kliv-toolbar">
-                    <button className="kliv-nav-btn">← Anterior</button>
+                    <button className="kliv-nav-btn">←</button>
                     <span className="kliv-breadcrumb">Inicio / {activeSection}</span>
-                    <button className="kliv-nav-btn">Siguiente →</button>
+                    <button className="kliv-nav-btn">→</button>
                 </div>
 
                 <section className="kliv-content">
-                    <h2>{activeSection}</h2>
-
-                    {activeSection === 'Dashboard' && (
+                    {activeSection === "Dashboard" ? (
                         <div className="kliv-pins-grid">
-                            {filteredPins.map(pin => (
-                                <div key={pin.id} className="kliv-pin-card">
-                                    <img src={pin.image} alt={`Pin ${pin.id}`} />
-                                    <div className="kliv-pin-info">
-                                        <button className="kliv-icon-btn">🤍</button>
-                                        <span>{pin.likes}</span>
-                                        <button className="kliv-icon-btn">💬</button>
-                                        <span>{pin.comments}</span>
-                                    </div>
-                                </div>
-                            ))}
+                            {filteredPins.length > 0 ? (
+                                filteredPins.map(pin => (
+                                    <article key={pin.id} className="kliv-pin-card">
+                                        <img src={pin.image} alt={`Pin ${pin.id}`} className="kliv-pin-img" />
+                                        <div className="kliv-pin-footer">
+                                            <div className="pin-meta">
+                                                <span className="pin-category">{pin.category}</span>
+                                            </div>
+                                            <div className="pin-actions">
+                                                <button className="kliv-icon-btn"><Heart size={16} /></button>
+                                                <span>{pin.likes}</span>
+                                                <button className="kliv-icon-btn"><MessageSquare size={16} /></button>
+                                                <span>{pin.comments}</span>
+                                            </div>
+                                        </div>
+                                    </article>
+                                ))
+                            ) : (
+                                <p className="empty-msg">No se encontraron resultados para "{searchQuery}"</p>
+                            )}
                         </div>
-                    )}
-
-                    {activeSection !== 'Dashboard' && (
-                        <p className="kliv-placeholder">
-                            Contenido de {activeSection} — En desarrollo 🚧
-                        </p>
+                    ) : (
+                        <div className="kliv-placeholder">
+                            <h2>{activeSection}</h2>
+                            <p>Contenido de esta sección — Próximamente 🚧</p>
+                        </div>
                     )}
                 </section>
             </main>

@@ -1,0 +1,263 @@
+// src/styles/index.scss
+
+// ================================
+// VARIABLES
+// ================================
+$primary-color: #4f46e5;
+$success-color: #10b981;
+$danger-color: #ef4444;
+$alt-color: #10b981;
+$light-color: #f3f4f6;
+$dark-color: #1f2937;
+$text-light: #ffffff;
+$text-dark: #111827;
+$font-main: 'Inter', sans-serif;
+$transition-speed: 0.3s;
+$border-radius: 0.5rem;
+
+// ================================
+// MIXINS
+// ================================
+@mixin flex-center($direction: column, $justify: center, $align: center) {
+    display: flex;
+    flex-direction: $direction;
+    justify-content: $justify;
+    align-items: $align;
+}
+
+@mixin btn-style($bg, $color) {
+    background-color: $bg;
+    color: $color;
+    border: none;
+    padding: 0.7rem 1.5rem;
+    border-radius: $border-radius;
+    cursor: pointer;
+    font-weight: 500;
+    text-align: center;
+    transition: all $transition-speed ease-in-out;
+
+    &:hover {
+        opacity: 0.85;
+        transform: translateY(-2px);
+    }
+
+    &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+}
+
+// ================================
+// RESET / GLOBAL
+// ================================
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 16px;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: $font-main;
+    background-color: $light-color;
+    color: $text-dark;
+    transition: all $transition-speed ease-in-out;
+
+    &.dark {
+        background-color: $dark-color;
+        color: $text-light;
+    }
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+ul,
+ol {
+    list-style: none;
+}
+
+// ================================
+// LAYOUT
+// ================================
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem 2rem;
+}
+
+.card {
+    background-color: inherit;
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    transition: all $transition-speed ease-in-out;
+
+    &:hover {
+        box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+    }
+}
+
+// ================================
+// BUTTONS
+// ================================
+.btn {
+    font-size: 1rem;
+    @include flex-center(row, center, center);
+    gap: 0.5rem;
+
+    &-primary {
+        @include btn-style($primary-color, $text-light);
+    }
+
+    &-danger {
+        @include btn-style($danger-color, $text-light);
+    }
+
+    &-success {
+        @include btn-style($success-color, $text-light);
+    }
+
+    &-alt {
+        @include btn-style($alt-color, $text-light);
+    }
+}
+
+// ================================
+// HEADINGS & TEXT
+// ================================
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: 700;
+}
+
+p {
+    line-height: 1.5;
+    margin-bottom: 1rem;
+}
+
+strong {
+    font-weight: 600;
+}
+
+// ================================
+// FORM ELEMENTS
+// ================================
+input,
+textarea,
+select,
+button {
+    font-family: inherit;
+    font-size: 1rem;
+    outline: none;
+}
+
+input,
+textarea,
+select {
+    border: 1px solid gray;
+    border-radius: $border-radius;
+    padding: 0.6rem 1rem;
+    transition: all $transition-speed ease-in-out;
+
+    &:focus {
+        border-color: $primary-color;
+        box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
+    }
+}
+
+// ================================
+// UTILITIES
+// ================================
+.text-center {
+    text-align: center;
+}
+
+.mt-1 {
+    margin-top: 0.5rem;
+}
+
+.mt-2 {
+    margin-top: 1rem;
+}
+
+.mb-1 {
+    margin-bottom: 0.5rem;
+}
+
+.mb-2 {
+    margin-bottom: 1rem;
+}
+
+.flex {
+    display: flex;
+
+    &.row {
+        flex-direction: row;
+    }
+
+    &.column {
+        flex-direction: column;
+    }
+
+    &.wrap {
+        flex-wrap: wrap;
+    }
+
+    &.center {
+        justify-content: center;
+        align-items: center;
+    }
+
+    &.between {
+        justify-content: space-between;
+    }
+
+    &.around {
+        justify-content: space-around;
+    }
+}
+
+// ================================
+// MESSAGES
+// ================================
+.error-message {
+    color: $danger-color;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+}
+
+.success-message {
+    color: $success-color;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+}
+
+// ================================
+// RESPONSIVE
+// ================================
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem;
+    }
+
+    .card {
+        padding: 1.5rem;
+    }
+
+    h1 {
+        font-size: 1.6rem;
+    }
+}

@@ -1,15 +1,19 @@
 /**
- * useAuth.js
+ * useAuth.js (versión mejorada con async/await)
  * ============================================================
- * Hook personalizado para acceder fácilmente al contexto de autenticación.
- * Centraliza el acceso a los métodos `login`, `logout` y al usuario actual.
+ * Hook personalizado para manejar autenticación reactiva.
+ * Incluye:
+ * - Sincronización automática con localStorage.
+ * - Redirección segura en rutas protegidas.
+ * - Manejo asíncrono de login/logout.
+ * - Compatibilidad total con AuthContext.
  *
- * @version 2.0
+ * @version 3.1
  * @author
  * Florencia Antonella Caminos García
  */
 
-import { useContext, useEffect } from "react"
+import { useContext, useEffect, useCallback } from "react"
 import { useNavigate } from "react-router-dom"
 import { AuthContext } from "@contexts/AuthContext"
 
@@ -18,8 +22,8 @@ import { AuthContext } from "@contexts/AuthContext"
  *
  * @returns {{
  *  user: object|null,
- *  login: (userData: object) => void,
- *  logout: () => void,
+ *  login: (credentials: object) => Promise<void>,
+ *  logout: () => Promise<void>,
  *  isAuthenticated: boolean,
  *  requireAuth: (redirectTo?: string) => void
  * }}
@@ -27,7 +31,6 @@ import { AuthContext } from "@contexts/AuthContext"
 export default function useAuth() {
     const { user, login, logout } = useContext(AuthContext)
     const navigate = useNavigate()
-
     const isAuthenticated = Boolean(user)
 
     /**
@@ -36,20 +39,73 @@ export default function useAuth() {
      *
      * @param {string} redirectTo - Ruta personalizada de redirección (por defecto: "/login")
      */
-    const requireAuth = (redirectTo = "/login") => {
-        if (!isAuthenticated) {
-            navigate(redirectTo)
-        }
-    }
+    const requireAuth = useCallback(
+        async (redirectTo = "/login") => {
+            if (!isAuthenticated) {
+                console.warn("[useAuth] Usuario no autenticado. Redirigiendo a:", redirectTo)
+                await new Promise((resolve) => setTimeout(resolve, 200)) // delay suave para UX
+                navigate(redirectTo, { replace: true })
+            }
+        },
+        [isAuthenticated, navigate]
+    )
 
-    // Sincroniza autenticación con localStorage (opcional)
+    /**
+     * Inicia sesión de forma asíncrona con control de errores.
+     *
+     * @param {object} credentials - { email, password }
+     */
+    const handleLogin = useCallback(
+        async (credentials) => {
+            try {
+                if (!credentials?.email || !credentials?.password) {
+                    throw new Error("Las credenciales no son válidas.")
+                }
+
+                await login(credentials) // Espera al contexto Auth para procesar
+                console.info("[useAuth] Login exitoso:", credentials.email)
+            } catch (err) {
+                console.error("[useAuth] Error en login:", err.message)
+                throw err
+            }
+        },
+        [login]
+    )
+
+    /**
+     * Cierra sesión limpiamente.
+     * Incluye pequeña pausa para UX visual (animaciones o loaders).
+     */
+    const handleLogout = useCallback(async () => {
+        try {
+            await new Promise((resolve) => setTimeout(resolve, 250))
+            await logout()
+            console.info("[useAuth] Sesión cerrada correctamente.")
+        } catch (err) {
+            console.error("[useAuth] Error durante logout:", err.message)
+        }
+    }, [logout])
+
+    /**
+     * Mantiene sincronizado el usuario con localStorage.
+     */
     useEffect(() => {
-        if (user) {
-            localStorage.setItem("user", JSON.stringify(user))
-        } else {
-            localStorage.removeItem("user")
+        try {
+            if (user) {
+                localStorage.setItem("user", JSON.stringify(user))
+            } else {
+                localStorage.removeItem("user")
+            }
+        } catch (error) {
+            console.warn("[useAuth] No se pudo sincronizar el usuario:", error)
         }
     }, [user])
 
-    return { user, login, logout, isAuthenticated, requireAuth }
+    return {
+        user,
+        login: handleLogin,
+        logout: handleLogout,
+        isAuthenticated,
+        requireAuth
+    }
 }
