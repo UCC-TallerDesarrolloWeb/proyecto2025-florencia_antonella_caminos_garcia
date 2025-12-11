@@ -1,34 +1,32 @@
 import React from "react"
 import PropTypes from "prop-types"
-import { motion } from "framer-motion"
 import { FiAlertCircle } from "react-icons/fi"
 
 export default function Input({
-    label,
-    name,
-    type = "text",
-    value,
-    onChange,
-    placeholder = "",
-    error = "",
-    required = false,
-    disabled = false,
-    icon: Icon = null,
-    className = "",
-}) {
+                                  label,
+                                  name,
+                                  type = "text",
+                                  value,
+                                  onChange,
+                                  placeholder = "",
+                                  error = "",
+                                  required = false,
+                                  disabled = false,
+                                  icon: Icon = null,
+                                  className = "",
+                              }) {
     const baseStyle = `
-    w-full px-4 py-2 rounded-xl border 
-    bg-white dark:bg-gray-900
-    text-gray-800 dark:text-gray-100
-    border-gray-300 dark:border-gray-700
-    placeholder-gray-400 dark:placeholder-gray-500
-    focus:outline-none focus:ring-2 focus:ring-purple-500
-    transition-all duration-200 ease-in-out
-    ${disabled ? "opacity-60 cursor-not-allowed" : ""}
-    ${error ? "border-red-500 ring-red-400" : ""}
-`
+        w-full px-4 py-2 rounded-xl border 
+        bg-white dark:bg-gray-900
+        text-gray-800 dark:text-gray-100
+        border-gray-300 dark:border-gray-700
+        placeholder-gray-400 dark:placeholder-gray-500
+        focus:outline-none focus:ring-2 focus:ring-purple-500
+        transition-all duration-200 ease-in-out
+        ${disabled ? "opacity-60 cursor-not-allowed" : ""}
+        ${error ? "border-red-500 ring-red-400" : ""}
+    `
 
-    // noinspection JSXUnresolvedComponent
     return (
         <div className={`flex flex-col space-y-1 mb-5 ${className}`}>
             {label && (
@@ -63,14 +61,15 @@ export default function Input({
             </div>
 
             {error && (
-                <!--suppress JSXUnresolvedComponent -->
-                <motion.span
-                    className="text-xs text-red-500 font-medium"
-                    initial={{ opacity: 0, y: -5 }}
-                    animate={{ opacity: 1, y: 0 }}
+                <span
+                    className="
+                        text-xs text-red-500 font-medium
+                        opacity-0 translate-y-[-4px]
+                        animate-[fadeIn_0.25s_ease-out_forwards]
+                    "
                 >
                     {error}
-                </motion.span>
+                </span>
             )}
         </div>
     )

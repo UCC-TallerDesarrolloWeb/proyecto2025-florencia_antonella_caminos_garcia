@@ -1,8 +1,5 @@
-// noinspection JSXUnresolvedComponent
-
 import React from 'react'
 import PropTypes from 'prop-types'
-import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@contexts/AuthContext'
 import { useTheme } from '@contexts/ThemeContext'
@@ -28,6 +25,7 @@ export default function Card({
 
     const diasSemana = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb']
 
+    // noinspection JSXUnresolvedComponent
     return (
         <motion.article
             onClick={handleClick}

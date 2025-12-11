@@ -4,16 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4e9aab01-0135-4572-83a6-76887b2c8b8c" name="Changes" comment="Update: Eliminé duplicado de la lógica de ruteo">
-      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/project.xml" afterDir="false" />
+    <list default="true" id="4e9aab01-0135-4572-83a6-76887b2c8b8c" name="Changes" comment="Update: Corregí errores de la carpeta pages">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/components/Button.js" beforeDir="false" afterPath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/components/Button.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/contexts/ThemeContext.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/contexts/ThemeContext.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/hooks/useAuth.js" beforeDir="false" afterPath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/hooks/useAuth.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/pages/Dashboard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/pages/Dashboard.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/pages/Home.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/pages/Home.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/pages/Login.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/pages/Login.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/pages/Register.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/pages/Register.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/components/Card.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/components/Card.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/components/Input.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/components/Input.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -177,7 +171,15 @@
       <option name="project" value="LOCAL" />
       <updated>1765467505827</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Update: Corregí errores de la carpeta pages">
+      <option name="closed" value="true" />
+      <created>1765468281607</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1765468281607</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -208,6 +210,7 @@
     <MESSAGE value="Update: Cambié el Readme.md" />
     <MESSAGE value="Update: Eliminé la utilización del tailwind" />
     <MESSAGE value="Update: Eliminé duplicado de la lógica de ruteo" />
-    <option name="LAST_COMMIT_MESSAGE" value="Update: Eliminé duplicado de la lógica de ruteo" />
+    <MESSAGE value="Update: Corregí errores de la carpeta pages" />
+    <option name="LAST_COMMIT_MESSAGE" value="Update: Corregí errores de la carpeta pages" />
   </component>
 </project>
