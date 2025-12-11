@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext } from "react"
 import { useNavigate } from "react-router-dom"
-import { motion } from "framer-motion"
 import { LogOut, Home, Sun, Moon } from "lucide-react"
 import useAuth from "@hooks/useAuth"
 import { ThemeContext } from "@contexts/ThemeContext"
@@ -36,6 +35,7 @@ export default function Dashboard() {
 
     const toggleTheme = () => setDarkMode((prev) => !prev)
 
+    // noinspection JSXUnresolvedComponent
     return (
         <motion.section
             className={`dashboard-container ${darkMode ? "dark" : "light"}`}

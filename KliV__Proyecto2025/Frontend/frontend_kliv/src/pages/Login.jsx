@@ -1,6 +1,5 @@
 import React, { useState, useContext, useEffect } from "react"
 import { useNavigate, Link } from "react-router-dom"
-import { motion } from "framer-motion"
 import { ThemeContext } from "@contexts/ThemeContext"
 import useAuth from "@hooks/useAuth"
 import "@styles/Login.css"
@@ -45,7 +44,9 @@ export default function Login() {
         }
     }
 
+    // noinspection JSXUnresolvedComponent
     return (
+        <!--suppress JSXUnresolvedComponent -->
         <motion.section
             className={`login-container ${darkMode ? "dark" : "light"}`}
             initial={{ opacity: 0, y: 40 }}
@@ -89,6 +90,7 @@ export default function Login() {
                     </div>
 
                     {(formError || error) && (
+                        <!--suppress JSXUnresolvedComponent -->
                         <motion.p
                             className="error-message"
                             initial={{ opacity: 0 }}

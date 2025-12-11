@@ -7,9 +7,9 @@ export const ThemeProvider = ({ children }) => {
         const storedTheme = localStorage.getItem("theme")
         if (storedTheme === "dark" || storedTheme === "light") return storedTheme === "dark"
 
-        if (window.matchMedia("(prefers-color-scheme: dark)").matches) return true
+        return window.matchMedia("(prefers-color-scheme: dark)").matches;
 
-        return false
+
     }, [])
 
     const [darkMode, setDarkMode] = useState(getInitialTheme)

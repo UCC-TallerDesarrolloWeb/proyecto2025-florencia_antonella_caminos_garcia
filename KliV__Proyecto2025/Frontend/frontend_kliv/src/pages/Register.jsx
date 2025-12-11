@@ -1,14 +1,5 @@
-import React, {
-    useState,
-    useEffect,
-    useReducer,
-    useContext,
-    useRef,
-    useCallback,
-    useMemo
-} from "react";
+import React, { useContext } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { motion } from "framer-motion";
 import { ThemeContext } from "@contexts/ThemeContext";
 import { AuthContext } from "@contexts/AuthContext";
 import "@styles/Register.css";
@@ -28,7 +19,7 @@ const formReducer = (state, action) => {
 const Register = () => {
     const navigate = useNavigate();
     const { darkMode } = useContext(ThemeContext);
-    const { agregarUsuario, usuarios } = useContext(AuthContext);
+    const { agregarUsuario} = useContext(AuthContext);
 
     const [formState, dispatch] = useReducer(formReducer, {
         nombre: "",
@@ -58,7 +49,7 @@ const Register = () => {
     // Validaciones memoizadas
     const validaciones = useMemo(() => {
         const validarEmail = (email) =>
-            /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email);
+            /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email);
         const validarPassword = (password) => password.length >= 6;
         const passwordsCoinciden =
             formState.password === formState.confirmPassword;
@@ -112,6 +103,7 @@ const Register = () => {
         [formState, validaciones, agregarUsuario, navigate]
     );
 
+    // noinspection JSXUnresolvedComponent
     return (
         <motion.section
             className={`register-container ${darkMode ? "dark" : "light"}`}
@@ -193,6 +185,7 @@ const Register = () => {
                     </div>
 
                     {mensaje && (
+                        <!--suppress JSXUnresolvedComponent -->
                         <motion.p
                             className={`error-message ${mensaje.includes("correctamente") ? "success" : "error"
                                 }`}

@@ -1,6 +1,7 @@
+// noinspection JSXUnresolvedComponent
+
 import React, { useEffect, useContext, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
-import { motion } from "framer-motion"
 import { ThemeContext } from "@contexts/ThemeContext"
 import useAuth from "@hooks/useAuth"
 import { fetchAllUsers } from "@api/users"

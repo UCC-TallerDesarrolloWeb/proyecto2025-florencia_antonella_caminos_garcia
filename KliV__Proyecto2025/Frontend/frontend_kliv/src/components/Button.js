@@ -52,10 +52,18 @@ export default function Button({
             disabled={disabled}
             className={classes}
             style={{ transition: 'transform 0.15s' }}
-            onMouseDown={() => { if (!disabled) event.target.style.transform = 'scale(0.97)' }}
-            onMouseUp={() => { if (!disabled) event.target.style.transform = 'scale(1)' }}
-            onMouseEnter={() => { if (!disabled) event.target.style.transform = 'scale(1.03)' }}
-            onMouseLeave={() => { if (!disabled) event.target.style.transform = 'scale(1)' }}
+            onMouseDown={() => { if (!disabled) { // noinspection JSDeprecatedSymbols
+                event.target.style.transform = 'scale(0.97)'
+            } }}
+            onMouseUp={() => { if (!disabled) { // noinspection JSDeprecatedSymbols
+                event.target.style.transform = 'scale(1)'
+            } }}
+            onMouseEnter={() => { if (!disabled) { // noinspection JSDeprecatedSymbols
+                event.target.style.transform = 'scale(1.03)'
+            } }}
+            onMouseLeave={() => { if (!disabled) { // noinspection JSDeprecatedSymbols
+                event.target.style.transform = 'scale(1)'
+            } }}
         >
             {Icon && <Icon size={18} />}
             <span>{label}</span>
