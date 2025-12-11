@@ -16,12 +16,6 @@ body {
   transition: all 0.3s ease;
 }
 
-body.dark-mode,
-body[data-theme=dark] {
-  background: #1a1a1a;
-  color: #ecf0f1;
-}
-
 /* ======================================================= */
 /* 🏠 LAYOUT PRINCIPAL - INDEX.HTML */
 /* ======================================================= */
@@ -362,24 +356,6 @@ body > main {
 }
 
 /* Botones estilo Task Manager */
-.dashboard-sidebar-btn {
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  padding: 0.75rem 1rem;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-align: left;
-  width: 100%;
-  margin-bottom: 0.5rem;
-}
-
-.dashboard-sidebar-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
-  transform: translateX(4px);
-}
-
 .dashboard-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -612,26 +588,6 @@ body > main {
   overflow-y: auto;
 }
 
-.task-item {
-  background: white;
-  border: 1px solid #e1e8ed;
-  border-radius: 8px;
-  padding: 1rem;
-  margin-bottom: 0.75rem;
-  cursor: move;
-  transition: all 0.3s ease;
-}
-
-.task-item:hover {
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  transform: translateY(-2px);
-}
-
-.task-item.dragging {
-  opacity: 0.5;
-  box-shadow: 0 0 20px rgba(52, 152, 219, 0.3);
-}
-
 .task-header {
   display: flex;
   justify-content: space-between;
@@ -657,36 +613,10 @@ body > main {
   color: rgba(231, 76, 60, 0.8);
 }
 
-.priority-medium {
-  background: rgba(243, 156, 18, 0.4);
-  color: rgba(243, 156, 18, 0.8);
-}
-
-.priority-low {
-  background: rgba(39, 174, 96, 0.4);
-  color: rgba(39, 174, 96, 0.8);
-}
-
 .task-due {
   font-size: 0.8rem;
   color: #95a5a6;
   margin-bottom: 0.5rem;
-}
-
-.task-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.25rem;
-  margin-bottom: 0.5rem;
-}
-
-.tag {
-  background: rgba(52, 152, 219, 0.4);
-  color: #3498db;
-  padding: 0.2rem 0.5rem;
-  border-radius: 10px;
-  font-size: 0.7rem;
-  font-weight: 500;
 }
 
 .task-actions {
@@ -753,65 +683,6 @@ body > main {
   overflow: hidden;
 }
 
-.calendar-grid {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 1px;
-  background: #e1e8ed;
-}
-
-.calendar-header-day {
-  background: #3498db;
-  color: white;
-  padding: 1rem;
-  text-align: center;
-  font-weight: 600;
-  text-transform: uppercase;
-  font-size: 0.85rem;
-}
-
-.calendar-day {
-  background: white;
-  min-height: 120px;
-  padding: 0.5rem;
-  position: relative;
-}
-
-.calendar-day.other-month {
-  background: rgba(149, 165, 166, 0.45);
-  color: #95a5a6;
-}
-
-.calendar-day.today {
-  background: #e3f2fd;
-}
-
-.day-number {
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-  color: #2c3e50;
-}
-
-.calendar-tasks .calendar-task {
-  background: rgba(52, 152, 219, 0.4);
-  color: #3498db;
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
-  margin-bottom: 0.25rem;
-  font-size: 0.75rem;
-  cursor: pointer;
-  transition: background 0.3s ease;
-}
-
-.calendar-tasks .calendar-task:hover {
-  background: rgba(52, 152, 219, 0.3);
-}
-
-.calendar-tasks .calendar-task.priority-high {
-  background: rgba(231, 76, 60, 0.4);
-  color: rgba(231, 76, 60, 0.8);
-}
-
 /* Vista Lista */
 #list-view {
   padding: 2rem;
@@ -828,24 +699,6 @@ body > main {
   overflow: hidden;
 }
 
-.list-task {
-  display: grid;
-  grid-template-columns: auto 1fr auto auto auto;
-  gap: 1rem;
-  align-items: center;
-  padding: 1rem 1.5rem;
-  border-bottom: 1px solid #e1e8ed;
-  transition: background 0.3s ease;
-}
-
-.list-task:hover {
-  background: rgba(52, 152, 219, 0.47);
-}
-
-.list-task:last-child {
-  border-bottom: none;
-}
-
 .task-checkbox {
   width: 20px;
   height: 20px;
@@ -856,11 +709,6 @@ body > main {
   font-weight: 600;
   color: #2c3e50;
   margin-bottom: 0.25rem;
-}
-
-.task-main .task-project {
-  font-size: 0.8rem;
-  color: #95a5a6;
 }
 
 .task-due {
@@ -878,16 +726,6 @@ body > main {
 .list-task .priority-high {
   background: rgba(231, 76, 60, 0.4);
   color: rgba(231, 76, 60, 0.8);
-}
-
-.list-task .priority-medium {
-  background: rgba(243, 156, 18, 0.4);
-  color: rgba(243, 156, 18, 0.8);
-}
-
-.list-task .priority-low {
-  background: rgba(39, 174, 96, 0.4);
-  color: rgba(39, 174, 96, 0.8);
 }
 
 .list-task .task-actions {
@@ -1158,13 +996,6 @@ body > main {
   padding: 0 0.5rem;
 }
 
-.radio-group,
-.checkbox-group {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-
 .radio-group label,
 .checkbox-group label {
   display: flex;
@@ -1189,50 +1020,10 @@ body > main {
   z-index: 3000;
 }
 
-.toast {
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-  padding: 1rem 1.5rem;
-  margin-bottom: 0.75rem;
-  border-left: 4px solid #27ae60;
-  animation: slideInRight 0.3s ease-out;
-}
-
-.toast.error {
-  border-left-color: #e74c3c;
-}
-
-.toast.warning {
-  border-left-color: #f39c12;
-}
-
-.toast.info {
-  border-left-color: #2980b9;
-}
-
 .toast-content {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-}
-
-.toast-message {
-  flex: 1;
-  font-weight: 500;
-}
-
-.toast-close {
-  background: none;
-  border: none;
-  font-size: 1.2rem;
-  cursor: pointer;
-  opacity: 0.7;
-  transition: opacity 0.3s ease;
-}
-
-.toast-close:hover {
-  opacity: 1;
 }
 
 /* ======================================================= */
@@ -1277,30 +1068,6 @@ body > main {
   }
 }
 /* Estados de interacción */
-.drag-over {
-  background: rgba(52, 152, 219, 0.47);
-  border: 2px dashed #3498db;
-}
-
-.loading {
-  position: relative;
-  pointer-events: none;
-}
-
-.loading::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 20px;
-  height: 20px;
-  margin: -10px 0 0 -10px;
-  border: 2px solid #e1e8ed;
-  border-top: 2px solid #3498db;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
 @keyframes spin {
   0% {
     transform: rotate(0deg);
@@ -1360,9 +1127,6 @@ body > main {
   .dashboard-grid {
     grid-template-columns: 1fr;
   }
-  .calendar-day {
-    min-height: 80px;
-  }
   .modal-content {
     width: 95%;
     margin: 1rem;
@@ -1381,13 +1145,6 @@ body.dark-mode .dashboard-card,
 body[data-theme=dark] .dashboard-card {
   background: #2d2d2d;
   border-color: #404040;
-}
-
-body.dark-mode .task-item,
-body[data-theme=dark] .task-item {
-  background: #2d2d2d;
-  border-color: #404040;
-  color: #ecf0f1;
 }
 
 body.dark-mode .modal-content,

@@ -184,49 +184,23 @@ select:focus {
   margin-top: 0.5rem;
 }
 
-.mt-2 {
-  margin-top: 1rem;
-}
-
 .mb-1 {
   margin-bottom: 0.5rem;
-}
-
-.mb-2 {
-  margin-bottom: 1rem;
 }
 
 .flex {
   display: flex;
 }
-.flex.row {
-  flex-direction: row;
-}
 .flex.column {
   flex-direction: column;
-}
-.flex.wrap {
-  flex-wrap: wrap;
 }
 .flex.center {
   justify-content: center;
   align-items: center;
 }
-.flex.between {
-  justify-content: space-between;
-}
-.flex.around {
-  justify-content: space-around;
-}
 
 .error-message {
   color: #ef4444;
-  font-size: 0.9rem;
-  margin-top: 0.5rem;
-}
-
-.success-message {
-  color: #10b981;
   font-size: 0.9rem;
   margin-top: 0.5rem;
 }

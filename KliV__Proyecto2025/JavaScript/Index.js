@@ -1534,11 +1534,11 @@ class DashboardApp {
 
     /**
      * @method handleProjectFormSubmit
-     * @description Maneja el envío del formulario de proyecto con validaciones
-     * @param {Event} event - Evento de envío del formulario
-     * @returns {void}
+     * @description Maneja el envío del formulario para agregar contenido a un proyecto.
+     * @param {SubmitEvent} event - Evento de envío del formulario
+     * @returns {Promise<void>}
      */
-    handleProjectFormSubmit = (event) => {
+    handleProjectFormSubmit = async(event) => {
         event.preventDefault();
 
         const contentInput = document.getElementById('project-content-text');
@@ -1572,17 +1572,18 @@ class DashboardApp {
 
         console.log('Guardando proyecto:', projectData);
 
-        this.saveProject(projectData)
-            .then((savedProject) => {
-                this.showSuccessMessage('form-success');
-                this.clearProjectForm();
-                this.showToast('Contenido agregado al proyecto correctamente', 'success');
-                console.log('Proyecto guardado exitosamente:', savedProject);
-            })
-            .catch(error => {
-                console.error('Error al guardar el proyecto:', error);
-                this.showError(error.message || 'Error al guardar el proyecto. Intenta nuevamente.');
-            });
+        try {
+            const savedProject = await this.saveProject(projectData);
+
+            this.showSuccessMessage('form-success');
+            this.clearProjectForm();
+            this.showToast('Contenido agregado al proyecto correctamente', 'success');
+            console.log('Proyecto guardado exitosamente:', savedProject);
+
+        } catch (error) {
+            console.error('Error al guardar el proyecto:', error);
+            this.showError(error.message || 'Error al guardar el proyecto. Intenta nuevamente.');
+        }
     }
 
     /**
@@ -1984,10 +1985,12 @@ class DashboardApp {
     /**
      * @method handleSettingsSubmit
      * @description Maneja el envío de formularios de configuración
-     * @param {HTMLFormElement} form - Formulario de configuración
+     * @param {event} event - Evento de envío del formulario (sumbit event)
      * @returns {void}
      */
-    handleSettingsSubmit = (form) => {
+    handleSettingsSubmit = (event) => {
+        event.preventDefault();
+
         console.log('Settings form submitted:', form.id);
 
         this.saveSettings()
@@ -2053,13 +2056,14 @@ class DashboardApp {
      */
     toggleNotifications = (enabled) => {
         if (enabled && 'Notification' in window) {
-            if (Notification.permission === 'default') {
-                Notification.requestPermission().then(permission => {
+            (async () => {
+                if (Notification.permission === 'default') {
+                    const permission = await Notification.requestPermission();
                     if (permission === 'granted') {
                         this.showToast('Notificaciones activadas', 'success');
                     }
-                });
-            }
+                }
+            })();
         }
         this.showToast(`Notificaciones ${enabled ? 'activadas' : 'desactivadas'}`, 'info');
     }

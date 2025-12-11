@@ -17,20 +17,6 @@
   color: #ffffff;
 }
 
-.home-content {
-  background-color: inherit;
-  border-radius: 1rem;
-  padding: 2rem;
-  max-width: 700px;
-  width: 100%;
-  text-align: center;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease-in-out;
-}
-.home-content:hover {
-  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
-}
-
 .home-title {
   font-size: 2rem;
   font-weight: 700;
@@ -44,110 +30,12 @@
   color: gray;
 }
 
-.home-actions {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-.home-actions .btn {
-  font-size: 1rem;
-}
-.home-actions .btn.btn-primary {
-  background-color: #4f46e5;
-  color: #ffffff;
-  border: none;
-  padding: 0.7rem 1.5rem;
-  border-radius: 0.5rem;
-  cursor: pointer;
-  font-weight: 500;
-  text-decoration: none;
-  text-align: center;
-  transition: all 0.3s ease-in-out;
-}
-.home-actions .btn.btn-primary:hover {
-  opacity: 0.85;
-  transform: translateY(-2px);
-}
-.home-actions .btn.btn-primary:active {
-  transform: translateY(0);
-}
-.home-actions .btn.btn-alt {
-  background-color: #10b981;
-  color: #ffffff;
-  border: none;
-  padding: 0.7rem 1.5rem;
-  border-radius: 0.5rem;
-  cursor: pointer;
-  font-weight: 500;
-  text-decoration: none;
-  text-align: center;
-  transition: all 0.3s ease-in-out;
-}
-.home-actions .btn.btn-alt:hover {
-  opacity: 0.85;
-  transform: translateY(-2px);
-}
-.home-actions .btn.btn-alt:active {
-  transform: translateY(0);
-}
-.home-actions .btn.btn-danger {
-  background-color: #ef4444;
-  color: #ffffff;
-  border: none;
-  padding: 0.7rem 1.5rem;
-  border-radius: 0.5rem;
-  cursor: pointer;
-  font-weight: 500;
-  text-decoration: none;
-  text-align: center;
-  transition: all 0.3s ease-in-out;
-}
-.home-actions .btn.btn-danger:hover {
-  opacity: 0.85;
-  transform: translateY(-2px);
-}
-.home-actions .btn.btn-danger:active {
-  transform: translateY(0);
-}
-
-.theme-toggle {
-  margin-top: 2rem;
-  background: transparent;
-  border: 2px solid currentColor;
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
-  cursor: pointer;
-  font-weight: 500;
-  transition: all 0.3s ease-in-out;
-}
-.theme-toggle:hover {
-  background-color: currentColor;
-  color: #f3f4f6;
-}
-
 @media (max-width: 768px) {
-  .home-content {
-    padding: 1.5rem;
-  }
   .home-title {
     font-size: 1.7rem;
   }
   .home-subtitle {
     font-size: 1rem;
-  }
-  .home-actions {
-    flex-direction: column;
-    gap: 0.75rem;
-  }
-  .home-actions .btn {
-    width: 100%;
-    justify-content: center;
-  }
-  .theme-toggle {
-    width: 100%;
   }
 }
 

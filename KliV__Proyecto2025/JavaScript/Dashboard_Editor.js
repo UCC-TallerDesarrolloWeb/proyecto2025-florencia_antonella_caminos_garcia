@@ -268,6 +268,7 @@ class DashboardEditor {
         this.mostrarNotificacion(`✅ Elemento ${type} agregado con ID: ${this.nextElementId - 1}`);
     }
 
+    // noinspection JSDuplicatedDeclaration
     /**
      * Elimina un elemento del dashboard por ID
      * @method eliminarElemento
@@ -708,6 +709,7 @@ class DashboardEditor {
         this.actualizarEstadisticas();
     }
 
+    // noinspection JSDuplicatedDeclaration
     /**
      * Elimina un elemento del dashboard por ID
      * @method eliminarElemento

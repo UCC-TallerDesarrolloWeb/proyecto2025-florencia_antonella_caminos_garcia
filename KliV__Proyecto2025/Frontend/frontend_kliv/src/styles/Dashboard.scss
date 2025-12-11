@@ -92,62 +92,13 @@ $font-main: 'Inter', sans-serif;
         }
     }
 
-    .fecha {
-        font-size: 0.9rem;
-        color: gray;
-    }
 }
 
 // Texto descriptivo
-.texto {
-    font-size: 1rem;
-    line-height: 1.6;
-    margin-bottom: 2rem;
-
-    strong {
-        color: $accent-color;
-        font-weight: 600;
-    }
-}
 
 // Actions
-.dashboard-actions {
-    @include flex-center(row, flex-start, center);
-    gap: 1rem;
-    flex-wrap: wrap;
-
-    .btn {
-        font-size: 0.95rem;
-
-        &.btn-primary {
-            @include btn-style($primary-color, $text-light);
-        }
-
-        &.btn-danger {
-            @include btn-style($danger-color, $text-light);
-        }
-
-        &.btn-theme {
-            &.btn-dark {
-                @include btn-style($dark-color, $text-light);
-                border: 1px solid $text-light;
-            }
-
-            &.btn-light {
-                @include btn-style($light-color, $text-dark);
-                border: 1px solid $text-dark;
-            }
-        }
-    }
-}
 
 // Footer
-.dashboard-footer {
-    margin-top: 3rem;
-    font-size: 0.8rem;
-    color: gray;
-    text-align: center;
-}
 
 // Responsivo
 @media (max-width: 768px) {
@@ -159,18 +110,4 @@ $font-main: 'Inter', sans-serif;
         font-size: 1.5rem;
     }
 
-    .texto {
-        font-size: 0.95rem;
-    }
-
-    .dashboard-actions {
-        gap: 0.5rem;
-        flex-direction: column;
-        align-items: stretch;
-
-        .btn {
-            width: 100%;
-            justify-content: center;
-        }
-    }
 }

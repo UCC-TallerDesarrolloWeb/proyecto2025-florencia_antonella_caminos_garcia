@@ -1,4 +1,5 @@
 // imagenes/api/users.js
+// noinspection GrazieInspection
 
 /**
  * Mock de usuarios para la aplicación.

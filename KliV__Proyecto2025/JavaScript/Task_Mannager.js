@@ -1,3 +1,5 @@
+// noinspection GrazieInspection
+
 /**
  * @file Gestor completo optimizado de tareas con funciones flecha
  * @description Sistema eficiente de gestión de tareas con todas las funcionalidades

@@ -16,20 +16,6 @@
   color: #ffffff;
 }
 
-.register-card {
-  background-color: inherit;
-  border-radius: 1rem;
-  padding: 2rem;
-  max-width: 450px;
-  width: 100%;
-  text-align: center;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease-in-out;
-}
-.register-card:hover {
-  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
-}
-
 .register-title {
   font-size: 1.8rem;
   font-weight: 700;
@@ -128,9 +114,6 @@
 }
 
 @media (max-width: 480px) {
-  .register-card {
-    padding: 1.5rem;
-  }
   .register-title {
     font-size: 1.6rem;
   }

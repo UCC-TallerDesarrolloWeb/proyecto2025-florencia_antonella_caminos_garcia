@@ -189,45 +189,22 @@ select {
     margin-top: 0.5rem;
 }
 
-.mt-2 {
-    margin-top: 1rem;
-}
-
 .mb-1 {
     margin-bottom: 0.5rem;
-}
-
-.mb-2 {
-    margin-bottom: 1rem;
 }
 
 .flex {
     display: flex;
 
-    &.row {
-        flex-direction: row;
-    }
-
-    &.column {
+  &.column {
         flex-direction: column;
     }
 
-    &.wrap {
-        flex-wrap: wrap;
-    }
-
-    &.center {
+  &.center {
         justify-content: center;
         align-items: center;
     }
 
-    &.between {
-        justify-content: space-between;
-    }
-
-    &.around {
-        justify-content: space-around;
-    }
 }
 
 // ================================
@@ -235,12 +212,6 @@ select {
 // ================================
 .error-message {
     color: $danger-color;
-    font-size: 0.9rem;
-    margin-top: 0.5rem;
-}
-
-.success-message {
-    color: $success-color;
     font-size: 0.9rem;
     margin-top: 0.5rem;
 }
