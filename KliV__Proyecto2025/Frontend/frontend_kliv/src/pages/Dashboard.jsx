@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useContext } from "react"
 import { useNavigate } from "react-router-dom"
 import { LogOut, Home, Sun, Moon } from "lucide-react"
-import useAuth from "@hooks/useAuth"
-import { ThemeContext } from "@contexts/ThemeContext"
-import "@styles/Dashboard.css"
+import useAuth from "../hooks/useAuth.js"
+import { ThemeContext } from "../contexts/ThemeContext.jsx"
+import "../styles/Dashboard.scss"
 
 export default function Dashboard() {
     const navigate = useNavigate()

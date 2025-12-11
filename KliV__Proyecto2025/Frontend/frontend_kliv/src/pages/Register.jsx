@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { ThemeContext } from "@contexts/ThemeContext";
-import { AuthContext } from "@contexts/AuthContext";
-import "@styles/Register.css";
+import { ThemeContext } from "../contexts/ThemeContext.jsx";
+import { AuthContext } from "../contexts/AuthContext.jsx";
+import "../styles/Register.css";
 
 // Reducer para manejar el formulario
 const formReducer = (state, action) => {
@@ -185,7 +185,6 @@ const Register = () => {
                     </div>
 
                     {mensaje && (
-                        <!--suppress JSXUnresolvedComponent -->
                         <motion.p
                             className={`error-message ${mensaje.includes("correctamente") ? "success" : "error"
                                 }`}

@@ -1,83 +1,121 @@
-import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom';
-import Home from '@pages/Home';
-import Login from '@pages/Login';
-import Register from '@pages/Register';
-import Dashboard from '@pages/Dashboard';
-import Navbar from '@components/Navbar';
-import useAuth from '@hooks/useAuth';
+// src/App.jsx
+import React, { Suspense, lazy } from 'react'
+import { Routes, Route, Navigate } from 'react-router-dom'
+import { useAuth } from './contexts/AuthContext.jsx'
+import { useTheme } from './contexts/ThemeContext.jsx'
+import Navbar from './components/Navbar.jsx'
+import Footer from './components/Footer.jsx'
+import LoadingSpinner from './components/LoadingSpinner.jsx'
+import './App.css'
 
-// Layout que renderiza Navbar + contenido dinámico
-function Layout() {
+// Componentes que SÍ existen (basado en los archivos que compartiste)
+const Home = lazy(() => import('./pages/Home'))
+const Login = lazy(() => import('./pages/Login'))
+const Register = lazy(() => import('./pages/Register'))
+const Dashboard = lazy(() => import('./pages/Dashboard'))
+const TaskManager = lazy(() => import('./components/TaskManager'))
+
+// Componentes que NO existen aún - COMENTADOS temporalmente
+// const KlivDashboard = lazy(() => import('./pages/KlivDashboard'))
+// const Activities = lazy(() => import('./pages/Activities'))
+
+// Componente para rutas protegidas
+const ProtectedRoute = ({ children }) => {
+    const { isAuthenticated } = useAuth()
+
+    return isAuthenticated ? children : <Navigate to="/login" />
+}
+
+// Layout principal con Navbar y Footer
+const MainLayout = ({ children }) => {
+    const { themeName } = useTheme()
+
     return (
-        <>
+        <div className={`app-container theme-${themeName}`}>
             <Navbar />
-            <Outlet />
-        </>
-    );
+            <main className="main-content">
+                {children}
+            </main>
+            <Footer
+                brand="KliV Manager"
+                links={[
+                    { label: "Inicio", to: "/" },
+                    { label: "Dashboard", to: "/dashboard" },
+                    { label: "Tareas", to: "/tasks" },
+                    { label: "Login", to: "/login" },
+                    { label: "Registro", to: "/register" }
+                ]}
+            />
+        </div>
+    )
 }
 
-// Ruta privada: solo accesible si está autenticado
-function PrivateRoute({ children }) {
-    const { isAuthenticated } = useAuth();
-    return isAuthenticated ? children : <Navigate to="/login" replace />;
-}
-
-// Ruta pública: solo accesible si NO está autenticado
-function PublicRoute({ children }) {
-    const { isAuthenticated } = useAuth();
-    return !isAuthenticated ? children : <Navigate to="/dashboard" replace />;
-}
-
-// Componente principal de la aplicación
-export default function App() {
+function App() {
     return (
-        <BrowserRouter>
+        <Suspense fallback={<LoadingSpinner />}>
             <Routes>
-                {/* Layout general con Navbar */}
-                <Route path="/" element={<Layout />}>
-                    {/* Página raíz redirige a Home */}
-                    <Route index element={<Navigate to="/home" replace />} />
+                {/* Rutas públicas */}
+                <Route path="/" element={
+                    <MainLayout>
+                        <Home />
+                    </MainLayout>
+                } />
 
-                    {/* Rutas públicas */}
-                    <Route
-                        path="home"
-                        element={
-                            <PublicRoute>
-                                <Home />
-                            </PublicRoute>
-                        }
-                    />
-                    <Route
-                        path="login"
-                        element={
-                            <PublicRoute>
-                                <Login />
-                            </PublicRoute>
-                        }
-                    />
-                    <Route
-                        path="register"
-                        element={
-                            <PublicRoute>
-                                <Register />
-                            </PublicRoute>
-                        }
-                    />
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
 
-                    {/* Rutas privadas */}
-                    <Route
-                        path="dashboard"
-                        element={
-                            <PrivateRoute>
-                                <Dashboard />
-                            </PrivateRoute>
-                        }
-                    />
+                {/* Rutas protegidas */}
+                <Route path="/dashboard" element={
+                    <ProtectedRoute>
+                        <MainLayout>
+                            <Dashboard />
+                        </MainLayout>
+                    </ProtectedRoute>
+                } />
 
-                    {/* Ruta 404: cualquier ruta no definida */}
-                    <Route path="*" element={<Navigate to="/home" replace />} />
-                </Route>
+                <Route path="/tasks" element={
+                    <ProtectedRoute>
+                        <MainLayout>
+                            <TaskManager />
+                        </MainLayout>
+                    </ProtectedRoute>
+                } />
+
+                {/*
+        Rutas comentadas porque los archivos no existen aún:
+
+        <Route path="/kliv-dashboard" element={
+          <ProtectedRoute>
+            <MainLayout>
+              <KlivDashboard />
+            </MainLayout>
+          </ProtectedRoute>
+        } />
+
+        <Route path="/activities" element={
+          <MainLayout>
+            <Activities />
+          </MainLayout>
+        } />
+        */}
+
+                {/* Ruta 404 */}
+                <Route path="*" element={
+                    <MainLayout>
+                        <div className="not-found auth-container flex flex-col items-center justify-center">
+                            <div className="auth-card">
+                                <h1 className="auth-card-title text-danger">404 - Página no encontrada</h1>
+                                <p className="text-center my-4">La página que buscas no existe.</p>
+                                <a href="/" className="btn btn-primary btn-full">
+                                    Volver al inicio
+                                </a>
+                            </div>
+                        </div>
+                    </MainLayout>
+                } />
             </Routes>
-        </BrowserRouter>
-    );
+        </Suspense>
+    )
 }
+
+export default App

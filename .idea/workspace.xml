@@ -4,32 +4,25 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4e9aab01-0135-4572-83a6-76887b2c8b8c" name="Changes" comment="Update: Corregí imports innecesarios">
+    <list default="true" id="4e9aab01-0135-4572-83a6-76887b2c8b8c" name="Changes" comment="Update: Corregí inspect-code y reempllazo de funciones .then por funciones await y async">
+      <change afterPath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/App.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/components/LoadingSpinner.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/api/users.js" beforeDir="false" afterPath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/api/users.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/index.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/index.css.map" beforeDir="false" afterPath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/index.css.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/index.scss" beforeDir="false" afterPath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/index.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/styles/Dashboard.css" beforeDir="false" afterPath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/styles/Dashboard.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/styles/Dashboard.css.map" beforeDir="false" afterPath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/styles/Dashboard.css.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/styles/Dashboard.scss" beforeDir="false" afterPath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/styles/Dashboard.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/styles/Home.css" beforeDir="false" afterPath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/styles/Home.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/styles/Home.css.map" beforeDir="false" afterPath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/styles/Home.css.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/styles/Home.scss" beforeDir="false" afterPath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/styles/Home.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/styles/Login.css" beforeDir="false" afterPath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/styles/Login.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/styles/Login.css.map" beforeDir="false" afterPath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/styles/Login.css.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/styles/Login.scss" beforeDir="false" afterPath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/styles/Login.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/styles/Register.css" beforeDir="false" afterPath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/styles/Register.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/styles/Register.css.map" beforeDir="false" afterPath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/styles/Register.css.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/styles/Register.scss" beforeDir="false" afterPath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/styles/Register.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/KliV__Proyecto2025/JavaScript/Dashboard_Editor.js" beforeDir="false" afterPath="$PROJECT_DIR$/KliV__Proyecto2025/JavaScript/Dashboard_Editor.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/KliV__Proyecto2025/JavaScript/Index.js" beforeDir="false" afterPath="$PROJECT_DIR$/KliV__Proyecto2025/JavaScript/Index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/KliV__Proyecto2025/JavaScript/Task_Mannager.js" beforeDir="false" afterPath="$PROJECT_DIR$/KliV__Proyecto2025/JavaScript/Task_Mannager.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/KliV__Proyecto2025/Styles/Styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/KliV__Proyecto2025/Styles/Styles.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/KliV__Proyecto2025/Styles/Styles.css.map" beforeDir="false" afterPath="$PROJECT_DIR$/KliV__Proyecto2025/Styles/Styles.css.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/KliV__Proyecto2025/Styles/Styles.scss" beforeDir="false" afterPath="$PROJECT_DIR$/KliV__Proyecto2025/Styles/Styles.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/KliV__Proyecto2025/html/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/KliV__Proyecto2025/html/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/App.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/components/Card.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/components/Card.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/components/Footer.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/components/Footer.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/components/KlivDashboard/KlivDashboard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/components/KlivDashboard/KlivDashboard.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/components/Navbar.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/components/Navbar.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/components/TaskManager/TaskManager.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/components/TaskManager/TaskManager.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/hooks/useAuth.js" beforeDir="false" afterPath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/hooks/useAuth.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/main.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/main.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/pages/Dashboard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/pages/Dashboard.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/pages/Home.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/pages/Home.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/pages/Login.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/pages/Login.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/pages/Register.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/pages/Register.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/vite.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/vite.config.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -73,9 +66,11 @@
   "keyToString": {
     "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "Node.js.App.jsx.executor": "Run",
     "Node.js.Button.js.executor": "Run",
     "Node.js.Button.jsx.executor": "Run",
     "Node.js.Card.jsx.executor": "Run",
+    "Node.js.useAuth.js.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
@@ -209,7 +204,15 @@
       <option name="project" value="LOCAL" />
       <updated>1765468972451</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Update: Corregí inspect-code y reempllazo de funciones .then por funciones await y async">
+      <option name="closed" value="true" />
+      <created>1765479127576</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1765479127576</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -242,6 +245,7 @@
     <MESSAGE value="Update: Eliminé duplicado de la lógica de ruteo" />
     <MESSAGE value="Update: Corregí errores de la carpeta pages" />
     <MESSAGE value="Update: Corregí imports innecesarios" />
-    <option name="LAST_COMMIT_MESSAGE" value="Update: Corregí imports innecesarios" />
+    <MESSAGE value="Update: Corregí inspect-code y reempllazo de funciones .then por funciones await y async" />
+    <option name="LAST_COMMIT_MESSAGE" value="Update: Corregí inspect-code y reempllazo de funciones .then por funciones await y async" />
   </component>
 </project>

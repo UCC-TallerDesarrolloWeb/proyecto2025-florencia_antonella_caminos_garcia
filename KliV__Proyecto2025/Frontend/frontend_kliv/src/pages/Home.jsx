@@ -2,10 +2,10 @@
 
 import React, { useEffect, useContext, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
-import { ThemeContext } from "@contexts/ThemeContext"
-import useAuth from "@hooks/useAuth"
-import { fetchAllUsers } from "@api/users"
-import "@styles/Home.css"
+import { ThemeContext } from "../contexts/ThemeContext.jsx"
+import useAuth from "../hooks/useAuth.js"
+import { fetchAllUsers } from "../api/users.js"
+import "../styles/Home.css"
 
 export default function Home() {
     const navigate = useNavigate()

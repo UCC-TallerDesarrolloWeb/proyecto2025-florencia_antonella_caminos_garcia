@@ -1,24 +1,16 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import { resolve } from "node:path";
+import { fileURLToPath, URL } from 'url'
 
-// https://vite.dev/config/
 export default defineConfig({
     plugins: [react()],
     resolve: {
         alias: {
-            '@components': resolve(__dirname, './imagenes/components'),
-            '@pages': resolve(__dirname, './imagenes/pages'),
-            '@context': resolve(__dirname, './imagenes/contexts'),
-            '@styles': resolve(__dirname, './imagenes/styles'),
-            '@data': resolve(__dirname, './imagenes/data'),
-        },
-    },
-    css: {
-        preprocessorOptions: {
-            scss: {
-                additionalData: `@import "@styles/index.scss";`
-            }
+            // alias comunes
+            '@': fileURLToPath(new URL('./src', import.meta.url)),
+            '@contexts': fileURLToPath(new URL('./src/contexts', import.meta.url)),
+            '@hooks': fileURLToPath(new URL('./src/hooks', import.meta.url)),
+            '@components': fileURLToPath(new URL('./src/components', import.meta.url)),
         }
     }
 })

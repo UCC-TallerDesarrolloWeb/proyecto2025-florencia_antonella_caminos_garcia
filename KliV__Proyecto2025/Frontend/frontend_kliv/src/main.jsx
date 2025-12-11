@@ -1,25 +1,19 @@
-import React, { StrictMode } from "react"
-import { createRoot } from "react-dom/client"
+import React from "react"
+import ReactDOM from "react-dom/client"
 import { BrowserRouter } from "react-router-dom"
-import { ThemeProvider } from "@contexts/ThemeContext"
-import { AuthProvider } from "@contexts/AuthContext"
-import App from "./App.jsx"
+import { ThemeProvider } from "./contexts/ThemeContext.jsx";
+import { AuthProvider } from "./contexts/AuthContext.jsx"
+import App from "./App.css"
+import "./index.css"
 
-// Contenedor raíz seguro
-const rootElement = document.getElementById("root")
+const rootElement = document.getElementById('root')
 
 if (!rootElement) {
-    throw new Error("No se encontró el elemento raíz (#root). Verifica tu index.html.")
+    throw new Error('No se encontró el elemento raíz (#root). Verifica tu index.html.')
 }
 
-const root = createRoot(rootElement)
-
-/**
- * Renderiza la aplicación con todos los proveedores de contexto
- * y configuración necesaria para Task Manager Pro.
- */
-root.render(
-    <StrictMode>
+ReactDOM.createRoot(document.getElementById('root')).render(
+    <React.StrictMode>
         <BrowserRouter basename="/">
             <ThemeProvider>
                 <AuthProvider>
@@ -27,5 +21,5 @@ root.render(
                 </AuthProvider>
             </ThemeProvider>
         </BrowserRouter>
-    </StrictMode>
+    </React.StrictMode>
 )

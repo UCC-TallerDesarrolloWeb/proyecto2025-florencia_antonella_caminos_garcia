@@ -1,27 +1,24 @@
 import React from "react"
-import PropTypes from "prop-types"
 import { Link } from "react-router-dom"
 
 export default function Footer({
-    brand,
-    links = [],
-    social = [],
-    year = new Date().getFullYear(),
-    className = "",
-}) {
+                                   brand = "KliV Manager",
+                                   links = [],
+                                   social = [],
+                                   year = new Date().getFullYear(),
+                                   className = "",
+                               }) {
     return (
         <footer
             className={`w-full border-t border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 py-6 px-6 transition-all duration-300 ${className}`}
         >
             <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6 md:gap-0">
                 <div className="flex flex-col items-center md:items-start text-center md:text-left">
-                    {brand && (
-                        <h2 className="text-xl font-bold tracking-wide text-purple-600 dark:text-purple-400">
-                            {brand}
-                        </h2>
-                    )}
+                    <h2 className="text-xl font-bold tracking-wide text-purple-600 dark:text-purple-400">
+                        {brand}
+                    </h2>
                     <p className="text-sm mt-1">
-                        © {year} {brand || "Tu Empresa"}. Todos los derechos reservados.
+                        © {year} {brand}. Todos los derechos reservados.
                     </p>
                 </div>
 
@@ -69,22 +66,4 @@ export default function Footer({
             </div>
         </footer>
     )
-}
-
-Footer.propTypes = {
-    brand: PropTypes.string,
-    links: PropTypes.arrayOf(
-        PropTypes.shape({
-            label: PropTypes.string.isRequired,
-            to: PropTypes.string.isRequired,
-        })
-    ),
-    social: PropTypes.arrayOf(
-        PropTypes.shape({
-            icon: PropTypes.elementType.isRequired,
-            href: PropTypes.string.isRequired,
-        })
-    ),
-    year: PropTypes.number,
-    className: PropTypes.string,
 }

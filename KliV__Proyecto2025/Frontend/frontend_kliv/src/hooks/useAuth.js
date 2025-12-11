@@ -2,7 +2,7 @@
 
 import { useContext, useEffect, useCallback } from "react"
 import { useNavigate } from "react-router-dom"
-import { AuthContext } from "@contexts/AuthContext"
+import { AuthContext } from "../contexts/AuthContext.jsx"
 
 /**
  * Hook personalizado que retorna las funciones y estados de autenticación.
