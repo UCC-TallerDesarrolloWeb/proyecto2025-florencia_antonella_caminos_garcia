@@ -28,6 +28,7 @@ export default function Input({
     ${error ? "border-red-500 ring-red-400" : ""}
 `
 
+    // noinspection JSXUnresolvedComponent
     return (
         <div className={`flex flex-col space-y-1 mb-5 ${className}`}>
             {label && (
@@ -62,6 +63,7 @@ export default function Input({
             </div>
 
             {error && (
+                <!--suppress JSXUnresolvedComponent -->
                 <motion.span
                     className="text-xs text-red-500 font-medium"
                     initial={{ opacity: 0, y: -5 }}

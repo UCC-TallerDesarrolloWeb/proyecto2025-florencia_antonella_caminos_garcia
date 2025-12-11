@@ -1,4 +1,4 @@
-// src/api/tasks.js
+// imagenes/api/tasks.js
 
 let mockTasks = [
     { id: 1, title: "Tarea 1", completed: false },

@@ -32,7 +32,7 @@ export default function Navbar() {
                 {/* Logo */}
                 <Link to="/" className="flex items-center gap-2 group">
                     <img
-                        src="/assets/logo.png"
+                        src="./public/logo.png"
                         alt="KliV Logo"
                         className="w-9 h-9 rounded-lg shadow-md group-hover:scale-105 transition-transform duration-300"
                     />

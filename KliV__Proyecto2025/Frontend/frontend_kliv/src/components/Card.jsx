@@ -1,9 +1,11 @@
+// noinspection JSXUnresolvedComponent
+
 import React from 'react'
 import PropTypes from 'prop-types'
 import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@contexts/AuthContext'
-import { useTheme } from '@context/ThemeContext'
+import { useTheme } from '@contexts/ThemeContext'
 import { Heart, Clock } from 'lucide-react'
 
 export default function Card({

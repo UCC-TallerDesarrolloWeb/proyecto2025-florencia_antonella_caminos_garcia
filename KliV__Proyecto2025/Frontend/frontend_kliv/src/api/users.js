@@ -1,4 +1,4 @@
-// src/api/users.js
+// imagenes/api/users.js
 
 /**
  * Mock de usuarios para la aplicación.
