@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4e9aab01-0135-4572-83a6-76887b2c8b8c" name="Changes" comment="Update: Eliminé la utilización del tailwind" />
+    <list default="true" id="4e9aab01-0135-4572-83a6-76887b2c8b8c" name="Changes" comment="Update: Eliminé la utilización del tailwind">
+      <change beforePath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/router/AppRouter.jsx" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -151,7 +153,15 @@
       <option name="project" value="LOCAL" />
       <updated>1765467044450</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Update: Eliminé la utilización del tailwind">
+      <option name="closed" value="true" />
+      <created>1765467218182</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1765467218182</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
