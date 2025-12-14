@@ -6,7 +6,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useRequireAuth } from "@/hooks/useRequireAuth";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { fetchAllUsers } from "../api/users";
-import "@/styles/Home.scss";
+import "@/styles/Home.css";
 
 const Home = () => {
     const { user, isAuthenticated, logout } = useAuth();

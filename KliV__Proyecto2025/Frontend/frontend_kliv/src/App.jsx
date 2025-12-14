@@ -5,7 +5,7 @@ import { useTheme } from '@/contexts/ThemeContext'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import LoadingSpinner from '@/components/LoadingSpinner'
-import './App.css'
+//import '@/src/App.css'
 
 // Componentes lazy
 const Home = lazy(() => import('@/pages/Home'))

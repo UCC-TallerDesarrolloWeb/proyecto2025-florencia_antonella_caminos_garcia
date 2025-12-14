@@ -4,7 +4,7 @@ import { BrowserRouter } from "react-router-dom"
 import { ThemeProvider } from "@/contexts/ThemeContext.jsx";
 import { AuthProvider } from "@/contexts/AuthContext.jsx"
 import App from "@/App.jsx"
-import "@/styles/index.scss"
+//import "index.css"
 
 const rootElement = document.getElementById('root')
 

@@ -5,7 +5,7 @@ import { ThemeContext } from "@/contexts/ThemeContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { useFormValidation } from "@/hooks/useFormValidation";
 import { useAuthRedirect } from "@/hooks/useAuthRedirect";
-import "@/styles/Login.scss";
+import "@/styles/Login.css";
 
 const Login = () => {
     const { darkMode } = useContext(ThemeContext);
