@@ -1,8 +1,10 @@
 import { createContext, useState, useEffect, useContext, useCallback, useMemo } from "react"
+import {useNavigate} from "react-router-dom"
 
 export const AuthContext = createContext()
 
 export const AuthProvider = ({ children }) => {
+    const navigate = useNavigate()
     const [user, setUser] = useState(null)
     const [token, setToken] = useState(null)
     const [loading, setLoading] = useState(true)
@@ -50,11 +52,16 @@ export const AuthProvider = ({ children }) => {
             const response = await fakeAuthRequest(credentials)
             if (response.success) {
                 persistAuth(response.user, response.token)
+                return {success: true}
             } else {
-                setError("Credenciales inválidas. Inténtelo nuevamente.")
+                setError("Credenciales inválidas. Intentelo nuevamente.")
+                return {success: false, message: "Credenciales Invalidas"}
             }
         } catch {
-            setError("No se pudo conectar con el servidor de autenticación.")
+
+            setError("No se pudo conectar con el servidor de autenticacion.")
+            return {success: false, message: "Error de conexion"}
+
         } finally {
             setLoading(false)
         }
@@ -69,29 +76,26 @@ export const AuthProvider = ({ children }) => {
         {
             setError("Debe completar todos los campos obligatorios.")
             setLoading(false)
-            return
+            return {success: false, message: "Campos Incompletos"}
         }
 
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
         if (!emailRegex.test(userData.email)) {
             setError("Por favor, ingrese un email válido.")
             setLoading(false)
-            return
+            return { success: false, message: "Email invalido" }
         }
-    if (userData.password.length < 6) {
-            setError("La contraseña debe tener al menos 6 caracteres.")
-            setLoading(false)
-            return
+
+        if (userData.password.length < 6) {
+                setError("La contraseña debe tener al menos 6 caracteres.")
+                setLoading(false)
+                return { success: false, message: "Contraseña muy corta" }
         }
 
         try {
             const response = await fakeRegisterRequest(userData)
             
             if (response.success) {
-                // Opción 1: Autenticar automáticamente después del registro
-                // persistAuth(response.user, response.token)
-                
-                // Opción 2: Solo confirmar registro exitoso
                 setError(null)
                 return { success: true, message: "Usuario registrado exitosamente" }
             } else {
@@ -115,6 +119,14 @@ export const AuthProvider = ({ children }) => {
 
     const isAuthenticated = useMemo(() => Boolean(user && token), [user, token])
 
+    const requireAuth = useCallback(async (redirectTo = "/login") => {
+        if (!isAuthenticated) {
+            console.warn("[useAuth] Usuario no autenticado. Redirigiendo a:", redirectTo)
+            await new Promise((resolve) => setTimeout(resolve, 200))
+            navigate(redirectTo, { replace: true })
+        }
+    }, [isAuthenticated, navigate])
+
     const value = useMemo(() => ({
         user,
         token,
@@ -123,8 +135,10 @@ export const AuthProvider = ({ children }) => {
         login,
         logout,
         agregarUsuario,
-        isAuthenticated
-    }), [user, token, error, loading, login, logout, isAuthenticated])
+        isAuthenticated,
+        requireAuth,
+        setError
+    }), [user, token, error, loading, login, logout, isAuthenticated, requireAuth])
 
     return (
         <AuthContext.Provider value={value}>
@@ -155,8 +169,75 @@ const fakeAuthRequest = (credentials) =>
         }, 700)
     })
 
+const fakeRegisterRequest = (userData) =>
+    new Promise((resolve) => {
+        const { email, name, password, role = "user" } = userData
+        
+        setTimeout(() => {
+            const existingEmails = ["admin@kliv.com", "user@kliv.com"]
+            
+            if (existingEmails.includes(email)) {
+                resolve({
+                    success: false,
+                    message: "El email ya está registrado"
+                })
+                return
+            }
+            
+            resolve({
+                success: true,
+                user: { 
+                    name, 
+                    email, 
+                    role,
+                    id: crypto.randomUUID(),
+                    createdAt: new Date().toISOString()
+                },
+                token: crypto.randomUUID(),
+                message: "Usuario registrado exitosamente"
+            })
+        }, 1000)
+    })
+
 export const useAuth = () => {
     const context = useContext(AuthContext)
     if (!context) throw new Error("useAuth debe ser usado dentro de un AuthProvider")
-    return context
+    
+    const { user, login, logout, ...rest } = context
+    
+    const handleLogin = useCallback(async (credentials) => {
+        try {
+            if (!credentials?.email || !credentials?.password) {
+                throw new Error("Las credenciales no son válidas.")
+            }
+            const result = await login(credentials)
+            if (result?.success) {
+                console.info("[useAuth] Login exitoso:", credentials.email)
+                return result
+            } else {
+                throw new Error(result?.message || "Error en login")
+            }
+        } catch (err) {
+            console.error("[useAuth] Error en login:", err.message)
+            throw err
+        }
+    }, [login])
+
+    const handleLogout = useCallback(async () => {
+        try {
+            await new Promise((resolve) => setTimeout(resolve, 250))
+            logout()
+            console.info("[useAuth] Sesión cerrada correctamente.")
+        } catch (err) {
+            console.error("[useAuth] Error durante logout:", err.message)
+        }
+    }, [logout])
+
+    return {
+        ...rest,
+        user,
+        login: handleLogin, 
+        logout: handleLogout, 
+        isAuthenticated: rest.isAuthenticated
+    }
 }

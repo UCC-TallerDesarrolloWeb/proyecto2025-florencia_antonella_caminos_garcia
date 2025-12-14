@@ -1,145 +1,207 @@
-import React, { useState, useEffect, useContext } from "react"
-import { useNavigate } from "react-router-dom"
-import { LogOut, Home, Sun, Moon } from "lucide-react"
-import useAuth from "../hooks/useAuth.js"
-import { ThemeContext } from "../contexts/ThemeContext.jsx"
-import "../styles/Dashboard.scss"
+import React, { useContext, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import { useAuth } from "../contexts/AuthContext";
+import { useRequireAuth } from "../hooks/useRequireAuth";
+import { useLocalStorage } from "../hooks/useLocalStorage";
+import { ThemeContext } from "../contexts/ThemeContext";
+import "../styles/Dashboard.css";
 
-export default function Dashboard() {
-    const navigate = useNavigate()
-    const { user, logout, isAuthenticated } = useAuth()
-    const { darkMode, setDarkMode } = useContext(ThemeContext)
+const Dashboard = () => {
+    const navigate = useNavigate();
+    const { user, logout } = useAuth();
+    const { darkMode, setDarkMode } = useContext(ThemeContext);
+    
+    const { loading: authLoading } = useRequireAuth();
+    
+    const [stats, setStats] = useLocalStorage("dashboard_stats", {
+        visits: 0,
+        lastVisit: null,
+        tasksCreated: 0
+    });
+    
+    const [currentTime, setCurrentTime] = React.useState(new Date());
+    const [greeting, setGreeting] = React.useState("");
 
-    const [fecha, setFecha] = useState(new Date())
-    const [saludo, setSaludo] = useState("")
-
-    // Si no está autenticado, redirige al login
     useEffect(() => {
-        if (!isAuthenticated) {
-            navigate("/login")
-        }
-    }, [isAuthenticated, navigate])
+        const updateGreeting = () => {
+            const hour = new Date().getHours();
+            if (hour < 12) setGreeting("¡Buenos días!");
+            else if (hour < 19) setGreeting("¡Buenas tardes!");
+            else setGreeting("¡Buenas noches!");
+        };
 
-    // Saludo dinámico + hora en tiempo real
+        updateGreeting();
+        const interval = setInterval(() => {
+            setCurrentTime(new Date());
+            updateGreeting();
+        }, 60000);
+
+        return () => clearInterval(interval);
+    }, []);
+
     useEffect(() => {
-        const definirSaludo = () => {
-            const hora = new Date().getHours()
-            if (hora < 12) return "¡Buenos días!"
-            if (hora < 19) return "¡Buenas tardes!"
-            return "¡Buenas noches!"
+        const updatedStats = {
+            ...stats,
+            visits: stats.visits + 1,
+            lastVisit: new Date().toISOString()
+        };
+        setStats(updatedStats);
+    }, []);
+
+    const handleLogout = async () => {
+        try {
+            await logout();
+            navigate("/");
+        } catch (error) {
+            console.error("Error al cerrar sesión:", error);
         }
-        setSaludo(definirSaludo())
-        const interval = setInterval(() => setFecha(new Date()), 1000)
-        return () => clearInterval(interval)
-    }, [])
+    };
 
-    const toggleTheme = () => setDarkMode((prev) => !prev)
+    const toggleTheme = () => {
+        setDarkMode(prev => !prev);
+    };
 
-    // noinspection JSXUnresolvedComponent
+    const formatTime = (date) => {
+        return date.toLocaleTimeString("es-ES", {
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit"
+        });
+    };
+
+    const formatDate = (date) => {
+        return date.toLocaleDateString("es-ES", {
+            weekday: "long",
+            day: "numeric",
+            month: "long",
+            year: "numeric"
+        });
+    };
+
+    if (authLoading) {
+        return (
+            <div className="dashboard-loading">
+                <div className="loading-spinner"></div>
+                <p>Cargando dashboard...</p>
+            </div>
+        );
+    }
+
     return (
         <motion.section
             className={`dashboard-container ${darkMode ? "dark" : "light"}`}
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
         >
             <motion.div
                 className="dashboard-card"
-                whileHover={{ scale: 1.02 }}
-                transition={{ type: "spring", stiffness: 120 }}
+                initial={{ y: 20, scale: 0.95 }}
+                animate={{ y: 0, scale: 1 }}
+                transition={{ duration: 0.4 }}
             >
-                <header className="dashboard-header">
-                    <h1 className="titulo">
-                        {saludo}{" "}
-                        <motion.span
-                            className="user"
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ delay: 0.4 }}
-                        >
+                <div className="dashboard-header">
+                    <h1 className="dashboard-title">
+                        {greeting}{" "}
+                        <span className="user-name">
                             {user?.name || "Usuario"}
-                        </motion.span>{" "}
-                        👋
+                        </span>
+                        <span className="welcome-emoji"> 👋</span>
                     </h1>
+                    
+                    <div className="dashboard-time">
+                        <div className="current-date">{formatDate(currentTime)}</div>
+                        <div className="current-time">{formatTime(currentTime)}</div>
+                    </div>
+                </div>
 
-                    <motion.p
-                        className="fecha"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 0.6 }}
-                    >
-                        {fecha.toLocaleDateString("es-ES", {
-                            weekday: "long",
-                            day: "numeric",
-                            month: "long",
-                        })}
-                        , {fecha.toLocaleTimeString("es-ES")}
-                    </motion.p>
-                </header>
+                <div className="dashboard-stats">
+                    <div className="stat-card">
+                        <div className="stat-icon">📊</div>
+                        <div className="stat-content">
+                            <div className="stat-value">{stats.visits}</div>
+                            <div className="stat-label">Visitas al dashboard</div>
+                        </div>
+                    </div>
+                    
+                    <div className="stat-card">
+                        <div className="stat-icon">✅</div>
+                        <div className="stat-content">
+                            <div className="stat-value">{stats.tasksCreated}</div>
+                            <div className="stat-label">Tareas creadas</div>
+                        </div>
+                    </div>
+                    
+                    <div className="stat-card">
+                        <div className="stat-icon">👤</div>
+                        <div className="stat-content">
+                            <div className="stat-value">
+                                {user?.role === "admin" ? "Administrador" : "Usuario"}
+                            </div>
+                            <div className="stat-label">Tu rol</div>
+                        </div>
+                    </div>
+                </div>
 
-                <motion.p
-                    className="texto"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.8 }}
-                >
-                    Desde este panel podés administrar tus{" "}
-                    <strong>tareas</strong>, proyectos y ajustar tus{" "}
-                    <strong>preferencias del sistema</strong>. Todo está
-                    sincronizado con tu sesión.
-                </motion.p>
-
-                <motion.div
-                    className="dashboard-actions"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 1.1 }}
-                >
+                <div className="dashboard-actions">
                     <button
                         onClick={() => navigate("/home")}
-                        className="btn btn-primary flex items-center gap-2"
+                        className="action-btn primary"
                     >
-                        <Home size={18} />
-                        Ir al inicio
+                        <span className="btn-icon">🏠</span>
+                        <span className="btn-text">Ir al inicio</span>
                     </button>
-
+                    
                     <button
-                        onClick={logout}
-                        className="btn btn-danger flex items-center gap-2"
+                        onClick={() => navigate("/tasks")}
+                        className="action-btn secondary"
                     >
-                        <LogOut size={18} />
-                        Cerrar sesión
+                        <span className="btn-icon">📋</span>
+                        <span className="btn-text">Gestionar tareas</span>
                     </button>
+                    
+                    <button
+                        onClick={() => navigate("/profile")}
+                        className="action-btn secondary"
+                    >
+                        <span className="btn-icon">⚙️</span>
+                        <span className="btn-text">Configuración</span>
+                    </button>
+                </div>
 
+                <div className="theme-section">
                     <button
                         onClick={toggleTheme}
-                        className={`btn btn-theme flex items-center gap-2 ${
-                            darkMode ? "btn-light" : "btn-dark"
-                        }`}
+                        className="theme-toggle"
                     >
-                        {darkMode ? (
-                            <>
-                                <Sun size={18} /> Modo Claro
-                            </>
-                        ) : (
-                            <>
-                                <Moon size={18} /> Modo Oscuro
-                            </>
-                        )}
+                        <span className="theme-icon">
+                            {darkMode ? "☀️" : "🌙"}
+                        </span>
+                        <span className="theme-text">
+                            {darkMode ? "Modo claro" : "Modo oscuro"}
+                        </span>
                     </button>
-                </motion.div>
+                </div>
+
+                <div className="logout-section">
+                    <button
+                        onClick={handleLogout}
+                        className="logout-btn"
+                    >
+                        <span className="logout-icon">🚪</span>
+                        <span className="logout-text">Cerrar sesión</span>
+                    </button>
+                </div>
             </motion.div>
 
-            <motion.footer
-                className="dashboard-footer"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 1.3 }}
-            >
-                <small>
-                    © {new Date().getFullYear()} Kliv Manager — Panel del usuario
-                </small>
-            </motion.footer>
+            <div className="dashboard-footer">
+                <p>
+                    © {new Date().getFullYear()} Task Manager Pro — Panel de usuario
+                </p>
+            </div>
         </motion.section>
-    )
-}
+    );
+};
+
+export default Dashboard;
