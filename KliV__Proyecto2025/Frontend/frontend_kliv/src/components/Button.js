@@ -1,16 +1,15 @@
-import React from 'react'
 import { useTheme } from '../contexts/ThemeContext'
 
 export default function Button({
-                                   label,
-                                   onClick,
-                                   type = 'button',
-                                   disabled = false,
-                                   variant = 'primary',
-                                   size = 'md',
-                                   icon: Icon,
-                                   className = ''
-                               }) {
+    label,
+    onClick,
+    type = 'button',
+    disabled = false,
+    variant = 'primary',
+    size = 'md',
+    icon: Icon,
+    className = ''
+}) {
     const { theme } = useTheme()
     const isDark = theme === 'dark'
 
@@ -51,19 +50,26 @@ export default function Button({
             onClick={onClick}
             disabled={disabled}
             className={classes}
-            style={{ transition: 'transform 0.15s' }}
-            onMouseDown={() => { if (!disabled) { // noinspection JSDeprecatedSymbols
-                event.target.style.transform = 'scale(0.97)'
-            } }}
-            onMouseUp={() => { if (!disabled) { // noinspection JSDeprecatedSymbols
-                event.target.style.transform = 'scale(1)'
-            } }}
-            onMouseEnter={() => { if (!disabled) { // noinspection JSDeprecatedSymbols
-                event.target.style.transform = 'scale(1.03)'
-            } }}
-            onMouseLeave={() => { if (!disabled) { // noinspection JSDeprecatedSymbols
-                event.target.style.transform = 'scale(1)'
-            } }}
+            onMouseDown={() => {
+                if (!disabled) { // noinspection JSDeprecatedSymbols
+                    event.target.style.transform = 'scale(0.97)'
+                }
+            }}
+            onMouseUp={() => {
+                if (!disabled) { // noinspection JSDeprecatedSymbols
+                    event.target.style.transform = 'scale(1)'
+                }
+            }}
+            onMouseEnter={() => {
+                if (!disabled) { // noinspection JSDeprecatedSymbols
+                    event.target.style.transform = 'scale(1.03)'
+                }
+            }}
+            onMouseLeave={() => {
+                if (!disabled) { // noinspection JSDeprecatedSymbols
+                    event.target.style.transform = 'scale(1)'
+                }
+            }}
         >
             {Icon && <Icon size={18} />}
             <span>{label}</span>

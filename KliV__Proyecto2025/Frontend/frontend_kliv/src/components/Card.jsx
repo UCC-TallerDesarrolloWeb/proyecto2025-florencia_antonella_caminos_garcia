@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
+import{ motion } from 'framer-motion'
 import { useTheme } from '../contexts/ThemeContext'
 import { Heart, Clock } from 'lucide-react'
 

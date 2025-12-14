@@ -1,13 +1,12 @@
-import React from "react"
 import { Link } from "react-router-dom"
 
 export default function Footer({
-                                   brand = "KliV Manager",
-                                   links = [],
-                                   social = [],
-                                   year = new Date().getFullYear(),
-                                   className = "",
-                               }) {
+    brand = "KliV Manager",
+    links = [],
+    social = [],
+    year = new Date().getFullYear(),
+    className = "",
+}) {
     return (
         <footer
             className={`w-full border-t border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 py-6 px-6 transition-all duration-300 ${className}`}

@@ -1,20 +1,19 @@
-import React from "react"
 import PropTypes from "prop-types"
 import { FiAlertCircle } from "react-icons/fi"
 
 export default function Input({
-                                  label,
-                                  name,
-                                  type = "text",
-                                  value,
-                                  onChange,
-                                  placeholder = "",
-                                  error = "",
-                                  required = false,
-                                  disabled = false,
-                                  icon: Icon = null,
-                                  className = "",
-                              }) {
+    label,
+    name,
+    type = "text",
+    value,
+    onChange,
+    placeholder = "",
+    error = "",
+    required = false,
+    disabled = false,
+    icon: Icon = null,
+    className = "",
+}) {
     const baseStyle = `
         w-full px-4 py-2 rounded-xl border 
         bg-white dark:bg-gray-900

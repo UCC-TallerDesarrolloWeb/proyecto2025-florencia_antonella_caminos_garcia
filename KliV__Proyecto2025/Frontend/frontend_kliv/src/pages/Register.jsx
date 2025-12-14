@@ -1,10 +1,10 @@
-import React, { useContext, useReducer, useState, useEffect, useMemo, useCallback, useRef } from React;
+import React, { useContext, useReducer, useState, useEffect, useMemo, useCallback, useRef } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ThemeContext } from "../contexts/ThemeContext.jsx";
-import { useAuth } from "../contexts/AuthContext.jsx";
-import { useFormValidation } from "../hooks/useFormValidation.js";
-import { useAuthRedirect } from "../hooks/useAuthRedirect.js";
+import { ThemeContext } from "../contexts/ThemeContext";
+import { useAuth } from "../contexts/AuthContext";
+import { useFormValidation } from "../hooks/useFormValidation";
+import { useAuthRedirect } from "../hooks/useAuthRedirect";
 import "../styles/Register.css";
 
 const Register = () => {
@@ -76,14 +76,12 @@ const Register = () => {
 
     const isLoading = authLoading || isSubmitting;
 
-    // Enfocar input al cargar
     useEffect(() => {
         if (nombreRef.current) {
             nombreRef.current.focus();
         }
     }, []);
 
-    // Limpiar mensajes automáticamente
     useEffect(() => {
         if (mensaje) {
             const timer = setTimeout(() => setMensaje(""), 4000);
@@ -91,7 +89,6 @@ const Register = () => {
         }
     }, [mensaje]);
 
-    // Mostrar errores del contexto de autenticación
     useEffect(() => {
         if (authError) {
             setMensaje(authError);
@@ -105,10 +102,8 @@ const Register = () => {
         setMensaje("");
         setError(null);
 
-        // Validar formulario con feedback visual
         const isFormValid = validateForm();
         if (!isFormValid) {
-            // Encontrar el primer campo con error para dar foco
             const firstErrorField = Object.keys(errors).find(key => errors[key]);
             if (firstErrorField) {
                 const errorElement = document.getElementById(firstErrorField);
@@ -121,7 +116,6 @@ const Register = () => {
             return;
         }
 
-        // Preparar datos para envío
         const userData = {
             name: values.nombre.trim(),
             email: values.email.trim().toLowerCase(),
@@ -145,7 +139,6 @@ const Register = () => {
                 setMensaje("🎉 ¡Registro exitoso! Redirigiendo al login...");
                 resetForm();
 
-                // Feedback visual de éxito
                 const formElement = e.target;
                 formElement.classList.add('success-submit');
 
@@ -157,9 +150,7 @@ const Register = () => {
             } else {
                 const errorMessage = resultado?.message || "❌ Error en el registro";
 
-                // Clasificar errores para mejor UX
                 if (errorMessage.toLowerCase().includes("email") || errorMessage.toLowerCase().includes("correo")) {
-                    // Enfocar campo de email si hay error relacionado
                     const emailInput = document.getElementById('email');
                     if (emailInput) {
                         emailInput.focus();
@@ -169,7 +160,6 @@ const Register = () => {
 
                 setMensaje(errorMessage);
 
-                // Scroll al mensaje de error
                 setTimeout(() => {
                     const messageElement = document.querySelector('.global-message');
                     if (messageElement) {
@@ -208,10 +198,13 @@ const Register = () => {
             </span>
         );
 
+        const buttonClasses = `submit-button ${!isValid ? 'button-disabled' : ''} ${isLoading ? 'button-loading' : ''}`;
+        const buttonColor = !isValid ? "#a0aec0" : "#4299e1";
+
         return (
             <motion.button
                 type="submit"
-                className={`submit-button ${!isValid ? 'button-disabled' : ''} ${isLoading ? 'button-loading' : ''}`}
+                className={buttonClasses}
                 disabled={isLoading || !isValid || !isFormComplete}
                 whileHover={(!isLoading && isValid && isFormComplete) ? {
                     scale: 1.02,
@@ -222,8 +215,7 @@ const Register = () => {
                 } : {}}
                 initial={{ opacity: 0.8 }}
                 animate={{
-                    opacity: (isLoading || !isValid || !isFormComplete) ? 0.7 : 1,
-                    backgroundColor: !isValid ? "#a0aec0" : "#4299e1"
+                    opacity: (isLoading || !isValid || !isFormComplete) ? 0.7 : 1
                 }}
             >
                 {buttonText}
@@ -276,7 +268,6 @@ const Register = () => {
                     </span>
                 </div>
 
-                {/* Botón para cerrar mensaje (opcional) */}
                 {!isLoading && (
                     <button
                         className="close-message"
@@ -335,7 +326,7 @@ const Register = () => {
             return {
                 score,
                 level: score < 2 ? "Débil" : score < 4 ? "Moderada" : "Fuerte",
-                color: score < 2 ? "#e53e3e" : score < 4 ? "#d69e2e" : "#38a169"
+                levelClass: score < 2 ? "weak" : score < 4 ? "moderate" : "strong"
             };
         };
 
@@ -345,7 +336,7 @@ const Register = () => {
             <div className="password-strength">
                 <div className="strength-header">
                     <span>Seguridad de la contraseña:</span>
-                    <span style={{ color: strength.color, fontWeight: 600 }}>
+                    <span className={`strength-level ${strength.levelClass}`}>
                         {strength.level}
                     </span>
                 </div>
@@ -353,10 +344,7 @@ const Register = () => {
                     {[1, 2, 3, 4, 5].map((index) => (
                         <div
                             key={index}
-                            className={`strength-bar ${index <= strength.score ? 'active' : ''}`}
-                            style={{
-                                backgroundColor: index <= strength.score ? strength.color : '#e2e8f0'
-                            }}
+                            className={`strength-bar ${index <= strength.score ? 'active' : ''} ${strength.levelClass}`}
                         />
                     ))}
                 </div>
@@ -409,7 +397,6 @@ const Register = () => {
                     noValidate
                     aria-label="Formulario de registro"
                 >
-                    {}
                     <div className="form-group">
                         <label htmlFor="nombre">Nombre completo *</label>
                         <input
@@ -540,7 +527,6 @@ const Register = () => {
             </motion.div>
         </motion.section>
     );
-
-}
+};
 
 export default Register;
