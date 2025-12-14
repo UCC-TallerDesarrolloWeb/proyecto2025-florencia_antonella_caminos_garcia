@@ -1,10 +1,10 @@
 import React from "react"
 import ReactDOM from "react-dom/client"
 import { BrowserRouter } from "react-router-dom"
-import { ThemeProvider } from "./contexts/ThemeContext.jsx";
-import { AuthProvider } from "./contexts/AuthContext.jsx"
-import App from "./App.css"
-import "./index.css"
+import { ThemeProvider } from "@/contexts/ThemeContext.jsx";
+import { AuthProvider } from "@/contexts/AuthContext.jsx"
+import App from "@/App.jsx"
+import "@/styles/index.scss"
 
 const rootElement = document.getElementById('root')
 

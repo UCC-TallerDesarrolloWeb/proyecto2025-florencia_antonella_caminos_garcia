@@ -1,11 +1,11 @@
 import React, { useContext, useState, useEffect, useCallback, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ThemeContext } from "../contexts/ThemeContext";
-import { useAuth } from "../contexts/AuthContext";
-import { useFormValidation } from "../hooks/useFormValidation";
-import { useAuthRedirect } from "../hooks/useAuthRedirect";
-import "../styles/Login.css";
+import { ThemeContext } from "@/contexts/ThemeContext";
+import { useAuth } from "@/contexts/AuthContext";
+import { useFormValidation } from "@/hooks/useFormValidation";
+import { useAuthRedirect } from "@/hooks/useAuthRedirect";
+import "@/styles/Login.scss";
 
 const Login = () => {
     const { darkMode } = useContext(ThemeContext);

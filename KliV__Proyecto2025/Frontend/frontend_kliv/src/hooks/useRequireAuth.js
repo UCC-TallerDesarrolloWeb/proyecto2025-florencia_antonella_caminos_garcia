@@ -1,6 +1,6 @@
 import { useEffect } from "react"
 import { useNavigate, useLocation } from "react-router-dom"
-import { useAuth } from "../contexts/AuthContext"
+import { useAuth } from "@/contexts/AuthContext"
 
 /**
  * Hook para proteger rutas - redirige al login si no está autenticado

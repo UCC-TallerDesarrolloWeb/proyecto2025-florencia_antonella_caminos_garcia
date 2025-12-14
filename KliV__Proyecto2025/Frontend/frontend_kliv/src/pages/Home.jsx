@@ -1,12 +1,12 @@
 import React, { useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ThemeContext } from "../contexts/ThemeContext";
-import { useAuth } from "../contexts/AuthContext";
-import { useRequireAuth } from "../hooks/useRequireAuth";
-import { useLocalStorage } from "../hooks/useLocalStorage";
+import { ThemeContext } from "@/contexts/ThemeContext";
+import { useAuth } from "@/contexts/AuthContext";
+import { useRequireAuth } from "@/hooks/useRequireAuth";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { fetchAllUsers } from "../api/users";
-import "../styles/Home.css";
+import "@/styles/Home.scss";
 
 const Home = () => {
     const { user, isAuthenticated, logout } = useAuth();

@@ -1,11 +1,11 @@
 import React, { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { useAuth } from "../contexts/AuthContext";
-import { useRequireAuth } from "../hooks/useRequireAuth";
-import { useLocalStorage } from "../hooks/useLocalStorage";
-import { ThemeContext } from "../contexts/ThemeContext";
-import "../styles/Dashboard.css";
+import { useAuth } from "@/contexts/AuthContext";
+import { useRequireAuth } from "@/hooks/useRequireAuth";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
+import { ThemeContext } from "@/contexts/ThemeContext";
+import "@/styles/Dashboard.scss";
 
 const Dashboard = () => {
     const navigate = useNavigate();

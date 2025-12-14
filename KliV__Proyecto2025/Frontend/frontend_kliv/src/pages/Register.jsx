@@ -1,11 +1,11 @@
 import React, { useContext, useReducer, useState, useEffect, useMemo, useCallback, useRef } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ThemeContext } from "../contexts/ThemeContext";
-import { useAuth } from "../contexts/AuthContext";
-import { useFormValidation } from "../hooks/useFormValidation";
-import { useAuthRedirect } from "../hooks/useAuthRedirect";
-import "../styles/Register.css";
+import { ThemeContext } from "@/contexts/ThemeContext";
+import { useAuth } from "@/contexts/AuthContext";
+import { useFormValidation } from "@/hooks/useFormValidation";
+import { useAuthRedirect } from "@/hooks/useAuthRedirect";
+import "@/styles/Register.scss";
 
 const Register = () => {
     const navigate = useNavigate();

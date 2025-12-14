@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useTheme } from './context/ThemeContext.jsx'
+import { useTheme } from '@/context/ThemeContext.jsx'
 
 const initialTasks = [
     { id: 1, title: 'Diseñar mockups', status: 'To Do' },

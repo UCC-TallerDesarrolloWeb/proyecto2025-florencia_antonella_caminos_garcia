@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react"
-import { useAuth } from "./context/AuthContext"
+import { useAuth } from "@/context/AuthContext"
 import { useNavigate } from "react-router-dom"
 import { LogOut, Search, Heart, MessageSquare, Settings, HelpCircle, LayoutDashboard, FolderKanban, Image as ImageIcon, ListTodo } from "lucide-react"
-import "./styles/Dashboard.css"
+import "@/styles/Dashboard.scss"
 
 const KlivDashboard = () => {
     const navigate = useNavigate()

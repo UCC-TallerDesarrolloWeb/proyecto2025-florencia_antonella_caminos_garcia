@@ -1,17 +1,17 @@
 import { Suspense, lazy } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
-import { useAuth } from './contexts/AuthContext'
-import { useTheme } from './contexts/ThemeContext'
-import Navbar from './components/Navbar'
-import Footer from './components/Footer'
-import LoadingSpinner from './components/LoadingSpinner'
+import { useAuth } from '@/contexts/AuthContext'
+import { useTheme } from '@/contexts/ThemeContext'
+import Navbar from '@/components/Navbar'
+import Footer from '@/components/Footer'
+import LoadingSpinner from '@/components/LoadingSpinner'
 import './App.css'
 
 // Componentes lazy
-const Home = lazy(() => import('./pages/Home'))
-const Login = lazy(() => import('./pages/Login'))
-const Register = lazy(() => import('./pages/Register'))
-const Dashboard = lazy(() => import('./pages/Dashboard'))
+const Home = lazy(() => import('@/pages/Home'))
+const Login = lazy(() => import('@/pages/Login'))
+const Register = lazy(() => import('@/pages/Register'))
+const Dashboard = lazy(() => import('@/pages/Dashboard'))
 
 // Componente para rutas protegidas
 const ProtectedRoute = ({ children }) => {

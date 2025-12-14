@@ -1,4 +1,4 @@
-export { useRequireAuth } from "./useRequireAuth"
-export { useAuthRedirect } from "./useAuthRedirect"
-export { useFormValidation } from "./useFormValidation"
-export { useLocalStorage } from "./useLocalStorage"
+export { useRequireAuth } from "@/hooks/useRequireAuth"
+export { useAuthRedirect } from "@/hooks/useAuthRedirect"
+export { useFormValidation } from "@/hooks/useFormValidation"
+export { useLocalStorage } from "@/hooks/useLocalStorage"
