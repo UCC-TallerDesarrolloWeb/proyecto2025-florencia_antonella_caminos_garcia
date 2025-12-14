@@ -60,6 +60,52 @@ export const AuthProvider = ({ children }) => {
         }
     }, [persistAuth])
 
+    const agregarUsuario = useCallback(async (userData) =>
+    {
+        setLoading(true)
+        setError(null)
+
+        if(!userData?.email || !userData?.password || !userData?.name)
+        {
+            setError("Debe completar todos los campos obligatorios.")
+            setLoading(false)
+            return
+        }
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+        if (!emailRegex.test(userData.email)) {
+            setError("Por favor, ingrese un email válido.")
+            setLoading(false)
+            return
+        }
+    if (userData.password.length < 6) {
+            setError("La contraseña debe tener al menos 6 caracteres.")
+            setLoading(false)
+            return
+        }
+
+        try {
+            const response = await fakeRegisterRequest(userData)
+            
+            if (response.success) {
+                // Opción 1: Autenticar automáticamente después del registro
+                // persistAuth(response.user, response.token)
+                
+                // Opción 2: Solo confirmar registro exitoso
+                setError(null)
+                return { success: true, message: "Usuario registrado exitosamente" }
+            } else {
+                setError(response.message || "No se pudo registrar el usuario.")
+                return { success: false, message: response.message }
+            }
+        } catch (error) {
+            setError("Error de conexión al registrar usuario.")
+            return { success: false, message: "Error de conexión" }
+        } finally {
+            setLoading(false)
+        }
+    }, [])
+
     const logout = useCallback(() => {
         setUser(null)
         setToken(null)
@@ -76,6 +122,7 @@ export const AuthProvider = ({ children }) => {
         loading,
         login,
         logout,
+        agregarUsuario,
         isAuthenticated
     }), [user, token, error, loading, login, logout, isAuthenticated])
 

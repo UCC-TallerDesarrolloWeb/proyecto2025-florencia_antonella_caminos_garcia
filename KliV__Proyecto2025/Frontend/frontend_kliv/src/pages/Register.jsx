@@ -1,7 +1,8 @@
-import React, { useContext } from "react";
+import React, {useContext, useReducer, useState, useEffect, useMemo, useCallback, useRef} from React;
 import { useNavigate, Link } from "react-router-dom";
+import {motion} from "framer-motion";
 import { ThemeContext } from "../contexts/ThemeContext.jsx";
-import { AuthContext } from "../contexts/AuthContext.jsx";
+import { useAuth } from "../contexts/AuthContext.jsx";
 import "../styles/Register.css";
 
 // Reducer para manejar el formulario
@@ -19,7 +20,7 @@ const formReducer = (state, action) => {
 const Register = () => {
     const navigate = useNavigate();
     const { darkMode } = useContext(ThemeContext);
-    const { agregarUsuario} = useContext(AuthContext);
+    const { agregarUsuario, loading: authLoading, error: authError } = useAuth();
 
     const [formState, dispatch] = useReducer(formReducer, {
         nombre: "",
@@ -29,13 +30,16 @@ const Register = () => {
     });
 
     const [mensaje, setMensaje] = useState("");
-    const [loading, setLoading] = useState(false);
+    const [localLoading, setLocalLoading] = useState(false);
 
     const nombreRef = useRef(null);
 
     // Enfocar input al cargar
     useEffect(() => {
-        nombreRef.current.focus();
+        if(nombreRef.current)
+        {
+            nombreRef.current.focus();
+        }
     }, []);
 
     // Limpiar mensajes automáticamente
@@ -45,6 +49,13 @@ const Register = () => {
             return () => clearTimeout(timer);
         }
     }, [mensaje]);
+
+    // Mostrar errores del contexto de autenticación
+    useEffect(() => {
+        if (authError) {
+            setMensaje(authError);
+        }
+    }, [authError]);
 
     // Validaciones memoizadas
     const validaciones = useMemo(() => {
@@ -57,13 +68,17 @@ const Register = () => {
         return {
             emailValido: validarEmail(formState.email),
             passwordValido: validarPassword(formState.password),
-            passwordsCoinciden
+            passwordsCoinciden,
+            formularioValido: formState.nombre.trim() && 
+                            validarEmail(formState.email) && 
+                            validarPassword(formState.password) && 
+                            passwordsCoinciden
         };
-    }, [formState.email, formState.password, formState.confirmPassword]);
+    }, [formState]);
 
     // Manejo del registro
     const handleRegister = useCallback(
-        (e) => {
+        async (e) => {
             e.preventDefault();
             setMensaje("");
 
@@ -87,22 +102,35 @@ const Register = () => {
                 return;
             }
 
-            setLoading(true);
+            setLocalLoading(true);
+            
+            try {
+                const resultado = await agregarUsuario({ 
+                name: formState.nombre,
+                email: formState.email,
+                password: formState.password
+            });
 
-            // Simular registro
-            setTimeout(() => {
-                agregarUsuario({ ...formState });
+            if (resultado?.success) {
                 setMensaje("¡Usuario registrado correctamente!");
                 dispatch({ type: "RESET" });
-                setLoading(false);
+                
+                // Redirigir automáticamente al login después de un breve delay
+                setTimeout(() => {
+                    navigate("/login");
+                }, 1500);
+            } else {
+                setMensaje(resultado?.message || "Error al registrar usuario");
+            }
+        } catch (error) {
+            setMensaje("Error inesperado al registrar usuario");
+            console.error("Error en registro:", error);
+        } finally {
+            setLocalLoading(false);
+        }
+    }, [formState, validaciones, agregarUsuario, navigate]);
 
-                // Redirigir automáticamente al login
-                navigate("/login");
-            }, 1000);
-        },
-        [formState, validaciones, agregarUsuario, navigate]
-    );
-
+    const isLoading = authLoading || localLoading;
     // noinspection JSXUnresolvedComponent
     return (
         <motion.section
@@ -135,6 +163,8 @@ const Register = () => {
                             }
                             placeholder="Juan Pérez"
                             autoComplete="name"
+                            required
+                            disabled={isLoading}
                         />
                     </div>
 
@@ -149,6 +179,8 @@ const Register = () => {
                             }
                             placeholder="usuario@ejemplo.com"
                             autoComplete="username"
+                            required
+                            disabled = {isLoading}
                         />
                     </div>
 
@@ -163,6 +195,8 @@ const Register = () => {
                             }
                             placeholder="••••••••"
                             autoComplete="new-password"
+                            required
+                            disabled = {isLoading}
                         />
                     </div>
 
@@ -181,6 +215,8 @@ const Register = () => {
                             }
                             placeholder="••••••••"
                             autoComplete="new-password"
+                            required
+                            disabled = {isLoading}
                         />
                     </div>
 
@@ -198,9 +234,9 @@ const Register = () => {
                     <motion.button
                         type="submit"
                         className="btn btn-primary"
-                        disabled={loading}
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
+                        disabled={isLoading || !validaciones.formularioValido}
+                        whileHover={{scale: validaciones.formularioValido && !isLoading ? 1.05 : 1 }}
+                        whileTap={{ scale: validaciones.formularioValido && !isLoading ? 0.95 : 1 }}
                     >
                         {loading ? "Registrando..." : "Crear cuenta"}
                     </motion.button>
@@ -208,7 +244,7 @@ const Register = () => {
 
                 <div className="register-footer">
                     <p>
-                        ¿Ya tenés cuenta?{" "}
+                        ¿Ya tenes cuenta?{" "}
                         <Link to="/login" className="login-link">
                             Iniciar sesión
                         </Link>
