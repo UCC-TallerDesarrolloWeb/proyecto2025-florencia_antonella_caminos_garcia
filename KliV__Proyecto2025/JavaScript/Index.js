@@ -1988,20 +1988,18 @@ class DashboardApp {
      * @param {event} event - Evento de envío del formulario (sumbit event)
      * @returns {void}
      */
-    handleSettingsSubmit = (event) => {
+    handleSettingsSubmit = async (event) => {
         event.preventDefault();
-
         console.log('Settings form submitted:', form.id);
-
-        this.saveSettings()
-            .then(() => {
+        
+        try{
+                await this.saveSettings();
                 this.showSuccessMessage('settings-success');
                 this.showToast('Configuración guardada correctamente', 'success');
-            })
-            .catch((error) => {
+            } catch(error) {
                 console.error('Error en configuración:', error);
                 this.showError(error.message || 'Error al guardar la configuración');
-            });
+            };
     }
 
     /**

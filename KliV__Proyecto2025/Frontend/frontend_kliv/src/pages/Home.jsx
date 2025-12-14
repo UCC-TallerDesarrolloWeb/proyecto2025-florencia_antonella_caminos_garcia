@@ -35,10 +35,23 @@ export default function Home() {
 
     // Llamada a API mock para obtener usuarios
     useEffect(() => {
-        fetchAllUsers()
-            .then((data) => setUsers(data))
-            .finally(() => setLoading(false))
-    }, [])
+        const fetchData = async () =>
+        {
+            try {
+                const data = await fetchAllUsers();
+                setUsers(data);
+            }
+            catch (error)
+            {
+                console.error("Error fetching users:", error);
+            }
+            finally
+            {
+                setLoading(false);
+            }
+        };
+        fetchData();
+    }, []);
 
     return (
         <motion.section
