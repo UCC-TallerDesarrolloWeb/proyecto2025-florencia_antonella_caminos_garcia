@@ -4,25 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4e9aab01-0135-4572-83a6-76887b2c8b8c" name="Changes" comment="Update: Corregí inspect-code y reempllazo de funciones .then por funciones await y async">
-      <change afterPath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/App.scss" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/components/LoadingSpinner.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/App.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/components/Card.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/components/Card.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/components/Footer.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/components/Footer.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/components/KlivDashboard/KlivDashboard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/components/KlivDashboard/KlivDashboard.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/components/Navbar.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/components/Navbar.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/components/TaskManager/TaskManager.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/components/TaskManager/TaskManager.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/hooks/useAuth.js" beforeDir="false" afterPath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/hooks/useAuth.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/main.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/main.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/pages/Dashboard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/pages/Dashboard.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/pages/Home.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/pages/Home.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/pages/Login.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/pages/Login.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/pages/Register.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/pages/Register.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/vite.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/vite.config.js" afterDir="false" />
+    <list default="true" id="4e9aab01-0135-4572-83a6-76887b2c8b8c" name="Changes" comment="Update: Agregué estilo a App.jsx">
+      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/project.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/watcherTasks.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/KliV__Proyecto2025/Documentacion/Documentacion.docx" beforeDir="false" afterPath="$PROJECT_DIR$/KliV__Proyecto2025/Documentacion/Documentacion.docx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/KliV__Proyecto2025/Documentacion/~$cumentacion.docx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/KliV__Proyecto2025/Frontend/frontend_kliv/src/App.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -62,36 +54,36 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "Node.js.App.jsx.executor": "Run",
-    "Node.js.Button.js.executor": "Run",
-    "Node.js.Button.jsx.executor": "Run",
-    "Node.js.Card.jsx.executor": "Run",
-    "Node.js.useAuth.js.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "main",
-    "javascript.nodejs.core.library.configured.version": "22.17.0",
-    "javascript.nodejs.core.library.typings.version": "22.17.2",
-    "js.introduce.parameter.add.jsdoc": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.standard": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.standard": "",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "run.code.analysis.last.selected.profile": "pProject Default",
-    "settings.editor.selected.configurable": "settings.javascript.linters.eslint",
-    "ts.external.directory.path": "C:\\Program Files\\JetBrains\\WebStorm 2025.2\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;Node.js.App.jsx.executor&quot;: &quot;Run&quot;,
+    &quot;Node.js.Button.js.executor&quot;: &quot;Run&quot;,
+    &quot;Node.js.Button.jsx.executor&quot;: &quot;Run&quot;,
+    &quot;Node.js.Card.jsx.executor&quot;: &quot;Run&quot;,
+    &quot;Node.js.useAuth.js.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;javascript.nodejs.core.library.configured.version&quot;: &quot;22.17.0&quot;,
+    &quot;javascript.nodejs.core.library.typings.version&quot;: &quot;22.17.2&quot;,
+    &quot;js.introduce.parameter.add.jsdoc&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.standard&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.standard&quot;: &quot;&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;settings.javascript.linters.eslint&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;C:\\Program Files\\JetBrains\\WebStorm 2025.2\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="QodanaReportsService">
     <option name="descriptions">
       <ReportDescription localRun="true" path="C:\Users\florc\AppData\Local\Temp\qodana_output\qodana.sarif.json" reportGuid="7221ea4b-9350-48ea-921e-ee708f2433fe" reportId="proyecto2025-florencia_antonella_caminos_garcia/qodana/2025-11-07" />
@@ -106,7 +98,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-3aa1da707db6-JavaScript-WS-252.26830.93" />
+        <option value="bundled-js-predefined-d6986cc7102b-a71380e98a7c-JavaScript-WS-252.28238.10" />
       </set>
     </attachedChunks>
   </component>
@@ -123,6 +115,7 @@
       <workItem from="1762546500935" duration="4490000" />
       <workItem from="1762551091401" duration="55178000" />
       <workItem from="1762706439554" duration="14775000" />
+      <workItem from="1765735779205" duration="366000" />
     </task>
     <task id="LOCAL-00001" summary="Fix: Labels, Arrow functions, documentation, css, react">
       <option name="closed" value="true" />
@@ -212,7 +205,23 @@
       <option name="project" value="LOCAL" />
       <updated>1765479127576</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Update: Corregí el error de ejecución del código, ahora corre sin problemas">
+      <option name="closed" value="true" />
+      <created>1765495089024</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1765495089024</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Update: Agregué estilo a App.jsx">
+      <option name="closed" value="true" />
+      <created>1765495120903</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1765495120903</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -246,6 +255,8 @@
     <MESSAGE value="Update: Corregí errores de la carpeta pages" />
     <MESSAGE value="Update: Corregí imports innecesarios" />
     <MESSAGE value="Update: Corregí inspect-code y reempllazo de funciones .then por funciones await y async" />
-    <option name="LAST_COMMIT_MESSAGE" value="Update: Corregí inspect-code y reempllazo de funciones .then por funciones await y async" />
+    <MESSAGE value="Update: Corregí el error de ejecución del código, ahora corre sin problemas" />
+    <MESSAGE value="Update: Agregué estilo a App.jsx" />
+    <option name="LAST_COMMIT_MESSAGE" value="Update: Agregué estilo a App.jsx" />
   </component>
 </project>

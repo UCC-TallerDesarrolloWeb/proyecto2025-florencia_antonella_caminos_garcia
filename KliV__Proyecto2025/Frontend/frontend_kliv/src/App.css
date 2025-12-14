@@ -131,14 +131,7 @@ body {
 .btn-primary:active:not(:disabled) {
   transform: translateY(0);
 }
-.btn-secondary {
-  background-color: var(--bg-secondary);
-  color: var(--text-primary);
-  border: 1px solid var(--border-color);
-}
-.btn-secondary:hover:not(:disabled) {
-  background-color: var(--hover-bg);
-}
+
 .btn-danger {
   background-color: #ef4444;
   color: white;
@@ -146,21 +139,7 @@ body {
 .btn-danger:hover:not(:disabled) {
   background-color: rgb(234.9802955665, 21.0197044335, 21.0197044335);
 }
-.btn-ghost {
-  background-color: transparent;
-  color: var(--text-primary);
-}
-.btn-ghost:hover:not(:disabled) {
-  background-color: var(--hover-bg);
-}
-.btn-sm {
-  padding: 0.25rem 1rem;
-  font-size: 0.75rem;
-}
-.btn-lg {
-  padding: 1rem 2rem;
-  font-size: 1rem;
-}
+
 .btn-full {
   width: 100%;
 }
@@ -175,25 +154,7 @@ body {
   font-weight: 500;
   color: var(--text-primary);
 }
-.form-control {
-  width: 100%;
-  padding: 0.5rem 1rem;
-  background-color: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-  border-radius: 0.5rem;
-  color: var(--text-primary);
-  font-size: 1rem;
-  transition: border-color 150ms ease, box-shadow 150ms ease;
-}
-.form-control:focus {
-  outline: none;
-  border-color: #7c3aed;
-  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
-}
-.form-control:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
+
 .form-error {
   margin-top: 0.25rem;
   font-size: 0.75rem;
@@ -495,12 +456,7 @@ body {
   .kliv-dashboard {
     grid-template-columns: 1fr;
   }
-  .kliv-dashboard.sidebar-open .kliv-sidebar {
-    display: block;
-  }
-  .kliv-dashboard.sidebar-closed .kliv-sidebar {
-    display: none;
-  }
+
 }
 
 ::-webkit-scrollbar {
