@@ -5,7 +5,7 @@ import { ThemeContext } from "@/contexts/ThemeContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { useFormValidation } from "@/hooks/useFormValidation";
 import { useAuthRedirect } from "@/hooks/useAuthRedirect";
-import "@/styles/Register.scss";
+import "@/styles/Register.css";
 
 const Register = () => {
     const navigate = useNavigate();

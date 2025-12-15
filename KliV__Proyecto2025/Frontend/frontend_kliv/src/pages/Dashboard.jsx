@@ -5,21 +5,21 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useRequireAuth } from "@/hooks/useRequireAuth";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { ThemeContext } from "@/contexts/ThemeContext";
-import "@/styles/Dashboard.scss";
+import "@/styles/Dashboard.css";
 
 const Dashboard = () => {
     const navigate = useNavigate();
     const { user, logout } = useAuth();
     const { darkMode, setDarkMode } = useContext(ThemeContext);
-    
+
     const { loading: authLoading } = useRequireAuth();
-    
+
     const [stats, setStats] = useLocalStorage("dashboard_stats", {
         visits: 0,
         lastVisit: null,
         tasksCreated: 0
     });
-    
+
     const [currentTime, setCurrentTime] = React.useState(new Date());
     const [greeting, setGreeting] = React.useState("");
 
@@ -41,13 +41,12 @@ const Dashboard = () => {
     }, []);
 
     useEffect(() => {
-        const updatedStats = {
-            ...stats,
-            visits: stats.visits + 1,
+        setStats(prevstats => ({
+            ...prevstats,
+            visits: prevstats.visits + 1,
             lastVisit: new Date().toISOString()
-        };
-        setStats(updatedStats);
-    }, []);
+        }));
+    }, [setStats]);
 
     const handleLogout = async () => {
         try {
@@ -109,7 +108,7 @@ const Dashboard = () => {
                         </span>
                         <span className="welcome-emoji"> 👋</span>
                     </h1>
-                    
+
                     <div className="dashboard-time">
                         <div className="current-date">{formatDate(currentTime)}</div>
                         <div className="current-time">{formatTime(currentTime)}</div>
@@ -124,7 +123,7 @@ const Dashboard = () => {
                             <div className="stat-label">Visitas al dashboard</div>
                         </div>
                     </div>
-                    
+
                     <div className="stat-card">
                         <div className="stat-icon">✅</div>
                         <div className="stat-content">
@@ -132,7 +131,7 @@ const Dashboard = () => {
                             <div className="stat-label">Tareas creadas</div>
                         </div>
                     </div>
-                    
+
                     <div className="stat-card">
                         <div className="stat-icon">👤</div>
                         <div className="stat-content">
@@ -152,7 +151,7 @@ const Dashboard = () => {
                         <span className="btn-icon">🏠</span>
                         <span className="btn-text">Ir al inicio</span>
                     </button>
-                    
+
                     <button
                         onClick={() => navigate("/tasks")}
                         className="action-btn secondary"
@@ -160,7 +159,7 @@ const Dashboard = () => {
                         <span className="btn-icon">📋</span>
                         <span className="btn-text">Gestionar tareas</span>
                     </button>
-                    
+
                     <button
                         onClick={() => navigate("/profile")}
                         className="action-btn secondary"
